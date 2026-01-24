@@ -1,13 +1,19 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "lib": ["es2023"],
     "rootDirs": [".", "./src"],
     "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
+    "emitDeclarationOnly": true,
     "sourceMap": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
     "types": ["node"]
   },
-  "include": ["src/**/*", "./eslint.config.ts", "./drizzle.config.ts", "scripts/**/*"],
+  "include": ["src/**/*", "./eslint.config.ts", "scripts/**/*", "./tsdown.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
