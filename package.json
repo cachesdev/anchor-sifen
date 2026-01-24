@@ -1,0 +1,9 @@
+{
+  "name": "anchor-sifen",
+  "version": "0.1.0",
+  "private": "true",
+  "type": "module",
+  "keywords": [],
+  "author": "Anchor Software",
+  "packageManager": "pnpm@10.28.0"
+}
