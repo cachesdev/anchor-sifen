@@ -3,25 +3,43 @@
   "version": "0.1.0",
   "type": "module",
   "author": "Anchor Software",
-  "main": "src/index.ts",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
   "packageManager": "pnpm@10.28.0",
   "scripts": {
-    "build": "NODE_ENV=production tsc src/index.ts --outDir dist",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
-    "check": "tsc --noEmit"
+    "test": "vitest",
+    "check": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.1",
     "@eslint/js": "^9.39.2",
-    "@types/node": "^25.0.9",
+    "@types/node": "^24",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "globals": "^17.0.0",
     "jiti": "^2.6.1",
     "prettier": "^3.8.0",
+    "tsdown": "^0.20.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.0"
+    "typescript-eslint": "^8.53.0",
+    "vitest": "^4.0.16"
   }
 }
