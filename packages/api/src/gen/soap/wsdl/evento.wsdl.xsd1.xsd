@@ -1,0 +1,3234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ekuatia.set.gov.py/sifen/xsd" xmlns:tns="http://ekuatia.set.gov.py/sifen/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:sch1="http://www.w3.org/2000/09/xmldsig#" xmlns:sch0="http://ekuatia.set.gov.py/sifen/xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://www.w3.org/2000/09/xmldsig#" xmlns="http://ekuatia.set.gov.py/sifen/xsd">
+<xs:import schemaLocation="evento.wsdl.xsd2.xsd" namespace="http://www.w3.org/2000/09/xmldsig#"/>
+<xs:import schemaLocation="evento.wsdl.xsd2.xsd" namespace="http://www.w3.org/2000/09/xmldsig#"/>
+<xs:element name="rEnviEventoDe">
+<xs:annotation>
+<xs:documentation>Recepcion de Eventos de Documentos Electronicos</xs:documentation></xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="dId">
+<xs:annotation>
+<xs:documentation>Identificador de control de envio</xs:documentation></xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:totalDigits value="15"/></xs:restriction></xs:simpleType></xs:element>
+<xs:element name="dEvReg">
+<xs:annotation>
+<xs:documentation>Evento a ser registrado
+                        </xs:documentation></xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="gGroupGesEve" type="tgGroupGesEve"/></xs:sequence></xs:complexType></xs:element></xs:sequence></xs:complexType></xs:element>
+<xs:element name="rRetEnviEventoDe">
+<xs:annotation>
+<xs:documentation>Respuesta de Eventos</xs:documentation></xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="dFecProc" type="fecUTC"/>
+<xs:element maxOccurs="15" name="gResProcEVe" type="tgResProcEVe">
+<xs:annotation>
+<xs:documentation>Grupo Resultado de Procesamiento del Evento
+                        </xs:documentation></xs:annotation></xs:element></xs:sequence></xs:complexType></xs:element>
+<xs:simpleType name="tdCodRes">
+<xs:annotation>
+<xs:documentation>
+                Codigo de resultado de procesamiento
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[0-9]{4}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdMsgRes">
+<xs:annotation>
+<xs:documentation>
+                Mensaje del resultado de procesamiento
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="255"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdEstRes">
+<xs:annotation>
+<xs:documentation>
+                Estado del resultado
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="8"/>
+<xs:maxLength value="30"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdProtAut">
+<xs:annotation>
+<xs:documentation>
+                N&#250;mero de transacci&#243;n
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:long"/></xs:simpleType>
+<xs:simpleType name="tid">
+<xs:annotation>
+<xs:documentation>
+    			N&#250;mero Identificador del Evento
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{1,10}"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="9999999999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="fecUTC">
+<xs:annotation>
+<xs:documentation>
+                Normalizador de Fecha y Hora en Formato UTC {AAAA-MM-DDThh:mm:ss-ss:ss}
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:dateTime">
+<xs:pattern value="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d[+|-]\d\d:\d\d"/></xs:restriction></xs:simpleType>
+<xs:complexType name="tgResProc">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo Resultado de Procesamiento
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="dCodRes" type="tdCodRes"/>
+<xs:element name="dMsgRes" type="tdMsgRes"/></xs:sequence></xs:complexType>
+<xs:complexType name="tgResProcEVe">
+<xs:annotation>
+<xs:documentation>
+                Grupo de resultado de procesamiento
+            </xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="dEstRes" type="tdEstRes"/>
+<xs:element minOccurs="0" name="dProtAut" type="tdProtAut"/>
+<xs:element name="id" type="tid"/>
+<xs:element maxOccurs="100" name="gResProc" type="tgResProc"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeCan">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al evento de Cancelaci&#243;n del DTE
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="mOtEve" type="tmotEve"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeInu">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al evento de Inutilizaci&#243;n de numero de un DE
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="dNumTim" type="tdNumTim"/>
+<xs:element name="dEst" type="tdEst"/>
+<xs:element name="dPunExp" type="tdPunExp"/>
+<xs:element name="dNumIn" type="tdNumDE"/>
+<xs:element name="dNumFin" type="tdNumDE"/>
+<xs:element name="iTiDE" type="tiTiDEEv"/>
+<xs:element name="mOtEve" type="tmotEve"/>
+<xs:element minOccurs="0" name="dSerieNum" type="tserieNum"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeNotRec">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al evento receptor Notificaci&#243;n - Recepci&#243;n de un DE/DTE
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dFecEmi" type="fecHhmmss"/>
+<xs:element name="dFecRecep" type="fecHhmmss"/>
+<xs:element name="iTipRec" type="tiTipEve"/>
+<xs:element name="dNomRec" type="tdNomRec"/>
+<xs:element minOccurs="0" name="dRucRec" type="tRuc"/>
+<xs:element minOccurs="0" name="dDVRec" type="tDVer"/>
+<xs:element minOccurs="0" name="dTipIDRec" type="tiTipDocRec"/>
+<xs:element minOccurs="0" name="dNumID" type="tdNumDocId"/>
+<xs:element name="dTotalGs" type="tMontoBase"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeConf">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al evento receptor Conformidad
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="iTipConf" type="tiTipEve"/>
+<xs:element minOccurs="0" name="dFecRecep" type="fecHhmmss"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeDisconf">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al evento receptor Disconformidad
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="mOtEve" type="tmotEve"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeDescon">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al evento receptor Desconocimiento
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dFecEmi" type="fecHhmmss"/>
+<xs:element name="dFecRecep" type="fecHhmmss"/>
+<xs:element name="iTipRec" type="tiTipEve"/>
+<xs:element name="dNomRec" type="tdNomRec"/>
+<xs:element minOccurs="0" name="dRucRec" type="tRuc"/>
+<xs:element minOccurs="0" name="dDVRec" type="tDVer"/>
+<xs:element minOccurs="0" name="dTipIDRec" type="tiTipDoc"/>
+<xs:element minOccurs="0" name="dNumID" type="tdNumDocId"/>
+<xs:element name="mOtEve" type="tmotEve"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeRetAce">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento de retenci&#243;n 
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dRuc" type="tRuc"/>
+<xs:element name="dNumTimRet" type="tdNumTim"/>
+<xs:element name="dEstRet" type="tdEst"/>
+<xs:element name="dPunExpRet" type="tdPunExp"/>
+<xs:element name="dNumDocRet" type="tdNumDoc"/>
+<xs:element name="dCodConRet" type="tdCodConRet"/>
+<xs:element name="dFeEmiRet" type="fecHhmmss"/>
+<xs:element name="dMonRet" type="tMontoBase"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeRetAnu">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento de retenci&#243;n anulaci&#243;n 
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dRuc" type="tRuc"/>
+<xs:element name="dNumTimRet" type="tdNumTim"/>
+<xs:element name="dEstRet" type="tdEst"/>
+<xs:element name="dPunExpRet" type="tdPunExp"/>
+<xs:element name="dNumDocRet" type="tdNumDoc"/>
+<xs:element name="dCodConRet" type="tdCodConRet"/>
+<xs:element name="dFeEmiRet" type="fecHhmmss"/>
+<xs:element name="dFecAnRet" type="fecHhmmss"/>
+<xs:element name="dMonRet" type="tMontoBase"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeCCFF">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento de cr&#233;ditos fiscales 
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dNumTraCCFF" type="tdNumTra"/>
+<xs:element name="dFeAceTraCCFF" type="fecHhmmss"/></xs:sequence></xs:complexType>
+<xs:complexType name="rGeEvenAntRem">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento anticipo &#243; remision
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeDevCCFF">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento de devoluci&#243;n de cr&#233;ditos fiscales - Cuestionado &#243; Devuelto
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dNumDevSol" type="tdNumTra"/>
+<xs:element name="dNumDevInf" type="tdNumTra"/>
+<xs:element name="dNumDevRes" type="tdNumTra"/>
+<xs:element name="dFeEmiSol" type="fecHhmmss"/>
+<xs:element name="dFeEmiInf" type="fecHhmmss"/>
+<xs:element name="dFeEmiRes" type="fecHhmmss"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeDeVTr">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento por actualizaci&#243;n de datos del transporte
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element minOccurs="0" name="Id" type="tId"/>
+<xs:element minOccurs="0" name="dMotEv" type="tdNumTra"/>
+<xs:element minOccurs="0" name="cDepEnt" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dDesDepEnt" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="cDisEnt" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dDesDisEnt" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="cCiuEnt" type="tId"/>
+<xs:element minOccurs="0" name="dDesCiuEnt" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dDirEnt" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dNumCas" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dCompDir1" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dNomChof" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dNumIDChof" type="tId"/>
+<xs:element minOccurs="0" name="iNatTrans" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dRucTrans" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dDVTrans" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dNomTrans" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="iTipIDTrans" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dDTipIDTrans" type="tId"/>
+<xs:element minOccurs="0" name="dNumIDTrans" type="tdNumTra"/>
+<xs:element minOccurs="0" name="iTipTrans" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dDesTipTrans" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="iModTrans" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dDesModTrans" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dTiVehTras" type="tId"/>
+<xs:element minOccurs="0" name="dMarVeh" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dTipIdenVeh" type="tdNumTra"/>
+<xs:element minOccurs="0" name="dNroIDVeh" type="fecHhmmss"/>
+<xs:element minOccurs="0" name="dNroMatVeh" type="fecHhmmss"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeEnd">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento de Endoso
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="iTipRec" type="tiTipEve"/>
+<xs:element name="dNomRec" type="tdNom"/>
+<xs:element minOccurs="0" name="dRucRec" type="tRuc"/>
+<xs:element minOccurs="0" name="dDVRec" type="tDVer"/>
+<xs:element minOccurs="0" name="dTipIDRec" type="tiTipDoc"/>
+<xs:element minOccurs="0" name="dNumIDRec" type="tdNumDocId"/>
+<xs:element name="dRucEmi" type="tRuc"/>
+<xs:element name="dDVEmi" type="tDVer"/>
+<xs:element name="dNomEmi" type="tdNom"/>
+<xs:element name="dTipEnd" type="tdTipEnd"/>
+<xs:element name="iTipFac" type="tiTipFac"/>
+<xs:element name="dNomFac" type="tdNom"/>
+<xs:element name="dRucFac" type="tRuc"/>
+<xs:element name="dDVFac" type="tDVer"/>
+<xs:element minOccurs="0" name="dNumCon" type="tdContr"/>
+<xs:element minOccurs="0" name="dNumRegPubCon" type="tdContr"/>
+<xs:element name="dTotalGs" type="tMontoBase"/>
+<xs:element name="dPorDes" type="tMontoBasePorc"/>
+<xs:element minOccurs="0" name="dMonDesMonExt" type="tMontoBase"/>
+<xs:element minOccurs="0" name="dTipCamDesMonExt" type="tMontoBase"/>
+<xs:element name="dMonDesGs" type="tMontoBase"/>
+<xs:element name="dTotOpeEndGs" type="tMontoBase"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeTr">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento de Transporte
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dMotEv" type="tdMotEv"/>
+<xs:element minOccurs="0" name="cDepEnt" type="tcDepEnt"/>
+<xs:element minOccurs="0" name="dDesDepEnt" type="tdDesDepEnt"/>
+<xs:element minOccurs="0" name="cDisEnt" type="tcDisEnt"/>
+<xs:element minOccurs="0" name="dDesDisEnt" type="tdDesDisEnt"/>
+<xs:element minOccurs="0" name="cCiuEnt" type="tcCiuEnt"/>
+<xs:element minOccurs="0" name="dDesCiuEnt" type="tdDesCiuEnt"/>
+<xs:element minOccurs="0" name="dDirEnt" type="tdDirEnt"/>
+<xs:element minOccurs="0" name="dNumCas" type="tdNumCasTr"/>
+<xs:element minOccurs="0" name="dCompDir1" type="tdDirEnt"/>
+<xs:element minOccurs="0" name="dNomChof" type="tdNomRec"/>
+<xs:element minOccurs="0" name="dNumIDChof" type="tdNumDocId"/>
+<xs:element minOccurs="0" name="iNatTrans" type="tiTipEve"/>
+<xs:element minOccurs="0" name="dRucTrans" type="tRuc"/>
+<xs:element minOccurs="0" name="dDVTrans" type="tDVer"/>
+<xs:element minOccurs="0" name="dNomTrans" type="tdNomRec"/>
+<xs:element minOccurs="0" name="iTipIDTrans" type="tiTipDoc"/>
+<xs:element minOccurs="0" name="dDTipIDTrans" type="tdDtipDoc"/>
+<xs:element minOccurs="0" name="dNumIDTrans" type="tdNumDocId"/>
+<xs:element minOccurs="0" name="iTipTrans" type="tiTipTrans"/>
+<xs:element minOccurs="0" name="dDesTipTrans" type="tdDesTipTrans"/>
+<xs:element minOccurs="0" name="iModTrans" type="tdMotEv"/>
+<xs:element minOccurs="0" name="dDesModTrans" type="tdDesModTrans"/>
+<xs:element minOccurs="0" name="dTiVehTras" type="tdTiVehTras"/>
+<xs:element minOccurs="0" name="dMarVeh" type="tdMarVeh"/>
+<xs:element minOccurs="0" name="dTipIdenVeh" type="tdTipIdenVeh"/>
+<xs:element minOccurs="0" name="dNroIDVeh" type="tdNroIDVeh"/>
+<xs:element minOccurs="0" name="dNroMatVeh" type="tdNroMatVeh"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeOA">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento Origen Set Objeto de Analisis
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dFechaOA" type="formatFecha"/>
+<xs:element name="cMotOA" type="tcMotOA"/>
+<xs:element name="dMotDesOA" type="tdMotDesOA"/>
+<xs:element minOccurs="0" name="dObsOA" type="tdObs"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVePC">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento Origen Set Proceso de Control
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dFechaPC" type="formatFecha"/>
+<xs:element name="cMotPC" type="tcMotPC"/>
+<xs:element name="dMotDesPC" type="tdMotDesPC"/>
+<xs:element minOccurs="0" name="dObsEvePC" type="tdObs"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeImp">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento Origen Set Impugnacion del DTE
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dFechaImp" type="formatFecha"/>
+<xs:element name="cMotImp" type="tcMotImp"/>
+<xs:element name="dMotDesImp" type="tdMotDesImp"/>
+<xs:element minOccurs="0" name="dObsEveImp" type="tdObs"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGeVeDet">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento Origen Set Determinacion del DTE
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="dFechaDet" type="formatFecha"/>
+<xs:element name="cMotDet" type="tcMotDet"/>
+<xs:element name="dMotDesDet" type="tdMotDesDet"/>
+<xs:element minOccurs="0" name="dObsEveDet" type="tdObs"/></xs:sequence></xs:complexType>
+<xs:complexType name="tgGroupEvt">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo del evento
+	    	</xs:documentation></xs:annotation>
+<xs:choice>
+<xs:element name="rGeVeCan" type="trGeVeCan"/>
+<xs:element name="rGeVeInu" type="trGeVeInu"/>
+<xs:element name="rGeVeNotRec" type="trGeVeNotRec"/>
+<xs:element name="rGeVeConf" type="trGeVeConf"/>
+<xs:element name="rGeVeDisconf" type="trGeVeDisconf"/>
+<xs:element name="rGeVeDescon" type="trGeVeDescon"/>
+<xs:element name="rGeVeEnd" type="trGeVeEnd"/>
+<xs:element name="rGeVeTr" type="trGeVeTr"/>
+<xs:element name="rGEveNom" type="trGEveNom"/></xs:choice></xs:complexType>
+<xs:complexType name="trGEveNom">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo de Datos que identifican al Evento de Nominaci&#243;n
+	    	</xs:documentation></xs:annotation>
+<xs:sequence>
+<xs:element name="Id" type="tId"/>
+<xs:element name="mOtEve" type="tmotEve"/>
+<xs:element name="iNatRec" type="tiTipEve"/>
+<xs:element name="iTiOpe" type="tiTiOpeEv"/>
+<xs:element name="cPaisRec" type="paisType"/>
+<xs:element name="dDesPaisRe" type="tDesPais"/>
+<xs:element minOccurs="0" name="iTiContRec" type="tiTipCont"/>
+<xs:element minOccurs="0" name="dRucRec" type="tRuc"/>
+<xs:element minOccurs="0" name="dDVRec" type="tDVer"/>
+<xs:element minOccurs="0" name="iTipIDRec" type="tiTipDocRec"/>
+<xs:element minOccurs="0" name="dDTipIDRec" type="tdDtipDocRec"/>
+<xs:element minOccurs="0" name="dNumIDRec" type="tdNumDocId"/>
+<xs:element name="dNomRec" type="tdNomRec"/>
+<xs:element minOccurs="0" name="dNomFanRec" type="tdNomRec"/>
+<xs:element minOccurs="0" name="dDirRec" type="tdDirEnt"/>
+<xs:element minOccurs="0" name="dNumCasRec" type="tdNumCas"/>
+<xs:element minOccurs="0" name="cDepRec" type="tcDepEnt"/>
+<xs:element minOccurs="0" name="dDesDepRec" type="tdDesDepEnt"/>
+<xs:element minOccurs="0" name="cDisRec" type="tcDisEnt"/>
+<xs:element minOccurs="0" name="dDesDisRec" type="tdDesDisEnt"/>
+<xs:element minOccurs="0" name="cCiuRec" type="tcCiuEnt"/>
+<xs:element minOccurs="0" name="dDesCiuRec" type="tdDesCiuEnt"/>
+<xs:element minOccurs="0" name="dTelRec" type="tdTel"/>
+<xs:element minOccurs="0" name="dCelRec" type="tdCel"/>
+<xs:element minOccurs="0" name="dEmailRec" type="tEmail"/>
+<xs:element minOccurs="0" name="dCodCliente">
+<xs:annotation>
+<xs:documentation>
+                        Codigo del Cliente
+                    </xs:documentation></xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="3"/>
+<xs:whiteSpace value="collapse"/>
+<xs:maxLength value="15"/></xs:restriction></xs:simpleType></xs:element></xs:sequence></xs:complexType>
+<xs:complexType name="tgGroupEvtRecep">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo del evento Receptores
+	    	</xs:documentation></xs:annotation>
+<xs:choice>
+<xs:element name="rGeVeNotRec" type="trGeVeNotRec"/>
+<xs:element name="rGeVeConf" type="trGeVeConf"/>
+<xs:element name="rGeVeDisconf" type="trGeVeDisconf"/>
+<xs:element name="rGeVeDescon" type="trGeVeDescon"/></xs:choice></xs:complexType>
+<xs:complexType name="tgGroupEvtEmi">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo del evento Emisores
+	    	</xs:documentation></xs:annotation>
+<xs:choice>
+<xs:element name="rGeVeRetAce" type="trGeVeRetAce"/>
+<xs:element name="rGeVeRetAnu" type="trGeVeRetAnu"/>
+<xs:element name="rGeVeCCFF" type="trGeVeCCFF"/>
+<xs:element name="rGeDevCCFFCue" type="trGeDevCCFF"/>
+<xs:element name="rGeDevCCFFDev" type="trGeDevCCFF"/>
+<xs:element name="rGeVeAnt" type="rGeEvenAntRem"/>
+<xs:element name="rGeVeRem" type="rGeEvenAntRem"/>
+<xs:element name="rGEveNom" type="trGEveNom"/></xs:choice></xs:complexType>
+<xs:complexType name="tgGroupEvtSet">
+<xs:annotation>
+<xs:documentation>
+	    		Grupo del evento Origen SET
+	    	</xs:documentation></xs:annotation>
+<xs:choice>
+<xs:element name="rGeVeOA" type="trGeVeOA"/>
+<xs:element name="rGeVePC" type="trGeVePC"/>
+<xs:element name="rGeVeImp" type="trGeVeImp"/>
+<xs:element name="rGeVeDet" type="trGeVeDet"/></xs:choice></xs:complexType>
+<xs:complexType name="trEve">
+<xs:sequence>
+<xs:element name="dFecFirma" type="fecHhmmss"/>
+<xs:element name="dVerFor" type="tVerFor"/>
+<xs:element name="gGroupTiEvt" type="tgGroupEvt"/></xs:sequence>
+<xs:attribute name="Id" type="tdIdEve" use="required"/></xs:complexType>
+<xs:complexType name="trEveRecep">
+<xs:sequence>
+<xs:element name="dFecFirma" type="fecHhmmss"/>
+<xs:element name="dVerFor" type="tVerFor"/>
+<xs:element name="gGroupTiEvt" type="tgGroupEvtRecep"/></xs:sequence></xs:complexType>
+<xs:complexType name="trEveEmi">
+<xs:sequence>
+<xs:element name="dFecFirma" type="fecHhmmss"/>
+<xs:element name="dVerFor" type="tVerFor"/>
+<xs:element name="gGroupTiEvt" type="tgGroupEvtEmi"/></xs:sequence></xs:complexType>
+<xs:complexType name="trEveSet">
+<xs:sequence>
+<xs:element name="dFecFirma" type="fecHhmmss"/>
+<xs:element name="dVerFor" type="tVerFor"/>
+<xs:element name="gGroupTiEvt" type="tgGroupEvtSet"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGesEveRecep">
+<xs:sequence>
+<xs:element name="rEve" type="trEveRecep"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGesEveEmi">
+<xs:sequence>
+<xs:element name="rEve" type="trEveEmi"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGesEveSet">
+<xs:sequence>
+<xs:element name="rEve" type="trEveSet"/></xs:sequence></xs:complexType>
+<xs:complexType name="trGesEve">
+<xs:sequence>
+<xs:element name="rEve" type="trEve"/>
+<xs:element ref="ns0:Signature">
+<xs:annotation>
+<xs:documentation>
+                        Firma Digital del DE
+                    </xs:documentation></xs:annotation></xs:element></xs:sequence></xs:complexType>
+<xs:complexType name="tgGroupGesEve">
+<xs:sequence>
+<xs:element maxOccurs="15" name="rGesEve" type="trGesEve"/></xs:sequence></xs:complexType>
+<xs:simpleType name="dVerFormType">
+<xs:annotation>
+<xs:documentation>Version del formato del documento electronico</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:pattern value="[0-9]{4,5}[.][0-9]{2}"/>
+<xs:fractionDigits value="2"/>
+<xs:totalDigits value="7"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="iAmbType">
+<xs:annotation>
+<xs:documentation>Ambiente de destino: 1:Produccion, 2:Prueba</xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:totalDigits value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tVerFor">
+<xs:annotation>
+<xs:documentation>
+                Version del Formato del documento electronico
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[1][4][1]|[1][5][0]"/>
+<xs:totalDigits value="3"/></xs:restriction></xs:simpleType>
+<xs:element name="prodid">
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9][0-9][0-9][0-9][0-9]"/></xs:restriction></xs:simpleType></xs:element>
+<xs:simpleType name="tiTiOpeEv">
+<xs:annotation>
+<xs:documentation>
+                Tipo de operacion: 1(B2B), 2(B2C), 4(B2F)
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:whiteSpace value="preserve"/>
+<xs:pattern value="[1-2]|[4]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tId">
+<xs:annotation>
+<xs:documentation>
+                Codigo de Control del Documento Electronico
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[0-9]{2}([0-9]{7}[0-9A-D]?)[0-9]{34}"/>
+<xs:length value="44"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tmotEve">
+<xs:annotation>
+<xs:documentation>
+    			Motivo del Evento
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="5"/>
+<xs:maxLength value="500"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDateTimeUTC">
+<xs:annotation>
+<xs:documentation>
+                Normalizador de Fecha y Hora en Formato UTC
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:dateTime">
+<xs:pattern value="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d[+|-]\d\d:\d\d"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTiDEEv">
+<xs:annotation>
+<xs:documentation>
+                Tipo de documento electronico
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="7"/>
+<xs:enumeration value="8"/>
+<xs:enumeration value="9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdTiGDE">
+<xs:annotation>
+<xs:documentation>
+                Tipo de Evento 
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="10"/>
+<xs:enumeration value="11"/>
+<xs:enumeration value="12"/>
+<xs:enumeration value="13"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNumDE">
+<xs:annotation>
+<xs:documentation>
+    			N&#250;mero Inicio del rango del Documento
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="7"/>
+<xs:pattern value="0+[1-9][0-9]*|[1-9]+[0-9]+"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdIdEve">
+<xs:annotation>
+<xs:documentation>
+    			N&#250;mero Identificador del Evento
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]+"/>
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="9999999999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipEve">
+<xs:annotation>
+<xs:documentation>
+                Tipo de Receptor 
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNomRec">
+<xs:annotation>
+<xs:documentation>
+    			Nombre del Receptor
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="4"/>
+<xs:maxLength value="255"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdRecepFut">
+<xs:annotation>
+<xs:documentation>
+				Recepci&#243;n Futura
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[0-1]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCodConRet">
+<xs:annotation>
+<xs:documentation>
+                Identificador de la retenci&#243;n
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:maxLength value="40"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNumTra">
+<xs:annotation>
+<xs:documentation>
+                N&#250;mero de transferencia
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:maxLength value="10"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNom">
+<xs:annotation>
+<xs:documentation>
+    			Nombre del Receptor
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="4"/>
+<xs:maxLength value="255"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdTipEnd">
+<xs:annotation>
+<xs:documentation>
+                Tipo de Endoso 
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipFac">
+<xs:annotation>
+<xs:documentation>
+                Tipo de Factor 
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdContr">
+<xs:annotation>
+<xs:documentation>
+    			Numero de Contrato
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="50"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tMontoBasePorc">
+<xs:annotation>
+<xs:documentation>
+				Tipo base para los atributos de porcentaje
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="11"/>
+<xs:fractionDigits value="8"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="999.99999999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdMotEv">
+<xs:annotation>
+<xs:documentation>
+                Motivo del Evento 
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcDepEnt">
+<xs:annotation>
+<xs:documentation>
+                C&#243;digo del departamento del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{1,2}"/>
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="99"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesDepEnt">
+<xs:annotation>
+<xs:documentation>
+                Descripci&#243;n del departamento del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="6"/>
+<xs:maxLength value="16"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcDisEnt">
+<xs:annotation>
+<xs:documentation>
+                C&#243;digo del distrito del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{1,4}"/>
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="9999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesDisEnt">
+<xs:annotation>
+<xs:documentation>
+                Descripci&#243;n del distrito del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="30"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcCiuEnt">
+<xs:annotation>
+<xs:documentation>
+                C&#243;digo del ciudad del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{1,5}"/>
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="99999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesCiuEnt">
+<xs:annotation>
+<xs:documentation>
+                Descripci&#243;n del ciudad del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="30"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDirEnt">
+<xs:annotation>
+<xs:documentation>
+                Direcci&#243;n del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="255"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNumCasTr">
+<xs:annotation>
+<xs:documentation>
+                N&#250;mero de casa del local de la entrega
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{1,6}"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="999999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNomChof">
+<xs:annotation>
+<xs:documentation>
+                Nombre y apellido del chofer
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="4"/>
+<xs:maxLength value="60"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNroIDVeh">
+<xs:annotation>
+<xs:documentation>
+                N&#250;mero de vehiculo
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="20"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipTrans">
+<xs:annotation>
+<xs:documentation>
+				Tipo de transporte
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-2]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTipTrans">
+<xs:annotation>
+<xs:documentation>
+                Descripcion de Tipo de transporte
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="6"/>
+<xs:maxLength value="7"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdTiVehTras">
+<xs:annotation>
+<xs:documentation>
+                Tipo de veh&#237;culo
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="4"/>
+<xs:maxLength value="10"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdMarVeh">
+<xs:annotation>
+<xs:documentation>
+                Marca del veh&#237;culo
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdTipIdenVeh">
+<xs:annotation>
+<xs:documentation>
+                Tipo de identificaci&#243;n del veh&#237;culo 
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNroMatVeh">
+<xs:annotation>
+<xs:documentation>
+                Marca del veh&#237;culo
+            </xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:length value="6"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="formatFecha">
+<xs:annotation>
+<xs:documentation>
+				Normalizador de Fecha AAAA-MM-DD
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:date">
+<xs:pattern value="\d{4}-\d\d-\d\d"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdObs">
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="500"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcMotOA">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo del motivo del evento Objeto de An&#225;lisis
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdMotDesOA">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del motivo del evento Objeto de
+				An&#225;lisis
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="5"/>
+<xs:maxLength value="47"/>
+<xs:enumeration value="Operaciones no reconocidas por el contribuyente"/>
+<xs:enumeration value="Simulaci&#243;n de operaciones"/>
+<xs:enumeration value="Omisi&#243;n de ingresos"/>
+<xs:enumeration value="Proveedores inconsistentes"/>
+<xs:enumeration value="Otros"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcMotPC">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo del motivo del evento Proceso de Control
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdMotDesPC">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del motivo del evento Proceso de
+				Control
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="5"/>
+<xs:maxLength value="47"/>
+<xs:enumeration value="Proceso de control Interno"/>
+<xs:enumeration value="Proceso de Fiscalizaci&#243;n"/>
+<xs:enumeration value="Proceso de Cobranzas"/>
+<xs:enumeration value="Proceso de Devoluci&#243;n de Cr&#233;ditos Fiscales"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcMotImp">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo del motivo del evento Impugnacion del DTE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdMotDesImp">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del motivo del evento Impugnacion del DTE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="5"/>
+<xs:maxLength value="69"/>
+<xs:enumeration value="Operaciones no reconocidas por el contribuyente (proveedor o cliente)"/>
+<xs:enumeration value="Simulaci&#243;n de operaciones"/>
+<xs:enumeration value="Inconsistencias detectadas"/>
+<xs:enumeration value="Contenido falso"/>
+<xs:enumeration value="Otros"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcMotDet">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo del motivo del evento Determinacion del DTE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdMotDesDet">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del motivo del evento Determinacion del DTE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="4"/>
+<xs:maxLength value="43"/>
+<xs:enumeration value="Aplicaci&#243;n de multa al Emisor"/>
+<xs:enumeration value="Aplicaci&#243;n de multa al Receptor"/>
+<xs:enumeration value="Correcci&#243;n Cr&#233;dito fiscal"/>
+<xs:enumeration value="Correcci&#243;n D&#233;bito fiscal"/>
+<xs:enumeration value="Anulaci&#243;n de Impugnaci&#243;n por fallo judicial"/>
+<xs:enumeration value="Otro"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tserieNum">
+<xs:annotation>
+<xs:documentation>
+    			Serie del n&#250;mero del documento
+    		</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[A-Z][A-Z]"/>
+<xs:minLength value="2"/>
+<xs:maxLength value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="paisType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="MKD">
+<xs:annotation>
+<xs:documentation>Macedonia del Norte</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TWN">
+<xs:annotation>
+<xs:documentation>Taiw&#225;n (Provincia de China)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DZA">
+<xs:annotation>
+<xs:documentation>Argelia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="EGY">
+<xs:annotation>
+<xs:documentation>Egipto</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LBY">
+<xs:annotation>
+<xs:documentation>Libia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MAR">
+<xs:annotation>
+<xs:documentation>Marruecos</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SDN">
+<xs:annotation>
+<xs:documentation>Sud&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TUN">
+<xs:annotation>
+<xs:documentation>T&#250;nez</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ESH">
+<xs:annotation>
+<xs:documentation>S&#225;hara Occidental</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IOT">
+<xs:annotation>
+<xs:documentation>Territorio Brit&#225;nico del Oc&#233;ano &#205;ndico</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BDI">
+<xs:annotation>
+<xs:documentation>Burundi</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="COM">
+<xs:annotation>
+<xs:documentation>Comoras</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DJI">
+<xs:annotation>
+<xs:documentation>Djibouti</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ERI">
+<xs:annotation>
+<xs:documentation>Eritrea</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ETH">
+<xs:annotation>
+<xs:documentation>Etiop&#237;a</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ATF">
+<xs:annotation>
+<xs:documentation>Territorio de las Tierras Australes Francesas</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KEN">
+<xs:annotation>
+<xs:documentation>Kenya</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MDG">
+<xs:annotation>
+<xs:documentation>Madagascar</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MWI">
+<xs:annotation>
+<xs:documentation>Malawi</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MUS">
+<xs:annotation>
+<xs:documentation>Mauricio</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MYT">
+<xs:annotation>
+<xs:documentation>Mayotte</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MOZ">
+<xs:annotation>
+<xs:documentation>Mozambique</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="REU">
+<xs:annotation>
+<xs:documentation>Reuni&#243;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="RWA">
+<xs:annotation>
+<xs:documentation>Rwanda</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SYC">
+<xs:annotation>
+<xs:documentation>Seychelles</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SOM">
+<xs:annotation>
+<xs:documentation>Somalia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SSD">
+<xs:annotation>
+<xs:documentation>Sud&#225;n del Sur</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="UGA">
+<xs:annotation>
+<xs:documentation>Uganda</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TZA">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica Unida de Tanzan&#237;a</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ZMB">
+<xs:annotation>
+<xs:documentation>Zambia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ZWE">
+<xs:annotation>
+<xs:documentation>Zimbabwe</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="AGO">
+<xs:annotation>
+<xs:documentation>Angola</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CMR">
+<xs:annotation>
+<xs:documentation>Camer&#250;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CAF">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica Centroafricana</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TCD">
+<xs:annotation>
+<xs:documentation>Chad</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="COG">
+<xs:annotation>
+<xs:documentation>Congo</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="COD">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica Democr&#225;tica del Congo</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GNQ">
+<xs:annotation>
+<xs:documentation>Guinea Ecuatorial</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GAB">
+<xs:annotation>
+<xs:documentation>Gab&#243;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="STP">
+<xs:annotation>
+<xs:documentation>Santo Tom&#233; y Pr&#237;ncipe</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BWA">
+<xs:annotation>
+<xs:documentation>Botswana</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LSO">
+<xs:annotation>
+<xs:documentation>Lesotho</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NAM">
+<xs:annotation>
+<xs:documentation>Namibia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ZAF">
+<xs:annotation>
+<xs:documentation>Sud&#225;frica</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SWZ">
+<xs:annotation>
+<xs:documentation>Swazilandia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BEN">
+<xs:annotation>
+<xs:documentation>Benin</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BFA">
+<xs:annotation>
+<xs:documentation>Burkina Faso</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CPV">
+<xs:annotation>
+<xs:documentation>Cabo Verde</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CIV">
+<xs:annotation>
+<xs:documentation>C&#244;te d'Ivoire</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GMB">
+<xs:annotation>
+<xs:documentation>Gambia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GHA">
+<xs:annotation>
+<xs:documentation>Ghana</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GIN">
+<xs:annotation>
+<xs:documentation>Guinea</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GNB">
+<xs:annotation>
+<xs:documentation>Guinea-Bissau</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LBR">
+<xs:annotation>
+<xs:documentation>Liberia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MLI">
+<xs:annotation>
+<xs:documentation>Mal&#237;</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MRT">
+<xs:annotation>
+<xs:documentation>Mauritania</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NER">
+<xs:annotation>
+<xs:documentation>N&#237;ger</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NGA">
+<xs:annotation>
+<xs:documentation>Nigeria</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SHN">
+<xs:annotation>
+<xs:documentation>Santa Elena</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SEN">
+<xs:annotation>
+<xs:documentation>Senegal</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SLE">
+<xs:annotation>
+<xs:documentation>Sierra Leona</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TGO">
+<xs:annotation>
+<xs:documentation>Togo</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="AIA">
+<xs:annotation>
+<xs:documentation>Anguila</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ATG">
+<xs:annotation>
+<xs:documentation>Antigua y Barbuda</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ABW">
+<xs:annotation>
+<xs:documentation>Aruba</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BHS">
+<xs:annotation>
+<xs:documentation>Bahamas</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BRB">
+<xs:annotation>
+<xs:documentation>Barbados</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BES">
+<xs:annotation>
+<xs:documentation>Bonaire, San Eustaquio y Saba</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="VGB">
+<xs:annotation>
+<xs:documentation>Islas V&#237;rgenes Brit&#225;nicas</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CYM">
+<xs:annotation>
+<xs:documentation>Islas Caim&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CUB">
+<xs:annotation>
+<xs:documentation>CUBA</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CUW">
+<xs:annotation>
+<xs:documentation>Cura&#231;ao</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DMA">
+<xs:annotation>
+<xs:documentation>Dominica</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DOM">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica Dominicana</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GRD">
+<xs:annotation>
+<xs:documentation>Granada</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GLP">
+<xs:annotation>
+<xs:documentation>Guadalupe</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="HTI">
+<xs:annotation>
+<xs:documentation>Hait&#237;</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="JAM">
+<xs:annotation>
+<xs:documentation>Jamaica</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MTQ">
+<xs:annotation>
+<xs:documentation>Martinica</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MSR">
+<xs:annotation>
+<xs:documentation>Montserrat</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PRI">
+<xs:annotation>
+<xs:documentation>Puerto Rico</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BLM">
+<xs:annotation>
+<xs:documentation>San Bartolom&#233;</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KNA">
+<xs:annotation>
+<xs:documentation>Saint Kitts y Nevis</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LCA">
+<xs:annotation>
+<xs:documentation>Santa Luc&#237;a</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MAF">
+<xs:annotation>
+<xs:documentation>San Mart&#237;n (parte francesa)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="VCT">
+<xs:annotation>
+<xs:documentation>San Vicente y las Granadinas</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SXM">
+<xs:annotation>
+<xs:documentation>San Mart&#237;n (parte holand&#233;s)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TTO">
+<xs:annotation>
+<xs:documentation>Trinidad y Tabago</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TCA">
+<xs:annotation>
+<xs:documentation>Islas Turcas y Caicos</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="VIR">
+<xs:annotation>
+<xs:documentation>Islas V&#237;rgenes de los Estados Unidos</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BLZ">
+<xs:annotation>
+<xs:documentation>Belice</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CRI">
+<xs:annotation>
+<xs:documentation>Costa Rica</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SLV">
+<xs:annotation>
+<xs:documentation>El Salvador</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GTM">
+<xs:annotation>
+<xs:documentation>Guatemala</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="HND">
+<xs:annotation>
+<xs:documentation>Honduras</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MEX">
+<xs:annotation>
+<xs:documentation>M&#233;xico</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NIC">
+<xs:annotation>
+<xs:documentation>Nicaragua</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PAN">
+<xs:annotation>
+<xs:documentation>Panam&#225;</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ARG">
+<xs:annotation>
+<xs:documentation>Argentina</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BOL">
+<xs:annotation>
+<xs:documentation>Bolivia (Estado Plurinacional de)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BRA">
+<xs:annotation>
+<xs:documentation>Brasil</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CHL">
+<xs:annotation>
+<xs:documentation>Chile</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="COL">
+<xs:annotation>
+<xs:documentation>Colombia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ECU">
+<xs:annotation>
+<xs:documentation>Ecuador</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FLK">
+<xs:annotation>
+<xs:documentation>Islas Malvinas (Falkland)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GUF">
+<xs:annotation>
+<xs:documentation>Guayana Francesa</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GUY">
+<xs:annotation>
+<xs:documentation>Guyana</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PRY">
+<xs:annotation>
+<xs:documentation>Paraguay</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PER">
+<xs:annotation>
+<xs:documentation>Per&#250;</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SGS">
+<xs:annotation>
+<xs:documentation>Georgia del Sur y las Islas Sandwich del Sur</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SUR">
+<xs:annotation>
+<xs:documentation>Suriname</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="URY">
+<xs:annotation>
+<xs:documentation>Uruguay</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="VEN">
+<xs:annotation>
+<xs:documentation>Venezuela (Rep&#250;blica Bolivariana de)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BMU">
+<xs:annotation>
+<xs:documentation>Bermuda</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CAN">
+<xs:annotation>
+<xs:documentation>Canad&#225;</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GRL">
+<xs:annotation>
+<xs:documentation>Groenlandia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SPM">
+<xs:annotation>
+<xs:documentation>Saint Pierre y Miquelon</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="USA">
+<xs:annotation>
+<xs:documentation>Estados Unidos de Am&#233;rica</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ATA">
+<xs:annotation>
+<xs:documentation>Ant&#225;rtida</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KAZ">
+<xs:annotation>
+<xs:documentation>Kazajst&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KGZ">
+<xs:annotation>
+<xs:documentation>Kirguist&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TJK">
+<xs:annotation>
+<xs:documentation>Tayikist&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TKM">
+<xs:annotation>
+<xs:documentation>Turkmenist&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="UZB">
+<xs:annotation>
+<xs:documentation>Uzbekist&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CHN">
+<xs:annotation>
+<xs:documentation>China</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="HKG">
+<xs:annotation>
+<xs:documentation>Hong Kong</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MAC">
+<xs:annotation>
+<xs:documentation>Macao</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PRK">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica Popular Democr&#225;tica de Corea</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="JPN">
+<xs:annotation>
+<xs:documentation>Jap&#243;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MNG">
+<xs:annotation>
+<xs:documentation>Mongolia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KOR">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica de Corea</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BRN">
+<xs:annotation>
+<xs:documentation>Brunei Darussalam</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KHM">
+<xs:annotation>
+<xs:documentation>Camboya</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IDN">
+<xs:annotation>
+<xs:documentation>Indonesia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LAO">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica Democr&#225;tica Popular Lao</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MYS">
+<xs:annotation>
+<xs:documentation>Malasia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MMR">
+<xs:annotation>
+<xs:documentation>Myanmar</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PHL">
+<xs:annotation>
+<xs:documentation>Filipinas</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SGP">
+<xs:annotation>
+<xs:documentation>Singapur</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="THA">
+<xs:annotation>
+<xs:documentation>Tailandia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TLS">
+<xs:annotation>
+<xs:documentation>Timor-Leste</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="VNM">
+<xs:annotation>
+<xs:documentation>Viet Nam</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="AFG">
+<xs:annotation>
+<xs:documentation>Afganist&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BGD">
+<xs:annotation>
+<xs:documentation>Bangladesh</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BTN">
+<xs:annotation>
+<xs:documentation>Bhut&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IND">
+<xs:annotation>
+<xs:documentation>India</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IRN">
+<xs:annotation>
+<xs:documentation>Ir&#225;n (Rep&#250;blica Isl&#225;mica del)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MDV">
+<xs:annotation>
+<xs:documentation>Maldivas</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NPL">
+<xs:annotation>
+<xs:documentation>Nepal</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PAK">
+<xs:annotation>
+<xs:documentation>Pakist&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LKA">
+<xs:annotation>
+<xs:documentation>Sri Lanka</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ARM">
+<xs:annotation>
+<xs:documentation>Armenia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="AZE">
+<xs:annotation>
+<xs:documentation>Azerbaiy&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BHR">
+<xs:annotation>
+<xs:documentation>Bahrein</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CYP">
+<xs:annotation>
+<xs:documentation>Chipre</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GEO">
+<xs:annotation>
+<xs:documentation>Georgia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IRQ">
+<xs:annotation>
+<xs:documentation>Iraq</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ISR">
+<xs:annotation>
+<xs:documentation>Israel</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="JOR">
+<xs:annotation>
+<xs:documentation>Jordania</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KWT">
+<xs:annotation>
+<xs:documentation>Kuwait</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LBN">
+<xs:annotation>
+<xs:documentation>L&#237;bano</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="OMN">
+<xs:annotation>
+<xs:documentation>Om&#225;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="QAT">
+<xs:annotation>
+<xs:documentation>Qatar</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SAU">
+<xs:annotation>
+<xs:documentation>Arabia Saudita</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PSE">
+<xs:annotation>
+<xs:documentation>Estado de Palestina</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SYR">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica &#193;rabe Siria</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TUR">
+<xs:annotation>
+<xs:documentation>Turqu&#237;a</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ARE">
+<xs:annotation>
+<xs:documentation>Emiratos &#193;rabes Unidos</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="YEM">
+<xs:annotation>
+<xs:documentation>Yemen</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BLR">
+<xs:annotation>
+<xs:documentation>Belar&#250;s</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BGR">
+<xs:annotation>
+<xs:documentation>Bulgaria</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CZE">
+<xs:annotation>
+<xs:documentation>Chequia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="HUN">
+<xs:annotation>
+<xs:documentation>Hungr&#237;a</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="POL">
+<xs:annotation>
+<xs:documentation>Polonia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MDA">
+<xs:annotation>
+<xs:documentation>Rep&#250;blica de Moldova</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ROU">
+<xs:annotation>
+<xs:documentation>Rumania</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="RUS">
+<xs:annotation>
+<xs:documentation>Federaci&#243;n de Rusia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SVK">
+<xs:annotation>
+<xs:documentation>Eslovaquia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="UKR">
+<xs:annotation>
+<xs:documentation>Ucrania</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ALA">
+<xs:annotation>
+<xs:documentation>Islas &#197;land</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GGY">
+<xs:annotation>
+<xs:documentation>Guernsey</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="JEY">
+<xs:annotation>
+<xs:documentation>Jersey</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DNK">
+<xs:annotation>
+<xs:documentation>Dinamarca</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="EST">
+<xs:annotation>
+<xs:documentation>Estonia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FRO">
+<xs:annotation>
+<xs:documentation>Islas Feroe</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FIN">
+<xs:annotation>
+<xs:documentation>Finlandia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ISL">
+<xs:annotation>
+<xs:documentation>Islandia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IRL">
+<xs:annotation>
+<xs:documentation>Irlanda</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IMN">
+<xs:annotation>
+<xs:documentation>Isla de Man</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LVA">
+<xs:annotation>
+<xs:documentation>Letonia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LTU">
+<xs:annotation>
+<xs:documentation>Lituania</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NOR">
+<xs:annotation>
+<xs:documentation>Noruega</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SJM">
+<xs:annotation>
+<xs:documentation>Islas Svalbard y Jan Mayen</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SWE">
+<xs:annotation>
+<xs:documentation>Suecia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GBR">
+<xs:annotation>
+<xs:documentation>Reino Unido de Gran Breta&#241;a e Irlanda del Norte</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ALB">
+<xs:annotation>
+<xs:documentation>Albania</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="AND">
+<xs:annotation>
+<xs:documentation>Andorra</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BIH">
+<xs:annotation>
+<xs:documentation>Bosnia y Herzegovina</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="HRV">
+<xs:annotation>
+<xs:documentation>Croacia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GIB">
+<xs:annotation>
+<xs:documentation>Gibraltar</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GRC">
+<xs:annotation>
+<xs:documentation>Grecia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="VAT">
+<xs:annotation>
+<xs:documentation>Santa Sede</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ITA">
+<xs:annotation>
+<xs:documentation>Italia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MLT">
+<xs:annotation>
+<xs:documentation>Malta</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MNE">
+<xs:annotation>
+<xs:documentation>Montenegro</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PRT">
+<xs:annotation>
+<xs:documentation>Portugal</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SMR">
+<xs:annotation>
+<xs:documentation>San Marino</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SRB">
+<xs:annotation>
+<xs:documentation>Serbia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SVN">
+<xs:annotation>
+<xs:documentation>Eslovenia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ESP">
+<xs:annotation>
+<xs:documentation>Espa&#241;a</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MKD">
+<xs:annotation>
+<xs:documentation>ex Rep&#250;blica Yugoslava de Macedonia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="AUT">
+<xs:annotation>
+<xs:documentation>Austria</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="BEL">
+<xs:annotation>
+<xs:documentation>B&#233;lgica</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FRA">
+<xs:annotation>
+<xs:documentation>Francia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DEU">
+<xs:annotation>
+<xs:documentation>Alemania</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LIE">
+<xs:annotation>
+<xs:documentation>Liechtenstein</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="LUX">
+<xs:annotation>
+<xs:documentation>Luxemburgo</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MCO">
+<xs:annotation>
+<xs:documentation>M&#243;naco</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NLD">
+<xs:annotation>
+<xs:documentation>Pa&#237;ses Bajos</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CHE">
+<xs:annotation>
+<xs:documentation>Suiza</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="AUS">
+<xs:annotation>
+<xs:documentation>Australia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CXR">
+<xs:annotation>
+<xs:documentation>Isla de Navidad</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CCK">
+<xs:annotation>
+<xs:documentation>Islas Cocos (Keeling)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="HMD">
+<xs:annotation>
+<xs:documentation>Islas Heard y McDonald</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NZL">
+<xs:annotation>
+<xs:documentation>Nueva Zelandia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NFK">
+<xs:annotation>
+<xs:documentation>Islas Norfolk</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FJI">
+<xs:annotation>
+<xs:documentation>Fiji</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NCL">
+<xs:annotation>
+<xs:documentation>Nueva Caledonia</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PNG">
+<xs:annotation>
+<xs:documentation>Papua Nueva Guinea</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="SLB">
+<xs:annotation>
+<xs:documentation>Islas Salom&#243;n</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="VUT">
+<xs:annotation>
+<xs:documentation>Vanuatu</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="GUM">
+<xs:annotation>
+<xs:documentation>Guam</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="KIR">
+<xs:annotation>
+<xs:documentation>Kiribati</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MHL">
+<xs:annotation>
+<xs:documentation>Islas Marshall</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FSM">
+<xs:annotation>
+<xs:documentation>Micronesia (Estados Federados de)</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NRU">
+<xs:annotation>
+<xs:documentation>Nauru</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="MNP">
+<xs:annotation>
+<xs:documentation>Islas Marianas Septentrionales</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PLW">
+<xs:annotation>
+<xs:documentation>Palau</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="UMI">
+<xs:annotation>
+<xs:documentation>Islas menores alejadas de Estados Unidos</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ASM">
+<xs:annotation>
+<xs:documentation>Samoa Americana</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="COK">
+<xs:annotation>
+<xs:documentation>Islas Cook</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PYF">
+<xs:annotation>
+<xs:documentation>Polinesia Francesa</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NIU">
+<xs:annotation>
+<xs:documentation>Niue</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="PCN">
+<xs:annotation>
+<xs:documentation>Pitcairn</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="WSM">
+<xs:annotation>
+<xs:documentation>Samoa</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TKL">
+<xs:annotation>
+<xs:documentation>Tokelau</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TON">
+<xs:annotation>
+<xs:documentation>Tonga</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="TUV">
+<xs:annotation>
+<xs:documentation>Tuvalu</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="WLF">
+<xs:annotation>
+<xs:documentation>Islas Wallis y Futuna</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="NN">
+<xs:annotation>
+<xs:documentation>NO EXISTE</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDepartamentos">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo del departamento donde se realiza la transacci&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1">
+<xs:annotation>
+<xs:documentation>CAPITAL</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="2">
+<xs:annotation>
+<xs:documentation>CONCEPCION</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="3">
+<xs:annotation>
+<xs:documentation>SAN PEDRO</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="4">
+<xs:annotation>
+<xs:documentation>CORDILLERA</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="5">
+<xs:annotation>
+<xs:documentation>GUAIRA</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="6">
+<xs:annotation>
+<xs:documentation>CAAGUAZU</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="7">
+<xs:annotation>
+<xs:documentation>CAAZAPA</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="8">
+<xs:annotation>
+<xs:documentation>ITAPUA</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="9">
+<xs:annotation>
+<xs:documentation>MISIONES</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="10">
+<xs:annotation>
+<xs:documentation>PARAGUARI</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="11">
+<xs:annotation>
+<xs:documentation>ALTO PARANA</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="12">
+<xs:annotation>
+<xs:documentation>CENTRAL</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="13">
+<xs:annotation>
+<xs:documentation>NEEMBUCU</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="14">
+<xs:annotation>
+<xs:documentation>AMAMBAY</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="15">
+<xs:annotation>
+<xs:documentation>PTE. HAYES</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="16">
+<xs:annotation>
+<xs:documentation>BOQUERON</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="17">
+<xs:annotation>
+<xs:documentation>ALTO PARAGUAY</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="18">
+<xs:annotation>
+<xs:documentation>CANINDEYU</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="19">
+<xs:annotation>
+<xs:documentation>CHACO</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="20">
+<xs:annotation>
+<xs:documentation>NUEVA ASUNCION</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDesDepartamento">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del departamento donde se realiza la transacci&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="CAPITAL"/>
+<xs:enumeration value="CONCEPCION"/>
+<xs:enumeration value="SAN PEDRO"/>
+<xs:enumeration value="CORDILLERA"/>
+<xs:enumeration value="GUAIRA"/>
+<xs:enumeration value="CAAGUAZU"/>
+<xs:enumeration value="CAAZAPA"/>
+<xs:enumeration value="ITAPUA"/>
+<xs:enumeration value="MISIONES"/>
+<xs:enumeration value="PARAGUARI"/>
+<xs:enumeration value="ALTO PARANA"/>
+<xs:enumeration value="CENTRAL"/>
+<xs:enumeration value="NEEMBUCU"/>
+<xs:enumeration value="AMAMBAY"/>
+<xs:enumeration value="PTE. HAYES"/>
+<xs:enumeration value="BOQUERON"/>
+<xs:enumeration value="ALTO PARAGUAY"/>
+<xs:enumeration value="CANINDEYU"/>
+<xs:enumeration value="CHACO"/>
+<xs:enumeration value="NUEVA ASUNCION"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tEmail">
+<xs:restriction base="xs:string">
+<xs:pattern value="([0-9a-zA-Z]([0-9a-zA-Z\.\-_])*@([0-9a-zA-Z][0-9a-zA-Z\-_]*\.)+[a-zA-Z]{2,9})"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDesPais">
+<xs:restriction base="noEmptyString">
+<xs:whiteSpace value="preserve"/>
+<xs:minLength value="4"/>
+<xs:maxLength value="50"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tCDC">
+<xs:annotation>
+<xs:documentation>
+				Codigo de Control del Documento Electronico
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[0-9]{2}([0-9]{7}[0-9A-D])[0-9]{34}"/>
+<xs:length value="44"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipEmi">
+<xs:annotation>
+<xs:documentation>
+				Tipo de Emision: 1(Normal), 2(Contingencia)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:pattern value="[1-2]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTipEmi">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de emision: 1(Normal). 2(Contingencia)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="6"/>
+<xs:maxLength value="12"/>
+<xs:enumeration value="Normal"/>
+<xs:enumeration value="Contingencia"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiCodSe">
+<xs:annotation>
+<xs:documentation>
+				La generacion de este codigo es responsabilidad del emisor, segun los
+				delineamientos
+				establecidos en el
+				Manual Tecnico, no debe ser un numero secuencial, sino aleatorio, tampoco
+				debe
+				contener solo ceros
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{9}"/>
+<xs:minInclusive value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiIndPres">
+<xs:annotation>
+<xs:documentation>
+				Indicador de presencia
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-6]|9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesIndPres">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del indicador de presencia
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Operaci&#243;n presencial"/>
+<xs:enumeration value="Operaci&#243;n electr&#243;nica"/>
+<xs:enumeration value="Operaci&#243;n telemarketing"/>
+<xs:enumeration value="Venta a domicilio"/>
+<xs:enumeration value="Operaci&#243;n bancaria"/>
+<xs:enumeration value="Operaci&#243;n c&#237;clica"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="10"/>
+<xs:maxLength value="30"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tiTipTra">
+<xs:annotation>
+<xs:documentation>
+				Tipo de transaccion
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="13"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTiTran">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de transaccion
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Venta de mercader&#237;a"/>
+<xs:enumeration value="Prestaci&#243;n de servicios"/>
+<xs:enumeration value="Mixto (Venta de mercader&#237;a y servicios)"/>
+<xs:enumeration value="Venta de activo fijo"/>
+<xs:enumeration value="Venta de divisas"/>
+<xs:enumeration value="Compra de divisas"/>
+<xs:enumeration value="Promoci&#243;n o entrega de muestras"/>
+<xs:enumeration value="Donaci&#243;n"/>
+<xs:enumeration value="Anticipo"/>
+<xs:enumeration value="Compra de productos"/>
+<xs:enumeration value="Compra de servicios"/>
+<xs:enumeration value="Venta de cr&#233;dito fiscal"/>
+<xs:enumeration value="Muestras m&#233;dicas (Art. 3 RG 24/2014)"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdInfoEmi">
+<xs:annotation>
+<xs:documentation>
+				Informacion de interes del emisor respecto al DE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="3000"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdInfoFisc">
+<xs:annotation>
+<xs:documentation>
+				Informacion de interes del Fisco respecto al DE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="3000"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTiDE">
+<xs:annotation>
+<xs:documentation>
+				Tipo de documento electronico
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="1|[4-7]|9|10"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTiDE">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de documento electronico
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Factura electr&#243;nica"/>
+<xs:enumeration value="Autofactura electr&#243;nica"/>
+<xs:enumeration value="Nota de cr&#233;dito electr&#243;nica"/>
+<xs:enumeration value="Nota de d&#233;bito electr&#243;nica"/>
+<xs:enumeration value="Nota de remisi&#243;n electr&#243;nica"/>
+<xs:enumeration value="Boleta de venta electr&#243;nica"/>
+<xs:enumeration value="Boleta resimple electr&#243;nica"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNumTim">
+<xs:annotation>
+<xs:documentation>
+				Numero de timbrado del documento electronico.
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="8"/>
+<xs:maxLength value="8"/>
+<xs:pattern value="0+[1-9][0-9]*|[1-9]+[0-9]+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tdEst">
+<xs:annotation>
+<xs:documentation>Codigo de establecimiento proveido por el Sistema
+				de timbrado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="3"/>
+<xs:pattern value="[0-9]{3}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdPunExp">
+<xs:annotation>
+<xs:documentation>
+				Codigo de Punto de Exp. proveido por el Sist.Timbrado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="3"/>
+<xs:pattern value="[0-9]{3}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNumDoc">
+<xs:annotation>
+<xs:documentation>
+				Numero de documento del DE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="7"/>
+<xs:maxLength value="7"/>
+<xs:pattern value="0+[1-9][0-9]*|[1-9]+[0-9]+"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdSerieNum">
+<xs:annotation>
+<xs:documentation>
+				Serie del n&#250;mero de timbrado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:pattern value="[A-Z]{2}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNumDocId">
+<xs:annotation>
+<xs:documentation>
+				Numero de documento de identidad
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[0-9A-Za-z\-]{1,20}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="dNomRazSocial">
+<xs:annotation>
+<xs:documentation>
+            	Nombre o raz&#243;n social
+            </xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="60"/>
+<xs:minLength value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdFeIniT">
+<xs:annotation>
+<xs:documentation>
+				Fecha inicio de vigencia del Timbrado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:date">
+<xs:minInclusive value="2018-05-01"/>
+<xs:pattern value="[2-9][0-9]{3}-([0][1-9]|[1][0-2])-([0][0-9]|[1-2][0-9]|[3][0-1])"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdFeIniS">
+<xs:annotation>
+<xs:documentation>
+				Fecha inicio de vigencia de SIFEN
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:date">
+<xs:minInclusive value="2018-05-01"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="fecHhmmss">
+<xs:annotation>
+<xs:documentation>
+				Normalizador de Fecha y Hora AAAA-MM-DDThh:mm:ss
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:dateTime">
+<xs:pattern value="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTImp">
+<xs:annotation>
+<xs:documentation>
+				Tipo de impuesto afectado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTImp">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del tipo de impuesto afectado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="IVA">
+<xs:annotation>
+<xs:documentation>
+						Corresponde al codigo 1 del campo dDesTimp
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="ISC">
+<xs:annotation>
+<xs:documentation>
+						Corresponde al codigo 2 del campo dDesTimp
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="Renta">
+<xs:annotation>
+<xs:documentation>
+						Corresponde al codigo 3 del campo dDesTimp
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="Ninguno">
+<xs:annotation>
+<xs:documentation>
+						Corresponde al codigo 4 del campo dDesTimp
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="IVA - Renta">
+<xs:annotation>
+<xs:documentation>
+						Corresponde al codigo 5 del campo dDesTimp
+					</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType>
+<xs:simpleType name="tRuc">
+<xs:restriction base="xs:string">
+<xs:minLength value="3"/>
+<xs:maxLength value="8"/>
+<xs:pattern value="[1-9][0-9]*[0-9A-D]?"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDVer">
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]"/>
+<xs:whiteSpace value="collapse"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipCont">
+<xs:annotation>
+<xs:documentation>
+				Tipo de contribuyente. 1(Persona Fisica), 2(Persona Juridica)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-2]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcTipReg">
+<xs:annotation>
+<xs:documentation>
+				Tipo de R&#233;gimen
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[1-8]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcTipRegAdu">
+<xs:annotation>
+<xs:documentation>
+				Regimenes Aduaneros
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{4}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcCiuEmi">
+<xs:restriction base="xs:integer">
+<xs:pattern value="[0-9]{1,5}"/>
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="99999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesCiuEmi">
+<xs:restriction base="noEmptyString">
+<xs:minLength value="1"/>
+<xs:maxLength value="30"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcDisEmi">
+<xs:annotation>
+<xs:documentation>
+				Codigo de distrito
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="1"/>
+<xs:pattern value="[0-9]{1,4}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesDisEmi">
+<xs:annotation>
+<xs:documentation>
+				Descripcion de distrito
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="1"/>
+<xs:maxLength value="30"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdTel">
+<xs:restriction base="xs:string">
+<xs:pattern value=".+"/>
+<xs:minLength value="6"/>
+<xs:maxLength value="15"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCel">
+<xs:restriction base="xs:string">
+<xs:pattern value=".+"/>
+<xs:minLength value="10"/>
+<xs:maxLength value="20"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcActEco">
+<xs:annotation>
+<xs:documentation>
+				Codigo de actividad economica del emisor segun la lista de maragantu
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="8"/>
+<xs:pattern value="[0-9A-Z]{1,8}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesActEco">
+<xs:annotation>
+<xs:documentation>
+				Descripcion de actividad economica
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="1"/>
+<xs:maxLength value="300"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcOblAfe">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo de la obligaci&#243;n afectada
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:totalDigits value="3"/>
+<xs:pattern value="[1-9][0-9][0-9]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesOblAfe">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n de la obligaci&#243;n afectada
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="21"/>
+<xs:maxLength value="65"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiNatRec">
+<xs:annotation>
+<xs:documentation>
+				Naturaleza del receptor: 1(Contribuyente), 2(No Contribuyente)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-2]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiNatVen">
+<xs:annotation>
+<xs:documentation>
+				Naturaleza del vendedor: 1(No Contribuyente), 2(Extranjero)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-2]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesNatVen">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del vendedor: 1(No contribuyente). 2(Extranjero)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="10"/>
+<xs:maxLength value="16"/>
+<xs:enumeration value="No contribuyente"/>
+<xs:enumeration value="Extranjero"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTiOpe">
+<xs:annotation>
+<xs:documentation>
+				Tipo de operacion: 1(B2B), 2(B2C), 3(B2G), 4(B2F)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-4]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipDoc">
+<xs:annotation>
+<xs:documentation>
+				Tipo de documento de identidad del vendedor
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-4]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipDocRec">
+<xs:annotation>
+<xs:documentation>
+				Tipo de documento de identidad del receptor
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-6]|9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipIDRespDE">
+<xs:annotation>
+<xs:documentation>
+				Tipo de documento de identidad del responsable de la generaci&#243;n del DE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-4]|9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDtipDoc">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de documento de identidad
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="C&#233;dula paraguaya"/>
+<xs:enumeration value="Pasaporte"/>
+<xs:enumeration value="C&#233;dula extranjera"/>
+<xs:enumeration value="Carnet de residencia"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDtipDocRec">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de documento de identidad del receptor
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="C&#233;dula paraguaya"/>
+<xs:enumeration value="Pasaporte"/>
+<xs:enumeration value="C&#233;dula extranjera"/>
+<xs:enumeration value="Carnet de residencia"/>
+<xs:enumeration value="Innominado"/>
+<xs:enumeration value="Tarjeta Diplom&#225;tica de exoneraci&#243;n fiscal"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="9"/>
+<xs:maxLength value="41"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tdDTipIDRespDE">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de documento de identidad del responsable de la generaci&#243;n del DE
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="C&#233;dula paraguaya"/>
+<xs:enumeration value="Pasaporte"/>
+<xs:enumeration value="C&#233;dula extranjera"/>
+<xs:enumeration value="Carnet de residencia"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="9"/>
+<xs:maxLength value="41"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tiCondOpe">
+<xs:annotation>
+<xs:documentation>Condicion de la operacion</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:pattern value="[1-2]"/>
+<xs:enumeration value="1">
+<xs:annotation>
+<xs:documentation>Contado</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="2">
+<xs:annotation>
+<xs:documentation>Cr&#233;dito</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDCondOpe">
+<xs:annotation>
+<xs:documentation>
+				Descripcion de condicion de operacion
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Contado"/>
+<xs:enumeration value="Cr&#233;dito"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTiPago">
+<xs:annotation>
+<xs:documentation>
+				Codigo de tipo de pago
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="7"/>
+<xs:enumeration value="8"/>
+<xs:enumeration value="9"/>
+<xs:enumeration value="10"/>
+<xs:enumeration value="11"/>
+<xs:enumeration value="12"/>
+<xs:enumeration value="13"/>
+<xs:enumeration value="14"/>
+<xs:enumeration value="15"/>
+<xs:enumeration value="16"/>
+<xs:enumeration value="17"/>
+<xs:enumeration value="18"/>
+<xs:enumeration value="19"/>
+<xs:enumeration value="20"/>
+<xs:enumeration value="21"/>
+<xs:enumeration value="99"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTiPag">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de pago
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Efectivo"/>
+<xs:enumeration value="Cheque"/>
+<xs:enumeration value="Tarjeta de cr&#233;dito"/>
+<xs:enumeration value="Tarjeta de d&#233;bito"/>
+<xs:enumeration value="Transferencia"/>
+<xs:enumeration value="Giro"/>
+<xs:enumeration value="Billetera electr&#243;nica"/>
+<xs:enumeration value="Tarjeta empresarial"/>
+<xs:enumeration value="Vale"/>
+<xs:enumeration value="Retenci&#243;n"/>
+<xs:enumeration value="Pago por anticipo"/>
+<xs:enumeration value="Valor fiscal"/>
+<xs:enumeration value="Valor comercial"/>
+<xs:enumeration value="Compensaci&#243;n"/>
+<xs:enumeration value="Permuta"/>
+<xs:enumeration value="Pago bancario"/>
+<xs:enumeration value="Pago M&#243;vil"/>
+<xs:enumeration value="Donaci&#243;n"/>
+<xs:enumeration value="Promoci&#243;n"/>
+<xs:enumeration value="Consumo Interno"/>
+<xs:enumeration value="Pago Electr&#243;nico"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="4"/>
+<xs:maxLength value="30"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tdDMoneTiPag">
+<xs:annotation>
+<xs:documentation>
+                        Descripcion de la moneda
+                    </xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:whiteSpace value="collapse"/>
+<xs:minLength value="3"/>
+<xs:maxLength value="20"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiDenTarj">
+<xs:annotation>
+<xs:documentation>
+				Codigo de tipo de tarjeta
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:totalDigits value="2"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="99"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesDenTarj">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n de denominaci&#243;n de la tarjeta
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="4"/>
+<xs:maxLength value="20"/>
+<xs:enumeration value="Visa"/>
+<xs:enumeration value="Mastercard"/>
+<xs:enumeration value="American Express"/>
+<xs:enumeration value="Maestro"/>
+<xs:enumeration value="Panal"/>
+<xs:enumeration value="Cabal"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="4"/>
+<xs:maxLength value="20"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tiForProPa">
+<xs:annotation>
+<xs:documentation>
+				Forma de procesamiento del pago. 1(POS), 2(Pago Electronico)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNunApOpe">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo de autorizaci&#243;n de la operaci&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="10"/>
+<xs:minInclusive value="100000"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tNumCheq">
+<xs:annotation>
+<xs:documentation>
+				Numero de cheque
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="8"/>
+<xs:maxLength value="8"/>
+<xs:pattern value="[0-9]{8}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDCondCred">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n de la condici&#243;n de la operaci&#243;n a cr&#233;dito
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Plazo"/>
+<xs:enumeration value="Cuota"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tFecAAAAMMDD">
+<xs:restriction base="xs:string">
+<xs:pattern value="[2-9][0-9]{3}([0][1-9]|[1][0-2])([0][0-9]|[1-2][0-9]|[3][0-1])"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tFecAAAAMMDDguion">
+<xs:restriction base="xs:string">
+<xs:pattern value="[2-9][0-9]{3}-([0][1-9]|[1][0-2])-([0][0-9]|[1-2][0-9]|[3][0-1])"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tFecDocImpAAAAMMDDguion">
+<xs:restriction base="xs:string">
+<xs:pattern value="[2-9][0-9]{3}-([0][1-9]|[1][0-2])-([0][0-9]|[1-2][0-9]|[3][0-1])"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tFecDDMMAAAAguion">
+<xs:restriction base="xs:string">
+<xs:pattern value="([0][0-9]|[1-2][0-9]|[3][0-1])-([0][1-9]|[1][0-2])-[1-9][0-9]{3}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdModCont">
+<xs:annotation>
+<xs:documentation>
+				Modalidad - Codigo emitido por la DNCP
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:length value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdEntCont">
+<xs:annotation>
+<xs:documentation>
+				Entidad - Codigo de contratacion emitido por la DNCP
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:pattern value="[0-9]{5}"/>
+<xs:minInclusive value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdAnoCont">
+<xs:annotation>
+<xs:documentation>
+				Anho - Codigo de contratacion emitido por la DNCP
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdSecCont">
+<xs:annotation>
+<xs:documentation>
+				Secuencia - Codigo de contratacion emitido por la DNCP
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:pattern value="[0-9]{7}"/>
+<xs:minInclusive value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCondTiCam">
+<xs:annotation>
+<xs:documentation>
+				Condici&#243;n del tipo de cambio 1(Global), 2(Por &#237;tem)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiCondAnt">
+<xs:annotation>
+<xs:documentation>
+				Condici&#243;n del Anticipo 1(Global), 2(Por &#237;tem)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesCondAnt">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n de la condici&#243;n del Anticipo
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Anticipo Global">
+<xs:annotation>
+<xs:documentation>
+						Corresponde al codigo 1 del campo iCondAnt
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="Anticipo por &#205;tem">
+<xs:annotation>
+<xs:documentation>
+						Corresponde al codigo 2 del campo iCondAnt
+					</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCodInt">
+<xs:annotation>
+<xs:documentation>
+				Codigo interno de mercaderia
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="1"/>
+<xs:maxLength value="50"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdParAranc">
+<xs:annotation>
+<xs:documentation>
+				Partida arancelaria
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:pattern value="[0-9]{4}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNCM">
+<xs:annotation>
+<xs:documentation>
+				Nomenclatura comun del MERCOSUR (NCM)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:pattern value="[0-9]{6,8}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDncpG">
+<xs:annotation>
+<xs:documentation>
+				Codigo DNCP - Nivel General
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[0-9]{8}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDncpE">
+<xs:annotation>
+<xs:documentation>
+				Codigo DNCP - Nivel Especifico
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[0-9]{3,4}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdGtin">
+<xs:annotation>
+<xs:documentation>
+				Codigo GTIN por Producto y por Paquete
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:pattern value="[0-9]{8,14}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCantProSer">
+<xs:annotation>
+<xs:documentation>
+				Cantidad del producto/servicio
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="18"/>
+<xs:fractionDigits value="8"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="9999999999.99999999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcRelMerc">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo de datos de relevancia de las mercader&#237;as : 1(Tolerancia de quiebra), 
+				2(Tolerancia de merma)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:whiteSpace value="collapse"/>
+<xs:pattern value="[1-2]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesRelMerc">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del C&#243;digo de datos de relevancia de las mercader&#237;as : 
+				1(Tolerancia de quiebra), 2(Tolerancia de merma)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:minLength value="19"/>
+<xs:maxLength value="21"/>
+<xs:enumeration value="Tolerancia de quiebra"/>
+<xs:enumeration value="Tolerancia de merma"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tMontoBase">
+<xs:annotation>
+<xs:documentation>
+				Tipo base para los atributos de monto
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="23"/>
+<xs:fractionDigits value="8"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="999999999999999.99999999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tMontoBase4">
+<xs:annotation>
+<xs:documentation>
+				Tipo base para los atributos de monto
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="19"/>
+<xs:fractionDigits value="4"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="999999999999999.9999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tMontoBase6">
+<xs:annotation>
+<xs:documentation>
+				Tipo base para montos 
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="10"/>
+<xs:fractionDigits value="4"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="999999.9999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tTipoCambioBase">
+<xs:annotation>
+<xs:documentation>
+				Tipo base para los tipos de cambio
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="9"/>
+<xs:fractionDigits value="4"/>
+<xs:minExclusive value="0"/>
+<xs:maxExclusive value="99999.9999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tPorcDesc8">
+<xs:annotation>
+<xs:documentation>
+                        Tipo de dato base para representar porcentajes
+                    </xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="11"/>
+<xs:fractionDigits value="8"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="100"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiAfecIVA">
+<xs:annotation>
+<xs:documentation>
+				Forma de afectacion del IVA 1(Gravado), 2(Exonerado), 3(Exento),
+				4(Gravado parcial)
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesAfecIVA">
+<xs:annotation>
+<xs:documentation>
+				Descripcion de la afectacion del IVA
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Gravado IVA"/>
+<xs:enumeration value="Exonerado (Art. 100 - Ley 6380/2019)"/>
+<xs:enumeration value="Exento"/>
+<xs:enumeration value="Gravado parcial (Grav- Exento)"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdTasaIVA">
+<xs:annotation>
+<xs:documentation>
+				Tasa del IVA
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:totalDigits value="2"/>
+<xs:minInclusive value="0"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcCatISC">
+<xs:annotation>
+<xs:documentation>
+				Categoria de ISC
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesCatISC">
+<xs:annotation>
+<xs:documentation>
+				Descripcion de categoria de ISC
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="SECCION I-(Cigarrillos,Tabacos,Esencias y Otros derivados del Tabaco)"/>
+<xs:enumeration value="SECCION II - (Bebidas con y sin alcohol)"/>
+<xs:enumeration value="SECCION III - (Alcoholes y Derivados del alcohol)"/>
+<xs:enumeration value="SECCION IV - (Combustibles)"/>
+<xs:enumeration value="SECCION V - (Art&#237;culos considerados de lujo)"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcTasaISC">
+<xs:annotation>
+<xs:documentation>
+				Tasa del ISC
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="7"/>
+<xs:enumeration value="8"/>
+<xs:enumeration value="9"/>
+<xs:enumeration value="10"/>
+<xs:enumeration value="11"/>
+<xs:enumeration value="12"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipOpVN">
+<xs:annotation>
+<xs:documentation>
+				Tipo de operacion de venta de vehiculos
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTipOpVN">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de venta de vehiculos
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Venta a representante"/>
+<xs:enumeration value="Venta al Consumidor final"/>
+<xs:enumeration value="Venta a gobierno"/>
+<xs:enumeration value="Venta a flota de veh&#237;culos"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tdChasis">
+<xs:annotation>
+<xs:documentation>
+				Chasis
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:pattern value="[0-9A-Za-z]{17}"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipCom">
+<xs:annotation>
+<xs:documentation>
+				Tipo de combustible
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTipCom">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de combustible
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Gasolina"/>
+<xs:enumeration value="Di&#233;sel"/>
+<xs:enumeration value="Etanol"/>
+<xs:enumeration value="GNV"/>
+<xs:enumeration value="Flex"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="3"/>
+<xs:maxLength value="20"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tiTipoPint">
+<xs:annotation>
+<xs:documentation>
+				Tipo de pintura del vehiculo
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTP">
+<xs:annotation>
+<xs:documentation>
+				Description del tipo de pintura
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Solida"/>
+<xs:enumeration value="Metalica"/>
+<xs:enumeration value="Perla"/>
+<xs:enumeration value="Fosca"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="4"/>
+<xs:maxLength value="10"/>
+<xs:pattern value="[A-Za-z0-9]"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tcTipVeh">
+<xs:annotation>
+<xs:documentation>
+				Tipo de veh&#237;culo
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="4"/>
+<xs:maxLength value="10"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiCondVeh">
+<xs:annotation>
+<xs:documentation>
+				Codigo de condicion del vehiculo
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:short">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesCondVeh">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Acabado"/>
+<xs:enumeration value="Semi-acabado"/>
+<xs:enumeration value="Inacabado"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tLectura">
+<xs:annotation>
+<xs:documentation>
+				Lectura energ&#237;a
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="13"/>
+<xs:fractionDigits value="2"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="99999999999.99"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdPoliza">
+<xs:annotation>
+<xs:documentation>
+				Codigo de poliza
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:whiteSpace value="collapse"/>
+<xs:maxLength value="20"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdVigPol">
+<xs:annotation>
+<xs:documentation>
+				Vigencia de p&#243;liza de seguro
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="6"/>
+<xs:fractionDigits value="1"/>
+<xs:minExclusive value="0"/>
+<xs:maxInclusive value="99999.9"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCRed">
+<xs:annotation>
+<xs:documentation>
+				Campo de redondeo
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:decimal">
+<xs:totalDigits value="8"/>
+<xs:fractionDigits value="4"/>
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="9999.9999"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="noEmptyString">
+<xs:annotation>
+<xs:documentation>
+				Cadena no vacia
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:whiteSpace value="preserve"/>
+<xs:pattern value=".*[^\s].*"/>
+<xs:minLength value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdTipCons">
+<xs:annotation>
+<xs:documentation>
+				Tipo de constancia de autofactura electronica
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTipCons">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del tipo de constancia
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Constancia de no ser contribuyente"/>
+<xs:enumeration value="Constancia de microproductores"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tCiudad">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo de la ciudad donde se realiza la transacci&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="5"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDesCiudad">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n de la ciudad donde se realiza la transacci&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="30"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDistrito">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo del distrito donde se realiza la transacci&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:totalDigits value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tDesDistrito">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del distrito donde se realiza la transacci&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="1"/>
+<xs:maxLength value="30"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTipDocAso">
+<xs:annotation>
+<xs:documentation>
+				Tipo de documento asociado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTipDocAso">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de documento asociado
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Electr&#243;nico"/>
+<xs:enumeration value="Impreso"/>
+<xs:enumeration value="Constancia Electr&#243;nica"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiTIpoDoc">
+<xs:annotation>
+<xs:documentation>
+				Tipos de documentos impresos
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:positiveInteger">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTIpoDoc">
+<xs:annotation>
+<xs:documentation>
+				Tipos de documentos impresos
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Factura"/>
+<xs:enumeration value="Nota de cr&#233;dito"/>
+<xs:enumeration value="Nota de d&#233;bito"/>
+<xs:enumeration value="Nota de remisi&#243;n"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiMotEmi">
+<xs:annotation>
+<xs:documentation>
+				Motivo de emision de la nota de credito/debito electronica
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:pattern value="[1-8]"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesMotEmi">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del motivo de la emision de la nota de credito/debito
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Devoluci&#243;n y Ajuste de precios"/>
+<xs:enumeration value="Devoluci&#243;n"/>
+<xs:enumeration value="Descuento"/>
+<xs:enumeration value="Bonificaci&#243;n"/>
+<xs:enumeration value="Cr&#233;dito incobrable"/>
+<xs:enumeration value="Recupero de costo"/>
+<xs:enumeration value="Recupero de gasto"/>
+<xs:enumeration value="Ajuste de precio"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiMotivTras">
+<xs:annotation>
+<xs:documentation>
+				Motivo de emisi&#243;n
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="7"/>
+<xs:enumeration value="8"/>
+<xs:enumeration value="9"/>
+<xs:enumeration value="10"/>
+<xs:enumeration value="11"/>
+<xs:enumeration value="12"/>
+<xs:enumeration value="13"/>
+<xs:enumeration value="14"/>
+<xs:enumeration value="99"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDMotivTras">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del motivo de emisi&#243;n
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Traslado por ventas"/>
+<xs:enumeration value="Traslado por consignaci&#243;n"/>
+<xs:enumeration value="Exportaci&#243;n"/>
+<xs:enumeration value="Traslado por compra"/>
+<xs:enumeration value="Importaci&#243;n"/>
+<xs:enumeration value="Traslado por devoluci&#243;n"/>
+<xs:enumeration value="Traslado entre locales de la empresa"/>
+<xs:enumeration value="Traslado de bienes por transformaci&#243;n"/>
+<xs:enumeration value="Traslado de bienes para reparaci&#243;n"/>
+<xs:enumeration value="Traslado por emisor m&#243;vil"/>
+<xs:enumeration value="Exhibici&#243;n o Demostraci&#243;n"/>
+<xs:enumeration value="Participaci&#243;n en ferias"/>
+<xs:enumeration value="Traslado de encomienda"/>
+<xs:enumeration value="Decomiso"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="60"/>
+<xs:minLength value="5"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tiRespEmiNR">
+<xs:annotation>
+<xs:documentation>
+				Responsable por la emisi&#243;n de la Nota de Remisi&#243;n Electr&#243;nica
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1">
+<xs:annotation>
+<xs:documentation>
+						Emisor de la factura
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="2">
+<xs:annotation>
+<xs:documentation>
+						Poseedor de la factura y bienes
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="3">
+<xs:annotation>
+<xs:documentation>
+						Empresa Transportista
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="4">
+<xs:annotation>
+<xs:documentation>
+						Despachante de Aduanas
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="5">
+<xs:annotation>
+<xs:documentation>
+						Agente de transporte o intermediario
+					</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesRespEmiNR">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n del Responsable de la emisi&#243;n de la Nota de Remisi&#243;n Electr&#243;nica
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="20"/>
+<xs:maxLength value="36"/>
+<xs:enumeration value="Emisor de la factura"/>
+<xs:enumeration value="Poseedor de la factura y bienes"/>
+<xs:enumeration value="Empresa transportista"/>
+<xs:enumeration value="Despachante de Aduanas"/>
+<xs:enumeration value="Agente de transporte o intermediario"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType>
+<xs:simpleType name="tiTTrans">
+<xs:annotation>
+<xs:documentation>
+				Tipo de transporte
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesTTrans">
+<xs:annotation>
+<xs:documentation>
+				Descripcion del tipo de transporte
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Propio"/>
+<xs:enumeration value="Tercero"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiModTrans">
+<xs:annotation>
+<xs:documentation>
+				Modalidad del transporte
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesModTrans">
+<xs:annotation>
+<xs:documentation>
+				Descripcion de la Modalidad de transporte
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Terrestre"/>
+<xs:enumeration value="Fluvial"/>
+<xs:enumeration value="A&#233;reo"/>
+<xs:enumeration value="Multimodal"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiRespFlete">
+<xs:annotation>
+<xs:documentation>
+				Responsable por el costo del flete
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tcCondNeg">
+<xs:annotation>
+<xs:documentation>
+				Condicion de la negociacion
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="CFR">
+<xs:annotation>
+<xs:documentation>
+						Costo y flete
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CIF">
+<xs:annotation>
+<xs:documentation>
+						Costo, seguro y flete
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CIP">
+<xs:annotation>
+<xs:documentation>
+						Transporte y seguros pagados hasta
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="CPT">
+<xs:annotation>
+<xs:documentation>
+						Transporte pagado hasta
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DAP">
+<xs:annotation>
+<xs:documentation>
+						Entregada en el lugar convenido
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DAT">
+<xs:annotation>
+<xs:documentation>
+						Entregada en terminal
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="DDP">
+<xs:annotation>
+<xs:documentation>
+						Entregada derechos pagados
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="EXW">
+<xs:annotation>
+<xs:documentation>
+						En fabrica
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FAS">
+<xs:annotation>
+<xs:documentation>
+						Franco al costado del buque
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FCA">
+<xs:annotation>
+<xs:documentation>
+						Franco transportista
+					</xs:documentation></xs:annotation></xs:enumeration>
+<xs:enumeration value="FOB">
+<xs:annotation>
+<xs:documentation>
+						Franco a bordo
+					</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDirec">
+<xs:annotation>
+<xs:documentation>
+				Tipo de dato para direcci&#243;n de 255 caracteres
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="255"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNumCas">
+<xs:annotation>
+<xs:documentation>
+                        Numero de casa
+                </xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="0"/>
+<xs:totalDigits value="6"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDirec2">
+<xs:annotation>
+<xs:documentation>
+				Direccion de longitud maxima 15 caracteres
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="15"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNombre">
+<xs:annotation>
+<xs:documentation>
+				Nombre o razon social
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="255"/>
+<xs:minLength value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCargo">
+<xs:annotation>
+<xs:documentation>
+				Cargo del responsable de la generaci&#243;n del DE
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="100"/>
+<xs:minLength value="4"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCadenaBase">
+<xs:annotation>
+<xs:documentation>
+				Tipo de dato alfanum&#233;rico de 20 caracteres
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="20"/>
+<xs:minLength value="20"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdNomPro">
+<xs:annotation>
+<xs:documentation>
+				Tipo de dato alfanum&#233;rico de 30 caracteres
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="30"/>
+<xs:minLength value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdCadenaBase20">
+<xs:annotation>
+<xs:documentation>
+				Tipo de dato alfanum&#233;rico de 20 caracteres
+			</xs:documentation></xs:annotation>
+<xs:restriction base="noEmptyString">
+<xs:maxLength value="20"/>
+<xs:minLength value="1"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tiForPag">
+<xs:annotation>
+<xs:documentation>
+				C&#243;digo de Forma de Pago
+			</xs:documentation></xs:annotation>
+<xs:restriction base="xs:integer">
+<xs:totalDigits value="1"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="tdDesForPag">
+<xs:annotation>
+<xs:documentation>
+				Descripci&#243;n de la Forma de Pago
+			</xs:documentation></xs:annotation>
+<xs:union>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Efectivo"/>
+<xs:enumeration value="Transferencia bancaria"/></xs:restriction></xs:simpleType>
+<xs:simpleType>
+<xs:restriction base="noEmptyString">
+<xs:minLength value="8"/>
+<xs:maxLength value="22"/>
+<xs:pattern value=".+"/></xs:restriction></xs:simpleType></xs:union></xs:simpleType></xs:schema>
