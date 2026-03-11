@@ -1,5 +1,5 @@
-import type { REve } from "./REve.js";
-import type { Signature } from "./Signature.js";
+import type { REve } from './REve.js';
+import type { Signature } from './Signature.js';
 
 /**
  * rGesEve
@@ -7,8 +7,8 @@ import type { Signature } from "./Signature.js";
  * @targetNamespace `http://ekuatia.set.gov.py/sifen/xsd`
  */
 export interface RGesEve {
-    /** rEve */
-    rEve?: REve;
-    /** Signature */
-    Signature?: Signature;
+  /** rEve */
+  rEve?: REve;
+  /** Signature */
+  Signature?: Signature;
 }

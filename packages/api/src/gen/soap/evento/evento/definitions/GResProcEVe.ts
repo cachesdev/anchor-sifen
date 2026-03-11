@@ -1,4 +1,4 @@
-import type { GResProc } from "./GResProc.js";
+import type { GResProc } from './GResProc.js';
 
 /**
  * gResProcEVe
@@ -6,12 +6,12 @@ import type { GResProc } from "./GResProc.js";
  * @targetNamespace `http://ekuatia.set.gov.py/sifen/xsd`
  */
 export interface GResProcEVe {
-    /** tdEstRes|xs:string|minLength,maxLength */
-    dEstRes?: string;
-    /** tdProtAut|xs:long */
-    dProtAut?: number;
-    /** tid|xs:integer|pattern,minInclusive,maxInclusive */
-    id?: string;
-    /** gResProc[] */
-    gResProc?: Array<GResProc>;
+  /** tdEstRes|xs:string|minLength,maxLength */
+  dEstRes?: string;
+  /** tdProtAut|xs:long */
+  dProtAut?: number;
+  /** tid|xs:integer|pattern,minInclusive,maxInclusive */
+  id?: string;
+  /** gResProc[] */
+  gResProc?: Array<GResProc>;
 }

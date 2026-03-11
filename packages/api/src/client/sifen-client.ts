@@ -1,5 +1,9 @@
-import { CertificateManager } from '../certificate';
+import { CertificateManager, type CertificateData } from '../certificate';
 import { createQRGenerator, type QRGenerator } from '../qr';
+import type { FacturaElectronica } from '../sifen/types';
+import { SifenSoapClient } from '../soap';
+import { createXMLGenerator, type XMLGenerator } from '../xml-gen';
+import { XMLSigner } from '../xml-sign';
 
 export interface SIFENConfig {
   environment: 'test' | 'prod';

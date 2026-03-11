@@ -1,4 +1,4 @@
-import type { Transforms } from "./Transforms.js";
+import type { Transforms } from './Transforms.js';
 
 /**
  * RetrievalMethod
@@ -6,6 +6,6 @@ import type { Transforms } from "./Transforms.js";
  * @targetNamespace `http://www.w3.org/2000/09/xmldsig#`
  */
 export interface RetrievalMethod {
-    /** Transforms */
-    Transforms?: Transforms;
+  /** Transforms */
+  Transforms?: Transforms;
 }

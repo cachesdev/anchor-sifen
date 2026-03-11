@@ -1,5 +1,5 @@
-import type { Transforms } from "./Transforms.js";
-import type { DigestMethod } from "./DigestMethod.js";
+import type { Transforms } from './Transforms.js';
+import type { DigestMethod } from './DigestMethod.js';
 
 /**
  * Reference
@@ -7,10 +7,10 @@ import type { DigestMethod } from "./DigestMethod.js";
  * @targetNamespace `http://www.w3.org/2000/09/xmldsig#`
  */
 export interface Reference {
-    /** Transforms */
-    Transforms?: Transforms;
-    /** DigestMethod */
-    DigestMethod?: DigestMethod;
-    /** DigestValueType|base64Binary */
-    DigestValue?: string;
+  /** Transforms */
+  Transforms?: Transforms;
+  /** DigestMethod */
+  DigestMethod?: DigestMethod;
+  /** DigestValueType|base64Binary */
+  DigestValue?: string;
 }

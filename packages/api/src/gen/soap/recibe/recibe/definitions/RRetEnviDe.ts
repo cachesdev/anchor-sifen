@@ -1,7 +1,7 @@
-import type { RProtDe } from "./RProtDe.js";
+import type { RProtDe } from './RProtDe.js';
 
 /** rRetEnviDe */
 export interface RRetEnviDe {
-    /** rProtDe */
-    rProtDe?: RProtDe;
+  /** rProtDe */
+  rProtDe?: RProtDe;
 }

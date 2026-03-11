@@ -1,4 +1,4 @@
-import type { RGesEve } from "./RGesEve.js";
+import type { RGesEve } from './RGesEve.js';
 
 /**
  * gGroupGesEve
@@ -6,6 +6,6 @@ import type { RGesEve } from "./RGesEve.js";
  * @targetNamespace `http://ekuatia.set.gov.py/sifen/xsd`
  */
 export interface GGroupGesEve {
-    /** rGesEve[] */
-    rGesEve?: Array<RGesEve>;
+  /** rGesEve[] */
+  rGesEve?: Array<RGesEve>;
 }

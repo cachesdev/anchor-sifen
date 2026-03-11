@@ -1,5 +1,5 @@
-import type { DeWsConsultasConsultaSoap12 } from "../ports/DeWsConsultasConsultaSoap12.js";
+import type { DeWsConsultasConsultaSoap12 } from '../ports/DeWsConsultasConsultaSoap12.js';
 
 export interface DeWsConsultasConsultaService {
-    readonly DeWsConsultasConsultaSoap12: DeWsConsultasConsultaSoap12;
+  readonly DeWsConsultasConsultaSoap12: DeWsConsultasConsultaSoap12;
 }
