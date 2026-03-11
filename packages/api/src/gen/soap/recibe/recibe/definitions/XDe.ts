@@ -1,0 +1,2 @@
+/** xDE */
+export interface XDe {}
