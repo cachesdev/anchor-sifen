@@ -1,7 +1,7 @@
-import type { GGroupGesEve } from "./GGroupGesEve.js";
+import type { GGroupGesEve } from './GGroupGesEve.js';
 
 /** dEvReg */
 export interface DEvReg {
-    /** gGroupGesEve */
-    gGroupGesEve?: GGroupGesEve;
+  /** gGroupGesEve */
+  gGroupGesEve?: GGroupGesEve;
 }

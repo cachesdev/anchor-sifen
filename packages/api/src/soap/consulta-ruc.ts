@@ -6,6 +6,7 @@ import { mapSoapError } from './errors.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
 
+// FIXME: no coincide
 export interface RUCQueryResult {
   ruc: string;
   dv: number;
