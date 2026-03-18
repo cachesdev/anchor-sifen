@@ -8,8 +8,8 @@ export function mapSoapError(error: unknown): Error {
     lowerMessage.includes('etimedout') ||
     lowerMessage.includes('socket hang up')
   ) {
-    return new Error('Could not connect to SIFEN endpoint.');
+    return new Error('No se pudo conectar a endpoint de SIFEN.');
   }
 
-  return new Error(`SIFEN request failed: ${originalMessage}`);
+  return new Error(`Error de request SIFEN: ${originalMessage}`);
 }

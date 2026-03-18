@@ -1,32 +1,24 @@
 import * as soap from 'soap';
-import { createClientAsync } from '../gen/soap/consultaRuc/consultaruc/client.js';
-import type { ConsultaRucClient } from '../gen/soap/consultaRuc/consultaruc/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
 import { mapSoapError } from './errors.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
-import type { SIFENConsRUCResponse } from '../sifen/types/response.js';
+import type { SIFENRecepLoteDEResponse } from '../sifen/types/response.js';
 import { escapeXml } from './validation.js';
+import {
+  createClientAsync,
+  type RecibeLoteClient
+} from '../gen/soap/recibeLote/recibelote/client.js';
 
-// FIXME: no coincide
-export interface RUCQueryResult {
-  ruc: string;
-  dv: number;
-  razonSocial: string;
-  estado: string;
-  tipContribuyente?: number;
-  nombreFantasia?: string;
-}
-
-export interface SifenRucClientOptions {
+export interface SifenRecibeLoteClientOptions {
   agent: Agent;
   environment: SifenEnvironment;
   certificatePem: string;
   certificatePemKey: string;
 }
 
-export class SifenRucClient {
-  private clientPromise: Promise<ConsultaRucClient> | undefined;
+export class SifenRecibeLoteClient {
+  private clientPromise: Promise<RecibeLoteClient> | undefined;
   private readonly environment: SifenEnvironment;
   private readonly agent: Agent;
   private readonly cert: {
@@ -34,7 +26,12 @@ export class SifenRucClient {
     pemKey: string;
   };
 
-  constructor({ environment, certificatePem, certificatePemKey, agent }: SifenRucClientOptions) {
+  constructor({
+    environment,
+    certificatePem,
+    certificatePemKey,
+    agent
+  }: SifenRecibeLoteClientOptions) {
     this.environment = environment;
     this.agent = agent;
     this.cert = {
@@ -43,7 +40,7 @@ export class SifenRucClient {
     };
   }
 
-  private getClient(): Promise<ConsultaRucClient> {
+  private getClient(): Promise<RecibeLoteClient> {
     if (this.clientPromise) return this.clientPromise;
 
     this.clientPromise = (async () => {
@@ -69,19 +66,19 @@ export class SifenRucClient {
     return this.clientPromise;
   }
 
-  async consultaRUC({
+  async recibeLote({
     digitoControl,
-    ruc
+    DE
   }: {
     digitoControl: string;
-    ruc: string;
-  }): Promise<SIFENConsRUCResponse> {
+    DE: string;
+  }): Promise<SIFENRecepLoteDEResponse> {
     try {
       const client = await this.getClient();
 
-      const data = await client.rEnviConsRUCAsync(
+      const data = await client.rEnvioLoteAsync(
         {
-          $xml: `<dId>${escapeXml(digitoControl)}</dId><dRUCCons>${escapeXml(ruc)}</dRUCCons>`
+          $xml: `<dId>${escapeXml(digitoControl)}</dId><xDE>${escapeXml(DE)}</xDE>`
         } as never,
         {
           overrideRootElement: {
@@ -94,17 +91,11 @@ export class SifenRucClient {
       const parsed = data[0];
 
       return {
-        codigoResultado: parsed.dCodRes!,
+        codigoResultado: parseInt(parsed.dCodRes!),
+        fechaProcesamiento: new Date(parsed.dFecProc!),
         mensajeResultado: parsed.dMsgRes!,
-        contenedorRuc: parsed.xContRUC
-          ? {
-              codigoEstado: parsed.xContRUC.dCodEstCons!,
-              descripcionEstado: parsed.xContRUC.dDesEstCons!,
-              razonSocial: parsed.xContRUC.dRazCons!,
-              rucConsultado: parsed.xContRUC.dRUCCons!,
-              esFacturadorElectronico: parsed.xContRUC.dRUCFactElec!
-            }
-          : undefined
+        numeroLote: parseInt(parsed.dProtConsLote!),
+        tiempoProcesamiento: parsed.dTpoProces!
       };
     } catch (error) {
       throw mapSoapError(error);

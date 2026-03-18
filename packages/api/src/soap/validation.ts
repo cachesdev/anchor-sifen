@@ -1,7 +1,13 @@
 import * as v from 'valibot';
 import { MAX_SIRECEPDE_SIZE_BYTES } from './config';
 
-// TODO: que es esto?
+export function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
 const SignedXmlSchema = v.pipe(
   v.string('signedXml must be a string.'),
