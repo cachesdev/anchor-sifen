@@ -17,17 +17,17 @@ export interface gTotSub {
   /** F - F009 | Total descuento particular por ítem | Pagina 102 */
   dTotDesc: number;
   /** F - F033 | Total descuento global por ítem | Pagina 102 */
-  dTotDescGlotem?: number;
+  dTotDescGlotem: number;
   /** F - F034 | Total Anticipo por ítem | Pagina 103 */
-  dTotAntItem?: number;
+  dTotAntItem: number;
   /** F - F035 | Total Anticipo global por ítem | Pagina 103 */
-  dTotAnt?: number;
+  dTotAnt: number;
   /** F - F010 | Porcentaje de descuento global sobre total de la operación | Pagina 103 */
-  dPorcDescTotal?: number;
+  dPorcDescTotal: number;
   /** F - F011 | Total Descuentos de la operación | Pagina 103 */
-  dDescTotal?: number;
+  dDescTotal: number;
   /** F - F012 | Total Anticipos de la operación | Pagina 103 */
-  dAnticipo?: number;
+  dAnticipo: number;
   /** F - F013 | Redondeo de la operación | Pagina 103 */
   dRedon: number;
   /** F - F025 | Comisión de la operación | Pagina 103 */

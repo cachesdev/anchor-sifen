@@ -1,5 +1,5 @@
 // AUTO-GENERATED (partial) — SIFEN Manual Técnico v150
-// Groups implemented: AA (AA001-AA002), A (A001-A005), B (B001-B006), C (C001-C010), D (D001-D299 subset: D010, D011-D020, D100-D160, D130-D145, D200-D222)
+// Groups implemented: AA (AA001-AA002), A (A001-A005), B (B001-B006), C (C001-C010), D (D001-D299 subset: D010, D011-D020, D100-D160, D130-D145, D200-D224)
 
 /**
  * AA - AA001 | Documento Electrónico elemento raíz | Pagina 64
@@ -9,7 +9,7 @@ export interface DocumentoElectronico {
    * AA - AA002 | Versión del formato | Pagina 64
    */
   rDE: {
-    dVerFor: number; // Version number (e.g., 150)
+    dVerFor: 150; // Manual v150 Fija esto al valor 150
     /**
      * A - A001 | Campos firmados del DE | Pagina 64
      */
@@ -56,7 +56,7 @@ export interface DE {
   /**
    * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 69
    */
-  gDatRec?: gDatRec;
+  gDatRec: gDatRec;
   // Note: further groups (E, items, etc.) will be implemented in subsequent batches.
 }
 
@@ -71,7 +71,7 @@ export interface gOpeDE {
   /**
    * B - B003 | Descripción del tipo de emisión | Pagina 65
    */
-  dDesTipEmi: string;
+  dDesTipEmi: DDesTipEmi;
   /**
    * B - B004 | Código de seguridad | Pagina 65
    */
@@ -93,11 +93,11 @@ export interface gTimb {
   /**
    * C - C002 | Tipo de Documento Electrónico | Pagina 64
    */
-  iTiDE: number; // 1..8 (1=Factura electronica, 6=Nota de debito electronica, etc.)
+  iTiDE: ITiDE;
   /**
    * C - C003 | Descripción del tipo de documento electrónico | Pagina 64
    */
-  dDesTiDE: string;
+  dDesTiDE: DDesTiDE;
   /**
    * C - C004 | Número del timbrado | Pagina 64
    */
@@ -153,23 +153,23 @@ export interface gOpeCom {
   /**
    * D1 - D012 | Descripción del tipo de transacción | Pagina 65
    */
-  dDesTipTra?: string;
+  dDesTipTra?: DDesTipTra;
   /**
    * D1 - D013 | Tipo de impuesto afectado | Pagina 65
    */
-  iTImp?: ITImp;
+  iTImp: ITImp;
   /**
    * D1 - D014 | Descripción del tipo de impuesto afectado | Pagina 66
    */
-  dDesTImp?: string;
+  dDesTImp: DDesTImp;
   /**
    * D1 - D015 | Moneda de la operación | Pagina 66
    */
-  cMoneOpe?: string; // ISO 4217 code
+  cMoneOpe: string; // ISO 4217 code
   /**
    * D1 - D016 | Descripción de la moneda de la operación | Pagina 66
    */
-  dDesMoneOpe?: string;
+  dDesMoneOpe: string;
   /**
    * D1 - D017 | Condición del tipo de cambio | Pagina 66
    */
@@ -185,7 +185,7 @@ export interface gOpeCom {
   /**
    * D1 - D020 | Descripción de la condición del Anticipo | Pagina 66
    */
-  dDesCondAnt?: string;
+  dDesCondAnt?: DDesCondAnt;
 }
 
 /**
@@ -271,7 +271,7 @@ export interface gEmis {
   /**
    * D2.1 - D130 | Grupo de campos que describen la actividad económica del emisor | Pagina 69
    */
-  gActEco?: gActEco[];
+  gActEco: [gActEco, ...gActEco[]];
   /**
    * D2.2 - D140 | Grupo de campos que identifican al responsable de la generación del DE | Pagina 69
    */
@@ -394,6 +394,30 @@ export interface gDatRec {
    * D3 - D222 | Descripción del distrito del receptor | Pagina 71
    */
   dDesDisRec?: string;
+  /**
+   * D3 - D223 | Código de la ciudad del receptor | Pagina 72
+   */
+  cCiuRec?: number;
+  /**
+   * D3 - D224 | Descripción de la ciudad del receptor | Pagina 72
+   */
+  dDesCiuRec?: string;
+  /**
+   * D3 - D214 | Número de teléfono del receptor | Pagina 72
+   */
+  dTelRec?: string;
+  /**
+   * D3 - D215 | Número de celular del receptor | Pagina 72
+   */
+  dCelRec?: string;
+  /**
+   * D3 - D216 | Correo electrónico del receptor | Pagina 72
+   */
+  dEmailRec?: string;
+  /**
+   * D3 - D217 | Código del cliente | Pagina 72
+   */
+  dCodCliente?: string;
 }
 
 // Enumerations are defined below (numeric and description constants).
@@ -426,16 +450,24 @@ export type DDesTipEmi = (typeof DDesTipEmiValues)[keyof typeof DDesTipEmiValues
 
 export const ITiDEValues = {
   FacturaElectronica: 1,
+  FacturaElectronicaExportacion: 2,
+  FacturaElectronicaImportacion: 3,
+  AutofacturaElectronica: 4,
   NotaCreditoElectronica: 5,
   NotaDebitoElectronica: 6,
-  NotaRemisionElectronica: 7
+  NotaRemisionElectronica: 7,
+  ComprobanteRetencionElectronico: 8
 } as const;
 export type ITiDE = (typeof ITiDEValues)[keyof typeof ITiDEValues];
 export const DDesTiDEValues = {
   FacturaElectronica: 'Factura electrónica',
+  FacturaElectronicaExportacion: 'Factura electrónica de exportación',
+  FacturaElectronicaImportacion: 'Factura electrónica de importación',
+  AutofacturaElectronica: 'Autofactura electrónica',
   NotaCreditoElectronica: 'Nota de crédito electrónica',
   NotaDebitoElectronica: 'Nota de débito electrónica',
-  NotaRemisionElectronica: 'Nota de remisión electrónica'
+  NotaRemisionElectronica: 'Nota de remisión electrónica',
+  ComprobanteRetencionElectronico: 'Comprobante de retención electrónico'
 } as const;
 export type DDesTiDE = (typeof DDesTiDEValues)[keyof typeof DDesTiDEValues];
 
@@ -468,7 +500,7 @@ export const DDesTipTraValues = {
   CompraProductos: 'Compra de productos',
   CompraServicios: 'Compra de servicios',
   VentaCreditoFiscal: 'Venta de crédito fiscal',
-  MuestrasMedicas: 'Muestras médicas'
+  MuestrasMedicas: 'Muestras médicas (Art. 3 RG 24/2014)'
 } as const;
 export type DDesTipTra = (typeof DDesTipTraValues)[keyof typeof DDesTipTraValues];
 
@@ -506,8 +538,8 @@ export const ICondAntValues = {
 } as const;
 export type ICondAnt = (typeof ICondAntValues)[keyof typeof ICondAntValues];
 export const DDesCondAntValues = {
-  AnticipoGlobal: 'Anticipo Global (un solo tipo de anticipo para todo el DE)',
-  AnticipoPorItem: 'Anticipo por ítem'
+  AnticipoGlobal: 'Anticipo Global',
+  AnticipoPorItem: 'Anticipo por Ítem'
 } as const;
 export type DDesCondAnt = (typeof DDesCondAntValues)[keyof typeof DDesCondAntValues];
 

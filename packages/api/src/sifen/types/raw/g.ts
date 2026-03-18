@@ -31,7 +31,14 @@ export interface gCamCarg {
   /** G1 - G056 | Total peso de la mercadería | Pagina 107 */
   dTotPesMerc?: number;
   /** G1 - G057 | Características de la Carga | Pagina 107 */
-  iCarCarga?: number; // 1=Cadena de frío, 2=Carga peligrosa, 3=Otro
+  iCarCarga?: ICarCarga;
   /** G1 - G058 | Descripción de las características de la carga | Pagina 107 */
   dDesCarCarga?: string;
 }
+
+export const ICarCargaValues = {
+  CadenaFrio: 1,
+  CargaPeligrosa: 2,
+  Otro: 3
+} as const;
+export type ICarCarga = (typeof ICarCargaValues)[keyof typeof ICarCargaValues];

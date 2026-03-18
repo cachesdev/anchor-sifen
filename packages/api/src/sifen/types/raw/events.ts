@@ -11,7 +11,7 @@ export interface gGroupGesEve {
   /**
    * GDE - GDE001 | rGesEve | Raíz de Gestión de Eventos (1..15)
    */
-  rGesEve: rGesEve[];
+  rGesEve: [rGesEve, ...rGesEve[]];
 }
 
 /**
@@ -21,7 +21,7 @@ export interface rGesEve {
   /** GDE - GDE002 | rEve | Grupos de campos generales del evento */
   rEve: rEve;
   /** GDE - GDE008 | Signature | Firma Digital del campo rEve (GDE001) */
-  Signature?: Signature;
+  Signature: Signature;
 }
 
 /**
@@ -33,11 +33,11 @@ export interface rEve {
   /** GDE - GDE004 | dFecFirma | Fecha y Hora del firmado */
   dFecFirma: string; // AAAA-MM-DDThh:mm:ss
   /** GDE - GDE005 | dVerFor | Versión del formato */
-  dVerFor: number;
+  dVerFor: 150;
   /** GDE - GDE006 | dTiGDE | Tipo de Evento */
   dTiGDE: DTiGDE;
   /** GDE - GDE007 | gGroupTiEvt | Grupo correspondiente al tipo de evento (dependiente de dTiGDE) */
-  gGroupTiEvt?:
+  gGroupTiEvt:
     | GecCancelacion
     | GeiInutilizacion
     | GenNotificacion
@@ -48,6 +48,7 @@ export interface rEve {
     | GeraRetencion
     | GecfCreditosFiscales
     | GedfDevolucionCreditos
+    | GeddDevolucionCreditos
     | GeaAnticipo
     | GereRemision
     | GetTransUpdate;
@@ -193,7 +194,7 @@ export interface GenNotificacion {
     dDVRec?: number;
     dTipIDRec?: number; // 1=Cédula paraguaya.. etc (not deep enum here)
     dNumID?: string;
-    dTotalGs?: number;
+    dTotalGs: number;
   };
 }
 
@@ -283,6 +284,23 @@ export interface GedfDevolucionCreditos {
     Id: string; // CDC
     dNumDevSol: string; // Número DIR
     dNumDevInf: string; // Número de informe
+    dNumDevRes: string; // Número de resolución de la devolución
+    dFeEmiSol: string; // Fecha de emisión de DIR
+    dFeEmiInf: string; // Fecha de emisión del informe
+    dFeEmiRes: string; // Fecha de emisión de la resolución
+  };
+}
+
+// --- Evento Devolución de Créditos (GEDD - Devuelto) ---
+export interface GeddDevolucionCreditos {
+  rGeDevCCFFDev: {
+    Id: string; // CDC
+    dNumDevSol: string; // Número DIR
+    dNumDevInf: string; // Número de informe
+    dNumDevRes: string; // Número de resolución de la devolución
+    dFeEmiSol: string; // Fecha de emisión de DIR
+    dFeEmiInf: string; // Fecha de emisión del informe
+    dFeEmiRes: string; // Fecha de emisión de la resolución
   };
 }
 
