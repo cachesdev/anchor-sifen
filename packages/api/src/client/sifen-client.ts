@@ -67,8 +67,13 @@ export class SifenAPI {
     };
   }
 
-  async consultaRUC(ruc: string, checkDigit: string) {
+  async consultaRUC({ digitoControl, ruc }: { digitoControl: string; ruc: string }) {
     const { rucClient } = this.sifenSoapClients;
-    return rucClient.consultaRUC(ruc, checkDigit);
+    return rucClient.consultaRUC({ ruc, digitoControl });
+  }
+
+  async recibeLote({ digitoControl, DE }: { digitoControl: string; DE: string }) {
+    const { recibeLoteClient } = this.sifenSoapClients;
+    return recibeLoteClient.recibeLote({ digitoControl, DE });
   }
 }
