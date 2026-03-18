@@ -2,6 +2,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import type { SifenEnvironment } from './client';
 
+export const SIFEN_NS = 'http://ekuatia.set.gov.py/sifen/xsd';
+
 interface SifenEndpointConfig {
   wsdl: string;
   endpoint: string;
