@@ -6,4 +6,6 @@
 export interface gCamFuFD {
   /** J - J002 | Caracteres correspondientes al código QR | Pagina 110 */
   dCarQR: string;
+  /** J - J003 | Información adicional de interés para el emisor | Pagina 110 */
+  dInfAdic?: string;
 }

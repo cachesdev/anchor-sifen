@@ -11,7 +11,7 @@ export interface gCamNCDE {
   /**
    * E5 - E402 | Descripción del motivo de emisión | Pagina 77
    */
-  dDesMotEmi: string;
+  dDesMotEmi: DDesMotEmi;
 }
 
 export const MotivoEmisionNCDEValues = {
@@ -37,6 +37,17 @@ export const DDesMotEmiValues = {
   AjustePrecio: 'Ajuste de precio'
 } as const;
 export type DDesMotEmi = (typeof DDesMotEmiValues)[keyof typeof DDesMotEmiValues];
+
+export const CRelMercValues = {
+  ToleranciaQuiebra: 1,
+  ToleranciaMerma: 2
+} as const;
+export type CRelMerc = (typeof CRelMercValues)[keyof typeof CRelMercValues];
+export const DDesRelMercValues = {
+  ToleranciaQuiebra: 'Tolerancia de quiebra',
+  ToleranciaMerma: 'Tolerancia de merma'
+} as const;
+export type DDesRelMerc = (typeof DDesRelMercValues)[keyof typeof DDesRelMercValues];
 
 /**
  * E8 - E700 | Campos que describen los ítems de la operación | Pagina 88
@@ -71,9 +82,9 @@ export interface gCamItem {
   /** E8 - E714 | Información de interés del emisor con respecto al ítem | Pagina 86 */
   dInfItem?: string;
   /** E8 - E715 | Código de datos de relevancia de las mercaderías | Pagina 86 */
-  cRelMerc?: number;
+  cRelMerc?: CRelMerc;
   /** E8 - E716 | Descripción del código de datos de relevancia de las mercaderías | Pagina 86 */
-  dDesRelMerc?: string;
+  dDesRelMerc?: DDesRelMerc;
   /** E8 - E717 | Cantidad de quiebra o merma | Pagina 86 */
   dCanQuiMer?: number;
   /** E8 - E718 | Porcentaje de quiebra o merma | Pagina 86 */
@@ -82,8 +93,6 @@ export interface gCamItem {
   dCDCAnticipo?: string;
   /** E8.1 - E720 | Campos que describen los precios, descuentos y valor total por ítem | Pagina 86 */
   gValorItem?: gValorItem;
-  /** E8.1.1 - EA001-EA050 | Descuentos y anticipos por ítem | Pagina 88 */
-  gDescuentosAnticipos?: EA[];
 }
 
 /**
@@ -96,22 +105,26 @@ export interface gValorItem {
   dTiCamIt?: number;
   /** E8.1 - E727 | Total bruto de la operación por ítem | Pagina 88 */
   dTotBruOpeItem: number;
-  /** E8.1 - E727b | EA008 - Valor total de la operación por ítem | Pagina 88 */
-  EA008?: number;
+  /** E8.1.1 - EA001-EA050 | Campos que describen descuentos, anticipos y valor total por ítem | Pagina 87 */
+  gValorRestaItem: gValorRestaItem;
 }
 
 /**
- * E8.1.1 - EA001-EA050 | Campos que describen descuentos, anticipos y valores por ítem
+ * E8.1.1 - EA001-EA050 | Campos que describen descuentos, anticipos y valor total por ítem | Pagina 87
  */
-export interface EA {
-  /** EA001 | dTpoMov | Tipo de movimiento (1=Descuento, 2=Anticipo, etc.) */
-  dTpoMov: number;
-  /** EA002 | dValMov | Valor del movimiento (monto) */
-  dValMov: number;
-  /** EA003 | dPorcMov | Porcentaje del movimiento */
-  dPorcMov?: number;
-  /** EA004 | dCodMotMov | Código motivo movimiento (si aplica) */
-  dCodMotMov?: string;
-  /** EA005 | dDescMov | Descripción del movimiento */
-  dDescMov?: string;
+export interface gValorRestaItem {
+  /** EA002 | dDescItem | Descuento particular sobre el precio unitario por ítem (incluidos impuestos) */
+  dDescItem?: number;
+  /** EA003 | dPorcDesIt | Porcentaje de descuento particular por ítem */
+  dPorcDesIt?: number;
+  /** EA004 | dDescGloItem | Descuento global sobre el precio unitario por ítem (incluidos impuestos) */
+  dDescGloItem?: number;
+  /** EA006 | dAntPreUniIt | Anticipo particular sobre el precio unitario por ítem (incluidos impuestos) */
+  dAntPreUniIt?: number;
+  /** EA007 | dAntGloPreUniIt | Anticipo global sobre el precio unitario por ítem (incluidos impuestos) */
+  dAntGloPreUniIt?: number;
+  /** EA008 | dTotOpeItem | Valor total de la operación por ítem */
+  dTotOpeItem: number;
+  /** EA009 | dTotOpeGs | Valor total de la operación por ítem en guaraníes */
+  dTotOpeGs?: number;
 }
