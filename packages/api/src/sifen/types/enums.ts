@@ -111,3 +111,18 @@ export const descripcionCondicionAnticipo = {
 } as const;
 export type DescripcionCondicionAnticipo =
   (typeof condicionAnticipo)[keyof typeof condicionAnticipo];
+
+/**
+ * Tipo Regimen - D104 | Pagina 68
+ */
+export const tipoRegimen = {
+  Turismo: 1,
+  Importador: 2,
+  EXportador: 3,
+  Maquila: 4,
+  Ley60_90: 5,
+  PequenoProductor: 6,
+  MedianoProductor: 7,
+  Contable: 8
+} as const;
+export type TipoRegimen = (typeof tipoRegimen)[keyof typeof tipoRegimen];
