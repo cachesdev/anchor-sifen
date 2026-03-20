@@ -1,2 +1,2 @@
-export { createXMLGenerator } from './xml-generator';
-export type { XMLGenerator } from './xml-generator';
+export { XMLGen } from './generator';
+export type { XMLGenerator } from './generator';

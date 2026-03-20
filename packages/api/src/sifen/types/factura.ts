@@ -1,27 +1,7 @@
 // Basado en SIFEN MT v150
 
 import type { OperacionDE, DatosGenerales, Emisor, Receptor, ItemDE } from './common';
-
-/**
- * Tipo de documento electrónico - C002 | Pagina 64
- */
-
-export const tipoDocumentoElectronico = {
-  FacturaElectronica: 1,
-  FacturaElectronicaExportacion: 2,
-  FacturaElectronicaImportacion: 3,
-  AutofacturaElectronica: 4,
-  NotaCreditoElectronica: 5,
-  NotaDebitoElectronica: 6,
-  NotaRemisionElectronica: 7,
-  ComprobanteRetencionElectronico: 8
-} as const;
-
-/**
- * Tipo de documento electrónico - C002 | Pagina 64
- */
-export type TipoDocumentoElectronico =
-  (typeof tipoDocumentoElectronico)[keyof typeof tipoDocumentoElectronico];
+import type { TipoDocumentoElectronico } from './enums';
 
 /**
  * Indicador de presencia - E011 | Pagina 73
@@ -41,13 +21,8 @@ export const indicadorPresencia = {
  */
 export type IndicadorPresencia = (typeof indicadorPresencia)[keyof typeof indicadorPresencia];
 
-// ============================================================================
-// Factura Electrónica (FE) Types
-// ============================================================================
-
 /**
- * Factura Electrónica - Estructura entera para DE Factura Electronica
- * Basado en MT SIFEN v150
+ * Factura Electrónica con campos legibles, Basado en MT SIFEN v150
  */
 export interface FacturaElectronica {
   /**
@@ -82,13 +57,7 @@ export interface CamposFirmadosDE {
    *
    * Fecha debe ser luego de la emision pero antes de la transmision.
    */
-  fechaFirma: string; // Format: AAAA-MM-DDThh:mm:ss
-  /**
-   * A005 | dSisFact | Sistema de facturación | Pagina 64
-   *
-   * Siempre 1 ya que 2 indica que la request viene de e-Kuatia'i.
-   */
-  sistemaFacturacion: 1;
+  fechaFirma: Date; // Format: AAAA-MM-DDThh:mm:ss
   /**
    * B001 | gOpeDE | Campos inherentes a la operación de DE | Pagina 65
    */
@@ -96,11 +65,11 @@ export interface CamposFirmadosDE {
   /**
    * C001 | gTimb | Datos del timbrado | Pagina 64
    */
-  timbrado: Timbrado;
+  datosTimbrado: Timbrado;
   /**
    * D001 | gDatGralOpe | Campos generales del DE | Pagina 65
    */
-  datosGenerales: DatosGenerales;
+  datosGenerales: Required<DatosGenerales>;
   /**
    * D100 | gEmis | Grupo de campos que identifican al emisor | Pagina 67
    */
@@ -132,33 +101,25 @@ export interface Timbrado {
    */
   tipoDocumento: TipoDocumentoElectronico;
   /**
-   * C003 | dDesTiDE | Descripción del tipo de documento electrónico | Pagina 64
-   */
-  descripcionTipoDocumento: string;
-  /**
    * C004 | dNumTim | Número del timbrado | Pagina 64
    */
   numeroTimbrado: number;
   /**
    * C005 | dEst | Establecimiento | Pagina 64
    */
-  establecimiento: string;
+  establecimiento: number;
   /**
    * C006 | dPunExp | Punto de expedición | Pagina 64
    */
-  puntoExpedicion: string;
+  puntoExpedicion: number;
   /**
    * C007 | dNumDoc | Número del documento | Pagina 64
    */
-  numeroDocumento: string;
+  numeroDocumento: number;
   /**
    * C008 | dFeIniT | Fecha inicio de vigencia del timbrado | Pagina 64
    */
-  fechaInicioVigencia: string; // Format: AAAA-MM-DD
-  /**
-   * C009 | dFeFinT | Fecha fin de vigencia del timbrado | Pagina 64
-   */
-  fechaFinVigencia: string; // Format: AAAA-MM-DD
+  fechaInicioVigencia: Date; // Format: AAAA-MM-DD
   /**
    * C010 | dSerieNum | Serie del número de timbrado | Pagina 64
    */
