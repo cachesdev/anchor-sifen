@@ -2,7 +2,7 @@ import { CertificateManager, type CertificateData } from '../certificate';
 import { createQRGenerator, type QRGenerator } from '../qr';
 import type { FacturaElectronica } from '../sifen/types';
 import { SifenSoapClient } from '../soap';
-import { createXMLGenerator, type XMLGenerator } from '../xml-gen';
+import { XMLGen } from '../xml-gen';
 import { XMLSigner } from '../xml-sign';
 
 export interface SIFENConfig {
@@ -16,7 +16,7 @@ export interface SIFENConfig {
 export class SifenAPI {
   private readonly config: SIFENConfig;
   private readonly certManager: CertificateManager;
-  private readonly xmlGenerator: XMLGenerator;
+  private readonly xmlGen: XMLGen;
   private readonly xmlSigner: XMLSigner;
   private readonly qrGenerator: QRGenerator;
   private readonly sifenSoapClients: SifenSoapClient;
@@ -25,7 +25,7 @@ export class SifenAPI {
   constructor(config: SIFENConfig) {
     this.config = config;
     this.certManager = new CertificateManager();
-    this.xmlGenerator = createXMLGenerator();
+    this.xmlGen = new XMLGen();
     this.xmlSigner = new XMLSigner();
     this.qrGenerator = createQRGenerator();
     this.certificateData = this.certManager.loadPKCS12(
@@ -47,7 +47,7 @@ export class SifenAPI {
     qrData: string;
   }> {
     // Generate XML
-    const xml = this.xmlGenerator.generateFacturaElectronica(data);
+    const xml = this.xmlGen.generateFacturaElectronica(data);
 
     // Sign XML
     const signedXml = await this.xmlSigner.signDocument(xml, this.certificateData);

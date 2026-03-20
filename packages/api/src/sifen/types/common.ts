@@ -1,6 +1,14 @@
 // SIFEN Common Type Definitions v150
 // Shared types used across different DTE types
 
+import type { CodigoMoneda } from '../../gen/iso4217';
+import type {
+  CondicionAnticipo,
+  CondicionTipoCambio,
+  TipoImpuesto,
+  TipoTransaccion
+} from './enums';
+
 // ============================================================================
 // Enums with clear values from field descriptions
 // ============================================================================
@@ -13,56 +21,12 @@ export const tipoEmision = {
   Contingencia: 2
 } as const;
 
-/**
- * Tipo de emisión - B002 | Pagina 65
- */
 export type TipoEmision = (typeof tipoEmision)[keyof typeof tipoEmision];
 
 export const descripcionTipoEmision = {
   [tipoEmision.Normal]: 'Normal',
   [tipoEmision.Contingencia]: 'Contingencia'
 } as const;
-export type DescripcionTipoEmision =
-  (typeof descripcionTipoEmision)[keyof typeof descripcionTipoEmision];
-
-/**
- * Tipo de impuesto afectado - D013 | Pagina 66
- */
-export const tipoImpuesto = {
-  IVA: 1,
-  ISC: 2,
-  Renta: 3,
-  Ninguno: 4,
-  IVARenta: 5
-} as const;
-/**
- * Tipo de impuesto afectado - D013 | Pagina 66
- */
-export type TipoImpuesto = (typeof tipoImpuesto)[keyof typeof tipoImpuesto];
-
-/**
- * Condición del tipo de cambio - D017 | Pagina 66
- */
-export const condicionTipoCambio = {
-  Global: 1,
-  PorItem: 2
-} as const;
-/**
- * Condición del tipo de cambio - D017 | Pagina 66
- */
-export type CondicionTipoCambio = (typeof condicionTipoCambio)[keyof typeof condicionTipoCambio];
-
-/**
- * Condición del Anticipo - D019 | Pagina 66
- */
-export const condicionAnticipo = {
-  Global: 1,
-  PorItem: 2
-} as const;
-/**
- * Condición del Anticipo - D019 | Pagina 66
- */
-export type CondicionAnticipo = (typeof condicionAnticipo)[keyof typeof condicionAnticipo];
 
 /**
  * Tipo de contribuyente - D103 | Pagina 67
@@ -118,11 +82,9 @@ export interface OperacionDE {
    */
   tipoEmision: TipoEmision;
   /**
-   * B003 | dDesTipEmi | Descripción del tipo de emisión | Pagina 65
-   */
-  descripcionTipoEmision: DescripcionTipoEmision;
-  /**
    * B004 | dCodSeg | Código de seguridad | Pagina 65
+   *
+   * Codigo de 9 digitos generado aleatoriamente por el emisor
    */
   codigoSeguridad: number;
   /**
@@ -142,7 +104,7 @@ export interface DatosGenerales {
   /**
    * D002 | dFeEmiDE | Fecha y hora de emisión del DE | Pagina 65
    */
-  fechaHoraEmision: string; // Format: AAAA-MM-DDThh:mm:ss
+  fechaHoraEmision: Date; // Format: AAAA-MM-DDThh:mm:ss
   /**
    * D010 | gOpeCom | Campos inherentes a la operación comercial | Pagina 65
    */
@@ -156,27 +118,15 @@ export interface OperacionComercial {
   /**
    * D011 | iTipTra | Tipo de transacción | Pagina 66
    */
-  tipoTransaccion?: number; // TODO: Define enum (1=Venta mercadería, 2=Prestación servicios, etc.)
-  /**
-   * D012 | dDesTipTra | Descripción del tipo de transacción | Pagina 66
-   */
-  descripcionTipoTransaccion?: string;
+  tipoTransaccion?: TipoTransaccion;
   /**
    * D013 | iTImp | Tipo de impuesto afectado | Pagina 66
    */
   tipoImpuesto: TipoImpuesto;
   /**
-   * D014 | dDesTImp | Descripción del tipo de impuesto afectado | Pagina 66
-   */
-  descripcionTipoImpuesto: string;
-  /**
    * D015 | cMoneOpe | Moneda de la operación | Pagina 66
    */
-  monedaOperacion: string; // TODO: Define enum based on ISO 4217
-  /**
-   * D016 | dDesMoneOpe | Descripción de la moneda de la operación | Pagina 66
-   */
-  descripcionMonedaOperacion: string;
+  monedaOperacion: CodigoMoneda;
   /**
    * D017 | dCondTiCam | Condición del tipo de cambio | Pagina 66
    */

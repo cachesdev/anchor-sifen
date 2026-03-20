@@ -1,6 +1,8 @@
 // AUTO-GENERATED (partial) — SIFEN Manual Técnico v150
 // Groups implemented: AA (AA001-AA002), A (A001-A005), B (B001-B006), C (C001-C010), D (D001-D299 subset: D010, D011-D020, D100-D160, D130-D145, D200-D224)
 
+import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/iso4217';
+
 /**
  * AA - AA001 | Documento Electrónico elemento raíz | Pagina 64
  */
@@ -119,10 +121,6 @@ export interface gTimb {
    */
   dFeIniT: string; // Format: AAAA-MM-DD
   /**
-   * C - C009 | Fecha fin de vigencia del timbrado | Pagina 64
-   */
-  dFeFinT: string; // Format: AAAA-MM-DD
-  /**
    * C - C010 | Serie del número de timbrado | Pagina 64
    */
   dSerieNum?: string;
@@ -165,11 +163,11 @@ export interface gOpeCom {
   /**
    * D1 - D015 | Moneda de la operación | Pagina 66
    */
-  cMoneOpe: string; // ISO 4217 code
+  cMoneOpe: CodigoMoneda;
   /**
    * D1 - D016 | Descripción de la moneda de la operación | Pagina 66
    */
-  dDesMoneOpe: string;
+  dDesMoneOpe: DescripcionCodigoMoneda;
   /**
    * D1 - D017 | Condición del tipo de cambio | Pagina 66
    */
@@ -420,11 +418,7 @@ export interface gDatRec {
   dCodCliente?: string;
 }
 
-// Enumerations are defined below (numeric and description constants).
-
-// TODO: Implement remaining tables (e.g., Tipo de Régimen, Monedas ISO, Tablas de ubicaciones) as constants/types per manual references.
-
-// --- Enumerations (numeric + description constants) ---
+// --- Enumeraciones ---
 
 export const DSisFactValues = {
   SistemaContribuyente: 1,
@@ -490,7 +484,7 @@ export type ITipTra = (typeof ITipTraValues)[keyof typeof ITipTraValues];
 export const DDesTipTraValues = {
   VentaMercaderia: 'Venta de mercadería',
   PrestacionServicios: 'Prestación de servicios',
-  Mixto: 'Mixto (Venta de mercadería y servicios)',
+  Mixto: 'Mixto',
   VentaActivoFijo: 'Venta de activo fijo',
   VentaDivisas: 'Venta de divisas',
   CompraDivisas: 'Compra de divisas',

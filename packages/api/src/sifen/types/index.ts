@@ -5,3 +5,4 @@ export * from './autofactura';
 export * from './sifen-ncde-common';
 export * from './nota-credito';
 export * from './nota-debito';
+export * from './enums';
