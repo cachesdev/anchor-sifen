@@ -6,7 +6,7 @@ import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../..
 import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/iso4217';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
-import type { gCamFE, gCamCond, gCamItem } from './e';
+import type { gCamFE, gCamAE, gCamNCDE, gCamNRE, gCamCond, gCamItem, gCamEsp, gTransp } from './e';
 import type { gTotSub } from './f';
 
 /**
@@ -66,9 +66,35 @@ export interface DE {
    */
   gDatRec: gDatRec;
   /**
+   * E - E001 | Campos específicos por tipo de Documento Electrónico | Pagina 73
+   */
+  gDtipDE: gDtipDE;
+  /**
+   * F - F001 | Campos de subtotales y totales | Pagina 102
+   */
+  gTotSub?: gTotSub;
+}
+
+/**
+ * E - E001 | Campos específicos por tipo de Documento Electrónico | Pagina 73
+ */
+export interface gDtipDE {
+  /**
    * E1 - E010 | Campos que componen la FE | Pagina 73
    */
   gCamFE?: gCamFE;
+  /**
+   * E3 - E300 | Campos que componen la Autofactura Electrónica | Pagina 76
+   */
+  gCamAE?: gCamAE;
+  /**
+   * E4 - E400 | Campos de la Nota de Crédito/Débito Electrónica | Pagina 77
+   */
+  gCamNCDE?: gCamNCDE;
+  /**
+   * E5 - E500 | Campos que componen la Nota de Remisión Electrónica | Pagina 78
+   */
+  gCamNRE?: gCamNRE;
   /**
    * E7 - E600 | Campos que describen la condición de la operación | Pagina 80
    */
@@ -78,9 +104,13 @@ export interface DE {
    */
   gCamItem?: gCamItem[];
   /**
-   * F - F001 | Campos de subtotales y totales | Pagina 89
+   * G - G050 | Campos complementarios comerciales de uso específico | Pagina 109
    */
-  gTotSub?: gTotSub;
+  gCamEsp?: gCamEsp;
+  /**
+   * E9 - E900 | Campos que describen el transporte de mercaderías | Pagina 95
+   */
+  gTransp?: gTransp;
 }
 
 /**

@@ -10,7 +10,8 @@ import {
   descripcionDenominacionTarjeta,
   descripcionCondicionCredito,
   descripcionTipoDocumentoResponsable,
-  descripcionTipoDocumentoIdentidadReceptor
+  descripcionTipoDocumentoIdentidadReceptor,
+  descripcionUnidadMedida
 } from '../sifen/types/enums';
 import { DateTime } from 'luxon';
 import { codigoMoneda } from '../gen/iso4217';
@@ -160,84 +161,96 @@ export class XMLGen implements XMLGenerator {
         dEmailRec: data.receptor.email,
         dCodCliente: data.receptor.codigoCliente
       },
-      gCamFE: {
-        iIndPres: data.camposFE.indicadorPresencia,
-        dDesIndPres: descripcionIndicadorPresencia[data.camposFE.indicadorPresencia],
-        dFecEmNR: data.camposFE.fechaTrasladoMercaderia,
-        gCompPub: data.camposFE.comprasPublicas
-          ? {
-              dModCont: data.camposFE.comprasPublicas.modalidad,
-              dEntCont: data.camposFE.comprasPublicas.entidad,
-              dAnoCont: data.camposFE.comprasPublicas.año,
-              dSecCont: data.camposFE.comprasPublicas.secuencia,
-              dFeCodCont: data.camposFE.comprasPublicas.fechaEmisionCodigoContratacion
-            }
-          : undefined
-      },
-      gCamCond: {
-        iCondOpe: data.condicionOperacion.condicion,
-        dDCondOpe: descripcionCondicionOperacion[data.condicionOperacion.condicion],
-        gPaConEIni: data.condicionOperacion.pagoContadoEntregaInicial?.map((pago) => ({
-          iTiPago: pago.tipoPago,
-          dDesTiPag:
-            pago.tipoPago === 99 ? pago.descripcionTipoPago! : descripcionTipoPago[pago.tipoPago],
-          dMonTiPag: pago.montoPago,
-          cMoneTiPag: pago.monedaPago,
-          dDMoneTiPag: codigoMoneda[pago.monedaPago],
-          dTiCamTiPag: pago.tipoCambioPago,
-          gPagTarCD: pago.pagoTarjeta
-            ? {
-                iDenTarj: pago.pagoTarjeta.denominacionTarjeta,
-                dDesDenTarj:
-                  pago.pagoTarjeta.denominacionTarjeta === 99
-                    ? pago.pagoTarjeta.descripcionDenominacionTarjeta!
-                    : descripcionDenominacionTarjeta[pago.pagoTarjeta.denominacionTarjeta],
-                dRSProTar: pago.pagoTarjeta.razonSocialProcesadora,
-                dRUCProTar: pago.pagoTarjeta.rucProcesadora,
-                dDVProTar: pago.pagoTarjeta.dvProcesadora,
-                iForProPa: pago.pagoTarjeta.formaProcesamientoPago,
-                dCodAuOpe: pago.pagoTarjeta.codigoAutorizacion,
-                dNomTit: pago.pagoTarjeta.nombreTitular,
-                dNumTarj: pago.pagoTarjeta.numeroTarjeta
-              }
+      gDtipDE: {
+        gCamFE: {
+          iIndPres: data.camposEspecificosTipoDE.camposFE.indicadorPresencia,
+          dDesIndPres: (() => {
+            // Segun E012, si el tipo es "Otro" la descripcion puede ser cualquiera
+            if (data.camposEspecificosTipoDE.camposFE.indicadorPresencia === 9)
+              return data.camposEspecificosTipoDE.camposFE.descripcionIndicadorPresencia;
+
+            return descripcionIndicadorPresencia[
+              data.camposEspecificosTipoDE.camposFE.indicadorPresencia
+            ];
+          })(),
+          dFecEmNR: data.camposEspecificosTipoDE.camposFE.fechaTrasladoMercaderia
+            ? formatDate(
+                data.camposEspecificosTipoDE.camposFE.fechaTrasladoMercaderia,
+                'YYYY-MM-DD'
+              )
             : undefined,
-          gPagCheq: pago.pagoCheque
+          gCompPub: data.camposEspecificosTipoDE.camposFE.comprasPublicas
             ? {
-                dNumCheq: pago.pagoCheque.numeroCheque,
-                dBcoEmi: pago.pagoCheque.bancoEmisor
+                dModCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.modalidad,
+                dEntCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.entidad,
+                dAnoCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.año,
+                dSecCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.secuencia,
+                dFeCodCont: formatDate(
+                  data.camposEspecificosTipoDE.camposFE.comprasPublicas
+                    .fechaEmisionCodigoContratacion,
+                  'YYYY-MM-DD'
+                )
               }
             : undefined
-        })),
-        gPagCred: data.condicionOperacion.pagoCredito
-          ? {
-              iCondCred: data.condicionOperacion.pagoCredito.condicionCredito,
-              dDCondCred:
-                descripcionCondicionCredito[data.condicionOperacion.pagoCredito.condicionCredito],
-              dPlazoCre: data.condicionOperacion.pagoCredito.plazoCredito,
-              dCuotas: data.condicionOperacion.pagoCredito.cantidadCuotas,
-              dMonEnt: data.condicionOperacion.pagoCredito.montoEntregaInicial,
-              gCuotas: data.condicionOperacion.pagoCredito.cuotas?.map((cuota) => ({
-                cMoneCuo: cuota.monedaCuota,
-                dDMoneCuo: codigoMoneda[cuota.monedaCuota],
-                dMonCuota: cuota.montoCuota,
-                dVencCuo: cuota.vencimientoCuota
-              }))
-            }
-          : undefined
+        },
+        gCamCond: {
+          iCondOpe: data.camposEspecificosTipoDE.condicionOperacion.condicion,
+          dDCondOpe:
+            descripcionCondicionOperacion[
+              data.camposEspecificosTipoDE.condicionOperacion.condicion
+            ],
+          gPaConEIni:
+            data.camposEspecificosTipoDE.condicionOperacion.pagoContadoEntregaInicial?.map(
+              (pago) => ({
+                iTiPago: pago.tipoPago,
+                dDesTiPag:
+                  pago.tipoPago === 99
+                    ? pago.descripcionTipoPago!
+                    : descripcionTipoPago[pago.tipoPago],
+                dMonTiPag: pago.montoPago,
+                cMoneTiPag: pago.monedaPago,
+                dDMoneTiPag: codigoMoneda[pago.monedaPago],
+                dTiCamTiPag: pago.tipoCambioPago,
+                gPagTarCD: pago.pagoTarjeta
+                  ? {
+                      iDenTarj: pago.pagoTarjeta.denominacionTarjeta,
+                      dDesDenTarj:
+                        pago.pagoTarjeta.denominacionTarjeta === 99
+                          ? pago.pagoTarjeta.descripcionDenominacionTarjeta!
+                          : descripcionDenominacionTarjeta[pago.pagoTarjeta.denominacionTarjeta],
+                      dRSProTar: pago.pagoTarjeta.razonSocialProcesadora,
+                      dRUCProTar: pago.pagoTarjeta.rucProcesadora,
+                      dDVProTar: pago.pagoTarjeta.dvProcesadora,
+                      iForProPa: pago.pagoTarjeta.formaProcesamientoPago,
+                      dCodAuOpe: pago.pagoTarjeta.codigoAutorizacion,
+                      dNomTit: pago.pagoTarjeta.nombreTitular,
+                      dNumTarj: pago.pagoTarjeta.numeroTarjeta
+                    }
+                  : undefined,
+                gPagCheq: pago.pagoCheque
+                  ? {
+                      dNumCheq: pago.pagoCheque.numeroCheque,
+                      dBcoEmi: pago.pagoCheque.bancoEmisor
+                    }
+                  : undefined
+              })
+            ),
+            // TODO: Implementar pago credito
       },
-      gCamItem: data.items.map((item) => ({
-        dCodInt: item.codigoInterno || '',
+      gCamItem: data.camposEspecificosTipoDE.items.map((item) => ({
+        dCodInt: item.codigoInterno,
+        dParAranc: item.partidaArancelaria,
+        dNCM: item.ncm,
+        dDncpG: item.codigoDncpGeneral,
+        dDncpE: item.codigoDncpEspecifico,
+        dGtin: item.gtin,
+        dGtinPq: item.gtinPaquete,
         dDesProSer: item.descripcion,
         cUniMed: item.codigoUnidadMedida,
-        dDesUniMed: item.descripcionUnidadMedida,
+        dDesUniMed: descripcionUnidadMedida[item.codigoUnidadMedida],
         dCantProSer: item.cantidad,
-        gValorItem: {
-          dPUniProSer: item.precioUnitario,
-          dTotBruOpeItem: item.precioTotal,
-          gValorRestaItem: {
-            dTotOpeItem: item.totalGeneralItem
-          }
-        }
+        cPaisOrig: item.codigoPaisOrigen,
+        dDesPaisOrig: item.codigoPaisOrigen ? descripcionCodigoPais[item.codigoPaisOrigen]: undefined,
       })),
       gTotSub: {
         dSubExe: data.totales.subtotalExento,

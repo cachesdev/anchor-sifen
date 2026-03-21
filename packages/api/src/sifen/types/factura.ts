@@ -70,6 +70,20 @@ export interface CamposFirmadosDE {
    */
   receptor: Receptor;
   /**
+   * E001 | gDtipDE | Campos específicos por tipo de Documento Electrónico | Pagina 73
+   */
+  camposEspecificosTipoDE: CamposEspecificosTipoDEFE;
+  /**
+   * F001 | gTotSub | Campos de subtotales y totales | Pagina 102
+   */
+  totales: TotalesOperacion;
+}
+
+/**
+ * E001 | gDtipDE | Campos específicos por tipo de Documento Electrónico para FE | Pagina 73
+ */
+export interface CamposEspecificosTipoDEFE {
+  /**
    * E010 | gCamFE | Campos que componen la FE | Pagina 73
    */
   camposFE: CamposFE;
@@ -81,10 +95,6 @@ export interface CamposFirmadosDE {
    * E700 | gItems | Campos que describen los ítems de la operación | Pagina 88
    */
   items: ItemDE[];
-  /**
-   * F001 | gTotSub | Campos de subtotales y totales | Pagina 89
-   */
-  totales: TotalesOperacion;
 }
 
 /**
@@ -130,9 +140,15 @@ export interface CamposFE {
    */
   indicadorPresencia: IndicadorPresencia;
   /**
+   * E012 | dDesIndPres | Descripcion del Indicador de presencia | Pagina 73
+   *
+   * solo mandar si indicadorPresencia es Otro (9) en ese caso se manda una descripcion arbitraria del indicador
+   */
+  descripcionIndicadorPresencia: string;
+  /**
    * E013 | dFecEmNR | Fecha futura del traslado de mercadería | Pagina 73
    */
-  fechaTrasladoMercaderia?: string; // Format: AAAA-MM-DD
+  fechaTrasladoMercaderia?: Date; // Format: AAAA-MM-DD
   /**
    * E020 | gCompPub | Campos que describen las informaciones de compras públicas | Pagina 73
    */
@@ -162,7 +178,7 @@ export interface ComprasPublicas {
   /**
    * E025 | dFeCodCont | Fecha de emisión del código de contratación por la DNCP | Pagina 74
    */
-  fechaEmisionCodigoContratacion: string; // Format: AAAA-MM-DD
+  fechaEmisionCodigoContratacion: Date; // Format: AAAA-MM-DD
 }
 
 /**
@@ -175,16 +191,10 @@ export interface CondicionOperacionFE {
   condicion: CondicionOperacion;
   /**
    * E605 | gPaConEIni | Campos que describen la forma de pago al contado o del monto de la entrega inicial | Pagina 80
-   *
-   * Obligatorio si E601 = 1 (Contado)
-   * Obligatorio si existe el campo E645 (Monto de la entrega inicial)
    */
   pagoContadoEntregaInicial?: PagoContadoEntregaInicial[];
   /**
    * E640 | gPagCred | Campos que describen la operación a crédito | Pagina 84
-   *
-   * Obligatorio si E601 = 2 (Crédito)
-   * No informar si E601 ≠ 2
    */
   pagoCredito?: PagoCredito;
 }
