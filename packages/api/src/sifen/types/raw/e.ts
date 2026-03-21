@@ -1,6 +1,7 @@
 // SIFEN E groups - E001..E899 (partial)
 
 import type { CodigoMoneda } from '../../../gen/iso4217';
+import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
 
 /**
  * E1 - E010 | Campos que componen la FE | Pagina 73
@@ -13,7 +14,7 @@ export interface gCamFE {
   /**
    * E1 - E012 | Descripción del indicador de presencia | Pagina 73
    */
-  dDesIndPres: DDesIndPres;
+  dDesIndPres: DDesIndPres | string;
   /**
    * E1 - E013 | Fecha futura del traslado de mercadería | Pagina 73
    */
@@ -359,6 +360,81 @@ export const DDesRelMercValues = {
 } as const;
 export type DDesRelMerc = (typeof DDesRelMercValues)[keyof typeof DDesRelMercValues];
 
+export const CUniMedValues = {
+  Unidad: 77,
+  KilogramosPorMetroCuadrado: 79,
+  Kilogramos: 83,
+  Gramos: 86,
+  Metros: 87,
+  Mililitros: 88,
+  Litros: 89,
+  Miligramos: 90,
+  Centimetros: 91,
+  CentimetrosCuadrados: 92,
+  CentimetrosCubicos: 93,
+  Pulgadas: 94,
+  Milimetros: 95,
+  MilimetrosCuadrados: 96,
+  Año: 97,
+  Mes: 98,
+  Tonelada: 99,
+  Hora: 100,
+  Minuto: 101,
+  Dia: 102,
+  Yardas: 103,
+  Determinacion: 104,
+  MetrosMT: 108,
+  MetrosCuadrados: 109,
+  MetrosCubicos: 110,
+  Racion: 569,
+  Kilometros: 625,
+  Segundo: 666,
+  MetroLineal: 660,
+  Hectareas: 869,
+  UnidadMedidaGlobal: 885,
+  PorMillaje: 891,
+  UnidadInternacional: 2329,
+  CostoPorMil: 2366
+} as const;
+export type CUniMed = (typeof CUniMedValues)[keyof typeof CUniMedValues];
+export const DDesUniMedValues = {
+  [CUniMedValues.Unidad]: 'UNI',
+  [CUniMedValues.KilogramosPorMetroCuadrado]: 'kg/m²',
+  [CUniMedValues.Kilogramos]: 'kg',
+  [CUniMedValues.Gramos]: 'g',
+  [CUniMedValues.Metros]: 'm',
+  [CUniMedValues.Mililitros]: 'ML',
+  [CUniMedValues.Litros]: 'LT',
+  [CUniMedValues.Miligramos]: 'MG',
+  [CUniMedValues.Centimetros]: 'CM',
+  [CUniMedValues.CentimetrosCuadrados]: 'CM2',
+  [CUniMedValues.CentimetrosCubicos]: 'CM3',
+  [CUniMedValues.Pulgadas]: 'PUL',
+  [CUniMedValues.Milimetros]: 'MM',
+  [CUniMedValues.MilimetrosCuadrados]: 'MM2',
+  [CUniMedValues.Año]: 'AA',
+  [CUniMedValues.Mes]: 'ME',
+  [CUniMedValues.Tonelada]: 'TN',
+  [CUniMedValues.Hora]: 'Hs',
+  [CUniMedValues.Minuto]: 'Mi',
+  [CUniMedValues.Dia]: 'Di',
+  [CUniMedValues.Yardas]: 'Ya',
+  [CUniMedValues.Determinacion]: 'DET',
+  [CUniMedValues.MetrosMT]: 'MT',
+  [CUniMedValues.MetrosCuadrados]: 'M2',
+  [CUniMedValues.MetrosCubicos]: 'M3',
+  [CUniMedValues.Racion]: 'ración',
+  [CUniMedValues.Kilometros]: 'Km',
+  [CUniMedValues.Segundo]: 'Se',
+  [CUniMedValues.MetroLineal]: 'ml',
+  [CUniMedValues.Hectareas]: 'ha',
+  [CUniMedValues.UnidadMedidaGlobal]: 'GL',
+  [CUniMedValues.PorMillaje]: 'pm',
+  [CUniMedValues.UnidadInternacional]: 'UI',
+  [CUniMedValues.CostoPorMil]: 'CPM'
+} as const;
+export type DDesUniMed = (typeof DDesUniMedValues)[keyof typeof DDesUniMedValues];
+
 /**
  * E8 - E700 | Campos que describen los ítems de la operación | Pagina 88
  */
@@ -380,15 +456,15 @@ export interface gCamItem {
   /** E8 - E708 | Descripción del producto y/o servicio | Pagina 86 */
   dDesProSer: string;
   /** E8 - E709 | Unidad de medida | Pagina 86 */
-  cUniMed: number;
+  cUniMed: CUniMed;
   /** E8 - E710 | Descripción de la unidad de medida | Pagina 86 */
-  dDesUniMed: string;
+  dDesUniMed: DDesUniMed;
   /** E8 - E711 | Cantidad del producto y/o servicio | Pagina 86 */
   dCantProSer: number;
   /** E8 - E712 | Código del país de origen del producto | Pagina 86 */
-  cPaisOrig?: string;
+  cPaisOrig?: CodigoPais;
   /** E8 - E713 | Descripción del país de origen del producto | Pagina 86 */
-  dDesPaisOrig?: string;
+  dDesPaisOrig?: DescripcionCodigoPais;
   /** E8 - E714 | Información de interés del emisor con respecto al ítem | Pagina 86 */
   dInfItem?: string;
   /** E8 - E715 | Código de datos de relevancia de las mercaderías | Pagina 86 */
@@ -437,4 +513,644 @@ export interface gValorRestaItem {
   dTotOpeItem: number;
   /** EA009 | dTotOpeGs | Valor total de la operación por ítem en guaraníes */
   dTotOpeGs?: number;
+}
+
+/**
+ * E3 - E300 | Campos que componen la Autofactura Electrónica | Pagina 76
+ */
+export interface gCamAE {
+  /**
+   * E4 - E301 | Naturaleza del vendedor | Pagina 76
+   */
+  iNatVen: INatVen;
+  /**
+   * E4 - E302 | Descripción de la naturaleza del vendedor | Pagina 76
+   */
+  dDesNatVen: DDesNatVen;
+  /**
+   * E4 - E304 | Tipo de documento de identidad del vendedor | Pagina 76
+   */
+  iTipIDVen: ITipIDVen;
+  /**
+   * E4 - E305 | Descripción del tipo de documento de identidad del vendedor | Pagina 76
+   */
+  dDTipIDVen: DDTipIDVen;
+  /**
+   * E4 - E306 | Número de documento de identidad del vendedor | Pagina 76
+   */
+  dNumIDVen: string;
+  /**
+   * E4 - E307 | Nombre y apellido del vendedor | Pagina 76
+   */
+  dNomVen: string;
+  /**
+   * E4 - E308 | Dirección del vendedor | Pagina 76
+   */
+  dDirVen: string;
+  /**
+   * E4 - E309 | Número de casa del vendedor | Pagina 76
+   */
+  dNumCasVen: number;
+  /**
+   * E4 - E310 | Código del departamento del vendedor | Pagina 76
+   */
+  cDepVen: number;
+  /**
+   * E4 - E311 | Descripción del departamento del vendedor | Pagina 76
+   */
+  dDesDepVen: string;
+  /**
+   * E4 - E312 | Código del distrito del vendedor | Pagina 76
+   */
+  cDisVen?: number;
+  /**
+   * E4 - E313 | Descripción del distrito del vendedor | Pagina 76
+   */
+  dDesDisVen?: string;
+  /**
+   * E4 - E314 | Código de la ciudad del vendedor | Pagina 76
+   */
+  cCiuVen: number;
+  /**
+   * E4 - E315 | Descripción de la ciudad del vendedor | Pagina 76
+   */
+  dDesCiuVen: string;
+  /**
+   * E4 - E316 | Lugar de la transacción | Pagina 76
+   */
+  dDirProv: string;
+  /**
+   * E4 - E317 | Código del departamento donde se realiza la transacción | Pagina 76
+   */
+  cDepProv: number;
+  /**
+   * E4 - E318 | Descripción del departamento donde se realiza la transacción | Pagina 76
+   */
+  dDesDepProv: string;
+  /**
+   * E4 - E319 | Código del distrito donde se realiza la transacción | Pagina 76
+   */
+  cDisProv?: number;
+  /**
+   * E4 - E320 | Descripción del distrito donde se realiza la transacción | Pagina 76
+   */
+  dDesDisProv?: string;
+  /**
+   * E4 - E321 | Código de la ciudad donde se realiza la transacción | Pagina 76
+   */
+  cCiuProv: number;
+  /**
+   * E4 - E322 | Descripción de la ciudad donde se realiza la transacción | Pagina 76
+   */
+  dDesCiuProv: string;
+}
+
+export const INatVenValues = {
+  NoContribuyente: 1,
+  Extranjero: 2
+} as const;
+export type INatVen = (typeof INatVenValues)[keyof typeof INatVenValues];
+
+export const DDesNatVenValues = {
+  NoContribuyente: 'No contribuyente',
+  Extranjero: 'Extranjero'
+} as const;
+export type DDesNatVen = (typeof DDesNatVenValues)[keyof typeof DDesNatVenValues];
+
+export const ITipIDVenValues = {
+  CedulaParaguaya: 1,
+  Pasaporte: 2,
+  CedulaExtranjera: 3,
+  CarnetResidencia: 4
+} as const;
+export type ITipIDVen = (typeof ITipIDVenValues)[keyof typeof ITipIDVenValues];
+
+export const DDTipIDVenValues = {
+  CedulaParaguaya: 'Cédula paraguaya',
+  Pasaporte: 'Pasaporte',
+  CedulaExtranjera: 'Cédula extranjera',
+  CarnetResidencia: 'Carnet de residencia'
+} as const;
+export type DDTipIDVen = (typeof DDTipIDVenValues)[keyof typeof DDTipIDVenValues];
+
+/**
+ * E5 - E500 | Campos que componen la Nota de Remisión Electrónica | Pagina 78
+ */
+export interface gCamNRE {
+  /**
+   * E6 - E501 | Motivo de emisión | Pagina 78
+   */
+  iMotEmiNR: IMotEmiNR;
+  /**
+   * E6 - E502 | Descripción del motivo de emisión | Pagina 78
+   */
+  dDesMotEmiNR: string;
+  /**
+   * E6 - E503 | Responsable de la emisión de la Nota Remisión Electrónica | Pagina 78
+   */
+  iRespEmiNR: IRespEmiNR;
+  /**
+   * E6 - E504 | Descripción del responsable de la emisión de la Nota de Remisión Electrónica | Pagina 78
+   */
+  dDesRespEmiNR: DDesRespEmiNR;
+  /**
+   * E6 - E505 | Kilómetros estimados de recorrido | Pagina 78
+   */
+  dKmR?: number;
+  /**
+   * E6 - E506 | Fecha futura de emisión de la factura | Pagina 78
+   */
+  dFecEm?: string; // Format: AAAA-MM-DD
+}
+
+export const IMotEmiNRValues = {
+  TrasladoVenta: 1,
+  TrasladoConsignacion: 2,
+  Exportacion: 3,
+  TrasladoCompra: 4,
+  Importacion: 5,
+  TrasladoDevolucion: 6,
+  TrasladoEntreLocales: 7,
+  TrasladoTransformacion: 8,
+  TrasladoReparacion: 9,
+  TrasladoEmisorMovil: 10,
+  ExhibicionDemostracion: 11,
+  ParticipacionFerias: 12,
+  TrasladoEncomienda: 13,
+  Decomiso: 14,
+  Otro: 99
+} as const;
+export type IMotEmiNR = (typeof IMotEmiNRValues)[keyof typeof IMotEmiNRValues];
+
+export const IRespEmiNRValues = {
+  EmisorFactura: 1,
+  PoseedorFacturaBienes: 2,
+  EmpresaTransportista: 3,
+  DespachanteAduanas: 4,
+  AgenteTransporteIntermediario: 5
+} as const;
+export type IRespEmiNR = (typeof IRespEmiNRValues)[keyof typeof IRespEmiNRValues];
+
+export const DDesRespEmiNRValues = {
+  EmisorFactura: 'Emisor de la factura',
+  PoseedorFacturaBienes: 'Poseedor de la factura y bienes',
+  EmpresaTransportista: 'Empresa transportista',
+  DespachanteAduanas: 'Despachante de Aduanas',
+  AgenteTransporteIntermediario: 'Agente de transporte o intermediario'
+} as const;
+export type DDesRespEmiNR = (typeof DDesRespEmiNRValues)[keyof typeof DDesRespEmiNRValues];
+
+/**
+ * G - G050 (E790) | Campos complementarios comerciales de uso específico | Pagina 109
+ */
+export interface gCamEsp {
+  /**
+   * E9.2 - E791 | Grupo del sector de energía eléctrica | Pagina 93
+   */
+  gGrupEner?: gGrupEner;
+  /**
+   * E9.3 - E800 | Grupo del sector de seguros | Pagina 93
+   */
+  gGrupSeg?: gGrupSeg;
+  /**
+   * E9.4 - E810 | Grupo del sector supermercados | Pagina 94
+   */
+  gGrupSup?: gGrupSup;
+  /**
+   * E9.5 - E820 | Grupo de datos adicionales de uso comercial | Pagina 94
+   */
+  gGrupAdi?: gGrupAdi;
+}
+
+/**
+ * E9.2 - E791 | Grupo del sector de energía eléctrica | Pagina 93
+ */
+export interface gGrupEner {
+  /**
+   * E9.2 - E792 | Número de medidor | Pagina 93
+   */
+  dNroMed?: string;
+  /**
+   * E9.2 - E793 | Código de actividad | Pagina 93
+   */
+  dActiv?: number;
+  /**
+   * E9.2 - E794 | Código de categoría | Pagina 93
+   */
+  dCateg?: string;
+  /**
+   * E9.2 - E795 | Lectura anterior | Pagina 93
+   */
+  dLecAnt?: number;
+  /**
+   * E9.2 - E796 | Lectura actual | Pagina 93
+   */
+  dLecAct?: number;
+  /**
+   * E9.2 - E797 | Consumo | Pagina 93
+   */
+  dConKwh?: number;
+}
+
+/**
+ * E9.3 - E800 | Grupo del sector de seguros | Pagina 93
+ */
+export interface gGrupSeg {
+  /**
+   * E9.3 - E801 | Código de la empresa de seguros en la Superintendencia de Seguros | Pagina 93
+   */
+  dCodEmpSeg?: string;
+  /**
+   * E9.3.1 - EA790 | Grupo de póliza de seguros | Pagina 93
+   */
+  gGrupPolSeg?: gGrupPolSeg[];
+}
+
+/**
+ * E9.3.1 - EA790 | Grupo de póliza de seguros | Pagina 93
+ */
+export interface gGrupPolSeg {
+  /**
+   * E9.3.1 - EA791 | Código de la póliza | Pagina 93
+   */
+  dPoliza: string;
+  /**
+   * E9.3.1 - EA792 | Descripción de la unidad de tiempo de vigencia | Pagina 93
+   */
+  dUnidVig: string;
+  /**
+   * E9.3.1 - EA793 | Vigencia de la póliza | Pagina 93
+   */
+  dVigencia: number;
+  /**
+   * E9.3.1 - EA794 | Número de la póliza | Pagina 93
+   */
+  dNumPoliza: string;
+  /**
+   * E9.3.1 - EA795 | Fecha de inicio de vigencia | Pagina 93
+   */
+  dFecIniVig?: string; // Format: AAAA-MM-DDThh:mm:ss
+  /**
+   * E9.3.1 - EA796 | Fecha de fin de vigencia | Pagina 93
+   */
+  dFecFinVig?: string; // Format: AAAA-MM-DDThh:mm:ss
+  /**
+   * E9.3.1 - EA797 | Código interno del ítem | Pagina 93
+   */
+  dCodInt?: string;
+}
+
+/**
+ * E9.4 - E810 | Grupo del sector supermercados | Pagina 94
+ */
+export interface gGrupSup {
+  /**
+   * E9.4 - E811 | Nombre del cajero | Pagina 94
+   */
+  dNomCaj?: string;
+  /**
+   * E9.4 - E812 | Efectivo | Pagina 94
+   */
+  dEfectivo?: number;
+  /**
+   * E9.4 - E813 | Vuelto | Pagina 94
+   */
+  dVuelto?: number;
+  /**
+   * E9.4 - E814 | Monto de la donación | Pagina 94
+   */
+  dDonac?: number;
+  /**
+   * E9.4 - E815 | Descripción de la donación | Pagina 94
+   */
+  dDesDonac?: string;
+}
+
+/**
+ * E9.5 - E820 | Grupo de datos adicionales de uso comercial | Pagina 94
+ */
+export interface gGrupAdi {
+  /**
+   * E9.5 - E821 | Ciclo | Pagina 94
+   */
+  dCiclo?: string;
+  /**
+   * E9.5 - E822 | Fecha de inicio de ciclo | Pagina 94
+   */
+  dFecIniC?: string; // Format: AAAA-MM-DD
+  /**
+   * E9.5 - E823 | Fecha de fin de ciclo | Pagina 94
+   */
+  dFecFinC?: string; // Format: AAAA-MM-DD
+  /**
+   * E9.5 - E824 | Fecha de vencimiento para el pago | Pagina 94
+   */
+  dVencPag?: string[]; // Format: AAAA-MM-DD, 0-3 occurrences
+  /**
+   * E9.5 - E825 | Número de contrato | Pagina 95
+   */
+  dContrato?: string;
+  /**
+   * E9.5 - E826 | Saldo anterior | Pagina 95
+   */
+  dSalAnt?: number;
+}
+
+/**
+ * E9 - E900 | Campos que describen el transporte de mercaderías | Pagina 95
+ */
+export interface gTransp {
+  /**
+   * E10 - E901 | Tipo de transporte | Pagina 95
+   */
+  iTipTrans?: ITipTrans;
+  /**
+   * E10 - E902 | Descripción del tipo de transporte | Pagina 95
+   */
+  dDesTipTrans?: DDesTipTrans;
+  /**
+   * E10 - E903 | Modalidad del transporte | Pagina 95
+   */
+  iModTrans: IModTrans;
+  /**
+   * E10 - E904 | Descripción de la modalidad del transporte | Pagina 95
+   */
+  dDesModTrans: DDesModTrans;
+  /**
+   * E10 - E905 | Responsable del costo del flete | Pagina 95
+   */
+  iRespFlete: IRespFlete;
+  /**
+   * E10 - E906 | Condición de la negociación | Pagina 95
+   */
+  cCondNeg?: string;
+  /**
+   * E10 - E907 | Número de manifiesto o conocimiento de carga | Pagina 96
+   */
+  dNuManif?: string;
+  /**
+   * E10 - E908 | Número de despacho de importación | Pagina 96
+   */
+  dNuDespImp?: string;
+  /**
+   * E10 - E909 | Fecha estimada de inicio de traslado | Pagina 96
+   */
+  dIniTras?: string; // Format: AAAA-MM-DD
+  /**
+   * E10 - E910 | Fecha estimada de fin de traslado | Pagina 96
+   */
+  dFinTras?: string; // Format: AAAA-MM-DD
+  /**
+   * E10 - E911 | Código del país de destino | Pagina 96
+   */
+  cPaisDest?: string;
+  /**
+   * E10 - E912 | Descripción del país de destino | Pagina 96
+   */
+  dDesPaisDest?: string;
+  /**
+   * E10.1 - E920 | Campos que identifican el local de salida de las mercaderías | Pagina 96
+   */
+  gCamSal?: gCamSal;
+  /**
+   * E10.2 - E940 | Campos que identifican el local de entrega de las mercaderías | Pagina 97
+   */
+  gCamEnt?: gCamEnt;
+  /**
+   * E10.3 - E960 | Campos que identifican el vehículo de traslado de mercaderías | Pagina 98
+   */
+  gVehTras?: gVehTras[];
+  /**
+   * E10.4 - E980 | Campos que identifican al transportista | Pagina 99
+   */
+  gCamTrans?: gCamTrans;
+}
+
+export const ITipTransValues = {
+  Propio: 1,
+  Tercero: 2
+} as const;
+export type ITipTrans = (typeof ITipTransValues)[keyof typeof ITipTransValues];
+
+export const DDesTipTransValues = {
+  Propio: 'Propio',
+  Tercero: 'Tercero'
+} as const;
+export type DDesTipTrans = (typeof DDesTipTransValues)[keyof typeof DDesTipTransValues];
+
+export const IModTransValues = {
+  Terrestre: 1,
+  Fluvial: 2,
+  Aereo: 3,
+  Multimodal: 4
+} as const;
+export type IModTrans = (typeof IModTransValues)[keyof typeof IModTransValues];
+
+export const DDesModTransValues = {
+  Terrestre: 'Terrestre',
+  Fluvial: 'Fluvial',
+  Aereo: 'Aéreo',
+  Multimodal: 'Multimodal'
+} as const;
+export type DDesModTrans = (typeof DDesModTransValues)[keyof typeof DDesModTransValues];
+
+export const IRespFleteValues = {
+  EmisorFactura: 1,
+  ReceptorFactura: 2,
+  Tercero: 3,
+  AgenteIntermediario: 4,
+  TransportePropio: 5
+} as const;
+export type IRespFlete = (typeof IRespFleteValues)[keyof typeof IRespFleteValues];
+
+/**
+ * E10.1 - E920 | Campos que identifican el local de salida de las mercaderías | Pagina 96
+ */
+export interface gCamSal {
+  /**
+   * E10.1 - E921 | Dirección del local de salida | Pagina 96
+   */
+  dDirLocSal: string;
+  /**
+   * E10.1 - E922 | Número de casa de salida | Pagina 96
+   */
+  dNumCasSal: number;
+  /**
+   * E10.1 - E923 | Complemento de dirección 1 salida | Pagina 96
+   */
+  dComp1Sal?: string;
+  /**
+   * E10.1 - E924 | Complemento de dirección 2 salida | Pagina 97
+   */
+  dComp2Sal?: string;
+  /**
+   * E10.1 - E925 | Código del departamento de salida | Pagina 97
+   */
+  cDepSal?: number;
+  /**
+   * E10.1 - E926 | Descripción del departamento de salida | Pagina 97
+   */
+  dDesDepSal?: string;
+  /**
+   * E10.1 - E927 | Código del distrito de salida | Pagina 97
+   */
+  cDisSal?: number;
+  /**
+   * E10.1 - E928 | Descripción del distrito de salida | Pagina 97
+   */
+  dDesDisSal?: string;
+  /**
+   * E10.1 - E929 | Código de la ciudad de salida | Pagina 97
+   */
+  cCiuSal?: number;
+  /**
+   * E10.1 - E930 | Descripción de la ciudad de salida | Pagina 97
+   */
+  dDesCiuSal?: string;
+  /**
+   * E10.1 - E931 | Teléfono del local de salida | Pagina 97
+   */
+  dTelSal?: string;
+}
+
+/**
+ * E10.2 - E940 | Campos que identifican el local de entrega de las mercaderías | Pagina 97
+ */
+export interface gCamEnt {
+  /**
+   * E10.2 - E941 | Dirección del local de entrega | Pagina 97
+   */
+  dDirLocEnt: string;
+  /**
+   * E10.2 - E942 | Número de casa de entrega | Pagina 97
+   */
+  dNumCasEnt: number;
+  /**
+   * E10.2 - E943 | Complemento de dirección 1 entrega | Pagina 97
+   */
+  dComp1Ent?: string;
+  /**
+   * E10.2 - E944 | Complemento de dirección 2 entrega | Pagina 97
+   */
+  dComp2Ent?: string;
+  /**
+   * E10.2 - E945 | Código del departamento de entrega | Pagina 97
+   */
+  cDepEnt?: number;
+  /**
+   * E10.2 - E946 | Descripción del departamento de entrega | Pagina 97
+   */
+  dDesDepEnt?: string;
+  /**
+   * E10.2 - E947 | Código del distrito de entrega | Pagina 97
+   */
+  cDisEnt?: number;
+  /**
+   * E10.2 - E948 | Descripción del distrito de entrega | Pagina 97
+   */
+  dDesDisEnt?: string;
+  /**
+   * E10.2 - E949 | Código de la ciudad de entrega | Pagina 97
+   */
+  cCiuEnt?: number;
+  /**
+   * E10.2 - E950 | Descripción de la ciudad de entrega | Pagina 97
+   */
+  dDesCiuEnt?: string;
+  /**
+   * E10.2 - E951 | Teléfono del local de entrega | Pagina 97
+   */
+  dTelEnt?: string;
+}
+
+/**
+ * E10.3 - E960 | Campos que identifican el vehículo de traslado de mercaderías | Pagina 98
+ */
+export interface gVehTras {
+  /**
+   * E10.3 - E961 | Tipo de vehículo | Pagina 98
+   */
+  iTiVehTras: number;
+  /**
+   * E10.3 - E962 | Marca del vehículo | Pagina 98
+   */
+  dMarVeh: string;
+  /**
+   * E10.3 - E963 | Identificación del vehículo | Pagina 98
+   */
+  dTipIdenVeh?: number;
+  /**
+   * E10.3 - E965 | Número de matrícula del vehículo | Pagina 98
+   */
+  dNroMatVeh?: string;
+  /**
+   * E10.3 - E966 | Número de identificación del vehículo | Pagina 98
+   */
+  dNroIDVeh?: string;
+  /**
+   * E10.3 - E967 | Adicional del vehículo | Pagina 98
+   */
+  dAdicVeh?: string;
+  /**
+   * E10.3 - E968 | Número de matrícula del remolque | Pagina 98
+   */
+  dNroMatRem?: string;
+  /**
+   * E10.3 - E969 | Número de identificación del remolque | Pagina 98
+   */
+  dNroIDRem?: string;
+}
+
+/**
+ * E10.4 - E980 | Campos que identifican al transportista | Pagina 99
+ */
+export interface gCamTrans {
+  /**
+   * E10.4 - E981 | Naturaleza del transportista | Pagina 99
+   */
+  iNatTrans: number;
+  /**
+   * E10.4 - E982 | Nombre o razón social del transportista | Pagina 99
+   */
+  dNomTrans: string;
+  /**
+   * E10.4 - E983 | RUC del transportista | Pagina 99
+   */
+  dRucTrans?: string;
+  /**
+   * E10.4 - E984 | Dígito verificador del RUC del transportista | Pagina 99
+   */
+  dDVTrans?: number;
+  /**
+   * E10.4 - E985 | Tipo de documento de identidad del transportista | Pagina 99
+   */
+  iTipIDTrans?: number;
+  /**
+   * E10.4 - E986 | Número de documento de identidad del transportista | Pagina 99
+   */
+  dNumIDTrans?: string;
+  /**
+   * E10.4 - E987 | Código del país del transportista | Pagina 99
+   */
+  cNacTrans?: string;
+  /**
+   * E10.4 - E988 | Descripción del país del transportista | Pagina 99
+   */
+  dDesNacTrans?: string;
+  /**
+   * E10.4 - E989 | Número de documento del agente de transporte | Pagina 99
+   */
+  dNumIDChof?: string;
+  /**
+   * E10.4 - E990 | Nombre del agente de transporte | Pagina 99
+   */
+  dNomChof?: string;
+  /**
+   * E10.4 - E991 | Dirección del agente de transporte | Pagina 99
+   */
+  dDomFisc?: string;
+  /**
+   * E10.4 - E992 | Dirección del transportista | Pagina 99
+   */
+  dDirChof?: string;
 }

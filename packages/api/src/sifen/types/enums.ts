@@ -203,8 +203,7 @@ export const descripcionIndicadorPresencia = {
   [indicadorPresencia.OperacionTelemarketing]: 'Operación telemarketing',
   [indicadorPresencia.VentaDomicilio]: 'Venta a domicilio',
   [indicadorPresencia.OperacionBancaria]: 'Operación bancaria',
-  [indicadorPresencia.OperacionCiclica]: 'Operación cíclica',
-  [indicadorPresencia.Otro]: 'Otro'
+  [indicadorPresencia.OperacionCiclica]: 'Operación cíclica'
 } as const;
 export type DescripcionIndicadorPresencia =
   (typeof descripcionIndicadorPresencia)[keyof typeof descripcionIndicadorPresencia];
@@ -276,7 +275,6 @@ export const descripcionTipoPago = {
   [tipoPago.Promocion]: 'Promoción',
   [tipoPago.ConsumoInterno]: 'Consumo Interno',
   [tipoPago.PagoElectronico]: 'Pago Electrónico'
-  // Otro (99) requires custom description from user
 } as const;
 export type DescripcionTipoPago = (typeof descripcionTipoPago)[keyof typeof descripcionTipoPago];
 
@@ -390,3 +388,125 @@ export const tipoContribuyente = {
  * Tipo de contribuyente - D103 | Pagina 67
  */
 export type TipoContribuyente = (typeof tipoContribuyente)[keyof typeof tipoContribuyente];
+
+/**
+ * Código de relevancia - E715 | Pagina 87
+ */
+export const codigoRelevancia = {
+  Mercaderia: 1,
+  Servicio: 2,
+  Producto: 3,
+  BienCapital: 4,
+  Otro: 9
+} as const;
+export type CodigoRelevancia = (typeof codigoRelevancia)[keyof typeof codigoRelevancia];
+
+/**
+ * Afectación tributaria del IVA - E731 | Pagina 88
+ */
+export const afectacionIVA = {
+  Gravado: 1,
+  Exonerado: 2,
+  Exento: 3,
+  GravadoParcial: 4
+} as const;
+export type AfectacionIVA = (typeof afectacionIVA)[keyof typeof afectacionIVA];
+
+export const descripcionAfectacionIVA = {
+  [afectacionIVA.Gravado]: 'Gravado IVA',
+  [afectacionIVA.Exonerado]: 'Exonerado (Art. 83- Ley 125/91)',
+  [afectacionIVA.Exento]: 'Exento',
+  [afectacionIVA.GravadoParcial]: 'Gravado parcial (Grav-Exento)'
+} as const;
+export type DescripcionAfectacionIVA =
+  (typeof descripcionAfectacionIVA)[keyof typeof descripcionAfectacionIVA];
+
+/**
+ * Tasa del IVA - E734 | Pagina 88
+ */
+export const tasaIVA = {
+  Tasa10: 10,
+  Tasa5: 5,
+  Exento: 0
+} as const;
+export type TasaIVA = (typeof tasaIVA)[keyof typeof tasaIVA];
+
+/**
+ * Unidad de medida - E709 | Pagina 211
+ */
+export const unidadMedida = {
+  Unidad: 77,
+  KilogramosPorMetroCuadrado: 79,
+  Kilogramos: 83,
+  Gramos: 86,
+  Metros: 87,
+  Mililitros: 88,
+  Litros: 89,
+  Miligramos: 90,
+  Centimetros: 91,
+  CentimetrosCuadrados: 92,
+  CentimetrosCubicos: 93,
+  Pulgadas: 94,
+  Milimetros: 95,
+  MilimetrosCuadrados: 96,
+  Año: 97,
+  Mes: 98,
+  Tonelada: 99,
+  Hora: 100,
+  Minuto: 101,
+  Dia: 102,
+  Yardas: 103,
+  Determinacion: 104,
+  MetrosMT: 108,
+  MetrosCuadrados: 109,
+  MetrosCubicos: 110,
+  Racion: 569,
+  Kilometros: 625,
+  Segundo: 666,
+  MetroLineal: 660,
+  Hectareas: 869,
+  UnidadMedidaGlobal: 885,
+  PorMillaje: 891,
+  UnidadInternacional: 2329,
+  CostoPorMil: 2366
+} as const;
+export type UnidadMedida = (typeof unidadMedida)[keyof typeof unidadMedida];
+
+export const descripcionUnidadMedida = {
+  [unidadMedida.Unidad]: 'UNI',
+  [unidadMedida.KilogramosPorMetroCuadrado]: 'kg/m²',
+  [unidadMedida.Kilogramos]: 'kg',
+  [unidadMedida.Gramos]: 'g',
+  [unidadMedida.Metros]: 'm',
+  [unidadMedida.Mililitros]: 'ML',
+  [unidadMedida.Litros]: 'LT',
+  [unidadMedida.Miligramos]: 'MG',
+  [unidadMedida.Centimetros]: 'CM',
+  [unidadMedida.CentimetrosCuadrados]: 'CM2',
+  [unidadMedida.CentimetrosCubicos]: 'CM3',
+  [unidadMedida.Pulgadas]: 'PUL',
+  [unidadMedida.Milimetros]: 'MM',
+  [unidadMedida.MilimetrosCuadrados]: 'MM2',
+  [unidadMedida.Año]: 'AA',
+  [unidadMedida.Mes]: 'ME',
+  [unidadMedida.Tonelada]: 'TN',
+  [unidadMedida.Hora]: 'Hs',
+  [unidadMedida.Minuto]: 'Mi',
+  [unidadMedida.Dia]: 'Di',
+  [unidadMedida.Yardas]: 'Ya',
+  [unidadMedida.Determinacion]: 'DET',
+  [unidadMedida.MetrosMT]: 'MT',
+  [unidadMedida.MetrosCuadrados]: 'M2',
+  [unidadMedida.MetrosCubicos]: 'M3',
+  [unidadMedida.Racion]: 'ración',
+  [unidadMedida.Kilometros]: 'Km',
+  [unidadMedida.Segundo]: 'Se',
+  [unidadMedida.MetroLineal]: 'ml',
+  [unidadMedida.Hectareas]: 'ha',
+  [unidadMedida.UnidadMedidaGlobal]: 'GL',
+  [unidadMedida.PorMillaje]: 'pm',
+  [unidadMedida.UnidadInternacional]: 'UI',
+  [unidadMedida.CostoPorMil]: 'CPM'
+} as const;
+export type DescripcionUnidadMedida =
+  (typeof descripcionUnidadMedida)[keyof typeof descripcionUnidadMedida];

@@ -7,9 +7,12 @@ import type { CodigoDistrito } from '../../gen/distritos';
 import type { CodigoMoneda } from '../../gen/iso4217';
 import type { CodigoPais } from '../../gen/paises';
 import type {
+  AfectacionIVA,
+  CodigoRelevancia,
   CondicionAnticipo,
   CondicionTipoCambio,
   NaturalezaReceptor,
+  TasaIVA,
   TipoContribuyente,
   TipoContribuyenteReceptor,
   TipoDocumentoIdentidadReceptor,
@@ -18,7 +21,8 @@ import type {
   TipoImpuesto,
   TipoOperacion,
   TipoRegimen,
-  TipoTransaccion
+  TipoTransaccion,
+  UnidadMedida
 } from './enums';
 
 // ============================================================================
@@ -304,71 +308,225 @@ export interface Receptor {
 }
 
 /**
- * E700 | gItems | Campos que describen los ítems de la operación | Pagina 88
+ * E700 | gCamItem | Campos que describen los ítems de la operación | Pagina 85
  */
 export interface ItemDE {
   /**
-   * E710 | dCodInt | Código interno del ítem | Pagina 88
+   * E701 | dCodInt | Código interno | Pagina 85
    */
-  codigoInterno?: string;
+  codigoInterno: string;
   /**
-   * E711 | dDesPro | Descripción del producto/servicio | Pagina 88
+   * E702 | dParAranc | Partida arancelaria | Pagina 85
+   */
+  partidaArancelaria?: number;
+  /**
+   * E703 | dNCM | Nomenclatura común del Mercosur (NCM) | Pagina 85
+   */
+  ncm?: number;
+  /**
+   * E704 | dDncpG | Código DNCP – Nivel General | Pagina 85
+   */
+  codigoDncpGeneral?: string;
+  /**
+   * E705 | dDncpE | Código DNCP – Nivel Especifico | Pagina 85
+   */
+  codigoDncpEspecifico?: string;
+  /**
+   * E706 | dGtin | Código GTIN por producto | Pagina 85
+   */
+  gtin?: number;
+  /**
+   * E707 | dGtinPq | Código GTIN por paquete | Pagina 85
+   */
+  gtinPaquete?: number;
+  /**
+   * E708 | dDesProSer | Descripción del producto y/o servicio | Pagina 85
    */
   descripcion: string;
   /**
-   * E712 | cUniMed | Código de unidad de medida | Pagina 88
+   * E709 | cUniMed | Unidad de medida | Pagina 85
    */
-  codigoUnidadMedida: number; // TODO: Define enum based on available units
+  codigoUnidadMedida: UnidadMedida;
   /**
-   * E713 | dDesUniMed | Descripción de la unidad de medida | Pagina 88
-   */
-  descripcionUnidadMedida: string;
-  /**
-   * E714 | dCantPro | Cantidad del producto/servicio | Pagina 88
+   * E711 | dCantProSer | Cantidad del producto y/o servicio | Pagina 85
    */
   cantidad: number;
   /**
-   * E715 | dPreUniPro | Precio unitario del producto/servicio | Pagina 88
+   * E712 | cPaisOrig | Código del país de origen del producto | Pagina 85
    */
-  precioUnitario: number;
+  codigoPaisOrigen?: CodigoPais;
   /**
-   * E716 | dPreTotPro | Precio total del producto/servicio | Pagina 88
+   * E713 | dDesPaisOrig | Descripción del país de origen del producto | Pagina 85
    */
-  precioTotal: number;
+  descripcionPaisOrigen?: string;
   /**
-   * E717 | dTotGralItem | Total general del ítem | Pagina 88
+   * E714 | dInfItem | Información de interés del emisor con respecto al ítem | Pagina 85
    */
-  totalGeneralItem: number;
+  informacionItem?: string;
   /**
-   * E730 | gCamIVA | Campos que describen el IVA de la operación por ítem | Pagina 89
+   * E715 | cRelMerc | Código de datos de relevancia de las mercaderías | Pagina 85
+   */
+  codigoRelevancia?: CodigoRelevancia;
+  /**
+   * E716 | dDesRelMerc | Descripción del código de datos de relevancia de las mercaderías | Pagina 85
+   */
+  descripcionRelevancia?: string;
+  /**
+   * E717 | dCanQuiMer | Cantidad de quiebra o merma | Pagina 86
+   */
+  cantidadQuiebraMerma?: number;
+  /**
+   * E718 | dPorQuiMer | Porcentaje de quiebra o merma | Pagina 86
+   */
+  porcentajeQuiebraMerma?: number;
+  /**
+   * E719 | dCDCAnticipo | CDC del anticipo | Pagina 86
+   */
+  cdcAnticipo?: string;
+  /**
+   * E720 | gValorItem | Campos que describen los precios, descuentos y valor total por ítem | Pagina 85
+   */
+  valorItem?: ValorItem;
+  /**
+   * E730 | gCamIVA | Campos que describen el IVA de la operación por ítem
    */
   iva?: IVAItem;
   /**
-   * E740 | gCamISC | Campos que describen el ISC de la operación por ítem | Pagina 89
+   * E750 | gRasMerc | Grupo de rastreo de la mercadería
    */
-  isc?: ISCItem;
+  rastreoMercaderia?: RastreoMercaderia;
 }
 
 /**
- * E730 | gCamIVA | Campos que describen el IVA de la operación por ítem | Pagina 89
+ * E720 | gValorItem | Campos que describen los precios, descuentos y valor total por ítem | pagina 87
+ */
+export interface ValorItem {
+  /**
+   * E721 | dPUniProSer | Precio unitario del producto y/o servicio (incluidos impuestos) | Pagina 87
+   */
+  precioUnitario: number;
+  /**
+   * E725 | dTiCamIt | Tipo de cambio por ítem | Pagina 87
+   */
+  tipoCambio?: number;
+  /**
+   * E727 | dTotBruOpeItem | Total bruto de la operación por ítem | Pagina 87
+   */
+  totalBruto: number;
+  /**
+   * EA001 | gValorRestaItem | Campos que describen los descuentos, anticipos y valor total por ítem | Pagina 87
+   */
+  valorRestaItem: ValorRestaItem;
+}
+
+/**
+ * EA001 | gValorRestaItem | Campos que describen los descuentos, anticipos y valor total por ítem | Pagina 87
+ */
+export interface ValorRestaItem {
+  /**
+   * EA002 | dDescItem | Descuento particular sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
+   */
+  descuentoParticular?: number;
+  /**
+   * EA003 | dPorcDesIt | Porcentaje de descuento particular por ítem | Pagina 88
+   */
+  porcentajeDescuentoParticular?: number;
+  /**
+   * EA004 | dDescGloItem | Descuento global sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
+   */
+  descuentoGlobal?: number;
+  /**
+   * EA006 | dAntPreUniIt | Anticipo particular sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
+   */
+  anticipoParticular?: number;
+  /**
+   * EA007 | dAntGloPreUniIt | Anticipo global sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
+   */
+  anticipoGlobal?: number;
+  /**
+   * EA008 | dTotOpeItem | Valor total de la operación por ítem | Pagina 88
+   */
+  totalOperacion: number;
+  /**
+   * EA009 | dTotOpeGs | Valor total de la operación por ítem en guaraníes | Pagina 88
+   */
+  totalOperacionGuaranies?: number;
+}
+
+/**
+ * E730 | gCamIVA | Campos que describen el IVA de la operación por ítem | Manual Tecnico p.89
  */
 export interface IVAItem {
   /**
-   * E731 | iTasaIVA | Tasa de IVA | Pagina 89
+   * E731 | iAfecIVA | Forma de afectación tributaria del IVA
    */
-  tasaIVA: number; // TODO: Define enum (5=5%, 10=10%, etc.)
+  afectacionIVA: AfectacionIVA;
   /**
-   * E732 | dDesTasaIVA | Descripción de la tasa de IVA | Pagina 89
+   * E732 | dDesAfecIVA | Descripción de la forma de afectación tributaria del IVA
    */
-  descripcionTasaIVA: string;
+  descripcionAfectacionIVA: string;
   /**
-   * E733 | dBaseGravIVA | Base gravada de IVA | Pagina 89
+   * E733 | dPropIVA | Proporción gravada de IVA
    */
-  baseGravadaIVA: number;
+  proporcionGravada: number;
   /**
-   * E734 | dLiqIVA | Líquido IVA | Pagina 89
+   * E734 | dTasaIVA | Tasa del IVA
    */
-  liquidadoIVA: number;
+  tasaIVA: TasaIVA;
+  /**
+   * E735 | dBasGravIVA | Base gravada del IVA por ítem
+   */
+  baseGravada: number;
+  /**
+   * E736 | dLiqIVAItem | Liquidación del IVA por ítem
+   */
+  liquidacionIVA: number;
+}
+
+/**
+ * E750 | gRasMerc | Grupo de rastreo de la mercadería | Manual Tecnico p.90
+ */
+export interface RastreoMercaderia {
+  /**
+   * E751 | dNumLote | Número de lote
+   */
+  numeroLote?: string;
+  /**
+   * E752 | dVencMerc | Fecha de vencimiento de la mercadería
+   */
+  fechaVencimiento?: string; // Format: AAAA-MM-DD
+  /**
+   * E753 | dNSerie | Número de serie
+   */
+  numeroSerie?: string;
+  /**
+   * E754 | dNumPedi | Número de pedido
+   */
+  numeroPedido?: string;
+  /**
+   * E755 | dNumSegui | Número de seguimiento del envío
+   */
+  numeroSeguimiento?: string;
+  /**
+   * E756 | dNomImp | Nombre del Importador
+   */
+  nombreImportador?: string;
+  /**
+   * E757 | dDirImp | Dirección de Importador
+   */
+  direccionImportador?: string;
+  /**
+   * E758 | dNumFir | Número de registro de la firma del importador
+   */
+  numeroRegistroFirma?: string;
+  /**
+   * E759 | dNumReg | Número de registro del producto otorgado por el SENAVE
+   */
+  numeroRegistroProducto?: string;
+  /**
+   * E760 | dNumRegEntCom | Número de registro de entidad comercial otorgado por el SENAVE
+   */
+  numeroRegistroEntidadComercial?: string;
 }
 
 /**
