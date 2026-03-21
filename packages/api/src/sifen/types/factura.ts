@@ -1,6 +1,6 @@
 // Basado en SIFEN MT v150
 
-import type { OperacionDE, DatosGenerales, Emisor, Receptor, ItemDE } from './common';
+import type { OperacionDE, DatosGenerales, ItemDE } from './common';
 import type {
   TipoDocumentoElectronico,
   IndicadorPresencia,
@@ -61,14 +61,6 @@ export interface CamposFirmadosDE {
    * D001 | gDatGralOpe | Campos generales del DE | Pagina 65
    */
   datosGenerales: Required<DatosGenerales>;
-  /**
-   * D100 | gEmis | Grupo de campos que identifican al emisor | Pagina 67
-   */
-  emisor: Emisor;
-  /**
-   * D200 | gDatRec | Grupo de campos que identifican al receptor | Pagina 70
-   */
-  receptor: Receptor;
   /**
    * E001 | gDtipDE | Campos específicos por tipo de Documento Electrónico | Pagina 73
    */

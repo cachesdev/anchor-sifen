@@ -3,11 +3,6 @@ import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 import * as xmlCrypto from 'xml-crypto';
 import type { CertificateData } from '../certificate/certificate-manager';
 
-export interface SigningOptions {
-  /** Whether to pretty print the output XML */
-  prettyPrint?: boolean;
-}
-
 export class XMLSigner {
   /**
    * Sign an XML document according to SIFEN specifications
@@ -16,11 +11,7 @@ export class XMLSigner {
    * @param options Signing options
    * @returns Signed XML string
    */
-  async signDocument(
-    xml: string,
-    certData: CertificateData,
-    options: SigningOptions = {}
-  ): Promise<string> {
+  async signDocument(xml: string, certData: CertificateData): Promise<string> {
     try {
       // Parse XML
       const doc = new DOMParser().parseFromString(xml, 'text/xml');
@@ -61,28 +52,18 @@ export class XMLSigner {
         return `<X509Data><X509Certificate>${certData.certificateBase64}</X509Certificate></X509Data>`;
       };
 
+      // Serialize the document to ensure consistency between parsed doc and signed content
+      const serializedDoc = new XMLSerializer().serializeToString(doc);
+
       // Compute the signature
-      sig.computeSignature(xml, {
+      sig.computeSignature(serializedDoc, {
         location: { reference: '//*[local-name()="DE"]', action: 'after' },
         prefix: '',
         attrs: { xmlns: 'http://www.w3.org/2000/09/xmldsig#' }
       });
 
       // Get signed XML
-      let signedXml = sig.getSignedXml();
-
-      // Ensure proper structure and clean up unwanted elements
-      signedXml = this.cleanupSignature(signedXml);
-
-      // Safety check: verify signature still valid after cleanup
-      if (!this.verifySignature(signedXml, certData)) {
-        throw new Error('Signature invalid after cleanup; cleanup removed required elements');
-      }
-
-      // Apply pretty print if requested
-      if (options.prettyPrint) {
-        signedXml = this.formatXml(signedXml);
-      }
+      const signedXml = sig.getSignedXml();
 
       return signedXml;
     } catch (error) {
@@ -118,46 +99,6 @@ export class XMLSigner {
     }
 
     return cdc;
-  }
-
-  /**
-   * Clean up signature to ensure it matches SIFEN requirements
-   * Remove forbidden elements like X509SubjectName, X509IssuerSerial, etc.
-   */
-  private cleanupSignature(signedXml: string): string {
-    const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
-
-    // Elements that MUST NOT be present according to SIFEN docs
-    const forbiddenElements = [
-      'X509SubjectName',
-      'X509IssuerSerial',
-      'X509IssuerName',
-      'X509SKI',
-      'KeyValue',
-      'RSAKeyValue',
-      'Modulus',
-      'Exponent'
-    ];
-
-    for (const tagName of forbiddenElements) {
-      const elements = doc.getElementsByTagName(tagName);
-      while (elements && elements.length > 0) {
-        const element = elements[0];
-        if (element && element.parentNode) {
-          element.parentNode.removeChild(element);
-        }
-      }
-    }
-
-    return new XMLSerializer().serializeToString(doc);
-  }
-
-  /**
-   * Format XML with indentation
-   */
-  private formatXml(xml: string): string {
-    // Simple formatting - you might want to use a library like 'xml-formatter' for better results
-    return xml;
   }
 
   /**

@@ -30,10 +30,6 @@ export interface DocumentoElectronico {
  */
 export interface DE {
   /**
-   * A - A002 | Identificador del DE, CDC | Pagina 64
-   */
-  Id: string;
-  /**
    * A - A003 | Dígito verificador del identificador del DE | Pagina 64
    */
   dDVId: number;
@@ -57,14 +53,6 @@ export interface DE {
    * D - D001 | Campos generales del DE | Pagina 65
    */
   gDatGralOpe: gDatGralOpe;
-  /**
-   * D2 - D100 | Grupo de campos que identifican al emisor | Pagina 67
-   */
-  gEmis: gEmis;
-  /**
-   * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 70
-   */
-  gDatRec: gDatRec;
   /**
    * E - E001 | Campos específicos por tipo de Documento Electrónico | Pagina 73
    */
@@ -189,6 +177,14 @@ export interface gDatGralOpe {
    * D1 - D010 | Campos inherentes a la operación comercial | Pagina 65
    */
   gOpeCom?: gOpeCom;
+  /**
+   * D2 - D100 | Grupo de campos que identifican al emisor | Pagina 67
+   */
+  gEmis: gEmis;
+  /**
+   * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 70
+   */
+  gDatRec: gDatRec;
 }
 
 /**

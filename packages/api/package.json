@@ -18,6 +18,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
+    "@apidevtools/json-schema-ref-parser": "^15.3.1",
     "@eslint/compat": "^2.0.1",
     "@eslint/js": "^9.39.2",
     "@types/luxon": "^3.7.1",
@@ -31,6 +32,7 @@
     "exceljs": "^4.4.0",
     "globals": "^17.0.0",
     "jiti": "^2.6.1",
+    "json-schema-faker": "^0.6.0",
     "prettier": "^3.8.0",
     "tsdown": "^0.20.1",
     "tsx": "^4.21.0",

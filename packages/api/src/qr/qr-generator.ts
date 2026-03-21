@@ -24,8 +24,8 @@ export function createQRGenerator(): QRGenerator {
         env, // Environment
         data.de.camposFirmados.id, // CDC
         data.de.camposFirmados.datosGenerales.fechaHoraEmision, // Date
-        data.de.camposFirmados.emisor.ruc, // RUC
-        data.de.camposFirmados.items.length, // Item count
+        data.de.camposFirmados.datosGenerales.emisor.ruc, // RUC
+        data.de.camposFirmados.camposEspecificosTipoDE.items.length, // Item count
         '100000', // Total amount (mock)
         idCSC, // CSC ID
         csc // CSC
