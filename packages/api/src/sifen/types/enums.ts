@@ -393,13 +393,17 @@ export type TipoContribuyente = (typeof tipoContribuyente)[keyof typeof tipoCont
  * Código de relevancia - E715 | Pagina 87
  */
 export const codigoRelevancia = {
-  Mercaderia: 1,
-  Servicio: 2,
-  Producto: 3,
-  BienCapital: 4,
-  Otro: 9
+  ToleranciaQuibra: 1,
+  ToleranciaMerma: 2
 } as const;
 export type CodigoRelevancia = (typeof codigoRelevancia)[keyof typeof codigoRelevancia];
+
+export const descripcionCodigoRelevancia = {
+  [codigoRelevancia.ToleranciaQuibra]: 'Tolerancia de quiebra',
+  [codigoRelevancia.ToleranciaMerma]: 'Tolerancia de merma'
+} as const;
+export type DescripcionCodigoRelevancia =
+  (typeof descripcionCodigoRelevancia)[keyof typeof descripcionCodigoRelevancia];
 
 /**
  * Afectación tributaria del IVA - E731 | Pagina 88

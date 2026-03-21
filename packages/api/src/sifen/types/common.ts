@@ -386,11 +386,11 @@ export interface ItemDE {
   /**
    * E720 | gValorItem | Campos que describen los precios, descuentos y valor total por ítem | Pagina 85
    */
-  valorItem?: ValorItem;
+  valorItem: ValorItem;
   /**
    * E730 | gCamIVA | Campos que describen el IVA de la operación por ítem
    */
-  iva?: IVAItem;
+  iva: IVAItem;
   /**
    * E750 | gRasMerc | Grupo de rastreo de la mercadería
    */
@@ -461,10 +461,6 @@ export interface IVAItem {
    * E731 | iAfecIVA | Forma de afectación tributaria del IVA
    */
   afectacionIVA: AfectacionIVA;
-  /**
-   * E732 | dDesAfecIVA | Descripción de la forma de afectación tributaria del IVA
-   */
-  descripcionAfectacionIVA: string;
   /**
    * E733 | dPropIVA | Proporción gravada de IVA
    */
