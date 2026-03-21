@@ -435,6 +435,39 @@ export const DDesUniMedValues = {
 } as const;
 export type DDesUniMed = (typeof DDesUniMedValues)[keyof typeof DDesUniMedValues];
 
+export const IAfecIVAValues = {
+  Gravado: 1,
+  Exonerado: 2,
+  Exento: 3,
+  GravadoParcial: 4
+} as const;
+export type IAfecIVA = (typeof IAfecIVAValues)[keyof typeof IAfecIVAValues];
+export const DDesAfecIVAValues = {
+  [IAfecIVAValues.Gravado]: 'Gravado IVA',
+  [IAfecIVAValues.Exonerado]: 'Exonerado (Art. 83- Ley 125/91)',
+  [IAfecIVAValues.Exento]: 'Exento',
+  [IAfecIVAValues.GravadoParcial]: 'Gravado parcial (Grav-Exento)'
+} as const;
+export type DDesAfecIVA = (typeof DDesAfecIVAValues)[keyof typeof DDesAfecIVAValues];
+
+/**
+ * E8.2 - E730 | Campos que describen el IVA de la operación por ítem | Pagina 89
+ */
+export interface gCamIVA {
+  /** E8.2 - E731 | Forma de afectación tributaria del IVA | Pagina 89 */
+  iAfecIVA: IAfecIVA;
+  /** E8.2 - E732 | Descripción de la forma de afectación tributaria del IVA | Pagina 89 */
+  dDesAfecIVA: DDesAfecIVA;
+  /** E8.2 - E733 | Proporción gravada de IVA | Pagina 89 */
+  dPropIVA: number;
+  /** E8.2 - E734 | Tasa del IVA | Pagina 89 */
+  dTasaIVA: number;
+  /** E8.2 - E735 | Base gravada del IVA por ítem | Pagina 89 */
+  dBasGravIVA: number;
+  /** E8.2 - E736 | Liquidación del IVA por ítem | Pagina 89 */
+  dLiqIVAItem: number;
+}
+
 /**
  * E8 - E700 | Campos que describen los ítems de la operación | Pagina 88
  */
@@ -479,6 +512,8 @@ export interface gCamItem {
   dCDCAnticipo?: string;
   /** E8.1 - E720 | Campos que describen los precios, descuentos y valor total por ítem | Pagina 86 */
   gValorItem?: gValorItem;
+  /** E8.2 - E730 | Campos que describen el IVA de la operación por ítem | Pagina 89 */
+  gCamIVA?: gCamIVA;
 }
 
 /**
