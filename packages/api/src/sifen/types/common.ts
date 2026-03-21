@@ -69,6 +69,14 @@ export interface DatosGenerales {
    * D010 | gOpeCom | Campos inherentes a la operación comercial | Pagina 65
    */
   operacionComercial?: OperacionComercial;
+  /**
+   * D100 | gEmis | Grupo de campos que identifican al emisor | Pagina 67
+   */
+  emisor: Emisor;
+  /**
+   * D200 | gDatRec | Grupo de campos que identifican al receptor | Pagina 70
+   */
+  receptor: Receptor;
 }
 
 /**

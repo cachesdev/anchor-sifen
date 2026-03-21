@@ -309,7 +309,6 @@ export class XMLGen implements XMLGenerator {
     );
 
     const de: DocumentoElectronico['rDE']['DE'] = {
-      Id: data.id,
       dDVId: data.digitoVerificador,
       dFecFirma: formatDate(data.fechaFirma, 'stripFractional'),
       dSisFact: 1,
@@ -331,86 +330,88 @@ export class XMLGen implements XMLGenerator {
         dFeIniT: formatDate(data.datosTimbrado.fechaInicioVigencia, 'YYYY-MM-DD')
       },
       gDatGralOpe: {
-        dFeEmiDE: formatDate(data.datosGenerales.fechaHoraEmision, 'stripFractional')
-      },
-      gEmis: {
-        dRucEm: data.emisor.ruc,
-        dDVEmi: data.emisor.digitoVerificadorRuc,
-        iTipCont: data.emisor.tipoContribuyente,
-        cTipReg: data.emisor.tipoRegimen,
-        dNomEmi: data.emisor.nombre,
-        dNomFanEmi: data.emisor.nombreFantasia,
-        dDirEmi: data.emisor.direccion,
-        dNumCas: data.emisor.numeroCasa,
-        dCompDir1: data.emisor.complementoDireccion1,
-        dCompDir2: data.emisor.complementoDireccion2,
-        cDepEmi: data.emisor.codigoDepartamento,
-        dDesDepEmi: descripcionCodigoDepartamento[data.emisor.codigoDepartamento],
-        cDisEmi: data.emisor.codigoDistrito,
-        dDesDisEmi: data.emisor.codigoDistrito
-          ? descripcionCodigoDistrito[data.emisor.codigoDistrito]
-          : undefined,
-        cCiuEmi: data.emisor.codigoCiudad,
-        dDesCiuEmi: descripcionCodigoCiudad[data.emisor.codigoCiudad],
-        dTelEmi: data.emisor.telefonoEmisor,
-        dEmailE: data.emisor.emailEmisor,
-        dDenSuc: data.emisor.denominacionSucursal,
-        gActEco: data.emisor.actividadesEconomicas.map((v) => ({
-          cActEco: v.codigo.toString(),
-          dDesActEco: v.descripcion
-        })),
-        gRespDE: data.emisor.responsableDE
-          ? {
-              iTipIDRespDE: data.emisor.responsableDE.tipoDocumentoResponsable,
-              dDTipIDRespDE:
-                descripcionTipoDocumentoResponsable[
-                  data.emisor.responsableDE.tipoDocumentoResponsable
-                ],
-              dNumIDRespDE: data.emisor.responsableDE.numeroDocumentoResponsable,
-              dNomRespDE: data.emisor.responsableDE.nombreResponsable,
-              dCarRespDE: data.emisor.responsableDE.cargoResponsable
-            }
-          : undefined
-      },
-      gDatRec: {
-        iNatRec: data.receptor.naturalezaReceptor,
-        iTiOpe: data.receptor.tipoOperacion,
-        cPaisRec: data.receptor.codigoPais,
-        dDesPaisRe: descripcionCodigoPais[data.receptor.codigoPais],
-        iTiContRec: data.receptor.tipoContribuyente,
-        dRucRec: data.receptor.ruc,
-        dDVRec: data.receptor.digitoVerificadorRuc,
-        iTipIDRec: data.receptor.tipoDocumentoIdentidad,
-        dDTipIDRec: (() => {
-          if (!data.receptor.tipoDocumentoIdentidad) return undefined;
+        dFeEmiDE: formatDate(data.datosGenerales.fechaHoraEmision, 'stripFractional'),
+        gEmis: {
+          dRucEm: data.datosGenerales.emisor.ruc,
+          dDVEmi: data.datosGenerales.emisor.digitoVerificadorRuc,
+          iTipCont: data.datosGenerales.emisor.tipoContribuyente,
+          cTipReg: data.datosGenerales.emisor.tipoRegimen,
+          dNomEmi: data.datosGenerales.emisor.nombre,
+          dNomFanEmi: data.datosGenerales.emisor.nombreFantasia,
+          dDirEmi: data.datosGenerales.emisor.direccion,
+          dNumCas: data.datosGenerales.emisor.numeroCasa,
+          dCompDir1: data.datosGenerales.emisor.complementoDireccion1,
+          dCompDir2: data.datosGenerales.emisor.complementoDireccion2,
+          cDepEmi: data.datosGenerales.emisor.codigoDepartamento,
+          dDesDepEmi: descripcionCodigoDepartamento[data.datosGenerales.emisor.codigoDepartamento],
+          cDisEmi: data.datosGenerales.emisor.codigoDistrito,
+          dDesDisEmi: data.datosGenerales.emisor.codigoDistrito
+            ? descripcionCodigoDistrito[data.datosGenerales.emisor.codigoDistrito]
+            : undefined,
+          cCiuEmi: data.datosGenerales.emisor.codigoCiudad,
+          dDesCiuEmi: descripcionCodigoCiudad[data.datosGenerales.emisor.codigoCiudad],
+          dTelEmi: data.datosGenerales.emisor.telefonoEmisor,
+          dEmailE: data.datosGenerales.emisor.emailEmisor,
+          dDenSuc: data.datosGenerales.emisor.denominacionSucursal,
+          gActEco: data.datosGenerales.emisor.actividadesEconomicas.map((v) => ({
+            cActEco: v.codigo.toString(),
+            dDesActEco: v.descripcion
+          })),
+          gRespDE: data.datosGenerales.emisor.responsableDE
+            ? {
+                iTipIDRespDE: data.datosGenerales.emisor.responsableDE.tipoDocumentoResponsable,
+                dDTipIDRespDE:
+                  descripcionTipoDocumentoResponsable[
+                    data.datosGenerales.emisor.responsableDE.tipoDocumentoResponsable
+                  ],
+                dNumIDRespDE: data.datosGenerales.emisor.responsableDE.numeroDocumentoResponsable,
+                dNomRespDE: data.datosGenerales.emisor.responsableDE.nombreResponsable,
+                dCarRespDE: data.datosGenerales.emisor.responsableDE.cargoResponsable
+              }
+            : undefined
+        },
+        gDatRec: {
+          iNatRec: data.datosGenerales.receptor.naturalezaReceptor,
+          iTiOpe: data.datosGenerales.receptor.tipoOperacion,
+          cPaisRec: data.datosGenerales.receptor.codigoPais,
+          dDesPaisRe: descripcionCodigoPais[data.datosGenerales.receptor.codigoPais],
+          iTiContRec: data.datosGenerales.receptor.tipoContribuyente,
+          dRucRec: data.datosGenerales.receptor.ruc,
+          dDVRec: data.datosGenerales.receptor.digitoVerificadorRuc,
+          iTipIDRec: data.datosGenerales.receptor.tipoDocumentoIdentidad,
+          dDTipIDRec: (() => {
+            if (!data.datosGenerales.receptor.tipoDocumentoIdentidad) return undefined;
 
-          // Segun D209, si el tipo es "Otro" la descripcion puede ser cualquiera
-          if (data.receptor.tipoDocumentoIdentidad === 9)
-            return data.receptor.descripcionDocumentoIdentidad;
+            // Segun D209, si el tipo es "Otro" la descripcion puede ser cualquiera
+            if (data.datosGenerales.receptor.tipoDocumentoIdentidad === 9)
+              return data.datosGenerales.receptor.descripcionDocumentoIdentidad;
 
-          return descripcionTipoDocumentoIdentidadReceptor[data.receptor.tipoDocumentoIdentidad];
-        })(),
-        dNumIDRec: data.receptor.numeroDocumentoIdentidad,
-        dNomRec: data.receptor.nombre,
-        dNomFanRec: data.receptor.nombreFantasia,
-        dDirRec: data.receptor.direccion,
-        dNumCasRec: data.receptor.numeroCasa,
-        dDepRec: data.receptor.codigoDepartamento,
-        dDesDepRec: data.receptor.codigoDepartamento
-          ? descripcionCodigoDepartamento[data.receptor.codigoDepartamento]
-          : undefined,
-        dDisRec: data.receptor.codigoDistrito,
-        dDesDisRec: data.receptor.codigoDistrito
-          ? descripcionCodigoDistrito[data.receptor.codigoDistrito]
-          : undefined,
-        cCiuRec: data.receptor.codigoCiudad,
-        dDesCiuRec: data.receptor.codigoCiudad
-          ? descripcionCodigoCiudad[data.receptor.codigoCiudad]
-          : undefined,
-        dTelRec: data.receptor.telefono,
-        dCelRec: data.receptor.celular,
-        dEmailRec: data.receptor.email,
-        dCodCliente: data.receptor.codigoCliente
+            return descripcionTipoDocumentoIdentidadReceptor[
+              data.datosGenerales.receptor.tipoDocumentoIdentidad
+            ];
+          })(),
+          dNumIDRec: data.datosGenerales.receptor.numeroDocumentoIdentidad,
+          dNomRec: data.datosGenerales.receptor.nombre,
+          dNomFanRec: data.datosGenerales.receptor.nombreFantasia,
+          dDirRec: data.datosGenerales.receptor.direccion,
+          dNumCasRec: data.datosGenerales.receptor.numeroCasa,
+          dDepRec: data.datosGenerales.receptor.codigoDepartamento,
+          dDesDepRec: data.datosGenerales.receptor.codigoDepartamento
+            ? descripcionCodigoDepartamento[data.datosGenerales.receptor.codigoDepartamento]
+            : undefined,
+          dDisRec: data.datosGenerales.receptor.codigoDistrito,
+          dDesDisRec: data.datosGenerales.receptor.codigoDistrito
+            ? descripcionCodigoDistrito[data.datosGenerales.receptor.codigoDistrito]
+            : undefined,
+          cCiuRec: data.datosGenerales.receptor.codigoCiudad,
+          dDesCiuRec: data.datosGenerales.receptor.codigoCiudad
+            ? descripcionCodigoCiudad[data.datosGenerales.receptor.codigoCiudad]
+            : undefined,
+          dTelRec: data.datosGenerales.receptor.telefono,
+          dCelRec: data.datosGenerales.receptor.celular,
+          dEmailRec: data.datosGenerales.receptor.email,
+          dCodCliente: data.datosGenerales.receptor.codigoCliente
+        }
       },
       gDtipDE: {
         gCamFE: {
@@ -507,7 +508,7 @@ export class XMLGen implements XMLGenerator {
         '@xsi:schemaLocation': 'http://ekuatia.set.gov.py/sifen/xsd siRecepDE_v150.xsd',
         dVerFor: 150,
         DE: {
-          '@id': data.id,
+          '@Id': data.id,
           ...de
         }
       }
