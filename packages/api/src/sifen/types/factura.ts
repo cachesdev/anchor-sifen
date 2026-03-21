@@ -1,25 +1,16 @@
 // Basado en SIFEN MT v150
 
 import type { OperacionDE, DatosGenerales, Emisor, Receptor, ItemDE } from './common';
-import type { TipoDocumentoElectronico } from './enums';
-
-/**
- * Indicador de presencia - E011 | Pagina 73
- */
-
-export const indicadorPresencia = {
-  OperacionPresencial: 1,
-  OperacionElectronica: 2,
-  OperacionTelemarketing: 3,
-  VentaDomicilio: 4,
-  OperacionBancaria: 5,
-  OperacionCiclica: 6,
-  Otro: 9
-} as const;
-/**
- * Indicador de presencia - E011 | Pagina 73
- */
-export type IndicadorPresencia = (typeof indicadorPresencia)[keyof typeof indicadorPresencia];
+import type {
+  TipoDocumentoElectronico,
+  IndicadorPresencia,
+  CondicionOperacion,
+  TipoPago,
+  DenominacionTarjeta,
+  FormaProcesamientoPago,
+  CondicionCredito
+} from './enums';
+import type { CodigoMoneda } from '../../gen/iso4217';
 
 /**
  * Factura Electrónica con campos legibles, Basado en MT SIFEN v150
@@ -75,13 +66,17 @@ export interface CamposFirmadosDE {
    */
   emisor: Emisor;
   /**
-   * D200 | gDatRec | Grupo de campos que identifican al receptor | Pagina 69
+   * D200 | gDatRec | Grupo de campos que identifican al receptor | Pagina 70
    */
-  receptor?: Receptor;
+  receptor: Receptor;
   /**
    * E010 | gCamFE | Campos que componen la FE | Pagina 73
    */
-  camposFE?: CamposFE;
+  camposFE: CamposFE;
+  /**
+   * E600 | gCamCond | Campos que describen la condición de la operación | Pagina 80
+   */
+  condicionOperacion: CondicionOperacionFE;
   /**
    * E700 | gItems | Campos que describen los ítems de la operación | Pagina 88
    */
@@ -89,7 +84,7 @@ export interface CamposFirmadosDE {
   /**
    * F001 | gTotSub | Campos de subtotales y totales | Pagina 89
    */
-  totales?: TotalesOperacion;
+  totales: TotalesOperacion;
 }
 
 /**
@@ -135,10 +130,6 @@ export interface CamposFE {
    */
   indicadorPresencia: IndicadorPresencia;
   /**
-   * E012 | dDesIndPres | Descripción del indicador de presencia | Pagina 73
-   */
-  descripcionIndicadorPresencia: string;
-  /**
    * E013 | dFecEmNR | Fecha futura del traslado de mercadería | Pagina 73
    */
   fechaTrasladoMercaderia?: string; // Format: AAAA-MM-DD
@@ -172,6 +163,186 @@ export interface ComprasPublicas {
    * E025 | dFeCodCont | Fecha de emisión del código de contratación por la DNCP | Pagina 74
    */
   fechaEmisionCodigoContratacion: string; // Format: AAAA-MM-DD
+}
+
+/**
+ * E600 | gCamCond | Campos que describen la condición de la operación | Pagina 80
+ */
+export interface CondicionOperacionFE {
+  /**
+   * E601 | iCondOpe | Condición de la operación | Pagina 80
+   */
+  condicion: CondicionOperacion;
+  /**
+   * E605 | gPaConEIni | Campos que describen la forma de pago al contado o del monto de la entrega inicial | Pagina 80
+   *
+   * Obligatorio si E601 = 1 (Contado)
+   * Obligatorio si existe el campo E645 (Monto de la entrega inicial)
+   */
+  pagoContadoEntregaInicial?: PagoContadoEntregaInicial[];
+  /**
+   * E640 | gPagCred | Campos que describen la operación a crédito | Pagina 84
+   *
+   * Obligatorio si E601 = 2 (Crédito)
+   * No informar si E601 ≠ 2
+   */
+  pagoCredito?: PagoCredito;
+}
+
+/**
+ * E605 | gPaConEIni | Campos que describen la forma de pago al contado o del monto de la entrega inicial | Pagina 80
+ */
+export interface PagoContadoEntregaInicial {
+  /**
+   * E606 | iTiPago | Tipo de pago | Pagina 81
+   */
+  tipoPago: TipoPago;
+  /**
+   * E607 | dDesTiPag | Descripción del tipo de pago | Pagina 81
+   *
+   * Si E606 = 99, informar el tipo de pago
+   */
+  descripcionTipoPago?: string;
+  /**
+   * E608 | dMonTiPag | Monto por tipo de pago | Pagina 81
+   */
+  montoPago: number;
+  /**
+   * E609 | cMoneTiPag | Moneda por tipo de pago | Pagina 81
+   */
+  monedaPago: CodigoMoneda;
+  /**
+   * E611 | dTiCamTiPag | Tipo de cambio por tipo de pago | Pagina 81
+   *
+   * Obligatorio si E609 ≠ PYG
+   */
+  tipoCambioPago?: number;
+  /**
+   * E620 | gPagTarCD | Campos que describen el pago o entrega inicial de la operación con tarjeta de crédito/débito | Pagina 82
+   *
+   * Se activa si E606 = 3 o 4
+   */
+  pagoTarjeta?: PagoTarjeta;
+  /**
+   * E630 | gPagCheq | Campos que describen el pago o entrega inicial de la operación con cheque | Pagina 83
+   *
+   * Se activa si E606 = 2
+   */
+  pagoCheque?: PagoCheque;
+}
+
+/**
+ * E620 | gPagTarCD | Campos que describen el pago o entrega inicial de la operación con tarjeta de crédito/débito | Pagina 82
+ */
+export interface PagoTarjeta {
+  /**
+   * E621 | iDenTarj | Denominación de la tarjeta | Pagina 82
+   */
+  denominacionTarjeta: DenominacionTarjeta;
+  /**
+   * E622 | dDesDenTarj | Descripción de denominación de la tarjeta | Pagina 82
+   *
+   * Si E621 = 99 informar la descripción de la denominación de la tarjeta
+   */
+  descripcionDenominacionTarjeta?: string;
+  /**
+   * E623 | dRSProTar | Razón social de la procesadora de tarjeta | Pagina 82
+   */
+  razonSocialProcesadora?: string;
+  /**
+   * E624 | dRUCProTar | RUC de la procesadora de tarjeta | Pagina 82
+   */
+  rucProcesadora?: string;
+  /**
+   * E625 | dDVProTar | Dígito verificador del RUC de la procesadora de tarjeta | Pagina 82
+   */
+  dvProcesadora?: number;
+  /**
+   * E626 | iForProPa | Forma de procesamiento de pago | Pagina 82
+   */
+  formaProcesamientoPago: FormaProcesamientoPago;
+  /**
+   * E627 | dCodAuOpe | Código de autorización de la operación | Pagina 82
+   */
+  codigoAutorizacion?: string;
+  /**
+   * E628 | dNomTit | Nombre del titular de la tarjeta | Pagina 82
+   */
+  nombreTitular?: string;
+  /**
+   * E629 | dNumTarj | Número de la tarjeta | Pagina 83
+   *
+   * Cuatro últimos dígitos de la tarjeta
+   */
+  numeroTarjeta?: string;
+}
+
+/**
+ * E630 | gPagCheq | Campos que describen el pago o entrega inicial de la operación con cheque | Pagina 83
+ */
+export interface PagoCheque {
+  /**
+   * E631 | dNumCheq | Número de cheque | Pagina 83
+   *
+   * Completar con 0 (cero) a la izquierda hasta alcanzar 8 (ocho) cifras
+   */
+  numeroCheque: string;
+  /**
+   * E632 | dBcoEmi | Banco emisor | Pagina 83
+   */
+  bancoEmisor: string;
+}
+
+/**
+ * E640 | gPagCred | Campos que describen la operación a crédito | Pagina 84
+ */
+export interface PagoCredito {
+  /**
+   * E641 | iCondCred | Condición de la operación a crédito | Pagina 84
+   */
+  condicionCredito: CondicionCredito;
+  /**
+   * E643 | dPlazoCre | Plazo del crédito | Pagina 84
+   *
+   * Obligatorio si E641 = 1
+   * Ejemplo: 30 días, 12 meses
+   */
+  plazoCredito?: string;
+  /**
+   * E644 | dCuotas | Cantidad de cuotas | Pagina 84
+   *
+   * Obligatorio si E641 = 2
+   * Ejemplo: 12, 24, 36
+   */
+  cantidadCuotas?: number;
+  /**
+   * E645 | dMonEnt | Monto de la entrega inicial | Pagina 84
+   */
+  montoEntregaInicial?: number;
+  /**
+   * E650 | gCuotas | Campos que describen las cuotas | Pagina 84
+   *
+   * Se activa si E641 = 2
+   */
+  cuotas?: Cuota[];
+}
+
+/**
+ * E650 | gCuotas | Campos que describen las cuotas | Pagina 84
+ */
+export interface Cuota {
+  /**
+   * E653 | cMoneCuo | Moneda de las cuotas | Pagina 84
+   */
+  monedaCuota: CodigoMoneda;
+  /**
+   * E655 | dDMoneCuo | Monto de la cuota | Pagina 84
+   */
+  montoCuota: number;
+  /**
+   * E656 | dVencCuo | Vencimiento de la cuota | Pagina 84
+   */
+  vencimientoCuota?: string; // Format: AAAA-MM-DD
 }
 
 /**
@@ -244,6 +415,8 @@ export interface TotalesOperacion {
   tipoCambio?: number;
   /**
    * F023 | dTotalGs | Total general de la operación en Guaraníes | Pagina 89
+   *
+   * Obligatorio si D015 ≠ PYG
    */
   totalGeneralGuaranies?: number;
 }

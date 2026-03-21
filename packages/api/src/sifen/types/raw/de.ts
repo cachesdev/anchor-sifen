@@ -1,7 +1,13 @@
 // AUTO-GENERATED (partial) — SIFEN Manual Técnico v150
-// Groups implemented: AA (AA001-AA002), A (A001-A005), B (B001-B006), C (C001-C010), D (D001-D299 subset: D010, D011-D020, D100-D160, D130-D145, D200-D224)
+// Groups implemented: AA (AA001-AA002), A (A001-A005), B (B001-B006), C (C001-C010), D (D001-D299 subset: D010, D011-D020, D100-D160, D130-D145, D200-D224), E (E010, E600, E700), F (F001)
 
+import type { CodigoCiudad, DescripcionCodigoCiudad } from '../../../gen/ciudades';
+import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../../gen/departamentos';
+import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/iso4217';
+import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
+import type { gCamFE, gCamCond, gCamItem } from './e';
+import type { gTotSub } from './f';
 
 /**
  * AA - AA001 | Documento Electrónico elemento raíz | Pagina 64
@@ -56,10 +62,25 @@ export interface DE {
    */
   gEmis: gEmis;
   /**
-   * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 69
+   * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 70
    */
   gDatRec: gDatRec;
-  // Note: further groups (E, items, etc.) will be implemented in subsequent batches.
+  /**
+   * E1 - E010 | Campos que componen la FE | Pagina 73
+   */
+  gCamFE?: gCamFE;
+  /**
+   * E7 - E600 | Campos que describen la condición de la operación | Pagina 80
+   */
+  gCamCond?: gCamCond;
+  /**
+   * E8 - E700 | Campos que describen los ítems de la operación | Pagina 88
+   */
+  gCamItem?: gCamItem[];
+  /**
+   * F - F001 | Campos de subtotales y totales | Pagina 89
+   */
+  gTotSub?: gTotSub;
 }
 
 /**
@@ -233,27 +254,27 @@ export interface gEmis {
   /**
    * D2 - D111 | Código del departamento de emisión | Pagina 67
    */
-  cDepEmi: number;
+  cDepEmi: CodigoDepartamento;
   /**
    * D2 - D112 | Descripción del departamento de emisión | Pagina 67
    */
-  dDesDepEmi: string;
+  dDesDepEmi: DescripcionCodigoDepartamento;
   /**
    * D2 - D113 | Código del distrito de emisión | Pagina 67
    */
-  cDisEmi?: number;
+  cDisEmi?: CodigoDistrito;
   /**
    * D2 - D114 | Descripción del distrito de emisión | Pagina 67
    */
-  dDesDisEmi?: string;
+  dDesDisEmi?: DescripcionCodigoDistrito;
   /**
    * D2 - D115 | Código de la ciudad de emisión | Pagina 68
    */
-  cCiuEmi: number;
+  cCiuEmi: CodigoCiudad;
   /**
    * D2 - D116 | Descripción de la ciudad de emisión | Pagina 68
    */
-  dDesCiuEmi: string;
+  dDesCiuEmi: DescripcionCodigoCiudad;
   /**
    * D2 - D117 | Teléfono local de emisión de DE | Pagina 68
    */
@@ -269,7 +290,7 @@ export interface gEmis {
   /**
    * D2.1 - D130 | Grupo de campos que describen la actividad económica del emisor | Pagina 69
    */
-  gActEco: [gActEco, ...gActEco[]];
+  gActEco: gActEco[];
   /**
    * D2.2 - D140 | Grupo de campos que identifican al responsable de la generación del DE | Pagina 69
    */
@@ -301,7 +322,7 @@ export interface gRespDE {
   /**
    * D2.2 - D142 | Descripción del tipo de documento de identidad del responsable de la generación del DE | Pagina 69
    */
-  dDTipIDRespDE: string;
+  dDTipIDRespDE: DDTipIDRespDE;
   /**
    * D2.2 - D143 | Número de documento de identidad del responsable de la generación del DE | Pagina 69
    */
@@ -331,11 +352,11 @@ export interface gDatRec {
   /**
    * D3 - D203 | Código de país del receptor | Pagina 70
    */
-  cPaisRec: string;
+  cPaisRec: CodigoPais;
   /**
    * D3 - D204 | Descripción del país receptor | Pagina 70
    */
-  dDesPaisRe: string;
+  dDesPaisRe: DescripcionCodigoPais;
   /**
    * D3 - D205 | Tipo de contribuyente receptor | Pagina 70
    */
@@ -355,7 +376,7 @@ export interface gDatRec {
   /**
    * D3 - D209 | Descripción del tipo de documento de identidad | Pagina 71
    */
-  dDTipIDRec?: string;
+  dDTipIDRec?: DDTipIDRec | string;
   /**
    * D3 - D210 | Número de documento de identidad | Pagina 71
    */
@@ -379,27 +400,27 @@ export interface gDatRec {
   /**
    * D3 - D219 | Código del departamento del receptor | Pagina 71
    */
-  dDepRec?: number;
+  dDepRec?: CodigoDepartamento;
   /**
    * D3 - D220 | Descripción del departamento del receptor | Pagina 71
    */
-  dDesDepRec?: string;
+  dDesDepRec?: DescripcionCodigoDepartamento;
   /**
    * D3 - D221 | Código del distrito del receptor | Pagina 71
    */
-  dDisRec?: number;
+  dDisRec?: CodigoDistrito;
   /**
    * D3 - D222 | Descripción del distrito del receptor | Pagina 71
    */
-  dDesDisRec?: string;
+  dDesDisRec?: DescripcionCodigoDistrito;
   /**
    * D3 - D223 | Código de la ciudad del receptor | Pagina 72
    */
-  cCiuRec?: number;
+  cCiuRec?: CodigoCiudad;
   /**
    * D3 - D224 | Descripción de la ciudad del receptor | Pagina 72
    */
-  dDesCiuRec?: string;
+  dDesCiuRec?: DescripcionCodigoCiudad;
   /**
    * D3 - D214 | Número de teléfono del receptor | Pagina 72
    */

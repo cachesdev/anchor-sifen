@@ -1,73 +1,29 @@
 // SIFEN Common Type Definitions v150
 // Shared types used across different DTE types
 
+import type { CodigoCiudad } from '../../gen/ciudades';
+import type { CodigoDepartamento } from '../../gen/departamentos';
+import type { CodigoDistrito } from '../../gen/distritos';
 import type { CodigoMoneda } from '../../gen/iso4217';
+import type { CodigoPais } from '../../gen/paises';
 import type {
   CondicionAnticipo,
   CondicionTipoCambio,
+  NaturalezaReceptor,
+  TipoContribuyente,
+  TipoContribuyenteReceptor,
+  TipoDocumentoIdentidadReceptor,
+  TipoDocumentoResponsable,
+  TipoEmision,
   TipoImpuesto,
+  TipoOperacion,
+  TipoRegimen,
   TipoTransaccion
 } from './enums';
 
 // ============================================================================
 // Enums with clear values from field descriptions
 // ============================================================================
-
-/**
- * Tipo de emisión - B002 | Pagina 65
- */
-export const tipoEmision = {
-  Normal: 1,
-  Contingencia: 2
-} as const;
-
-export type TipoEmision = (typeof tipoEmision)[keyof typeof tipoEmision];
-
-export const descripcionTipoEmision = {
-  [tipoEmision.Normal]: 'Normal',
-  [tipoEmision.Contingencia]: 'Contingencia'
-} as const;
-
-/**
- * Tipo de contribuyente - D103 | Pagina 67
- */
-export const tipoContribuyente = {
-  PersonaFisica: 1,
-  PersonaJuridica: 2
-} as const;
-/**
- * Tipo de contribuyente - D103 | Pagina 67
- */
-export type TipoContribuyente = (typeof tipoContribuyente)[keyof typeof tipoContribuyente];
-
-/**
- * Tipo de documento de identidad del receptor - D202 | Pagina 69
- */
-export const tipoDocumentoIdentidad = {
-  CedulaParaguaya: 1,
-  RUC: 2,
-  Pasaporte: 3,
-  CedulaExtranjera: 4,
-  CarnetResidencia: 5
-} as const;
-/**
- * Tipo de documento de identidad del receptor - D202 | Pagina 69
- */
-export type TipoDocumentoIdentidad =
-  (typeof tipoDocumentoIdentidad)[keyof typeof tipoDocumentoIdentidad];
-
-/**
- * Tipo de operación - D220 | Pagina 69
- */
-export const tipoOperacion = {
-  OperacionInterna: 1,
-  Exportacion: 2,
-  Importacion: 3
-} as const;
-/**
- * Tipo de operación - D220 | Pagina 69
- */
-export type TipoOperacion = (typeof tipoOperacion)[keyof typeof tipoOperacion];
 
 // ============================================================================
 // Common Interfaces
@@ -164,7 +120,7 @@ export interface Emisor {
   /**
    * D104 | cTipReg | Tipo de régimen | Pagina 67
    */
-  tipoRegimen?: number; // TODO: Define enum based on Tabla 1
+  tipoRegimen?: TipoRegimen;
   /**
    * D105 | dNomEmi | Nombre o razón social del emisor del DE | Pagina 67
    */
@@ -192,31 +148,57 @@ export interface Emisor {
   /**
    * D111 | cDepEmi | Código del departamento de emisión | Pagina 67
    */
-  codigoDepartamento: number; // TODO: Define enum based on XSD Departamentos
-  /**
-   * D112 | dDesDepEmi | Descripción del departamento de emisión | Pagina 67
-   */
-  descripcionDepartamento: string;
+  codigoDepartamento: CodigoDepartamento;
   /**
    * D113 | cDisEmi | Código del distrito de emisión | Pagina 67
    */
-  codigoDistrito?: number; // TODO: Define enum based on Tabla 2.1
-  /**
-   * D114 | dDesDisEmi | Descripción del distrito de emisión | Pagina 67
-   */
-  descripcionDistrito?: string;
+  codigoDistrito?: CodigoDistrito;
   /**
    * D115 | cCiuEmi | Código de la ciudad de emisión | Pagina 68
    */
-  codigoCiudad: number; // TODO: Define enum based on Tabla 2.2
+  codigoCiudad: CodigoCiudad;
   /**
-   * D116 | dDesCiuEmi | Descripción de la ciudad de emisión | Pagina 68
+   * D117 | dTelEmi | Teléfono local de emisión de DE | Pagina 69
    */
-  descripcionCiudad: string;
+  telefonoEmisor: string;
+  /**
+   * D118 | dEmailE | Correo electrónico del emisor | Pagina 69
+   */
+  emailEmisor: string;
+  /**
+   * D119 | dDenSuc | Denominación comercial de la sucursal | Pagina 69
+   */
+  denominacionSucursal?: string;
   /**
    * D130 | gActEco | Campos que describen la actividad económica del emisor | Pagina 68
    */
   actividadesEconomicas: ActividadEconomica[];
+  /**
+   * D140 | gRespDE | Grupo de campos que identifican al responsable de la generacion DE | Pagina 70
+   */
+  responsableDE?: ResponsableDE;
+}
+
+/**
+ * D140 | gRespDE | Campos que identifican al responsable de la generación del DE | Pagina 69
+ */
+export interface ResponsableDE {
+  /**
+   * D141 | Tipo de documento de identidad del responsable de la generación del DE | Pagina 69
+   */
+  tipoDocumentoResponsable: TipoDocumentoResponsable;
+  /**
+   * D143 | Número de documento de identidad del responsable de la generación del DE | Pagina 69
+   */
+  numeroDocumentoResponsable: string;
+  /**
+   * D144 | Nombre o razón social del responsable de la generación del DE | Pagina 69
+   */
+  nombreResponsable: string;
+  /**
+   * D145 | Cargo del responsable de la generación del DE | Pagina 69
+   */
+  cargoResponsable: string;
 }
 
 /**
@@ -234,105 +216,91 @@ export interface ActividadEconomica {
 }
 
 /**
- * D200 | gDatRec | Grupo de campos que identifican al receptor | Pagina 69
+ * D200 | gDatRec | Grupo de campos que identifican al receptor | Pagina 70
  */
 export interface Receptor {
   /**
-   * D201 | dRucRec | RUC del receptor | Pagina 69
+   * D201 | iNatRec | Naturaleza del receptor | Pagina 71
    */
-  ruc?: string;
+  naturalezaReceptor: NaturalezaReceptor;
   /**
-   * D202 | iTipIDRec | Tipo de documento de identidad del receptor | Pagina 69
-   */
-  tipoDocumentoIdentidad: TipoDocumentoIdentidad;
-  /**
-   * D203 | dNumIDRec | Número de documento de identidad del receptor | Pagina 69
-   */
-  numeroDocumentoIdentidad: string;
-  /**
-   * D204 | dDVRec | Dígito verificador del documento del receptor | Pagina 69
-   */
-  digitoVerificador?: number;
-  /**
-   * D205 | iTipContRec | Tipo de contribuyente del receptor | Pagina 69
-   */
-  tipoContribuyente?: TipoContribuyente;
-  /**
-   * D206 | dNomRec | Nombre o razón social del receptor | Pagina 69
-   */
-  nombre: string;
-  /**
-   * D207 | dNomFanRec | Nombre de fantasía del receptor | Pagina 69
-   */
-  nombreFantasia?: string;
-  /**
-   * D208 | dDirRec | Dirección del receptor | Pagina 69
-   */
-  direccion?: string;
-  /**
-   * D209 | dNumCasRec | Número de casa del receptor | Pagina 69
-   */
-  numeroCasa?: number;
-  /**
-   * D210 | dCompDir1Rec | Complemento de dirección 1 del receptor | Pagina 69
-   */
-  complementoDireccion1?: string;
-  /**
-   * D211 | dCompDir2Rec | Complemento de dirección 2 del receptor | Pagina 69
-   */
-  complementoDireccion2?: string;
-  /**
-   * D212 | cDepRec | Código del departamento del receptor | Pagina 69
-   */
-  codigoDepartamento?: number; // TODO: Define enum based on XSD Departamentos
-  /**
-   * D213 | dDesDepRec | Descripción del departamento del receptor | Pagina 69
-   */
-  descripcionDepartamento?: string;
-  /**
-   * D214 | cDisRec | Código del distrito del receptor | Pagina 69
-   */
-  codigoDistrito?: number; // TODO: Define enum based on Tabla 2.1
-  /**
-   * D215 | dDesDisRec | Descripción del distrito del receptor | Pagina 69
-   */
-  descripcionDistrito?: string;
-  /**
-   * D216 | cCiuRec | Código de la ciudad del receptor | Pagina 69
-   */
-  codigoCiudad?: number; // TODO: Define enum based on Tabla 2.2
-  /**
-   * D217 | dDesCiuRec | Descripción de la ciudad del receptor | Pagina 69
-   */
-  descripcionCiudad?: string;
-  /**
-   * D218 | dTelRec | Teléfono del receptor | Pagina 69
-   */
-  telefono?: string;
-  /**
-   * D219 | dCorRec | Correo electrónico del receptor | Pagina 69
-   */
-  correo?: string;
-  /**
-   * D220 | iTiOpe | Tipo de operación | Pagina 69
+   * D202 | iTiOpe | Tipo de operación | Pagina 71
    */
   tipoOperacion: TipoOperacion;
   /**
-   * D221 | dDesTiOpe | Descripción del tipo de operación | Pagina 69
+   * D203 | cPaisRec | Código de país del receptor | Pagina 71
    */
-  descripcionTipoOperacion: string;
+  codigoPais: CodigoPais;
   /**
-   * D222 | iTiContRec | Tipo de contribuyente receptor | Pagina 69
+   * D205 | iTiContRec | Tipo de contribuyente receptor | Pagina 71
    */
-  tipoContribuyenteReceptor?: number; // TODO: Define enum (1=Contribuyente IVA, 2=Consumidor final, etc.)
+  tipoContribuyente?: TipoContribuyenteReceptor;
   /**
-   * D223 | dDesTiContRec | Descripción del tipo de contribuyente receptor | Pagina 69
+   * D206 | dRucRec | RUC del receptor | Pagina 71
    */
-  descripcionTipoContribuyenteReceptor?: string;
+  ruc?: string;
   /**
-   * D224 | dCodIntRec | Código interno del receptor | Pagina 69
+   * D207 | dDVRec | Dígito verificador del RUC del receptor | Pagina 71
    */
-  codigoInterno?: string;
+  digitoVerificadorRuc?: number;
+  /**
+   * D208 | iTipIDRec | Tipo de documento de identidad del receptor | Pagina 71
+   */
+  tipoDocumentoIdentidad?: TipoDocumentoIdentidadReceptor;
+  /**
+   * D209 | dDTipIDRec | Descripcion de tipo documento de identidad del receptor | Pagina 71
+   *
+   * solo pasar si tipoDocumentoIdentidad es Otro (9)
+   */
+  descripcionDocumentoIdentidad?: string;
+  /**
+   * D210 | dNumIDRec | Número de documento de identidad | Pagina 72
+   */
+  numeroDocumentoIdentidad?: string;
+  /**
+   * D211 | dNomRec | Nombre o razón social del receptor del DE | Pagina 72
+   */
+  nombre: string;
+  /**
+   * D212 | dNomFanRec | Nombre de fantasía | Pagina 72
+   */
+  nombreFantasia?: string;
+  /**
+   * D213 | dDirRec | Dirección del receptor | Pagina 72
+   */
+  direccion?: string;
+  /**
+   * D218 | dNumCasRec | Número de casa del receptor | Pagina 72
+   */
+  numeroCasa?: number;
+  /**
+   * D219 | dDepRec | Código del departamento del receptor | Pagina 72
+   */
+  codigoDepartamento?: CodigoDepartamento;
+  /**
+   * D221 | dDisRec | Código del distrito del receptor | Pagina 72
+   */
+  codigoDistrito?: CodigoDistrito;
+  /**
+   * D223 | cCiuRec | Código de la ciudad del receptor | Pagina 73
+   */
+  codigoCiudad?: CodigoCiudad;
+  /**
+   * D214 | dTelRec | Número de teléfono del receptor | Pagina 73
+   */
+  telefono?: string;
+  /**
+   * D215 | dCelRec | Número de celular del receptor | Pagina 73
+   */
+  celular?: string;
+  /**
+   * D216 | dEmailRec | Correo electrónico del receptor | Pagina 73
+   */
+  email?: string;
+  /**
+   * D217 | dCodCliente | Código del cliente | Pagina 73
+   */
+  codigoCliente?: string;
 }
 
 /**

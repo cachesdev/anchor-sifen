@@ -28,6 +28,62 @@ export type DescripcionTipoDocumentoElectronico =
   (typeof descripcionTipoDocumentoElectronico)[keyof typeof descripcionTipoDocumentoElectronico];
 
 /**
+ * Naturaleza del receptor - D201 | Pagina 70
+ */
+export const naturalezaReceptor = {
+  Contribuyente: 1,
+  NoContribuyente: 2
+} as const;
+export type NaturalezaReceptor = (typeof naturalezaReceptor)[keyof typeof naturalezaReceptor];
+
+/**
+ * Tipo de operación - D202 | Pagina 70
+ */
+export const tipoOperacion = {
+  B2B: 1,
+  B2C: 2,
+  B2G: 3,
+  B2F: 4
+} as const;
+export type TipoOperacion = (typeof tipoOperacion)[keyof typeof tipoOperacion];
+
+/**
+ * Tipo de contribuyente receptor - D205 | Pagina 70
+ */
+export const tipoContribuyenteReceptor = {
+  PersonaFisica: 1,
+  PersonaJuridica: 2
+} as const;
+export type TipoContribuyenteReceptor =
+  (typeof tipoContribuyenteReceptor)[keyof typeof tipoContribuyenteReceptor];
+
+/**
+ * Tipo de documento de identidad del receptor - D208 | Pagina 70
+ */
+export const tipoDocumentoIdentidadReceptor = {
+  CedulaParaguaya: 1,
+  Pasaporte: 2,
+  CedulaExtranjera: 3,
+  CarnetResidencia: 4,
+  Innominado: 5,
+  TarjetaDiplomatica: 6,
+  Otro: 9
+} as const;
+export type TipoDocumentoIdentidadReceptor =
+  (typeof tipoDocumentoIdentidadReceptor)[keyof typeof tipoDocumentoIdentidadReceptor];
+
+export const descripcionTipoDocumentoIdentidadReceptor = {
+  [tipoDocumentoIdentidadReceptor.CedulaParaguaya]: 'Cédula paraguaya',
+  [tipoDocumentoIdentidadReceptor.Pasaporte]: 'Pasaporte',
+  [tipoDocumentoIdentidadReceptor.CedulaExtranjera]: 'Cédula extranjera',
+  [tipoDocumentoIdentidadReceptor.CarnetResidencia]: 'Carnet de residencia',
+  [tipoDocumentoIdentidadReceptor.Innominado]: 'Innominado',
+  [tipoDocumentoIdentidadReceptor.TarjetaDiplomatica]: 'Tarjeta Diplomática de exoneración fiscal'
+} as const;
+export type DescripcionTipoDocumentoIdentidadReceptor =
+  (typeof descripcionTipoDocumentoIdentidadReceptor)[keyof typeof descripcionTipoDocumentoIdentidadReceptor];
+
+/**
  * D011 | iTipTra | Tipo de transacción | Pagina 66
  */
 export const tipoTransaccion = {
@@ -126,3 +182,211 @@ export const tipoRegimen = {
   Contable: 8
 } as const;
 export type TipoRegimen = (typeof tipoRegimen)[keyof typeof tipoRegimen];
+
+/**
+ * Indicador de presencia - E011 | Pagina 73
+ */
+export const indicadorPresencia = {
+  OperacionPresencial: 1,
+  OperacionElectronica: 2,
+  OperacionTelemarketing: 3,
+  VentaDomicilio: 4,
+  OperacionBancaria: 5,
+  OperacionCiclica: 6,
+  Otro: 9
+} as const;
+export type IndicadorPresencia = (typeof indicadorPresencia)[keyof typeof indicadorPresencia];
+
+export const descripcionIndicadorPresencia = {
+  [indicadorPresencia.OperacionPresencial]: 'Operación presencial',
+  [indicadorPresencia.OperacionElectronica]: 'Operación electrónica',
+  [indicadorPresencia.OperacionTelemarketing]: 'Operación telemarketing',
+  [indicadorPresencia.VentaDomicilio]: 'Venta a domicilio',
+  [indicadorPresencia.OperacionBancaria]: 'Operación bancaria',
+  [indicadorPresencia.OperacionCiclica]: 'Operación cíclica',
+  [indicadorPresencia.Otro]: 'Otro'
+} as const;
+export type DescripcionIndicadorPresencia =
+  (typeof descripcionIndicadorPresencia)[keyof typeof descripcionIndicadorPresencia];
+
+/**
+ * Condición de la operación - E601 | Pagina 80
+ */
+export const condicionOperacion = {
+  Contado: 1,
+  Credito: 2
+} as const;
+export type CondicionOperacion = (typeof condicionOperacion)[keyof typeof condicionOperacion];
+
+export const descripcionCondicionOperacion = {
+  [condicionOperacion.Contado]: 'Contado',
+  [condicionOperacion.Credito]: 'Crédito'
+} as const;
+export type DescripcionCondicionOperacion =
+  (typeof descripcionCondicionOperacion)[keyof typeof descripcionCondicionOperacion];
+
+/**
+ * Tipo de pago - E606 | Pagina 81
+ */
+export const tipoPago = {
+  Efectivo: 1,
+  Cheque: 2,
+  TarjetaCredito: 3,
+  TarjetaDebito: 4,
+  Transferencia: 5,
+  Giro: 6,
+  BilleteraElectronica: 7,
+  TarjetaEmpresarial: 8,
+  Vale: 9,
+  Retencion: 10,
+  PagoAnticipo: 11,
+  ValorFiscal: 12,
+  ValorComercial: 13,
+  Compensacion: 14,
+  Permuta: 15,
+  PagoBancario: 16,
+  PagoMovil: 17,
+  Donacion: 18,
+  Promocion: 19,
+  ConsumoInterno: 20,
+  PagoElectronico: 21,
+  Otro: 99
+} as const;
+export type TipoPago = (typeof tipoPago)[keyof typeof tipoPago];
+
+export const descripcionTipoPago = {
+  [tipoPago.Efectivo]: 'Efectivo',
+  [tipoPago.Cheque]: 'Cheque',
+  [tipoPago.TarjetaCredito]: 'Tarjeta de crédito',
+  [tipoPago.TarjetaDebito]: 'Tarjeta de débito',
+  [tipoPago.Transferencia]: 'Transferencia',
+  [tipoPago.Giro]: 'Giro',
+  [tipoPago.BilleteraElectronica]: 'Billetera electrónica',
+  [tipoPago.TarjetaEmpresarial]: 'Tarjeta empresarial',
+  [tipoPago.Vale]: 'Vale',
+  [tipoPago.Retencion]: 'Retención',
+  [tipoPago.PagoAnticipo]: 'Pago por anticipo',
+  [tipoPago.ValorFiscal]: 'Valor fiscal',
+  [tipoPago.ValorComercial]: 'Valor comercial',
+  [tipoPago.Compensacion]: 'Compensación',
+  [tipoPago.Permuta]: 'Permuta',
+  [tipoPago.PagoBancario]: 'Pago bancario',
+  [tipoPago.PagoMovil]: 'Pago Móvil',
+  [tipoPago.Donacion]: 'Donación',
+  [tipoPago.Promocion]: 'Promoción',
+  [tipoPago.ConsumoInterno]: 'Consumo Interno',
+  [tipoPago.PagoElectronico]: 'Pago Electrónico'
+  // Otro (99) requires custom description from user
+} as const;
+export type DescripcionTipoPago = (typeof descripcionTipoPago)[keyof typeof descripcionTipoPago];
+
+/**
+ * Denominación de la tarjeta - E621 | Pagina 82
+ */
+export const denominacionTarjeta = {
+  Visa: 1,
+  Mastercard: 2,
+  AmericanExpress: 3,
+  Maestro: 4,
+  Panal: 5,
+  Cabal: 6,
+  Otro: 99
+} as const;
+export type DenominacionTarjeta = (typeof denominacionTarjeta)[keyof typeof denominacionTarjeta];
+
+export const descripcionDenominacionTarjeta = {
+  [denominacionTarjeta.Visa]: 'Visa',
+  [denominacionTarjeta.Mastercard]: 'Mastercard',
+  [denominacionTarjeta.AmericanExpress]: 'American Express',
+  [denominacionTarjeta.Maestro]: 'Maestro',
+  [denominacionTarjeta.Panal]: 'Panal',
+  [denominacionTarjeta.Cabal]: 'Cabal'
+  // Otro (99) requires custom description from user
+} as const;
+export type DescripcionDenominacionTarjeta =
+  (typeof descripcionDenominacionTarjeta)[keyof typeof descripcionDenominacionTarjeta];
+
+/**
+ * Forma de procesamiento de pago - E626 | Pagina 82
+ */
+export const formaProcesamientoPago = {
+  POS: 1,
+  PagoElectronico: 2,
+  Otro: 9
+} as const;
+export type FormaProcesamientoPago =
+  (typeof formaProcesamientoPago)[keyof typeof formaProcesamientoPago];
+
+export const descripcionFormaProcesamientoPago = {
+  [formaProcesamientoPago.POS]: 'POS',
+  [formaProcesamientoPago.PagoElectronico]: 'Pago Electrónico',
+  [formaProcesamientoPago.Otro]: 'Otro'
+} as const;
+export type DescripcionFormaProcesamientoPago =
+  (typeof descripcionFormaProcesamientoPago)[keyof typeof descripcionFormaProcesamientoPago];
+
+/**
+ * Condición de la operación a crédito - E641 | Pagina 84
+ */
+export const condicionCredito = {
+  Plazo: 1,
+  Cuota: 2
+} as const;
+export type CondicionCredito = (typeof condicionCredito)[keyof typeof condicionCredito];
+
+export const descripcionCondicionCredito = {
+  [condicionCredito.Plazo]: 'Plazo',
+  [condicionCredito.Cuota]: 'Cuota'
+} as const;
+export type DescripcionCondicionCredito =
+  (typeof descripcionCondicionCredito)[keyof typeof descripcionCondicionCredito];
+
+/**
+ * Tipo de documento del responsable de la generacion del DE | Pagina 84
+ */
+export const tipoDocumentoResponsable = {
+  CedulaParaguaya: 1,
+  Pasaporte: 2,
+  CedulaExtranjera: 3,
+  CarnetResidencia: 4,
+  Otro: 9
+} as const;
+export type TipoDocumentoResponsable =
+  (typeof tipoDocumentoResponsable)[keyof typeof tipoDocumentoResponsable];
+
+export const descripcionTipoDocumentoResponsable = {
+  [tipoDocumentoResponsable.CedulaParaguaya]: 'Cédula paraguaya',
+  [tipoDocumentoResponsable.Pasaporte]: 'Pasaporte',
+  [tipoDocumentoResponsable.CedulaExtranjera]: 'Cédula extranjera',
+  [tipoDocumentoResponsable.CarnetResidencia]: 'Carnet de residencia',
+  [tipoDocumentoResponsable.Otro]: 'Otro'
+} as const;
+export type DescripcionTipoDocumentoResponsable =
+  (typeof descripcionTipoDocumentoResponsable)[keyof typeof descripcionTipoDocumentoResponsable];
+
+/**
+ * Tipo de emisión - B002 | Pagina 65
+ */
+export const tipoEmision = {
+  Normal: 1,
+  Contingencia: 2
+} as const;
+
+export type TipoEmision = (typeof tipoEmision)[keyof typeof tipoEmision];
+
+export const descripcionTipoEmision = {
+  [tipoEmision.Normal]: 'Normal',
+  [tipoEmision.Contingencia]: 'Contingencia'
+} as const;
+
+/**
+ * Tipo de contribuyente - D103 | Pagina 67
+ */
+export const tipoContribuyente = {
+  PersonaFisica: 1,
+  PersonaJuridica: 2
+} as const;
+/**
+ * Tipo de contribuyente - D103 | Pagina 67
+ */
+export type TipoContribuyente = (typeof tipoContribuyente)[keyof typeof tipoContribuyente];
