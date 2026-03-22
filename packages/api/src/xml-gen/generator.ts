@@ -1,7 +1,22 @@
-import type { FacturaElectronica } from '../sifen/types/factura';
+import type {
+  CamposEspecificosTipoDEFE,
+  FacturaElectronica,
+  Timbrado
+} from '../sifen/types/factura';
 import { create } from 'xmlbuilder2';
-import type { DocumentoElectronico } from '../sifen/types/raw/de';
-import { descripcionTipoEmision } from '../sifen/types';
+import type {
+  DocumentoElectronico,
+  gDatGralOpe,
+  gDtipDE,
+  gOpeDE,
+  gTimb
+} from '../sifen/types/raw/de';
+import {
+  descripcionTipoEmision,
+  type DatosGenerales,
+  type ItemDE,
+  type OperacionDE
+} from '../sifen/types';
 import {
   descripcionTipoDocumentoElectronico,
   descripcionIndicadorPresencia,
@@ -252,247 +267,260 @@ function calculateGTotSub(params: CalculateGTotSubParams): gTotSub {
   };
 }
 
+/**
+ * Mapea un ItemDE a gCamItem.
+ */
+function generateGcamItem(items: ItemDE[]): gCamItem[] {
+  return items.map(
+    (item): gCamItem => ({
+      dCodInt: item.codigoInterno,
+      dParAranc: item.partidaArancelaria,
+      dNCM: item.ncm,
+      dDncpG: item.codigoDncpGeneral,
+      dDncpE: item.codigoDncpEspecifico,
+      dGtin: item.gtin,
+      dGtinPq: item.gtinPaquete,
+      dDesProSer: item.descripcion,
+      cUniMed: item.codigoUnidadMedida,
+      dDesUniMed: descripcionUnidadMedida[item.codigoUnidadMedida],
+      dCantProSer: item.cantidad,
+      cPaisOrig: item.codigoPaisOrigen,
+      dDesPaisOrig: item.codigoPaisOrigen
+        ? descripcionCodigoPais[item.codigoPaisOrigen]
+        : undefined,
+      dInfItem: item.informacionItem,
+      cRelMerc: item.codigoRelevancia,
+      dDesRelMerc: item.codigoRelevancia
+        ? descripcionCodigoRelevancia[item.codigoRelevancia]
+        : undefined,
+      dCanQuiMer: item.cantidadQuiebraMerma,
+      dPorQuiMer: item.porcentajeQuiebraMerma,
+      dCDCAnticipo: item.cdcAnticipo,
+      gValorItem: {
+        dPUniProSer: item.valorItem.precioUnitario,
+        dTiCamIt: item.valorItem.tipoCambio,
+        dTotBruOpeItem: item.valorItem.totalBruto,
+        gValorRestaItem: {
+          dDescItem: item.valorItem.valorRestaItem.descuentoParticular,
+          dPorcDesIt: item.valorItem.valorRestaItem.porcentajeDescuentoParticular,
+          dDescGloItem: item.valorItem.valorRestaItem.descuentoGlobal,
+          dAntPreUniIt: item.valorItem.valorRestaItem.anticipoParticular,
+          dAntGloPreUniIt: item.valorItem.valorRestaItem.anticipoGlobal,
+          dTotOpeItem: item.valorItem.valorRestaItem.totalOperacion,
+          dTotOpeGs: item.valorItem.valorRestaItem.totalOperacionGuaranies
+        }
+      },
+      gCamIVA: item.iva
+        ? {
+            iAfecIVA: item.iva.afectacionIVA,
+            dDesAfecIVA: descripcionAfectacionIVA[item.iva.afectacionIVA],
+            dPropIVA: item.iva.proporcionGravada,
+            dTasaIVA: item.iva.tasaIVA,
+            dBasGravIVA: item.iva.baseGravada,
+            dLiqIVAItem: item.iva.liquidacionIVA
+          }
+        : undefined
+    })
+  );
+}
+
+/**
+ * Mapea un OperacionDE a gOpeDE.
+ */
+function generateGOpeDE(operacionDE: OperacionDE): gOpeDE {
+  return {
+    iTipEmi: operacionDE.tipoEmision,
+    dDesTipEmi: descripcionTipoEmision[operacionDE.tipoEmision],
+    dCodSeg: operacionDE.codigoSeguridad,
+    dInfoEmi: operacionDE.informacionEmisor,
+    dInfoFisc: operacionDE.informacionFisco
+  };
+}
+
+/**
+ * Mapea gTimb de Timbrado.
+ */
+function generategTimb(timbrado: Timbrado): gTimb {
+  return {
+    iTiDE: timbrado.tipoDocumento,
+    dDesTiDE: descripcionTipoDocumentoElectronico[timbrado.tipoDocumento],
+    dNumTim: timbrado.numeroTimbrado,
+    dEst: timbrado.establecimiento.toString().padStart(3, '0'),
+    dPunExp: timbrado.puntoExpedicion.toString().padStart(3, '0'),
+    dNumDoc: timbrado.numeroDocumento.toString().padStart(7, '0'),
+    dSerieNum: timbrado.serieNumero,
+    dFeIniT: formatDate(timbrado.fechaInicioVigencia, 'YYYY-MM-DD')
+  };
+}
+
+function generategDatGralOpe(datosGen: DatosGenerales): gDatGralOpe {
+  return {
+    dFeEmiDE: formatDate(datosGen.fechaHoraEmision, 'stripFractional'),
+    gEmis: {
+      dRucEm: datosGen.emisor.ruc,
+      dDVEmi: datosGen.emisor.digitoVerificadorRuc,
+      iTipCont: datosGen.emisor.tipoContribuyente,
+      cTipReg: datosGen.emisor.tipoRegimen,
+      dNomEmi: datosGen.emisor.nombre,
+      dNomFanEmi: datosGen.emisor.nombreFantasia,
+      dDirEmi: datosGen.emisor.direccion,
+      dNumCas: datosGen.emisor.numeroCasa,
+      dCompDir1: datosGen.emisor.complementoDireccion1,
+      dCompDir2: datosGen.emisor.complementoDireccion2,
+      cDepEmi: datosGen.emisor.codigoDepartamento,
+      dDesDepEmi: descripcionCodigoDepartamento[datosGen.emisor.codigoDepartamento],
+      cDisEmi: datosGen.emisor.codigoDistrito,
+      dDesDisEmi: datosGen.emisor.codigoDistrito
+        ? descripcionCodigoDistrito[datosGen.emisor.codigoDistrito]
+        : undefined,
+      cCiuEmi: datosGen.emisor.codigoCiudad,
+      dDesCiuEmi: descripcionCodigoCiudad[datosGen.emisor.codigoCiudad],
+      dTelEmi: datosGen.emisor.telefonoEmisor,
+      dEmailE: datosGen.emisor.emailEmisor,
+      dDenSuc: datosGen.emisor.denominacionSucursal,
+      gActEco: datosGen.emisor.actividadesEconomicas.map((v) => ({
+        cActEco: v.codigo.toString(),
+        dDesActEco: v.descripcion
+      })),
+      gRespDE: datosGen.emisor.responsableDE
+        ? {
+            iTipIDRespDE: datosGen.emisor.responsableDE.tipoDocumentoResponsable,
+            dDTipIDRespDE:
+              descripcionTipoDocumentoResponsable[
+                datosGen.emisor.responsableDE.tipoDocumentoResponsable
+              ],
+            dNumIDRespDE: datosGen.emisor.responsableDE.numeroDocumentoResponsable,
+            dNomRespDE: datosGen.emisor.responsableDE.nombreResponsable,
+            dCarRespDE: datosGen.emisor.responsableDE.cargoResponsable
+          }
+        : undefined
+    },
+    gDatRec: {
+      iNatRec: datosGen.receptor.naturalezaReceptor,
+      iTiOpe: datosGen.receptor.tipoOperacion,
+      cPaisRec: datosGen.receptor.codigoPais,
+      dDesPaisRe: descripcionCodigoPais[datosGen.receptor.codigoPais],
+      iTiContRec: datosGen.receptor.tipoContribuyente,
+      dRucRec: datosGen.receptor.ruc,
+      dDVRec: datosGen.receptor.digitoVerificadorRuc,
+      iTipIDRec: datosGen.receptor.tipoDocumentoIdentidad,
+      dDTipIDRec: (() => {
+        if (!datosGen.receptor.tipoDocumentoIdentidad) return undefined;
+
+        // Segun D209, si el tipo es "Otro" la descripcion puede ser cualquiera
+        if (datosGen.receptor.tipoDocumentoIdentidad === 9)
+          return datosGen.receptor.descripcionDocumentoIdentidad;
+
+        return descripcionTipoDocumentoIdentidadReceptor[datosGen.receptor.tipoDocumentoIdentidad];
+      })(),
+      dNumIDRec: datosGen.receptor.numeroDocumentoIdentidad,
+      dNomRec: datosGen.receptor.nombre,
+      dNomFanRec: datosGen.receptor.nombreFantasia,
+      dDirRec: datosGen.receptor.direccion,
+      dNumCasRec: datosGen.receptor.numeroCasa,
+      dDepRec: datosGen.receptor.codigoDepartamento,
+      dDesDepRec: datosGen.receptor.codigoDepartamento
+        ? descripcionCodigoDepartamento[datosGen.receptor.codigoDepartamento]
+        : undefined,
+      dDisRec: datosGen.receptor.codigoDistrito,
+      dDesDisRec: datosGen.receptor.codigoDistrito
+        ? descripcionCodigoDistrito[datosGen.receptor.codigoDistrito]
+        : undefined,
+      cCiuRec: datosGen.receptor.codigoCiudad,
+      dDesCiuRec: datosGen.receptor.codigoCiudad
+        ? descripcionCodigoCiudad[datosGen.receptor.codigoCiudad]
+        : undefined,
+      dTelRec: datosGen.receptor.telefono,
+      dCelRec: datosGen.receptor.celular,
+      dEmailRec: datosGen.receptor.email,
+      dCodCliente: datosGen.receptor.codigoCliente
+    }
+  };
+}
+
+function generategDtipDE_FE(camposTipoDE: CamposEspecificosTipoDEFE, items: gCamItem[]): gDtipDE {
+  return {
+    gCamFE: {
+      iIndPres: camposTipoDE.camposFE.indicadorPresencia,
+      dDesIndPres: (() => {
+        // Segun E012, si el tipo es "Otro" la descripcion puede ser cualquiera
+        if (camposTipoDE.camposFE.indicadorPresencia === 9)
+          return camposTipoDE.camposFE.descripcionIndicadorPresencia;
+
+        return descripcionIndicadorPresencia[camposTipoDE.camposFE.indicadorPresencia];
+      })(),
+      dFecEmNR: camposTipoDE.camposFE.fechaTrasladoMercaderia
+        ? formatDate(camposTipoDE.camposFE.fechaTrasladoMercaderia, 'YYYY-MM-DD')
+        : undefined,
+      gCompPub: camposTipoDE.camposFE.comprasPublicas
+        ? {
+            dModCont: camposTipoDE.camposFE.comprasPublicas.modalidad,
+            dEntCont: camposTipoDE.camposFE.comprasPublicas.entidad,
+            dAnoCont: camposTipoDE.camposFE.comprasPublicas.año,
+            dSecCont: camposTipoDE.camposFE.comprasPublicas.secuencia,
+            dFeCodCont: formatDate(
+              camposTipoDE.camposFE.comprasPublicas.fechaEmisionCodigoContratacion,
+              'YYYY-MM-DD'
+            )
+          }
+        : undefined
+    },
+    gCamCond: {
+      iCondOpe: camposTipoDE.condicionOperacion.condicion,
+      dDCondOpe: descripcionCondicionOperacion[camposTipoDE.condicionOperacion.condicion],
+      gPaConEIni: camposTipoDE.condicionOperacion.pagoContadoEntregaInicial?.map((pago) => ({
+        iTiPago: pago.tipoPago,
+        dDesTiPag:
+          pago.tipoPago === 99 ? pago.descripcionTipoPago! : descripcionTipoPago[pago.tipoPago],
+        dMonTiPag: pago.montoPago,
+        cMoneTiPag: pago.monedaPago,
+        dDMoneTiPag: codigoMoneda[pago.monedaPago],
+        dTiCamTiPag: pago.tipoCambioPago,
+        gPagTarCD: pago.pagoTarjeta
+          ? {
+              iDenTarj: pago.pagoTarjeta.denominacionTarjeta,
+              dDesDenTarj:
+                pago.pagoTarjeta.denominacionTarjeta === 99
+                  ? pago.pagoTarjeta.descripcionDenominacionTarjeta!
+                  : descripcionDenominacionTarjeta[pago.pagoTarjeta.denominacionTarjeta],
+              dRSProTar: pago.pagoTarjeta.razonSocialProcesadora,
+              dRUCProTar: pago.pagoTarjeta.rucProcesadora,
+              dDVProTar: pago.pagoTarjeta.dvProcesadora,
+              iForProPa: pago.pagoTarjeta.formaProcesamientoPago,
+              dCodAuOpe: pago.pagoTarjeta.codigoAutorizacion,
+              dNomTit: pago.pagoTarjeta.nombreTitular,
+              dNumTarj: pago.pagoTarjeta.numeroTarjeta
+            }
+          : undefined,
+        gPagCheq: pago.pagoCheque
+          ? {
+              dNumCheq: pago.pagoCheque.numeroCheque,
+              dBcoEmi: pago.pagoCheque.bancoEmisor
+            }
+          : undefined
+      }))
+      // TODO: Implementar pago credito
+    },
+    gCamItem: items
+  };
+}
+
 export class XMLGen implements XMLGenerator {
   generateFacturaElectronica(factura: FacturaElectronica): string {
     const { camposFirmados: data } = factura.de;
 
-    const mappedItems: gCamItem[] = data.camposEspecificosTipoDE.items.map(
-      (item): gCamItem => ({
-        dCodInt: item.codigoInterno,
-        dParAranc: item.partidaArancelaria,
-        dNCM: item.ncm,
-        dDncpG: item.codigoDncpGeneral,
-        dDncpE: item.codigoDncpEspecifico,
-        dGtin: item.gtin,
-        dGtinPq: item.gtinPaquete,
-        dDesProSer: item.descripcion,
-        cUniMed: item.codigoUnidadMedida,
-        dDesUniMed: descripcionUnidadMedida[item.codigoUnidadMedida],
-        dCantProSer: item.cantidad,
-        cPaisOrig: item.codigoPaisOrigen,
-        dDesPaisOrig: item.codigoPaisOrigen
-          ? descripcionCodigoPais[item.codigoPaisOrigen]
-          : undefined,
-        dInfItem: item.informacionItem,
-        cRelMerc: item.codigoRelevancia,
-        dDesRelMerc: item.codigoRelevancia
-          ? descripcionCodigoRelevancia[item.codigoRelevancia]
-          : undefined,
-        dCanQuiMer: item.cantidadQuiebraMerma,
-        dPorQuiMer: item.porcentajeQuiebraMerma,
-        dCDCAnticipo: item.cdcAnticipo,
-        gValorItem: {
-          dPUniProSer: item.valorItem.precioUnitario,
-          dTiCamIt: item.valorItem.tipoCambio,
-          dTotBruOpeItem: item.valorItem.totalBruto,
-          gValorRestaItem: {
-            dDescItem: item.valorItem.valorRestaItem.descuentoParticular,
-            dPorcDesIt: item.valorItem.valorRestaItem.porcentajeDescuentoParticular,
-            dDescGloItem: item.valorItem.valorRestaItem.descuentoGlobal,
-            dAntPreUniIt: item.valorItem.valorRestaItem.anticipoParticular,
-            dAntGloPreUniIt: item.valorItem.valorRestaItem.anticipoGlobal,
-            dTotOpeItem: item.valorItem.valorRestaItem.totalOperacion,
-            dTotOpeGs: item.valorItem.valorRestaItem.totalOperacionGuaranies
-          }
-        },
-        gCamIVA: item.iva
-          ? {
-              iAfecIVA: item.iva.afectacionIVA,
-              dDesAfecIVA: descripcionAfectacionIVA[item.iva.afectacionIVA],
-              dPropIVA: item.iva.proporcionGravada,
-              dTasaIVA: item.iva.tasaIVA,
-              dBasGravIVA: item.iva.baseGravada,
-              dLiqIVAItem: item.iva.liquidacionIVA
-            }
-          : undefined
-      })
-    );
+    const items = generateGcamItem(data.camposEspecificosTipoDE.items);
 
     const de: DocumentoElectronico['rDE']['DE'] = {
       dDVId: data.digitoVerificador,
       dFecFirma: formatDate(data.fechaFirma, 'stripFractional'),
       dSisFact: 1,
-      gOpeDE: {
-        iTipEmi: data.operacionDE.tipoEmision,
-        dDesTipEmi: descripcionTipoEmision[data.operacionDE.tipoEmision],
-        dCodSeg: data.operacionDE.codigoSeguridad,
-        dInfoEmi: data.operacionDE.informacionEmisor,
-        dInfoFisc: data.operacionDE.informacionFisco
-      },
-      gTimb: {
-        iTiDE: data.datosTimbrado.tipoDocumento,
-        dDesTiDE: descripcionTipoDocumentoElectronico[data.datosTimbrado.tipoDocumento],
-        dNumTim: data.datosTimbrado.numeroTimbrado,
-        dEst: data.datosTimbrado.establecimiento.toString().padStart(3, '0'),
-        dPunExp: data.datosTimbrado.puntoExpedicion.toString().padStart(3, '0'),
-        dNumDoc: data.datosTimbrado.numeroDocumento.toString().padStart(7, '0'),
-        dSerieNum: data.datosTimbrado.serieNumero,
-        dFeIniT: formatDate(data.datosTimbrado.fechaInicioVigencia, 'YYYY-MM-DD')
-      },
-      gDatGralOpe: {
-        dFeEmiDE: formatDate(data.datosGenerales.fechaHoraEmision, 'stripFractional'),
-        gEmis: {
-          dRucEm: data.datosGenerales.emisor.ruc,
-          dDVEmi: data.datosGenerales.emisor.digitoVerificadorRuc,
-          iTipCont: data.datosGenerales.emisor.tipoContribuyente,
-          cTipReg: data.datosGenerales.emisor.tipoRegimen,
-          dNomEmi: data.datosGenerales.emisor.nombre,
-          dNomFanEmi: data.datosGenerales.emisor.nombreFantasia,
-          dDirEmi: data.datosGenerales.emisor.direccion,
-          dNumCas: data.datosGenerales.emisor.numeroCasa,
-          dCompDir1: data.datosGenerales.emisor.complementoDireccion1,
-          dCompDir2: data.datosGenerales.emisor.complementoDireccion2,
-          cDepEmi: data.datosGenerales.emisor.codigoDepartamento,
-          dDesDepEmi: descripcionCodigoDepartamento[data.datosGenerales.emisor.codigoDepartamento],
-          cDisEmi: data.datosGenerales.emisor.codigoDistrito,
-          dDesDisEmi: data.datosGenerales.emisor.codigoDistrito
-            ? descripcionCodigoDistrito[data.datosGenerales.emisor.codigoDistrito]
-            : undefined,
-          cCiuEmi: data.datosGenerales.emisor.codigoCiudad,
-          dDesCiuEmi: descripcionCodigoCiudad[data.datosGenerales.emisor.codigoCiudad],
-          dTelEmi: data.datosGenerales.emisor.telefonoEmisor,
-          dEmailE: data.datosGenerales.emisor.emailEmisor,
-          dDenSuc: data.datosGenerales.emisor.denominacionSucursal,
-          gActEco: data.datosGenerales.emisor.actividadesEconomicas.map((v) => ({
-            cActEco: v.codigo.toString(),
-            dDesActEco: v.descripcion
-          })),
-          gRespDE: data.datosGenerales.emisor.responsableDE
-            ? {
-                iTipIDRespDE: data.datosGenerales.emisor.responsableDE.tipoDocumentoResponsable,
-                dDTipIDRespDE:
-                  descripcionTipoDocumentoResponsable[
-                    data.datosGenerales.emisor.responsableDE.tipoDocumentoResponsable
-                  ],
-                dNumIDRespDE: data.datosGenerales.emisor.responsableDE.numeroDocumentoResponsable,
-                dNomRespDE: data.datosGenerales.emisor.responsableDE.nombreResponsable,
-                dCarRespDE: data.datosGenerales.emisor.responsableDE.cargoResponsable
-              }
-            : undefined
-        },
-        gDatRec: {
-          iNatRec: data.datosGenerales.receptor.naturalezaReceptor,
-          iTiOpe: data.datosGenerales.receptor.tipoOperacion,
-          cPaisRec: data.datosGenerales.receptor.codigoPais,
-          dDesPaisRe: descripcionCodigoPais[data.datosGenerales.receptor.codigoPais],
-          iTiContRec: data.datosGenerales.receptor.tipoContribuyente,
-          dRucRec: data.datosGenerales.receptor.ruc,
-          dDVRec: data.datosGenerales.receptor.digitoVerificadorRuc,
-          iTipIDRec: data.datosGenerales.receptor.tipoDocumentoIdentidad,
-          dDTipIDRec: (() => {
-            if (!data.datosGenerales.receptor.tipoDocumentoIdentidad) return undefined;
-
-            // Segun D209, si el tipo es "Otro" la descripcion puede ser cualquiera
-            if (data.datosGenerales.receptor.tipoDocumentoIdentidad === 9)
-              return data.datosGenerales.receptor.descripcionDocumentoIdentidad;
-
-            return descripcionTipoDocumentoIdentidadReceptor[
-              data.datosGenerales.receptor.tipoDocumentoIdentidad
-            ];
-          })(),
-          dNumIDRec: data.datosGenerales.receptor.numeroDocumentoIdentidad,
-          dNomRec: data.datosGenerales.receptor.nombre,
-          dNomFanRec: data.datosGenerales.receptor.nombreFantasia,
-          dDirRec: data.datosGenerales.receptor.direccion,
-          dNumCasRec: data.datosGenerales.receptor.numeroCasa,
-          dDepRec: data.datosGenerales.receptor.codigoDepartamento,
-          dDesDepRec: data.datosGenerales.receptor.codigoDepartamento
-            ? descripcionCodigoDepartamento[data.datosGenerales.receptor.codigoDepartamento]
-            : undefined,
-          dDisRec: data.datosGenerales.receptor.codigoDistrito,
-          dDesDisRec: data.datosGenerales.receptor.codigoDistrito
-            ? descripcionCodigoDistrito[data.datosGenerales.receptor.codigoDistrito]
-            : undefined,
-          cCiuRec: data.datosGenerales.receptor.codigoCiudad,
-          dDesCiuRec: data.datosGenerales.receptor.codigoCiudad
-            ? descripcionCodigoCiudad[data.datosGenerales.receptor.codigoCiudad]
-            : undefined,
-          dTelRec: data.datosGenerales.receptor.telefono,
-          dCelRec: data.datosGenerales.receptor.celular,
-          dEmailRec: data.datosGenerales.receptor.email,
-          dCodCliente: data.datosGenerales.receptor.codigoCliente
-        }
-      },
-      gDtipDE: {
-        gCamFE: {
-          iIndPres: data.camposEspecificosTipoDE.camposFE.indicadorPresencia,
-          dDesIndPres: (() => {
-            // Segun E012, si el tipo es "Otro" la descripcion puede ser cualquiera
-            if (data.camposEspecificosTipoDE.camposFE.indicadorPresencia === 9)
-              return data.camposEspecificosTipoDE.camposFE.descripcionIndicadorPresencia;
-
-            return descripcionIndicadorPresencia[
-              data.camposEspecificosTipoDE.camposFE.indicadorPresencia
-            ];
-          })(),
-          dFecEmNR: data.camposEspecificosTipoDE.camposFE.fechaTrasladoMercaderia
-            ? formatDate(
-                data.camposEspecificosTipoDE.camposFE.fechaTrasladoMercaderia,
-                'YYYY-MM-DD'
-              )
-            : undefined,
-          gCompPub: data.camposEspecificosTipoDE.camposFE.comprasPublicas
-            ? {
-                dModCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.modalidad,
-                dEntCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.entidad,
-                dAnoCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.año,
-                dSecCont: data.camposEspecificosTipoDE.camposFE.comprasPublicas.secuencia,
-                dFeCodCont: formatDate(
-                  data.camposEspecificosTipoDE.camposFE.comprasPublicas
-                    .fechaEmisionCodigoContratacion,
-                  'YYYY-MM-DD'
-                )
-              }
-            : undefined
-        },
-        gCamCond: {
-          iCondOpe: data.camposEspecificosTipoDE.condicionOperacion.condicion,
-          dDCondOpe:
-            descripcionCondicionOperacion[
-              data.camposEspecificosTipoDE.condicionOperacion.condicion
-            ],
-          gPaConEIni:
-            data.camposEspecificosTipoDE.condicionOperacion.pagoContadoEntregaInicial?.map(
-              (pago) => ({
-                iTiPago: pago.tipoPago,
-                dDesTiPag:
-                  pago.tipoPago === 99
-                    ? pago.descripcionTipoPago!
-                    : descripcionTipoPago[pago.tipoPago],
-                dMonTiPag: pago.montoPago,
-                cMoneTiPag: pago.monedaPago,
-                dDMoneTiPag: codigoMoneda[pago.monedaPago],
-                dTiCamTiPag: pago.tipoCambioPago,
-                gPagTarCD: pago.pagoTarjeta
-                  ? {
-                      iDenTarj: pago.pagoTarjeta.denominacionTarjeta,
-                      dDesDenTarj:
-                        pago.pagoTarjeta.denominacionTarjeta === 99
-                          ? pago.pagoTarjeta.descripcionDenominacionTarjeta!
-                          : descripcionDenominacionTarjeta[pago.pagoTarjeta.denominacionTarjeta],
-                      dRSProTar: pago.pagoTarjeta.razonSocialProcesadora,
-                      dRUCProTar: pago.pagoTarjeta.rucProcesadora,
-                      dDVProTar: pago.pagoTarjeta.dvProcesadora,
-                      iForProPa: pago.pagoTarjeta.formaProcesamientoPago,
-                      dCodAuOpe: pago.pagoTarjeta.codigoAutorizacion,
-                      dNomTit: pago.pagoTarjeta.nombreTitular,
-                      dNumTarj: pago.pagoTarjeta.numeroTarjeta
-                    }
-                  : undefined,
-                gPagCheq: pago.pagoCheque
-                  ? {
-                      dNumCheq: pago.pagoCheque.numeroCheque,
-                      dBcoEmi: pago.pagoCheque.bancoEmisor
-                    }
-                  : undefined
-              })
-            )
-          // TODO: Implementar pago credito
-        },
-        gCamItem: mappedItems
-      },
+      gOpeDE: generateGOpeDE(data.operacionDE),
+      gTimb: generategTimb(data.datosTimbrado),
+      gDatGralOpe: generategDatGralOpe(data.datosGenerales),
+      gDtipDE: generategDtipDE_FE(data.camposEspecificosTipoDE, items),
       gTotSub: calculateGTotSub({
-        items: mappedItems,
+        items: items,
         tipoImpuesto: data.datosGenerales.operacionComercial.tipoImpuesto,
         tipoDocumento: data.datosTimbrado.tipoDocumento,
         moneda: data.datosGenerales.operacionComercial.monedaOperacion,
