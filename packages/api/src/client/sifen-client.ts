@@ -41,39 +41,17 @@ export class SifenAPI {
     });
   }
 
-  async generateFacturaElectronica(data: FacturaElectronica): Promise<{
-    xml: string;
-    signedXml: string;
-    qrData: string;
-  }> {
-    // Generate XML
-    const xml = this.xmlGen.generateFacturaElectronica(data);
-
-    // Sign XML
-    const signedXml = await this.xmlSigner.signDocument(xml, this.certificateData);
-
-    // Generate QR data
-    const qrData = this.qrGenerator.generateQRData(
-      data,
-      this.config.idCSC,
-      this.config.csc,
-      this.config.environment
-    );
-
-    return {
-      xml,
-      signedXml,
-      qrData
-    };
+  async generateFEXML(data: FacturaElectronica): Promise<string> {
+    return this.xmlGen.generateFacturaElectronica(data);
   }
 
-  async consultaRUC({ digitoControl, ruc }: { digitoControl: string; ruc: string }) {
-    const { rucClient } = this.sifenSoapClients;
-    return rucClient.consultaRUC({ ruc, digitoControl });
-  }
+  // async consultaRUC({ digitoControl, ruc }: { digitoControl: string; ruc: string }) {
+  //   const { rucClient } = this.sifenSoapClients;
+  //   return rucClient.consultaRUC({ ruc, digitoControl });
+  // }
 
-  async recibeLote({ digitoControl, DE }: { digitoControl: string; DE: string }) {
-    const { recibeLoteClient } = this.sifenSoapClients;
-    return recibeLoteClient.recibeLote({ digitoControl, DE });
-  }
+  // async recibeLote({ digitoControl, DE }: { digitoControl: string; DE: string }) {
+  //   const { recibeLoteClient } = this.sifenSoapClients;
+  //   return recibeLoteClient.recibeLote({ digitoControl, DE });
+  // }
 }
