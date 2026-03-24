@@ -42,8 +42,8 @@ export interface XMLGenerator {
   generateFacturaElectronica(data: FacturaElectronica): string;
 }
 
-function formatDate(date: Date, format: 'stripFractional' | 'YYYY-MM-DD'): string {
-  const dt = DateTime.fromJSDate(date, { zone: 'America/Asuncion' });
+function formatDate(date: Date | DateTime, format: 'stripFractional' | 'YYYY-MM-DD'): string {
+  const dt = date instanceof Date ? DateTime.fromJSDate(date, { zone: 'America/Asuncion' }) : date;
 
   switch (format) {
     case 'stripFractional':
@@ -52,6 +52,13 @@ function formatDate(date: Date, format: 'stripFractional' | 'YYYY-MM-DD'): strin
     case 'YYYY-MM-DD':
       return dt.toISODate()!;
   }
+}
+
+function generateSecure9DigitNumber(): number {
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  // rango [100000000, 999999999]
+  return 100_000_000 + (array[0]! % 900_000_000);
 }
 
 interface CalculateGTotSubParams {
@@ -331,7 +338,9 @@ function generateGOpeDE(operacionDE: OperacionDE): gOpeDE {
   return {
     iTipEmi: operacionDE.tipoEmision,
     dDesTipEmi: descripcionTipoEmision[operacionDE.tipoEmision],
-    dCodSeg: operacionDE.codigoSeguridad,
+    dCodSeg: operacionDE.codigoSeguridad
+      ? operacionDE.codigoSeguridad
+      : generateSecure9DigitNumber(),
     dInfoEmi: operacionDE.informacionEmisor,
     dInfoFisc: operacionDE.informacionFisco
   };
@@ -342,8 +351,8 @@ function generateGOpeDE(operacionDE: OperacionDE): gOpeDE {
  */
 function generategTimb(timbrado: Timbrado): gTimb {
   return {
-    iTiDE: timbrado.tipoDocumento,
-    dDesTiDE: descripcionTipoDocumentoElectronico[timbrado.tipoDocumento],
+    iTiDE: 1,
+    dDesTiDE: descripcionTipoDocumentoElectronico[1],
     dNumTim: timbrado.numeroTimbrado,
     dEst: timbrado.establecimiento.toString().padStart(3, '0'),
     dPunExp: timbrado.puntoExpedicion.toString().padStart(3, '0'),
@@ -507,26 +516,26 @@ function generategDtipDE_FE(camposTipoDE: CamposEspecificosTipoDEFE, items: gCam
 
 export class XMLGen implements XMLGenerator {
   generateFacturaElectronica(factura: FacturaElectronica): string {
-    const { camposFirmados: data } = factura.de;
-
-    const items = generateGcamItem(data.camposEspecificosTipoDE.items);
+    const items = generateGcamItem(factura.camposEspecificosTipoDE.items);
 
     const de: DocumentoElectronico['rDE']['DE'] = {
-      dDVId: data.digitoVerificador,
-      dFecFirma: formatDate(data.fechaFirma, 'stripFractional'),
+      dDVId: factura.digitoVerificador ? factura.digitoVerificador : Number(factura.cdc[-1]!),
+      dFecFirma: factura.fechaFirma
+        ? formatDate(factura.fechaFirma, 'stripFractional')
+        : formatDate(DateTime.now().setZone('America/Asuncion'), 'stripFractional'),
       dSisFact: 1,
-      gOpeDE: generateGOpeDE(data.operacionDE),
-      gTimb: generategTimb(data.datosTimbrado),
-      gDatGralOpe: generategDatGralOpe(data.datosGenerales),
-      gDtipDE: generategDtipDE_FE(data.camposEspecificosTipoDE, items),
+      gOpeDE: generateGOpeDE(factura.operacionDE),
+      gTimb: generategTimb(factura.datosTimbrado),
+      gDatGralOpe: generategDatGralOpe(factura.datosGenerales),
+      gDtipDE: generategDtipDE_FE(factura.camposEspecificosTipoDE, items),
       gTotSub: calculateGTotSub({
         items: items,
-        tipoImpuesto: data.datosGenerales.operacionComercial.tipoImpuesto,
-        tipoDocumento: data.datosTimbrado.tipoDocumento,
-        moneda: data.datosGenerales.operacionComercial.monedaOperacion,
-        condicionTipoCambio: data.datosGenerales.operacionComercial.condicionTipoCambio,
-        tipoCambio: data.datosGenerales.operacionComercial.tipoCambio,
-        porcentajeDescuentoGlobal: data.totales.porcentajeDescuentoGlobal
+        tipoImpuesto: factura.datosGenerales.operacionComercial.tipoImpuesto,
+        tipoDocumento: factura.datosTimbrado.tipoDocumento,
+        moneda: factura.datosGenerales.operacionComercial.monedaOperacion,
+        condicionTipoCambio: factura.datosGenerales.operacionComercial.condicionTipoCambio,
+        tipoCambio: factura.datosGenerales.operacionComercial.tipoCambio,
+        porcentajeDescuentoGlobal: factura.totales.porcentajeDescuentoGlobal
       })
     };
 
@@ -536,7 +545,7 @@ export class XMLGen implements XMLGenerator {
         '@xsi:schemaLocation': 'http://ekuatia.set.gov.py/sifen/xsd siRecepDE_v150.xsd',
         dVerFor: 150,
         DE: {
-          '@Id': data.id,
+          '@Id': factura.cdc,
           ...de
         }
       }
