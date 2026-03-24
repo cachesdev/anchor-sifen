@@ -11,44 +11,30 @@ import type {
   CondicionCredito
 } from './enums';
 import type { CodigoMoneda } from '../../gen/iso4217';
+import type { Except } from 'type-fest';
 
 /**
  * Factura Electrónica con campos legibles, Basado en MT SIFEN v150
  */
 export interface FacturaElectronica {
   /**
-   * AA001 | rDE | Documento Electrónico elemento raíz | Pagina 64
-   */
-  de: {
-    /**
-     * AA002 | dVerFor | Versión del formato | Pagina 64
-     */
-    versionFormato: number;
-    /**
-     * A001 | DE | Campos firmados del DE | Pagina 64
-     */
-    camposFirmados: CamposFirmadosDE;
-  };
-}
-
-/**
- * A001 | DE | Campos firmados del DE | Pagina 64
- */
-export interface CamposFirmadosDE {
-  /**
    * A002 | Id | Identificador del DE, CDC | Pagina 64
    */
-  id: string;
+  cdc: string;
   /**
    * A003 | dDVId | Dígito verificador del identificador del DE | Pagina 64
+   *
+   * Opcional, inferido internamente.
    */
-  digitoVerificador: number;
+  digitoVerificador?: number;
   /**
    * A004 | dFecFirma | Fecha de la firma | Pagina 64
    *
    * Fecha debe ser luego de la emision pero antes de la transmision.
+   *
+   * Opcional, generado internamente.
    */
-  fechaFirma: Date; // Format: AAAA-MM-DDThh:mm:ss
+  fechaFirma?: Date; // Format: AAAA-MM-DDThh:mm:ss
   /**
    * B001 | gOpeDE | Campos inherentes a la operación de DE | Pagina 65
    */
@@ -56,7 +42,7 @@ export interface CamposFirmadosDE {
   /**
    * C001 | gTimb | Datos del timbrado | Pagina 64
    */
-  datosTimbrado: Timbrado;
+  datosTimbrado: Except<Timbrado, 'tipoDocumento'>;
   /**
    * D001 | gDatGralOpe | Campos generales del DE | Pagina 65
    */

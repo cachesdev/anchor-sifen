@@ -44,9 +44,9 @@ export interface OperacionDE {
   /**
    * B004 | dCodSeg | Código de seguridad | Pagina 65
    *
-   * Codigo de 9 digitos generado aleatoriamente por el emisor
+   * Opcional, generado internamente.
    */
-  codigoSeguridad: number;
+  codigoSeguridad?: number;
   /**
    * B005 | dInfoEmi | Información de interés del emisor respecto al DE | Pagina 65
    */

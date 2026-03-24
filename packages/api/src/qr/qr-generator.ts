@@ -22,7 +22,7 @@ export function createQRGenerator(): QRGenerator {
       // Real implementation would follow SIFEN QR specification
       const qrData = [
         env, // Environment
-        data.de.camposFirmados.id, // CDC
+        data.de.camposFirmados.cdc, // CDC
         data.de.camposFirmados.datosGenerales.fechaHoraEmision, // Date
         data.de.camposFirmados.datosGenerales.emisor.ruc, // RUC
         data.de.camposFirmados.camposEspecificosTipoDE.items.length, // Item count

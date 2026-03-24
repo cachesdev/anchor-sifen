@@ -4,7 +4,7 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "lib": ["es2023"],
-    "rootDirs": [".", "./src"],
+    "rootDir": "./src",
     "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
@@ -14,6 +14,6 @@
     "noUnusedLocals": true,
     "types": ["node"]
   },
-  "include": ["src/**/*", "./eslint.config.ts", "scripts/**/*", "./tsdown.config.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
