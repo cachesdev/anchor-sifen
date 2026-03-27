@@ -1,7 +1,8 @@
 /**
  * Codigos de Moneda ISO 4217 en base a Monedas_v150.xsd.
- * Generado por src/scripts/gen-iso4217.ts
  */
+import type { ValueOf } from 'type-fest';
+
 export const codigoMoneda = {
   AED: "Dirham",
   AFN: "Afghani",
@@ -206,4 +207,4 @@ export const codigoMoneda = {
 } as const;
 
 export type CodigoMoneda = keyof typeof codigoMoneda;
-export type DescripcionCodigoMoneda = (typeof codigoMoneda)[CodigoMoneda];
+export type DescripcionCodigoMoneda = ValueOf<typeof codigoMoneda>;

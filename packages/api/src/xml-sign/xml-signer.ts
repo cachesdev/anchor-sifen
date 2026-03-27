@@ -3,15 +3,20 @@ import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 import * as xmlCrypto from 'xml-crypto';
 import type { CertificateData } from '../certificate/certificate-manager';
 
+export interface SignedDocumentResult {
+  signedXml: string;
+  digestValue: string;
+  cdc: string;
+}
+
 export class XMLSigner {
   /**
    * Sign an XML document according to SIFEN specifications
    * @param xml The XML string to sign (must contain DE element with Id attribute)
    * @param certData Certificate data from CertificateManager
-   * @param options Signing options
-   * @returns Signed XML string
+   * @returns Object containing signed XML, DigestValue, and CDC
    */
-  async signDocument(xml: string, certData: CertificateData): Promise<string> {
+  async signDocument(xml: string, certData: CertificateData): Promise<SignedDocumentResult> {
     try {
       // Parse XML
       const doc = new DOMParser().parseFromString(xml, 'text/xml');
@@ -65,7 +70,14 @@ export class XMLSigner {
       // Get signed XML
       const signedXml = sig.getSignedXml();
 
-      return signedXml;
+      // Extract DigestValue from the signed XML
+      const digestValue = this.extractDigestValue(signedXml);
+
+      return {
+        signedXml,
+        digestValue,
+        cdc
+      };
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`XML signing failed: ${error.message}`);
@@ -73,6 +85,44 @@ export class XMLSigner {
       throw error;
     }
   }
+
+  /**
+   * Extract DigestValue from signed XML
+   * @param signedXml The signed XML string
+   * @returns The DigestValue as a string
+   */
+  private extractDigestValue(signedXml: string): string {
+    const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
+
+    // Try namespace-aware lookup first
+    let digestValueElements = doc.getElementsByTagNameNS(
+      'http://www.w3.org/2000/09/xmldsig#',
+      'DigestValue'
+    );
+
+    // Fallback to tag name lookup
+    if (!digestValueElements || digestValueElements.length === 0) {
+      digestValueElements = doc.getElementsByTagName('DigestValue');
+    }
+
+    if (!digestValueElements || digestValueElements.length === 0) {
+      throw new Error('DigestValue element not found in signed XML');
+    }
+
+    const digestValueElement = digestValueElements[0];
+    if (!digestValueElement) {
+      throw new Error('DigestValue element is null');
+    }
+
+    const digestValue = digestValueElement.textContent;
+    if (!digestValue) {
+      throw new Error('DigestValue is empty');
+    }
+
+    return digestValue.trim();
+  }
+
+
 
   /**
    * Extract CDC from DE element's Id attribute

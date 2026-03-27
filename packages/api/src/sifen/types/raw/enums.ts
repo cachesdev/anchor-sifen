@@ -30,6 +30,9 @@ export const DDesTipEmiValues = {
 } as const satisfies Record<ITipEmi, string>;
 export type DDesTipEmi = ValueOf<typeof DDesTipEmiValues>;
 
+/**
+ * C - C002 | Tipo de Documento Electrónico | Pagina 63
+ */
 export const ITiDEValues = {
   FacturaElectronica: 1,
   FacturaElectronicaExportacion: 2,
@@ -54,6 +57,9 @@ export const DDesTiDEValues = {
 } as const satisfies Record<ITiDE, string>;
 export type DDesTiDE = ValueOf<typeof DDesTiDEValues>;
 
+/**
+ * D1 - D011 | Tipo de transacción | Pagina 66
+ */
 export const ITipTraValues = {
   VentaMercaderia: 1,
   PrestacionServicios: 2,
@@ -88,6 +94,9 @@ export const DDesTipTraValues = {
 } as const satisfies Record<ITipTra, string>;
 export type DDesTipTra = ValueOf<typeof DDesTipTraValues>;
 
+/**
+ * D1 - D013 | Tipo de impuesto afectado | Pagina 66
+ */
 export const ITImpValues = {
   IVA: 1,
   ISC: 2,
@@ -118,6 +127,9 @@ export const DDesCondTiCamValues = {
 } as const satisfies Record<ICondTiCam, string>;
 export type DDesCondTiCam = ValueOf<typeof DDesCondTiCamValues>;
 
+/**
+ * D1 - D019 | Condición del Anticipo | Pagina 66
+ */
 export const ICondAntValues = {
   AnticipoGlobal: 1,
   AnticipoPorItem: 2

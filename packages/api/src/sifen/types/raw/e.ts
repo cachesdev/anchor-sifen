@@ -1,6 +1,6 @@
 // SIFEN E groups - E001..E899 (partial)
 
-import type { CodigoMoneda } from '../../../gen/iso4217';
+import type { CodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
 
 /**

@@ -6,3 +6,8 @@ export * from './sifen-ncde-common';
 export * from './nota-credito';
 export * from './nota-debito';
 export * from './enums';
+export * from '../../gen/monedas';
+export * from '../../gen/departamentos';
+export * from '../../gen/ciudades';
+export * from '../../gen/distritos';
+export * from '../../gen/paises';
