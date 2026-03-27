@@ -142,6 +142,9 @@ export const DDesCondAntValues = {
 } as const satisfies Record<ICondAnt, string>;
 export type DDesCondAnt = ValueOf<typeof DDesCondAntValues>;
 
+/**
+ * D2 - D103 | Tipo de contribuyente | Pagina 68
+ */
 export const ITipContValues = {
   PersonaFisica: 1,
   PersonaJuridica: 2

@@ -268,43 +268,43 @@ export interface GOpeCom {
  */
 export interface GEmis {
   /**
-   * D2 - D101 | RUC del contribuyente emisor | Pagina 67
+   * D2 - D101 | RUC del contribuyente emisor | Pagina 68
    */
   dRucEm: string;
   /**
-   * D2 - D102 | Dígito verificador del RUC del contribuyente emisor | Pagina 67
+   * D2 - D102 | Dígito verificador del RUC del contribuyente emisor | Pagina 68
    */
   dDVEmi: number;
   /**
-   * D2 - D103 | Tipo de contribuyente | Pagina 67
+   * D2 - D103 | Tipo de contribuyente | Pagina 68
    */
   iTipCont: ITipCont;
   /**
-   * D2 - D104 | Tipo de régimen | Pagina 67
+   * D2 - D104 | Tipo de régimen | Pagina 68
    */
   cTipReg?: number;
   /**
-   * D2 - D105 | Nombre o razón social del emisor del DE | Pagina 67
+   * D2 - D105 | Nombre o razón social del emisor del DE | Pagina 68
    */
   dNomEmi: string;
   /**
-   * D2 - D106 | Nombre de fantasía | Pagina 67
+   * D2 - D106 | Nombre de fantasía | Pagina 68
    */
   dNomFanEmi?: string;
   /**
-   * D2 - D107 | Dirección del local donde se emite el DE | Pagina 67
+   * D2 - D107 | Dirección del local donde se emite el DE | Pagina 68
    */
   dDirEmi: string;
   /**
-   * D2 - D108 | Número de casa | Pagina 67
+   * D2 - D108 | Número de casa | Pagina 68
    */
   dNumCas: number;
   /**
-   * D2 - D109 | Complemento de dirección 1 | Pagina 67
+   * D2 - D109 | Complemento de dirección 1 | Pagina 68
    */
   dCompDir1?: string;
   /**
-   * D2 - D110 | Complemento de dirección 2 | Pagina 67
+   * D2 - D110 | Complemento de dirección 2 | Pagina 68
    */
   dCompDir2?: string;
   /**
