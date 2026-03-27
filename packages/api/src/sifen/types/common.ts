@@ -4,7 +4,7 @@
 import type { CodigoCiudad } from '../../gen/ciudades';
 import type { CodigoDepartamento } from '../../gen/departamentos';
 import type { CodigoDistrito } from '../../gen/distritos';
-import type { CodigoMoneda } from '../../gen/iso4217';
+import type { CodigoMoneda } from '../../gen/monedas';
 import type { CodigoPais } from '../../gen/paises';
 import type {
   AfectacionIVA,
@@ -220,7 +220,7 @@ export interface ActividadEconomica {
   /**
    * D131 | cActEco | Código de la actividad económica | Pagina 68
    */
-  codigo: number; // TODO: Define enum based on available codes
+  codigo: string;
   /**
    * D132 | dDesActEco | Descripción de la actividad económica | Pagina 68
    */

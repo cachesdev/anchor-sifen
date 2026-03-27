@@ -1,2 +1,1 @@
-export type { QRGenerator } from './qr-generator';
-export { createQRGenerator } from './qr-generator';
+export { attachQRToSignedXML } from './qr-generator';

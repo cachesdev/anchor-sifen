@@ -1,72 +1,98 @@
-// AUTO-GENERATED (partial) — SIFEN Manual Técnico v150
-// Groups implemented: AA (AA001-AA002), A (A001-A005), B (B001-B006), C (C001-C010), D (D001-D299 subset: D010, D011-D020, D100-D160, D130-D145, D200-D224), E (E010, E600, E700), F (F001)
-
 import type { CodigoCiudad, DescripcionCodigoCiudad } from '../../../gen/ciudades';
 import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../../gen/departamentos';
 import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
-import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/iso4217';
+import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
 import type { gCamFE, gCamAE, gCamNCDE, gCamNRE, gCamCond, gCamItem, gCamEsp, gTransp } from './e';
-import type { gTotSub } from './f';
+import type {
+  DDesCondAnt,
+  DDesTiDE,
+  DDesTImp,
+  DDesTipEmi,
+  DDesTipTra,
+  DDTipIDRec,
+  DDTipIDRespDE,
+  DSisFact,
+  ICondAnt,
+  ICondTiCam,
+  INatRec,
+  ITiContRec,
+  ITiDE,
+  ITImp,
+  ITiOpe,
+  ITipCont,
+  ITipEmi,
+  ITipIDRec,
+  ITipIDRespDE,
+  ITipTra
+} from './enums';
+import type { gTotSub as GTotSub } from './f';
 
 /**
- * AA - AA001 | Documento Electrónico elemento raíz | Pagina 64
+ * AA | Documento Electrónico | Pagina 61
  */
 export interface DocumentoElectronico {
   /**
-   * AA - AA002 | Versión del formato | Pagina 64
+   * AA - AA001 | Documento Electrónico elemento raíz | Pagina 61
    */
   rDE: {
-    dVerFor: 150; // Manual v150 Fija esto al valor 150
     /**
-     * A - A001 | Campos firmados del DE | Pagina 64
+     * AA - AA002 | Versión del formato | Pagina 61
+     */
+    dVerFor: 150;
+    /**
+     * A - A001 | Campos firmados del DE | Pagina 61
      */
     DE: DE;
   };
 }
 
 /**
- * A - A001 | Campos firmados del DE | Pagina 64
+ * A - A001 | Campos firmados del DE | Pagina 61
+ *
+ * A002 (CDC) Omitido, ya que es un atributo y no un campo del DE.
  */
 export interface DE {
   /**
-   * A - A003 | Dígito verificador del identificador del DE | Pagina 64
+   * A - A003 | Dígito verificador del identificador del DE | Pagina 61
    */
   dDVId: number;
   /**
-   * A - A004 | Fecha de la firma | Pagina 64
+   * A - A004 | Fecha de la firma | Pagina 62
+   *
+   * Formato: AAAA-MM-DDThh:mm:ss
    */
-  dFecFirma: string; // Format: AAAA-MM-DDThh:mm:ss
+  dFecFirma: string;
   /**
-   * A - A005 | Sistema de facturación | Pagina 64
+   * A - A005 | Sistema de facturación | Pagina 62
    */
-  dSisFact: DSisFact; // 1=Sistema de facturación del contribuyente, 2=SIFEN solución gratuita
+  dSisFact: DSisFact;
   /**
-   * B - B001 | Campos inherentes a la operación de DE | Pagina 65
+   * B - B001 | Campos inherentes a la operación de DE | Pagina 62
    */
-  gOpeDE: gOpeDE;
+  gOpeDE: GOpeDE;
   /**
-   * C - C001 | Datos del timbrado | Pagina 64
+   * C - C001 | Datos del timbrado | Pagina 63
    */
-  gTimb: gTimb;
+  gTimb: GTimb;
   /**
    * D - D001 | Campos generales del DE | Pagina 65
    */
-  gDatGralOpe: gDatGralOpe;
+  gDatGralOpe: GDatGralOpe;
   /**
    * E - E001 | Campos específicos por tipo de Documento Electrónico | Pagina 73
    */
-  gDtipDE: gDtipDE;
+  gDtipDE: GDtipDE;
   /**
    * F - F001 | Campos de subtotales y totales | Pagina 102
    */
-  gTotSub?: gTotSub;
+  gTotSub?: GTotSub;
 }
 
 /**
  * E - E001 | Campos específicos por tipo de Documento Electrónico | Pagina 73
  */
-export interface gDtipDE {
+export interface GDtipDE {
   /**
    * E1 - E010 | Campos que componen la FE | Pagina 73
    */
@@ -102,45 +128,45 @@ export interface gDtipDE {
 }
 
 /**
- * B - B001 | Campos inherentes a la operación de DE | Pagina 65
+ * B - B001 | Campos inherentes a la operación de DE | Pagina 62
  */
-export interface gOpeDE {
+export interface GOpeDE {
   /**
-   * B - B002 | Tipo de emisión | Pagina 65
+   * B - B002 | Tipo de emisión | Pagina 62
    */
-  iTipEmi: ITipEmi; // 1=Normal, 2=Contingencia
+  iTipEmi: ITipEmi;
   /**
-   * B - B003 | Descripción del tipo de emisión | Pagina 65
+   * B - B003 | Descripción del tipo de emisión | Pagina 62
    */
   dDesTipEmi: DDesTipEmi;
   /**
-   * B - B004 | Código de seguridad | Pagina 65
+   * B - B004 | Código de seguridad | Pagina 62
    */
   dCodSeg: number;
   /**
-   * B - B005 | Información de interés del emisor respecto al DE | Pagina 65
+   * B - B005 | Información de interés del emisor respecto al DE | Pagina 62
    */
   dInfoEmi?: string;
   /**
-   * B - B006 | Información de interés del Fisco respecto al DE | Pagina 65
+   * B - B006 | Información de interés del Fisco respecto al DE | Pagina 63
    */
   dInfoFisc?: string;
 }
 
 /**
- * C - C001 | Datos del timbrado | Pagina 64
+ * C - C001 | Datos del timbrado | Pagina 63
  */
-export interface gTimb {
+export interface GTimb {
   /**
-   * C - C002 | Tipo de Documento Electrónico | Pagina 64
+   * C - C002 | Tipo de Documento Electrónico | Pagina 63
    */
   iTiDE: ITiDE;
   /**
-   * C - C003 | Descripción del tipo de documento electrónico | Pagina 64
+   * C - C003 | Descripción del tipo de documento electrónico | Pagina 63
    */
   dDesTiDE: DDesTiDE;
   /**
-   * C - C004 | Número del timbrado | Pagina 64
+   * C - C004 | Número del timbrado | Pagina 63
    */
   dNumTim: number;
   /**
@@ -156,79 +182,83 @@ export interface gTimb {
    */
   dNumDoc: string;
   /**
-   * C - C008 | Fecha inicio de vigencia del timbrado | Pagina 64
-   */
-  dFeIniT: string; // Format: AAAA-MM-DD
-  /**
    * C - C010 | Serie del número de timbrado | Pagina 64
    */
   dSerieNum?: string;
+  /**
+   * C - C008 | Fecha inicio de vigencia del timbrado | Pagina 64
+   *
+   * Formato: AAAA-MM-DD
+   */
+  dFeIniT: string;
 }
 
 /**
  * D - D001 | Campos generales del DE | Pagina 65
  */
-export interface gDatGralOpe {
+export interface GDatGralOpe {
   /**
    * D - D002 | Fecha y hora de emisión del DE | Pagina 65
+   *
+   * Formato: AAAA-MM-DDThh:mm:ss
    */
-  dFeEmiDE: string; // Format: AAAA-MM-DDThh:mm:ss
+  dFeEmiDE: string;
   /**
    * D1 - D010 | Campos inherentes a la operación comercial | Pagina 65
    */
-  gOpeCom?: gOpeCom;
+  gOpeCom?: GOpeCom;
   /**
    * D2 - D100 | Grupo de campos que identifican al emisor | Pagina 67
    */
-  gEmis: gEmis;
+  gEmis: GEmis;
   /**
    * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 70
    */
-  gDatRec: gDatRec;
+  gDatRec: GDatRec;
 }
 
 /**
  * D1 - D010 | Campos inherentes a la operación comercial | Pagina 65
  */
-export interface gOpeCom {
+export interface GOpeCom {
   /**
-   * D1 - D011 | Tipo de transacción | Pagina 65
+   * D1 - D011 | Tipo de transacción | Pagina 66
    */
   iTipTra?: ITipTra;
   /**
-   * D1 - D012 | Descripción del tipo de transacción | Pagina 65
+   * D1 - D012 | Descripción del tipo de transacción | Pagina 66
    */
   dDesTipTra?: DDesTipTra;
   /**
-   * D1 - D013 | Tipo de impuesto afectado | Pagina 65
+   * D1 - D013 | Tipo de impuesto afectado | Pagina 66
    */
   iTImp: ITImp;
   /**
-   * D1 - D014 | Descripción del tipo de impuesto afectado | Pagina 66
+   * D1 - D014 | Descripción del tipo de impuesto afectado | Pagina 67
    */
   dDesTImp: DDesTImp;
   /**
-   * D1 - D015 | Moneda de la operación | Pagina 66
+   * D1 - D015 | Moneda de la operación | Pagina 67
    */
   cMoneOpe: CodigoMoneda;
   /**
-   * D1 - D016 | Descripción de la moneda de la operación | Pagina 66
+   * D1 - D016 | Descripción de la moneda de la operación | Pagina 67
    */
   dDesMoneOpe: DescripcionCodigoMoneda;
   /**
-   * D1 - D017 | Condición del tipo de cambio | Pagina 66
+   * D1 - D017 | Condición del tipo de cambio | Pagina 67
    */
   dCondTiCam?: ICondTiCam;
   /**
-   * D1 - D018 | Tipo de cambio de la operación | Pagina 66
+   * D1 - D018 | Tipo de cambio de la operación | Pagina 67
    */
   dTiCam?: number;
   /**
-   * D1 - D019 | Condición del Anticipo | Pagina 66
+   * D1 - D019 | Condición del Anticipo | Pagina 67
    */
   iCondAnt?: ICondAnt;
   /**
-   * D1 - D020 | Descripción de la condición del Anticipo | Pagina 66
+   * D1 - D020 | Descripción de la condición del Anticipo | Pagina 67
    */
   dDesCondAnt?: DDesCondAnt;
 }
@@ -236,7 +266,7 @@ export interface gOpeCom {
 /**
  * D2 - D100 | Grupo de campos que identifican al emisor | Pagina 67
  */
-export interface gEmis {
+export interface GEmis {
   /**
    * D2 - D101 | RUC del contribuyente emisor | Pagina 67
    */
@@ -366,7 +396,7 @@ export interface gRespDE {
 /**
  * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 69
  */
-export interface gDatRec {
+export interface GDatRec {
   /**
    * D3 - D201 | Naturaleza del receptor | Pagina 70
    */
@@ -464,208 +494,3 @@ export interface gDatRec {
    */
   dCodCliente?: string;
 }
-
-// --- Enumeraciones ---
-
-export const DSisFactValues = {
-  SistemaContribuyente: 1,
-  SIFENSolucionGratuita: 2
-} as const;
-export type DSisFact = (typeof DSisFactValues)[keyof typeof DSisFactValues];
-export const DDesSisFactValues = {
-  SistemaContribuyente: 'Sistema de facturación del contribuyente',
-  SIFENSolucionGratuita: 'SIFEN solución gratuita'
-} as const;
-export type DDesSisFact = (typeof DDesSisFactValues)[keyof typeof DDesSisFactValues];
-
-export const ITipEmiValues = {
-  Normal: 1,
-  Contingencia: 2
-} as const;
-export type ITipEmi = (typeof ITipEmiValues)[keyof typeof ITipEmiValues];
-export const DDesTipEmiValues = {
-  Normal: 'Normal',
-  Contingencia: 'Contingencia'
-} as const;
-export type DDesTipEmi = (typeof DDesTipEmiValues)[keyof typeof DDesTipEmiValues];
-
-export const ITiDEValues = {
-  FacturaElectronica: 1,
-  FacturaElectronicaExportacion: 2,
-  FacturaElectronicaImportacion: 3,
-  AutofacturaElectronica: 4,
-  NotaCreditoElectronica: 5,
-  NotaDebitoElectronica: 6,
-  NotaRemisionElectronica: 7,
-  ComprobanteRetencionElectronico: 8
-} as const;
-export type ITiDE = (typeof ITiDEValues)[keyof typeof ITiDEValues];
-export const DDesTiDEValues = {
-  FacturaElectronica: 'Factura electrónica',
-  FacturaElectronicaExportacion: 'Factura electrónica de exportación',
-  FacturaElectronicaImportacion: 'Factura electrónica de importación',
-  AutofacturaElectronica: 'Autofactura electrónica',
-  NotaCreditoElectronica: 'Nota de crédito electrónica',
-  NotaDebitoElectronica: 'Nota de débito electrónica',
-  NotaRemisionElectronica: 'Nota de remisión electrónica',
-  ComprobanteRetencionElectronico: 'Comprobante de retención electrónico'
-} as const;
-export type DDesTiDE = (typeof DDesTiDEValues)[keyof typeof DDesTiDEValues];
-
-export const ITipTraValues = {
-  VentaMercaderia: 1,
-  PrestacionServicios: 2,
-  Mixto: 3,
-  VentaActivoFijo: 4,
-  VentaDivisas: 5,
-  CompraDivisas: 6,
-  PromocionOMuestras: 7,
-  Donacion: 8,
-  Anticipo: 9,
-  CompraProductos: 10,
-  CompraServicios: 11,
-  VentaCreditoFiscal: 12,
-  MuestrasMedicas: 13
-} as const;
-export type ITipTra = (typeof ITipTraValues)[keyof typeof ITipTraValues];
-export const DDesTipTraValues = {
-  VentaMercaderia: 'Venta de mercadería',
-  PrestacionServicios: 'Prestación de servicios',
-  Mixto: 'Mixto',
-  VentaActivoFijo: 'Venta de activo fijo',
-  VentaDivisas: 'Venta de divisas',
-  CompraDivisas: 'Compra de divisas',
-  PromocionOMuestras: 'Promoción o entrega de muestras',
-  Donacion: 'Donación',
-  Anticipo: 'Anticipo',
-  CompraProductos: 'Compra de productos',
-  CompraServicios: 'Compra de servicios',
-  VentaCreditoFiscal: 'Venta de crédito fiscal',
-  MuestrasMedicas: 'Muestras médicas (Art. 3 RG 24/2014)'
-} as const;
-export type DDesTipTra = (typeof DDesTipTraValues)[keyof typeof DDesTipTraValues];
-
-export const ITImpValues = {
-  IVA: 1,
-  ISC: 2,
-  Renta: 3,
-  Ninguno: 4,
-  IVA_Renta: 5
-} as const;
-export type ITImp = (typeof ITImpValues)[keyof typeof ITImpValues];
-export const DDesTImpValues = {
-  IVA: 'IVA',
-  ISC: 'ISC',
-  Renta: 'Renta',
-  Ninguno: 'Ninguno',
-  IVA_Renta: 'IVA - Renta'
-} as const;
-export type DDesTImp = (typeof DDesTImpValues)[keyof typeof DDesTImpValues];
-
-export const ICondTiCamValues = {
-  Global: 1,
-  PorItem: 2
-} as const;
-export type ICondTiCam = (typeof ICondTiCamValues)[keyof typeof ICondTiCamValues];
-export const DDesCondTiCamValues = {
-  Global: 'Global (un solo tipo de cambio para todo el DE)',
-  PorItem: 'Por ítem (tipo de cambio distinto por ítem)'
-} as const;
-export type DDesCondTiCam = (typeof DDesCondTiCamValues)[keyof typeof DDesCondTiCamValues];
-
-export const ICondAntValues = {
-  AnticipoGlobal: 1,
-  AnticipoPorItem: 2
-} as const;
-export type ICondAnt = (typeof ICondAntValues)[keyof typeof ICondAntValues];
-export const DDesCondAntValues = {
-  AnticipoGlobal: 'Anticipo Global',
-  AnticipoPorItem: 'Anticipo por Ítem'
-} as const;
-export type DDesCondAnt = (typeof DDesCondAntValues)[keyof typeof DDesCondAntValues];
-
-export const ITipContValues = {
-  PersonaFisica: 1,
-  PersonaJuridica: 2
-} as const;
-export type ITipCont = (typeof ITipContValues)[keyof typeof ITipContValues];
-export const DDesTipContValues = {
-  PersonaFisica: 'Persona Física',
-  PersonaJuridica: 'Persona Jurídica'
-} as const;
-export type DDesTipCont = (typeof DDesTipContValues)[keyof typeof DDesTipContValues];
-
-export const INatRecValues = {
-  Contribuyente: 1,
-  NoContribuyente: 2
-} as const;
-export type INatRec = (typeof INatRecValues)[keyof typeof INatRecValues];
-export const DDesNatRecValues = {
-  Contribuyente: 'contribuyente',
-  NoContribuyente: 'no contribuyente'
-} as const;
-export type DDesNatRec = (typeof DDesNatRecValues)[keyof typeof DDesNatRecValues];
-
-export const ITiOpeValues = {
-  B2B: 1,
-  B2C: 2,
-  B2G: 3,
-  B2F: 4
-} as const;
-export type ITiOpe = (typeof ITiOpeValues)[keyof typeof ITiOpeValues];
-export const DDesTiOpeValues = {
-  B2B: 'B2B',
-  B2C: 'B2C',
-  B2G: 'B2G',
-  B2F: 'B2F'
-} as const;
-export type DDesTiOpe = (typeof DDesTiOpeValues)[keyof typeof DDesTiOpeValues];
-
-export const ITiContRecValues = {
-  PersonaFisica: 1,
-  PersonaJuridica: 2
-} as const;
-export type ITiContRec = (typeof ITiContRecValues)[keyof typeof ITiContRecValues];
-export const DDesTiContRecValues = {
-  PersonaFisica: 'Persona Física',
-  PersonaJuridica: 'Persona Jurídica'
-} as const;
-export type DDesTiContRec = (typeof DDesTiContRecValues)[keyof typeof DDesTiContRecValues];
-
-export const ITipIDRespDEValues = {
-  CedulaParaguaya: 1,
-  Pasaporte: 2,
-  CedulaExtranjera: 3,
-  CarnetResidencia: 4,
-  Otro: 9
-} as const;
-export type ITipIDRespDE = (typeof ITipIDRespDEValues)[keyof typeof ITipIDRespDEValues];
-export const DDTipIDRespDEValues = {
-  CedulaParaguaya: 'Cédula paraguaya',
-  Pasaporte: 'Pasaporte',
-  CedulaExtranjera: 'Cédula extranjera',
-  CarnetResidencia: 'Carnet de residencia',
-  Otro: 'Otro'
-} as const;
-export type DDTipIDRespDE = (typeof DDTipIDRespDEValues)[keyof typeof DDTipIDRespDEValues];
-
-export const ITipIDRecValues = {
-  CedulaParaguaya: 1,
-  Pasaporte: 2,
-  CedulaExtranjera: 3,
-  CarnetResidencia: 4,
-  Innominado: 5,
-  TarjetaDiplomatica: 6,
-  Otro: 9
-} as const;
-export type ITipIDRec = (typeof ITipIDRecValues)[keyof typeof ITipIDRecValues];
-export const DDTipIDRecValues = {
-  CedulaParaguaya: 'Cédula paraguaya',
-  Pasaporte: 'Pasaporte',
-  CedulaExtranjera: 'Cédula extranjera',
-  CarnetResidencia: 'Carnet de residencia',
-  Innominado: 'Innominado',
-  TarjetaDiplomatica: 'Tarjeta Diplomática de exoneración fiscal',
-  Otro: 'Otro'
-} as const;
-export type DDTipIDRec = (typeof DDTipIDRecValues)[keyof typeof DDTipIDRecValues];

@@ -10,8 +10,8 @@ import type {
   FormaProcesamientoPago,
   CondicionCredito
 } from './enums';
-import type { CodigoMoneda } from '../../gen/iso4217';
-import type { Except } from 'type-fest';
+import type { CodigoMoneda } from '../../gen/monedas';
+import type { Except, SetRequiredDeep } from 'type-fest';
 
 /**
  * Factura Electrónica con campos legibles, Basado en MT SIFEN v150
@@ -46,7 +46,7 @@ export interface FacturaElectronica {
   /**
    * D001 | gDatGralOpe | Campos generales del DE | Pagina 65
    */
-  datosGenerales: Required<DatosGenerales>;
+  datosGenerales: SetRequiredDeep<Required<DatosGenerales>, 'operacionComercial.tipoTransaccion'>;
   /**
    * E001 | gDtipDE | Campos específicos por tipo de Documento Electrónico | Pagina 73
    */
@@ -122,7 +122,7 @@ export interface CamposFE {
    *
    * solo mandar si indicadorPresencia es Otro (9) en ese caso se manda una descripcion arbitraria del indicador
    */
-  descripcionIndicadorPresencia: string;
+  descripcionIndicadorPresencia?: string;
   /**
    * E013 | dFecEmNR | Fecha futura del traslado de mercadería | Pagina 73
    */
@@ -334,77 +334,103 @@ export interface Cuota {
 }
 
 /**
- * F001 | gTotSub | Campos de subtotales y totales | Pagina 89
+ * F001 | gTotSub | Campos de subtotales y totales | Pagina 102
  */
 export interface TotalesOperacion {
   /**
-   * F002 | dSubExe | Subtotal de la operación exenta | Pagina 89
+   * F002 | dSubExe | Subtotal de la operación exenta | Pagina 103
    */
   subtotalExento?: number;
   /**
-   * F003 | dSubExo | Subtotal de la operación exonerada | Pagina 89
+   * F003 | dSubExo | Subtotal de la operación exonerada | Pagina 103
    */
   subtotalExonerado?: number;
   /**
-   * F004 | dSub5 | Subtotal de la operación con IVA incluido a la tasa 5% | Pagina 89
+   * F004 | dSub5 | Subtotal de la operación con IVA incluido a la tasa 5% | Pagina 103
    */
   subtotalIVA5?: number;
   /**
-   * F005 | dSub10 | Subtotal de la operación con IVA incluido a la tasa 10% | Pagina 89
+   * F005 | dSub10 | Subtotal de la operación con IVA incluido a la tasa 10% | Pagina 103
    */
   subtotalIVA10?: number;
   /**
-   * F006 | dSubExoAE | Subtotal de operaciones exoneradas sujetas a aportes de ESS | Pagina 89
-   */
-  subtotalExoneradoESS?: number;
-  /**
-   * F008 | dTotOpe | Total Bruto de la operación | Pagina 89
+   * F008 | dTotOpe | Total Bruto de la operación | Pagina 103
    */
   totalBrutoOperacion: number;
   /**
-   * F009 | dTotDesc | Total descuento particular por ítem | Pagina 89
+   * F009 | dTotDesc | Total descuento particular por ítem | Pagina 103
    */
-  totalDescuentos?: number;
+  totalDescuentoItems: number;
   /**
-   * F010 | dPorcDescTotal | Porcentaje de descuento global sobre total de la operación | Pagina 89
+   * F033 | dTotDescGlotem | Total descuento global por ítem | Pagina 103
    */
-  porcentajeDescuentoGlobal?: number;
+  totalDescuentoGlobal: number;
   /**
-   * F011 | dTotGralOpe | Total general de la operación | Pagina 89
+   * F034 | dTotAntItem | Total Anticipo por ítem | Pagina 104
+   */
+  totalAnticipoItem: number;
+  /**
+   * F035 | dTotAnt | Total Anticipo global por ítem | Pagina 104
+   */
+  totalAnticipoItemGlobal: number;
+  /**
+   * F010 | dPorcDescTotal | Porcentaje de descuento global sobre total de la operación | Pagina 104
+   */
+  porcentajeDescuentoGlobal: number;
+  /**
+   * F011 | dDescTotal | Total Descuentos de la operación | Pagina 104
+   */
+  totalDescuentos: number;
+  /**
+   * F012 | dAnticipo | Total Anticipos de la operación | Pagina 104
+   */
+  totalAnticipo: number;
+  /**
+   * F013 | dRedon | Redondeo de la operación | Pagina 104
+   */
+  redondeo: number;
+  /**
+   * F025 | dComi | Comisión de la operación | Pagina 104
+   */
+  comision?: number;
+  /**
+   * F014 | dTotGralOpe | Total neto de la operación | Pagina 104
    */
   totalGeneralOperacion: number;
   /**
-   * F012 | dTotIVA | Total IVA de la operación | Pagina 89
+   * F015 | dIVA5 | TLiquidación del IVA a la tasa del 5% | Pagina 104
+   */
+  totalIVA5?: number;
+  /**
+   * F016 | dIVA10 | TLiquidación del IVA a la tasa del 10% | Pagina 104
+   */
+  totalIVA10?: number;
+  /**
+   * F036 | dLiqTotIVA5 | Liquidación total del IVA por redondeo a la tasa del 5% | Pagina 105
+   */
+  totalIVA5Redondeo?: number;
+  /**
+   * F036 | dLiqTotIVA10 | Liquidación total del IVA por redondeo a la tasa del 10% | Pagina 105
+   */
+  totalIVA10Redondeo?: number;
+  /**
+   * F026 | dIVAComi | Liquidación total del IVA de la comisión | Pagina 105
+   */
+  totalIVAComision?: number;
+  /**
+   * F017 | dTotIVA | Liquidación total del IVA | Pagina 105
    */
   totalIVA?: number;
   /**
-   * F013 | dTotGrav | Total gravada de la operación | Pagina 89
+   * F018 | dBaseGrav5 | Total base gravada al 5% | Pagina 105
    */
-  totalGravada?: number;
+  totalBaseGravada5?: number;
   /**
-   * F014 | dTotExe | Total exenta de la operación | Pagina 89
+   * F019 | dBaseGrav10 | Total base gravada al 10% | Pagina 106
    */
-  totalExenta?: number;
+  totalBaseGravada10?: number;
   /**
-   * F015 | dTotExo | Total exonerada de la operación | Pagina 89
-   */
-  totalExonerada?: number;
-  /**
-   * F016 | dTotOtraMon | Total de la operación en otra moneda | Pagina 89
-   */
-  totalOtraMoneda?: number;
-  /**
-   * F017 | dPorcExe | Porcentaje de exentas sobre el total de la operación | Pagina 89
-   */
-  porcentajeExentas?: number;
-  /**
-   * F018 | dTiCam | Tipo de cambio | Pagina 89
-   */
-  tipoCambio?: number;
-  /**
-   * F023 | dTotalGs | Total general de la operación en Guaraníes | Pagina 89
-   *
-   * Obligatorio si D015 ≠ PYG
+   * F023 | dTotalGs | Total general de la operación en Guaraníes | Pagina 106
    */
   totalGeneralGuaranies?: number;
 }

@@ -16,7 +16,7 @@ type XMLRootNode = {
 };
 
 const xsdPath = resolve(process.cwd(), 'xsd/Monedas_v150.xsd');
-const outputPath = resolve(process.cwd(), 'src/gen/iso4217.ts');
+const outputPath = resolve(process.cwd(), 'src/gen/monedas.ts');
 
 const xsd = readFileSync(xsdPath, 'utf8');
 const rootNode = create(xsd).root().node as unknown as XMLRootNode;
@@ -52,8 +52,9 @@ const lines: string[] = [];
 
 lines.push('/**');
 lines.push(' * Codigos de Moneda ISO 4217 en base a Monedas_v150.xsd.');
-lines.push(' * Generado por src/scripts/gen-iso4217.ts');
 lines.push(' */');
+lines.push("import type { ValueOf } from 'type-fest';");
+lines.push('');
 lines.push('export const codigoMoneda = {');
 
 for (const { code, name } of entries) {
@@ -63,7 +64,7 @@ for (const { code, name } of entries) {
 lines.push('} as const;');
 lines.push('');
 lines.push('export type CodigoMoneda = keyof typeof codigoMoneda;');
-lines.push('export type DescripcionCodigoMoneda = (typeof codigoMoneda)[CodigoMoneda];');
+lines.push('export type DescripcionCodigoMoneda = ValueOf<typeof codigoMoneda>;');
 lines.push('');
 
 writeFileSync(outputPath, lines.join('\n'), 'utf8');

@@ -6,10 +6,10 @@ import type {
 import { create } from 'xmlbuilder2';
 import type {
   DocumentoElectronico,
-  gDatGralOpe,
-  gDtipDE,
-  gOpeDE,
-  gTimb
+  GDatGralOpe,
+  GDtipDE,
+  GOpeDE,
+  GTimb
 } from '../sifen/types/raw/de';
 import {
   descripcionTipoEmision,
@@ -27,10 +27,11 @@ import {
   descripcionTipoDocumentoIdentidadReceptor,
   descripcionUnidadMedida,
   descripcionCodigoRelevancia,
-  descripcionAfectacionIVA
+  descripcionAfectacionIVA,
+  tipoDocumentoElectronico
 } from '../sifen/types/enums';
 import { DateTime } from 'luxon';
-import { codigoMoneda } from '../gen/iso4217';
+import { codigoMoneda } from '../gen/monedas';
 import { descripcionCodigoDepartamento } from '../gen/departamentos';
 import { descripcionCodigoDistrito } from '../gen/distritos';
 import { descripcionCodigoCiudad } from '../gen/ciudades';
@@ -334,7 +335,7 @@ function generateGcamItem(items: ItemDE[]): gCamItem[] {
 /**
  * Mapea un OperacionDE a gOpeDE.
  */
-function generateGOpeDE(operacionDE: OperacionDE): gOpeDE {
+function generateGOpeDE(operacionDE: OperacionDE): GOpeDE {
   return {
     iTipEmi: operacionDE.tipoEmision,
     dDesTipEmi: descripcionTipoEmision[operacionDE.tipoEmision],
@@ -349,10 +350,10 @@ function generateGOpeDE(operacionDE: OperacionDE): gOpeDE {
 /**
  * Mapea gTimb de Timbrado.
  */
-function generategTimb(timbrado: Timbrado): gTimb {
+function generategTimb(timbrado: Timbrado): GTimb {
   return {
-    iTiDE: 1,
-    dDesTiDE: descripcionTipoDocumentoElectronico[1],
+    iTiDE: timbrado.tipoDocumento,
+    dDesTiDE: descripcionTipoDocumentoElectronico[timbrado.tipoDocumento],
     dNumTim: timbrado.numeroTimbrado,
     dEst: timbrado.establecimiento.toString().padStart(3, '0'),
     dPunExp: timbrado.puntoExpedicion.toString().padStart(3, '0'),
@@ -362,7 +363,7 @@ function generategTimb(timbrado: Timbrado): gTimb {
   };
 }
 
-function generategDatGralOpe(datosGen: DatosGenerales): gDatGralOpe {
+function generategDatGralOpe(datosGen: DatosGenerales): GDatGralOpe {
   return {
     dFeEmiDE: formatDate(datosGen.fechaHoraEmision, 'stripFractional'),
     gEmis: {
@@ -447,14 +448,15 @@ function generategDatGralOpe(datosGen: DatosGenerales): gDatGralOpe {
   };
 }
 
-function generategDtipDE_FE(camposTipoDE: CamposEspecificosTipoDEFE, items: gCamItem[]): gDtipDE {
+function generategDtipDE_FE(camposTipoDE: CamposEspecificosTipoDEFE, items: gCamItem[]): GDtipDE {
   return {
     gCamFE: {
       iIndPres: camposTipoDE.camposFE.indicadorPresencia,
       dDesIndPres: (() => {
         // Segun E012, si el tipo es "Otro" la descripcion puede ser cualquiera
         if (camposTipoDE.camposFE.indicadorPresencia === 9)
-          return camposTipoDE.camposFE.descripcionIndicadorPresencia;
+          // FIXME: No validado
+          return camposTipoDE.camposFE.descripcionIndicadorPresencia!;
 
         return descripcionIndicadorPresencia[camposTipoDE.camposFE.indicadorPresencia];
       })(),
@@ -525,13 +527,16 @@ export class XMLGen implements XMLGenerator {
         : formatDate(DateTime.now().setZone('America/Asuncion'), 'stripFractional'),
       dSisFact: 1,
       gOpeDE: generateGOpeDE(factura.operacionDE),
-      gTimb: generategTimb(factura.datosTimbrado),
+      gTimb: generategTimb({
+        tipoDocumento: tipoDocumentoElectronico.FacturaElectronica,
+        ...factura.datosTimbrado
+      }),
       gDatGralOpe: generategDatGralOpe(factura.datosGenerales),
       gDtipDE: generategDtipDE_FE(factura.camposEspecificosTipoDE, items),
       gTotSub: calculateGTotSub({
         items: items,
         tipoImpuesto: factura.datosGenerales.operacionComercial.tipoImpuesto,
-        tipoDocumento: factura.datosTimbrado.tipoDocumento,
+        tipoDocumento: tipoDocumentoElectronico.FacturaElectronica,
         moneda: factura.datosGenerales.operacionComercial.monedaOperacion,
         condicionTipoCambio: factura.datosGenerales.operacionComercial.condicionTipoCambio,
         tipoCambio: factura.datosGenerales.operacionComercial.tipoCambio,

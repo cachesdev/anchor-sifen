@@ -1,8 +1,8 @@
 // SIFEN Events - Chapter 11 (Gestión de eventos) — v150
 // Implements core event groups (GDE, GEC, GEI, GEN, GCO, GDI, GED, GEA and related) per Manual Técnico v150
 
+import type { INatRec, ITiDE } from './enums';
 import type { Signature } from './i';
-import type { ITiDE, INatRec } from './de';
 
 /**
  * GDE - GDE000 | Raíz del grupo de eventos | Pagina 120
