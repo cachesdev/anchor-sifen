@@ -1,44 +1,62 @@
-// SIFEN G group - Complementary commercial fields (G001-G099) and load (G050-G099)
+import type { DescripcionUnidadMedida, UnidadMedida } from '../enums';
+import type { DDesCarCarga, ICarCarga } from './enums';
 
 /**
  * G - G001 | Campos de uso general | Pagina 106
  */
-export interface gCamGen {
-  /** G - G002 | Número de orden de compra | Pagina 106 */
+export interface GCamGen {
+  /**
+   * G - G002 | Número de orden de compra | Pagina 106
+   */
   dOrdCompra?: string;
-  /** G - G003 | Número de orden de venta | Pagina 106 */
+  /**
+   * G - G003 | Número de orden de venta | Pagina 106
+   */
   dOrdVta?: string;
-  /** G - G004 | Número de asiento contable | Pagina 106 */
+  /**
+   * G - G004 | Número de asiento contable | Pagina 107
+   */
   dAsiento?: string;
-  /** G1 - G050 | Campos generales de la carga | Pagina 107 */
-  gCamCarg?: gCamCarg;
+  /**
+   * G1 - G050 | Campos generales de la carga | Pagina 107
+   */
+  gCamCarg?: GCamCarg;
 }
 
 /**
  * G1 - G050 | Campos generales de la carga | Pagina 107
  */
-export interface gCamCarg {
-  /** G1 - G051 | Unidad de medida del total de volumen de la mercadería | Pagina 107 */
-  cUniMedTotVol?: number;
-  /** G1 - G052 | Descripción de la unidad de medida del total de volumen | Pagina 107 */
-  dDesUniMedTotVol?: string;
-  /** G1 - G053 | Total volumen de la mercadería | Pagina 107 */
+export interface GCamCarg {
+  /**
+   * G1 - G051 | Unidad de medida del total de volumen de la mercadería | Pagina 107
+   */
+  cUniMedTotVol?: UnidadMedida;
+  /**
+   * G1 - G052 | Descripción de la unidad de medida del total de volumen de la mercadería | Pagina 107
+   */
+  dDesUniMedTotVol?: DescripcionUnidadMedida;
+  /**
+   * G1 - G053 | Total volumen de la mercadería | Pagina 107
+   */
   dTotVolMerc?: number;
-  /** G1 - G054 | Unidad de medida del peso total | Pagina 107 */
-  cUniMedTotPes?: number;
-  /** G1 - G055 | Descripción de la unidad de medida del peso total | Pagina 107 */
-  dDesUniMedTotPes?: string;
-  /** G1 - G056 | Total peso de la mercadería | Pagina 107 */
+  /**
+   * G1 - G054 | Unidad de medida del peso total de la mercadería | Pagina 107
+   */
+  cUniMedTotPes?: UnidadMedida;
+  /**
+   * G1 - G055 | Descripción de la unidad de medida del peso total | Pagina 107
+   */
+  dDesUniMedTotPes?: DescripcionUnidadMedida;
+  /**
+   * G1 - G056 | Total peso de la mercadería | Pagina 107
+   */
   dTotPesMerc?: number;
-  /** G1 - G057 | Características de la Carga | Pagina 107 */
+  /**
+   * G1 - G057 | Características de la Carga | Pagina 108
+   */
   iCarCarga?: ICarCarga;
-  /** G1 - G058 | Descripción de las características de la carga | Pagina 107 */
-  dDesCarCarga?: string;
+  /**
+   * G1 - G058 | Descripción de las características de la carga | Pagina 108
+   */
+  dDesCarCarga?: DDesCarCarga;
 }
-
-export const ICarCargaValues = {
-  CadenaFrio: 1,
-  CargaPeligrosa: 2,
-  Otro: 3
-} as const;
-export type ICarCarga = (typeof ICarCargaValues)[keyof typeof ICarCargaValues];

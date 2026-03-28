@@ -11,6 +11,7 @@ import type {
   CodigoRelevancia,
   CondicionAnticipo,
   CondicionTipoCambio,
+  MotivoEmisionNCDE,
   NaturalezaReceptor,
   TasaIVA,
   TipoContribuyente,
@@ -553,4 +554,18 @@ export interface ISCItem {
    * E744 | dLiqISC | Líquido ISC | Pagina 89
    */
   liquidadoISC: number;
+}
+
+/**
+ * E400 | gCamNCDE | Campos de la Nota de Crédito/Débito Electrónica | Pagina 77
+ */
+export interface CamposNCDE {
+  /**
+   * E401 | iMotEmi | Motivo de emisión | Pagina 77
+   */
+  motivoEmision: MotivoEmisionNCDE;
+  /**
+   * E402 | dDesMotEmi | Descripción del motivo de emisión | Pagina 77
+   */
+  descripcionMotivoEmision: string;
 }

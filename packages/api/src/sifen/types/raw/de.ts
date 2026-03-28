@@ -3,7 +3,7 @@ import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../..
 import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
-import type { gCamFE, gCamAE, gCamNCDE, gCamNRE, gCamCond, gCamItem, gCamEsp, gTransp } from './e';
+import type { GCamAE, GCamCond, GCamEsp, GCamFE, GCamItem, GCamNCDE, GCamNRE, GTransp } from './e';
 import type {
   DDesCondAnt,
   DDesTiDE,
@@ -26,7 +26,9 @@ import type {
   ITipIDRespDE,
   ITipTra
 } from './enums';
-import type { gTotSub as GTotSub } from './f';
+import type { GTotSub } from './f';
+import type { GCamGen } from './g';
+import type { GCamDEAsoc } from './h';
 
 /**
  * AA | Documento Electrónico | Pagina 61
@@ -87,6 +89,14 @@ export interface DE {
    * F - F001 | Campos de subtotales y totales | Pagina 102
    */
   gTotSub?: GTotSub;
+  /**
+   * G - G001 | Campos de uso general | Pagina 106
+   */
+  gCamGen?: GCamGen;
+  /**
+   * H - H001 | Campos que identifican al DE asociado | Pagina 108
+   */
+  gCamDEAsoc?: GCamDEAsoc;
 }
 
 /**
@@ -96,35 +106,35 @@ export interface GDtipDE {
   /**
    * E1 - E010 | Campos que componen la FE | Pagina 73
    */
-  gCamFE?: gCamFE;
+  gCamFE?: GCamFE;
   /**
-   * E3 - E300 | Campos que componen la Autofactura Electrónica | Pagina 76
+   * E4 - E300 | Campos que componen la Autofactura Electrónica | Pagina 75
    */
-  gCamAE?: gCamAE;
+  gCamAE?: GCamAE;
   /**
-   * E4 - E400 | Campos de la Nota de Crédito/Débito Electrónica | Pagina 77
+   * E5 - E400 | Campos de la Nota de Crédito/Débito Electrónica | Pagina 77
    */
-  gCamNCDE?: gCamNCDE;
+  gCamNCDE?: GCamNCDE;
   /**
-   * E5 - E500 | Campos que componen la Nota de Remisión Electrónica | Pagina 78
+   * E6 - E500 | Campos que componen la Nota de Remisión Electrónica | Pagina 77
    */
-  gCamNRE?: gCamNRE;
+  gCamNRE?: GCamNRE;
   /**
    * E7 - E600 | Campos que describen la condición de la operación | Pagina 80
    */
-  gCamCond?: gCamCond;
+  gCamCond?: GCamCond;
   /**
-   * E8 - E700 | Campos que describen los ítems de la operación | Pagina 88
+   * E8 - E700 | Campos que describen los ítems de la operación | Pagina 85
    */
-  gCamItem?: gCamItem[];
+  gCamItem?: GCamItem[];
   /**
-   * G - G050 | Campos complementarios comerciales de uso específico | Pagina 109
+   * E9 - E790 | Campos complementarios comerciales de uso específico | Pagina 93
    */
-  gCamEsp?: gCamEsp;
+  gCamEsp?: GCamEsp;
   /**
-   * E9 - E900 | Campos que describen el transporte de mercaderías | Pagina 95
+   * E10 - E900 | Campos que describen el transporte de mercaderías | Pagina 96
    */
-  gTransp?: gTransp;
+  gTransp?: GTransp;
 }
 
 /**
@@ -308,55 +318,55 @@ export interface GEmis {
    */
   dCompDir2?: string;
   /**
-   * D2 - D111 | Código del departamento de emisión | Pagina 67
+   * D2 - D111 | Código del departamento de emisión | Pagina 68
    */
   cDepEmi: CodigoDepartamento;
   /**
-   * D2 - D112 | Descripción del departamento de emisión | Pagina 67
+   * D2 - D112 | Descripción del departamento de emisión | Pagina 68
    */
   dDesDepEmi: DescripcionCodigoDepartamento;
   /**
-   * D2 - D113 | Código del distrito de emisión | Pagina 67
+   * D2 - D113 | Código del distrito de emisión | Pagina 68
    */
   cDisEmi?: CodigoDistrito;
   /**
-   * D2 - D114 | Descripción del distrito de emisión | Pagina 67
+   * D2 - D114 | Descripción del distrito de emisión | Pagina 68
    */
   dDesDisEmi?: DescripcionCodigoDistrito;
   /**
-   * D2 - D115 | Código de la ciudad de emisión | Pagina 68
+   * D2 - D115 | Código de la ciudad de emisión | Pagina 69
    */
   cCiuEmi: CodigoCiudad;
   /**
-   * D2 - D116 | Descripción de la ciudad de emisión | Pagina 68
+   * D2 - D116 | Descripción de la ciudad de emisión | Pagina 69
    */
   dDesCiuEmi: DescripcionCodigoCiudad;
   /**
-   * D2 - D117 | Teléfono local de emisión de DE | Pagina 68
+   * D2 - D117 | Teléfono local de emisión de DE | Pagina 69
    */
   dTelEmi: string;
   /**
-   * D2 - D118 | Correo electrónico del emisor | Pagina 68
+   * D2 - D118 | Correo electrónico del emisor | Pagina 69
    */
   dEmailE: string;
   /**
-   * D2 - D119 | Denominación comercial de la sucursal | Pagina 68
+   * D2 - D119 | Denominación comercial de la sucursal | Pagina 69
    */
   dDenSuc?: string;
   /**
    * D2.1 - D130 | Grupo de campos que describen la actividad económica del emisor | Pagina 69
    */
-  gActEco: gActEco[];
+  gActEco: GActEco[];
   /**
-   * D2.2 - D140 | Grupo de campos que identifican al responsable de la generación del DE | Pagina 69
+   * D2.2 - D140 | Grupo de campos que identifican al responsable de la generación del DE | Pagina 70
    */
-  gRespDE?: gRespDE;
+  gRespDE?: GRespDE;
 }
 
 /**
  * D2.1 - D130 | Campos que describen la actividad económica del emisor | Pagina 69
  */
-export interface gActEco {
+export interface GActEco {
   /**
    * D2.1 - D131 | Código de la actividad económica del emisor | Pagina 69
    */
@@ -368,129 +378,129 @@ export interface gActEco {
 }
 
 /**
- * D2.2 - D140 | Campos que identifican al responsable de la generación del DE | Pagina 69
+ * D2.2 - D140 | Campos que identifican al responsable de la generación del DE | Pagina 70
  */
-export interface gRespDE {
+export interface GRespDE {
   /**
-   * D2.2 - D141 | Tipo de documento de identidad del responsable de la generación del DE | Pagina 69
+   * D2.2 - D141 | Tipo de documento de identidad del responsable de la generación del DE | Pagina 70
    */
   iTipIDRespDE: ITipIDRespDE;
   /**
-   * D2.2 - D142 | Descripción del tipo de documento de identidad del responsable de la generación del DE | Pagina 69
+   * D2.2 - D142 | Descripción del tipo de documento de identidad del responsable de la generación del DE | Pagina 70
    */
   dDTipIDRespDE: DDTipIDRespDE;
   /**
-   * D2.2 - D143 | Número de documento de identidad del responsable de la generación del DE | Pagina 69
+   * D2.2 - D143 | Número de documento de identidad del responsable de la generación del DE | Pagina 70
    */
   dNumIDRespDE: string;
   /**
-   * D2.2 - D144 | Nombre o razón social del responsable de la generación del DE | Pagina 69
+   * D2.2 - D144 | Nombre o razón social del responsable de la generación del DE | Pagina 70
    */
   dNomRespDE: string;
   /**
-   * D2.2 - D145 | Cargo del responsable de la generación del DE | Pagina 69
+   * D2.2 - D145 | Cargo del responsable de la generación del DE | Pagina 70
    */
   dCarRespDE: string;
 }
 
 /**
- * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 69
+ * D3 - D200 | Grupo de campos que identifican al receptor | Pagina 70
  */
 export interface GDatRec {
   /**
-   * D3 - D201 | Naturaleza del receptor | Pagina 70
+   * D3 - D201 | Naturaleza del receptor | Pagina 71
    */
   iNatRec: INatRec;
   /**
-   * D3 - D202 | Tipo de operación | Pagina 70
+   * D3 - D202 | Tipo de operación | Pagina 71
    */
   iTiOpe: ITiOpe;
   /**
-   * D3 - D203 | Código de país del receptor | Pagina 70
+   * D3 - D203 | Código de país del receptor | Pagina 71
    */
   cPaisRec: CodigoPais;
   /**
-   * D3 - D204 | Descripción del país receptor | Pagina 70
+   * D3 - D204 | Descripción del país receptor | Pagina 71
    */
   dDesPaisRe: DescripcionCodigoPais;
   /**
-   * D3 - D205 | Tipo de contribuyente receptor | Pagina 70
+   * D3 - D205 | Tipo de contribuyente receptor | Pagina 71
    */
   iTiContRec?: ITiContRec;
   /**
-   * D3 - D206 | RUC del receptor | Pagina 70
+   * D3 - D206 | RUC del receptor | Pagina 71
    */
   dRucRec?: string;
   /**
-   * D3 - D207 | Dígito verificador del RUC del receptor | Pagina 70
+   * D3 - D207 | Dígito verificador del RUC del receptor | Pagina 71
    */
   dDVRec?: number;
   /**
-   * D3 - D208 | Tipo de documento de identidad del receptor | Pagina 70
+   * D3 - D208 | Tipo de documento de identidad del receptor | Pagina 71
    */
   iTipIDRec?: ITipIDRec;
   /**
-   * D3 - D209 | Descripción del tipo de documento de identidad | Pagina 71
+   * D3 - D209 | Descripción del tipo de documento de identidad | Pagina 72
    */
-  dDTipIDRec?: DDTipIDRec | string;
+  dDTipIDRec?: DDTipIDRec;
   /**
-   * D3 - D210 | Número de documento de identidad | Pagina 71
+   * D3 - D210 | Número de documento de identidad | Pagina 72
    */
   dNumIDRec?: string;
   /**
-   * D3 - D211 | Nombre o razón social del receptor del DE | Pagina 71
+   * D3 - D211 | Nombre o razón social del receptor del DE | Pagina 72
    */
   dNomRec: string;
   /**
-   * D3 - D212 | Nombre de fantasía | Pagina 71
+   * D3 - D212 | Nombre de fantasía | Pagina 72
    */
   dNomFanRec?: string;
   /**
-   * D3 - D213 | Dirección del receptor | Pagina 71
+   * D3 - D213 | Dirección del receptor | Pagina 72
    */
   dDirRec?: string;
   /**
-   * D3 - D213 | Número de casa del receptor | Pagina 71
+   * D3 - D218 | Número de casa del receptor | Pagina 72
    */
   dNumCasRec?: number;
   /**
-   * D3 - D219 | Código del departamento del receptor | Pagina 71
+   * D3 - D219 | Código del departamento del receptor | Pagina 72
    */
   dDepRec?: CodigoDepartamento;
   /**
-   * D3 - D220 | Descripción del departamento del receptor | Pagina 71
+   * D3 - D220 | Descripción del departamento del receptor | Pagina 72
    */
   dDesDepRec?: DescripcionCodigoDepartamento;
   /**
-   * D3 - D221 | Código del distrito del receptor | Pagina 71
+   * D3 - D221 | Código del distrito del receptor | Pagina 72
    */
   dDisRec?: CodigoDistrito;
   /**
-   * D3 - D222 | Descripción del distrito del receptor | Pagina 71
+   * D3 - D222 | Descripción del distrito del receptor | Pagina 72
    */
   dDesDisRec?: DescripcionCodigoDistrito;
   /**
-   * D3 - D223 | Código de la ciudad del receptor | Pagina 72
+   * D3 - D223 | Código de la ciudad del receptor | Pagina 73
    */
   cCiuRec?: CodigoCiudad;
   /**
-   * D3 - D224 | Descripción de la ciudad del receptor | Pagina 72
+   * D3 - D224 | Descripción de la ciudad del receptor | Pagina 73
    */
   dDesCiuRec?: DescripcionCodigoCiudad;
   /**
-   * D3 - D214 | Número de teléfono del receptor | Pagina 72
+   * D3 - D214 | Número de teléfono del receptor | Pagina 73
    */
   dTelRec?: string;
   /**
-   * D3 - D215 | Número de celular del receptor | Pagina 72
+   * D3 - D215 | Número de celular del receptor | Pagina 73
    */
   dCelRec?: string;
   /**
-   * D3 - D216 | Correo electrónico del receptor | Pagina 72
+   * D3 - D216 | Correo electrónico del receptor | Pagina 73
    */
   dEmailRec?: string;
   /**
-   * D3 - D217 | Código del cliente | Pagina 72
+   * D3 - D217 | Código del cliente | Pagina 73
    */
   dCodCliente?: string;
 }

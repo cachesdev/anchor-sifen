@@ -1,7 +1,8 @@
 /**
  * Referencias geograficas: Distritos de Paraguay.
- * Generado por scripts/referencia-geografica.ts
  */
+import type { ValueOf } from 'type-fest';
+
 export const codigoDistrito = {
   AsuncionDistrito: 1,
   ConcepcionMunicipio: 2,
@@ -277,7 +278,7 @@ export const codigoDistrito = {
   PuertoAdela_289: 289,
 } as const;
 
-export type CodigoDistrito = (typeof codigoDistrito)[keyof typeof codigoDistrito];
+export type CodigoDistrito = ValueOf<typeof codigoDistrito>;
 
 export const descripcionCodigoDistrito = {
   [codigoDistrito.AsuncionDistrito]: 'ASUNCION (DISTRITO)',
@@ -552,6 +553,6 @@ export const descripcionCodigoDistrito = {
   [codigoDistrito.NuevaAsuncion]: 'NUEVA ASUNCIÓN',
   [codigoDistrito.PasoHorqueta]: 'PASO HORQUETA',
   [codigoDistrito.PuertoAdela_289]: 'PUERTO ADELA',
-} as const;
+} as const satisfies Record<CodigoDistrito, string>;
 
-export type DescripcionCodigoDistrito = (typeof descripcionCodigoDistrito)[keyof typeof descripcionCodigoDistrito];
+export type DescripcionCodigoDistrito = ValueOf<typeof descripcionCodigoDistrito>;

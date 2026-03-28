@@ -132,7 +132,6 @@ export const tipoImpuesto = {
   IVARenta: 5
 } as const;
 export type TipoImpuesto = (typeof tipoImpuesto)[keyof typeof tipoImpuesto];
-
 export const descripcionTipoImpuesto = {
   [tipoImpuesto.IVA]: 'IVA',
   [tipoImpuesto.ISC]: 'ISC',
@@ -514,3 +513,31 @@ export const descripcionUnidadMedida = {
 } as const;
 export type DescripcionUnidadMedida =
   (typeof descripcionUnidadMedida)[keyof typeof descripcionUnidadMedida];
+
+/**
+ * E5 - E401 | Motivo de emisión | Pagina 77
+ */
+export const motivoEmisionNCDE = {
+  DevolucionAjustePrecios: 1,
+  Devolucion: 2,
+  Descuento: 3,
+  Bonificacion: 4,
+  CreditoIncobrable: 5,
+  RecuperoCosto: 6,
+  RecuperoGasto: 7,
+  AjustePrecio: 8
+} as const;
+export type MotivoEmisionNCDE = (typeof motivoEmisionNCDE)[keyof typeof motivoEmisionNCDE];
+
+export const descripcionMotivoEmisionNCDE = {
+  [motivoEmisionNCDE.DevolucionAjustePrecios]: 'Devolución y ajuste de precios',
+  [motivoEmisionNCDE.Devolucion]: 'Devolución',
+  [motivoEmisionNCDE.Descuento]: 'Descuento',
+  [motivoEmisionNCDE.Bonificacion]: 'Bonificación',
+  [motivoEmisionNCDE.CreditoIncobrable]: 'Crédito incobrable',
+  [motivoEmisionNCDE.RecuperoCosto]: 'Recupero de costo',
+  [motivoEmisionNCDE.RecuperoGasto]: 'Recupero de gasto',
+  [motivoEmisionNCDE.AjustePrecio]: 'Ajuste de precio'
+} as const satisfies Record<MotivoEmisionNCDE, string>;
+export type DescripcionMotivoEmisionNCDE =
+  (typeof descripcionMotivoEmisionNCDE)[keyof typeof descripcionMotivoEmisionNCDE];

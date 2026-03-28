@@ -1,7 +1,8 @@
 /**
  * Referencias geograficas: Departamentos de Paraguay.
- * Generado por scripts/referencia-geografica.ts
  */
+import type { ValueOf } from 'type-fest';
+
 export const codigoDepartamento = {
   Capital: 1,
   Concepcion: 2,
@@ -23,7 +24,7 @@ export const codigoDepartamento = {
   Canindeyu: 18,
 } as const;
 
-export type CodigoDepartamento = (typeof codigoDepartamento)[keyof typeof codigoDepartamento];
+export type CodigoDepartamento = ValueOf<typeof codigoDepartamento>;
 
 export const descripcionCodigoDepartamento = {
   [codigoDepartamento.Capital]: 'CAPITAL',
@@ -44,6 +45,6 @@ export const descripcionCodigoDepartamento = {
   [codigoDepartamento.Boqueron]: 'BOQUERON',
   [codigoDepartamento.AltoParaguay]: 'ALTO PARAGUAY',
   [codigoDepartamento.Canindeyu]: 'CANINDEYU',
-} as const;
+} as const satisfies Record<CodigoDepartamento, string>;
 
-export type DescripcionCodigoDepartamento = (typeof descripcionCodigoDepartamento)[keyof typeof descripcionCodigoDepartamento];
+export type DescripcionCodigoDepartamento = ValueOf<typeof descripcionCodigoDepartamento>;
