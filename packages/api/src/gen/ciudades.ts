@@ -1,7 +1,8 @@
 /**
  * Referencias geograficas: Ciudades de Paraguay.
- * Generado por scripts/referencia-geografica.ts
  */
+import type { ValueOf } from 'type-fest';
+
 export const codigoCiudad = {
   AsuncionDistrito: 1,
   ConcepcionMunicipio: 3,
@@ -6771,7 +6772,7 @@ export const codigoCiudad = {
   ComIndigTekohaPotyVera: 6793,
 } as const;
 
-export type CodigoCiudad = (typeof codigoCiudad)[keyof typeof codigoCiudad];
+export type CodigoCiudad = ValueOf<typeof codigoCiudad>;
 
 export const descripcionCodigoCiudad = {
   [codigoCiudad.AsuncionDistrito]: 'ASUNCION (DISTRITO)',
@@ -13540,6 +13541,6 @@ export const descripcionCodigoCiudad = {
   [codigoCiudad.PuertoAdela]: 'PUERTO ADELA',
   [codigoCiudad.Ibel]: 'IBEL',
   [codigoCiudad.ComIndigTekohaPotyVera]: 'COM INDIG TEKOHA POTY VERA',
-} as const;
+} as const satisfies Record<CodigoCiudad, string>;
 
-export type DescripcionCodigoCiudad = (typeof descripcionCodigoCiudad)[keyof typeof descripcionCodigoCiudad];
+export type DescripcionCodigoCiudad = ValueOf<typeof descripcionCodigoCiudad>;

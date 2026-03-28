@@ -128,6 +128,8 @@ lines.push('/**');
 lines.push(' * Códigos de países ISO 3166 - Tabla 4 | Manual Tecnico p.211');
 lines.push(' * Generado por scripts/gen-paises.ts desde Paises_v100.xsd');
 lines.push(' */');
+lines.push("import type { ValueOf } from 'type-fest';");
+lines.push('');
 lines.push('export const codigoPais = {');
 
 for (const { code } of entries) {
@@ -136,7 +138,7 @@ for (const { code } of entries) {
 }
 
 lines.push('} as const;');
-lines.push('export type CodigoPais = (typeof codigoPais)[keyof typeof codigoPais];');
+lines.push('export type CodigoPais = ValueOf<typeof codigoPais>;');
 lines.push('');
 lines.push('export const descripcionCodigoPais = {');
 
@@ -144,10 +146,8 @@ for (const { code, name } of entries) {
   lines.push(`  [codigoPais.${toPascalCase(code)}]: ${JSON.stringify(name)},`);
 }
 
-lines.push('} as const;');
-lines.push(
-  'export type DescripcionCodigoPais = (typeof descripcionCodigoPais)[keyof typeof descripcionCodigoPais];'
-);
+lines.push('} as const satisfies Record<CodigoPais, string>;');
+lines.push('export type DescripcionCodigoPais = ValueOf<typeof descripcionCodigoPais>;');
 lines.push('');
 
 writeFileSync(outputPath, lines.join('\n'), 'utf8');

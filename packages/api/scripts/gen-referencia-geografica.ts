@@ -71,8 +71,9 @@ function buildEnumFile(params: {
   const lines: string[] = [
     '/**',
     ` * ${params.title}`,
-    ' * Generado por scripts/referencia-geografica.ts',
     ' */',
+    "import type { ValueOf } from 'type-fest';",
+    '',
     `export const ${params.enumName} = {`
   ];
 
@@ -83,7 +84,7 @@ function buildEnumFile(params: {
   lines.push(
     '} as const;',
     '',
-    `export type ${params.enumType} = (typeof ${params.enumName})[keyof typeof ${params.enumName}];`,
+    `export type ${params.enumType} = ValueOf<typeof ${params.enumName}>;`,
     '',
     `export const ${params.descName} = {`
   );
@@ -93,9 +94,9 @@ function buildEnumFile(params: {
   }
 
   lines.push(
-    '} as const;',
+    `} as const satisfies Record<${params.enumType}, string>;`,
     '',
-    `export type ${params.descType} = (typeof ${params.descName})[keyof typeof ${params.descName}];`,
+    `export type ${params.descType} = ValueOf<typeof ${params.descName}>;`,
     ''
   );
 

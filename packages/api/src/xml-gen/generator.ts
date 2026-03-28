@@ -36,8 +36,8 @@ import { descripcionCodigoDepartamento } from '../gen/departamentos';
 import { descripcionCodigoDistrito } from '../gen/distritos';
 import { descripcionCodigoCiudad } from '../gen/ciudades';
 import { descripcionCodigoPais } from '../gen/paises';
-import type { gCamItem } from '../sifen/types/raw/e';
-import type { gTotSub } from '../sifen/types/raw/f';
+import type { GCamItem } from '../sifen/types/raw/e';
+import type { GTotSub } from '../sifen/types/raw/f';
 
 export interface XMLGenerator {
   generateFacturaElectronica(data: FacturaElectronica): string;
@@ -63,7 +63,7 @@ function generateSecure9DigitNumber(): number {
 }
 
 interface CalculateGTotSubParams {
-  items: gCamItem[];
+  items: GCamItem[];
   tipoImpuesto: number;
   tipoDocumento: number;
   moneda: string;
@@ -76,7 +76,7 @@ interface CalculateGTotSubParams {
 /**
  * Calcula gTotSub (subtotales)
  */
-function calculateGTotSub(params: CalculateGTotSubParams): gTotSub {
+function calculateGTotSub(params: CalculateGTotSubParams): GTotSub {
   const {
     items,
     tipoImpuesto,
@@ -278,9 +278,9 @@ function calculateGTotSub(params: CalculateGTotSubParams): gTotSub {
 /**
  * Mapea un ItemDE a gCamItem.
  */
-function generateGcamItem(items: ItemDE[]): gCamItem[] {
+function generateGcamItem(items: ItemDE[]): GCamItem[] {
   return items.map(
-    (item): gCamItem => ({
+    (item): GCamItem => ({
       dCodInt: item.codigoInterno,
       dParAranc: item.partidaArancelaria,
       dNCM: item.ncm,
@@ -448,7 +448,7 @@ function generategDatGralOpe(datosGen: DatosGenerales): GDatGralOpe {
   };
 }
 
-function generategDtipDE_FE(camposTipoDE: CamposEspecificosTipoDEFE, items: gCamItem[]): GDtipDE {
+function generategDtipDE_FE(camposTipoDE: CamposEspecificosTipoDEFE, items: GCamItem[]): GDtipDE {
   return {
     gCamFE: {
       iIndPres: camposTipoDE.camposFE.indicadorPresencia,

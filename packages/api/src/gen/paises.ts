@@ -2,6 +2,8 @@
  * Códigos de países ISO 3166 - Tabla 4 | Manual Tecnico p.211
  * Generado por scripts/gen-paises.ts desde Paises_v100.xsd
  */
+import type { ValueOf } from 'type-fest';
+
 export const codigoPais = {
   Mkd: 'MKD',
   Twn: 'TWN',
@@ -253,7 +255,7 @@ export const codigoPais = {
   Wlf: 'WLF',
   Nn: 'NN',
 } as const;
-export type CodigoPais = (typeof codigoPais)[keyof typeof codigoPais];
+export type CodigoPais = ValueOf<typeof codigoPais>;
 
 export const descripcionCodigoPais = {
   [codigoPais.Mkd]: "ex República Yugoslava de Macedonia",
@@ -505,5 +507,5 @@ export const descripcionCodigoPais = {
   [codigoPais.Tuv]: "Tuvalu",
   [codigoPais.Wlf]: "Islas Wallis y Futuna",
   [codigoPais.Nn]: "NO EXISTE",
-} as const;
-export type DescripcionCodigoPais = (typeof descripcionCodigoPais)[keyof typeof descripcionCodigoPais];
+} as const satisfies Record<CodigoPais, string>;
+export type DescripcionCodigoPais = ValueOf<typeof descripcionCodigoPais>;
