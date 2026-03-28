@@ -110,6 +110,9 @@ export const dDesTImp = {
 } as const satisfies Record<ITImp, string>;
 export type DDesTImp = ValueOf<typeof dDesTImp>;
 
+/**
+ * D1 - D017 | Condición del tipo de cambio | Pagina 67
+ */
 export const iCondTiCam = {
   Global: 1,
   PorItem: 2
@@ -148,6 +151,26 @@ export const dDesTipCont = {
   [iTipCont.PersonaJuridica]: 'Persona Jurídica'
 } as const satisfies Record<ITipCont, string>;
 export type DDesTipCont = ValueOf<typeof dDesTipCont>;
+
+/**
+ * D2.2 - D141 | Tipo de documento de identidad del responsable de la generación del DE | Pagina 70
+ */
+export const iTipIDRespDE = {
+  CedulaParaguaya: 1,
+  Pasaporte: 2,
+  CedulaExtranjera: 3,
+  CarnetResidencia: 4,
+  Otro: 9
+} as const;
+export type ITipIDRespDE = ValueOf<typeof iTipIDRespDE>;
+export const dDTipIDRespDE = {
+  [iTipIDRespDE.CedulaParaguaya]: 'Cédula paraguaya',
+  [iTipIDRespDE.Pasaporte]: 'Pasaporte',
+  [iTipIDRespDE.CedulaExtranjera]: 'Cédula extranjera',
+  [iTipIDRespDE.CarnetResidencia]: 'Carnet de residencia',
+  [iTipIDRespDE.Otro]: 'Otro'
+} as const satisfies Record<ITipIDRespDE, string>;
+export type DDTipIDRespDE = ValueOf<typeof dDTipIDRespDE>;
 
 /**
  * D3 - D201 | Naturaleza del receptor | Pagina 71
@@ -196,26 +219,6 @@ export const dDesTiContRec = {
 export type DDesTiContRec = ValueOf<typeof dDesTiContRec>;
 
 /**
- * D2.2 - D141 | Tipo de documento de identidad del responsable de la generación del DE | Pagina 70
- */
-export const iTipIDRespDE = {
-  CedulaParaguaya: 1,
-  Pasaporte: 2,
-  CedulaExtranjera: 3,
-  CarnetResidencia: 4,
-  Otro: 9
-} as const;
-export type ITipIDRespDE = ValueOf<typeof iTipIDRespDE>;
-export const dDTipIDRespDE = {
-  [iTipIDRespDE.CedulaParaguaya]: 'Cédula paraguaya',
-  [iTipIDRespDE.Pasaporte]: 'Pasaporte',
-  [iTipIDRespDE.CedulaExtranjera]: 'Cédula extranjera',
-  [iTipIDRespDE.CarnetResidencia]: 'Carnet de residencia',
-  [iTipIDRespDE.Otro]: 'Otro'
-} as const satisfies Record<ITipIDRespDE, string>;
-export type DDTipIDRespDE = ValueOf<typeof dDTipIDRespDE>;
-
-/**
  * D3 - D208 | Tipo de documento de identidad del receptor | Pagina 71
  */
 export const iTipIDRec = {
@@ -262,6 +265,124 @@ export const dDesIndPres = {
   [iIndPres.Otro]: 'Otro'
 } as const satisfies Record<IIndPres, string>;
 export type DDesIndPres = ValueOf<typeof dDesIndPres>;
+
+/**
+ * E4 - E301 | Naturaleza del vendedor | Pagina 75
+ */
+export const iNatVen = {
+  NoContribuyente: 1,
+  Extranjero: 2
+} as const;
+export type INatVen = ValueOf<typeof iNatVen>;
+export const dDesNatVen = {
+  [iNatVen.NoContribuyente]: 'No contribuyente',
+  [iNatVen.Extranjero]: 'Extranjero'
+} as const satisfies Record<INatVen, string>;
+export type DDesNatVen = ValueOf<typeof dDesNatVen>;
+
+/**
+ * E4 - E304 | Tipo de documento de identidad del vendedor | Pagina 75
+ */
+export const iTipIDVen = {
+  CedulaParaguaya: 1,
+  Pasaporte: 2,
+  CedulaExtranjera: 3,
+  CarnetResidencia: 4
+} as const;
+export type ITipIDVen = ValueOf<typeof iTipIDVen>;
+export const dDTipIDVen = {
+  [iTipIDVen.CedulaParaguaya]: 'Cédula paraguaya',
+  [iTipIDVen.Pasaporte]: 'Pasaporte',
+  [iTipIDVen.CedulaExtranjera]: 'Cédula extranjera',
+  [iTipIDVen.CarnetResidencia]: 'Carnet de residencia'
+} as const;
+export type DDTipIDVen = ValueOf<typeof dDTipIDVen>;
+
+/**
+ * E5 - E401 | Motivo de emisión | Pagina 77
+ */
+export const iMotEmiValues = {
+  DevolucionAjustePrecios: 1,
+  Devolucion: 2,
+  Descuento: 3,
+  Bonificacion: 4,
+  CreditoIncobrable: 5,
+  RecuperoCosto: 6,
+  RecuperoGasto: 7,
+  AjustePrecio: 8
+} as const;
+export type IMotEmi = ValueOf<typeof iMotEmiValues>;
+export const dDesMotEmiValues = {
+  [iMotEmiValues.DevolucionAjustePrecios]: 'Devolución y Ajuste de precios',
+  [iMotEmiValues.Devolucion]: 'Devolución',
+  [iMotEmiValues.Descuento]: 'Descuento',
+  [iMotEmiValues.Bonificacion]: 'Bonificación',
+  [iMotEmiValues.CreditoIncobrable]: 'Crédito incobrable',
+  [iMotEmiValues.RecuperoCosto]: 'Recupero de costo',
+  [iMotEmiValues.RecuperoGasto]: 'Recupero de gasto',
+  [iMotEmiValues.AjustePrecio]: 'Ajuste de precio'
+} as const satisfies Record<IMotEmi, string>;
+export type DDesMotEmi = ValueOf<typeof dDesMotEmiValues>;
+
+/**
+ * E6 - E501 | Motivo de emisión | Pagina 79
+ */
+export const iMotEmiNR = {
+  TrasladoVenta: 1,
+  TrasladoConsignacion: 2,
+  Exportacion: 3,
+  TrasladoCompra: 4,
+  Importacion: 5,
+  TrasladoDevolucion: 6,
+  TrasladoEntreLocales: 7,
+  TrasladoTransformacion: 8,
+  TrasladoReparacion: 9,
+  TrasladoEmisorMovil: 10,
+  ExhibicionDemostracion: 11,
+  ParticipacionFerias: 12,
+  TrasladoEncomienda: 13,
+  Decomiso: 14,
+  Otro: 99
+} as const;
+export type IMotEmiNR = ValueOf<typeof iMotEmiNR>;
+export const dDesMotEmiNR = {
+  [iMotEmiNR.TrasladoVenta]: 'Traslado por ventas',
+  [iMotEmiNR.TrasladoConsignacion]: 'Traslado por consignación',
+  [iMotEmiNR.Exportacion]: 'Exportación',
+  [iMotEmiNR.TrasladoCompra]: 'Traslado por compra',
+  [iMotEmiNR.Importacion]: 'Importación',
+  [iMotEmiNR.TrasladoDevolucion]: 'Traslado por devolución',
+  [iMotEmiNR.TrasladoEntreLocales]: 'Traslado entre locales de la empresa',
+  [iMotEmiNR.TrasladoTransformacion]: 'Traslado de bienes por transformación',
+  [iMotEmiNR.TrasladoReparacion]: 'Traslado de bienes por reparación',
+  [iMotEmiNR.TrasladoEmisorMovil]: 'Traslado por emisor móvil',
+  [iMotEmiNR.ExhibicionDemostracion]: 'Exhibición o Demostración',
+  [iMotEmiNR.ParticipacionFerias]: 'Participación en ferias',
+  [iMotEmiNR.TrasladoEncomienda]: 'Traslado de encomienda',
+  [iMotEmiNR.Decomiso]: 'Decomiso',
+  [iMotEmiNR.Otro]: 'Otro'
+} as const satisfies Record<IMotEmiNR, string>;
+export type DDesMotEmiNR = ValueOf<typeof dDesMotEmiNR>;
+
+/**
+ * E6 - E503 | Responsable de la emisión de la Nota Remisión Electrónica | Pagina 79
+ */
+export const iRespEmiNR = {
+  EmisorFactura: 1,
+  PoseedorFacturaBienes: 2,
+  EmpresaTransportista: 3,
+  DespachanteAduanas: 4,
+  AgenteTransporteIntermediario: 5
+} as const;
+export type IRespEmiNR = ValueOf<typeof iRespEmiNR>;
+export const dDesRespEmiNR = {
+  [iRespEmiNR.EmisorFactura]: 'Emisor de la factura',
+  [iRespEmiNR.PoseedorFacturaBienes]: 'Poseedor de la factura y bienes',
+  [iRespEmiNR.EmpresaTransportista]: 'Empresa transportista',
+  [iRespEmiNR.DespachanteAduanas]: 'Despachante de Aduanas',
+  [iRespEmiNR.AgenteTransporteIntermediario]: 'Agente de transporte o intermediario'
+} as const satisfies Record<IRespEmiNR, string>;
+export type DDesRespEmiNR = ValueOf<typeof dDesRespEmiNR>;
 
 /**
  * E7 - E601 | Condición de la operación | Pagina 80
@@ -380,32 +501,6 @@ export const dDCondCred = {
 export type DDCondCred = ValueOf<typeof dDCondCred>;
 
 /**
- * E5 - E401 | Motivo de emisión | Pagina 77
- */
-export const iMotEmiValues = {
-  DevolucionAjustePrecios: 1,
-  Devolucion: 2,
-  Descuento: 3,
-  Bonificacion: 4,
-  CreditoIncobrable: 5,
-  RecuperoCosto: 6,
-  RecuperoGasto: 7,
-  AjustePrecio: 8
-} as const;
-export type IMotEmi = ValueOf<typeof iMotEmiValues>;
-export const dDesMotEmiValues = {
-  [iMotEmiValues.DevolucionAjustePrecios]: 'Devolución y Ajuste de precios',
-  [iMotEmiValues.Devolucion]: 'Devolución',
-  [iMotEmiValues.Descuento]: 'Descuento',
-  [iMotEmiValues.Bonificacion]: 'Bonificación',
-  [iMotEmiValues.CreditoIncobrable]: 'Crédito incobrable',
-  [iMotEmiValues.RecuperoCosto]: 'Recupero de costo',
-  [iMotEmiValues.RecuperoGasto]: 'Recupero de gasto',
-  [iMotEmiValues.AjustePrecio]: 'Ajuste de precio'
-} as const satisfies Record<IMotEmi, string>;
-export type DDesMotEmi = ValueOf<typeof dDesMotEmiValues>;
-
-/**
  * E8 - E715 | Código de datos de relevancia de las mercaderías | Pagina 86
  */
 export const cRelMerc = {
@@ -438,96 +533,44 @@ export const dDesAfecIVA = {
 export type DDesAfecIVA = ValueOf<typeof dDesAfecIVA>;
 
 /**
- * E4 - E301 | Naturaleza del vendedor | Pagina 75
+ * E8.5 - E771 | Tipo de operación de venta de vehículos | Pagina 91
  */
-export const iNatVen = {
-  NoContribuyente: 1,
-  Extranjero: 2
+export const iTipOpVNValues = {
+  Representante: 1,
+  ConsumidorFinal: 2,
+  Gobierno: 3,
+  FlotaVehiculos: 4
 } as const;
-export type INatVen = ValueOf<typeof iNatVen>;
-export const dDesNatVen = {
-  [iNatVen.NoContribuyente]: 'No contribuyente',
-  [iNatVen.Extranjero]: 'Extranjero'
-} as const satisfies Record<INatVen, string>;
-export type DDesNatVen = ValueOf<typeof dDesNatVen>;
+export type ITipOpVN = ValueOf<typeof iTipOpVNValues>;
+export const dDesTipOpVNValues = {
+  [iTipOpVNValues.Representante]: 'Venta a representante',
+  [iTipOpVNValues.ConsumidorFinal]: 'Venta al consumidor final',
+  [iTipOpVNValues.Gobierno]: 'Venta a gobierno',
+  [iTipOpVNValues.FlotaVehiculos]: 'Venta a flota de vehículos'
+} as const satisfies Record<ITipOpVN, string>;
+export type DDesTipOpVN = ValueOf<typeof dDesTipOpVNValues>;
 
 /**
- * E4 - E304 | Tipo de documento de identidad del vendedor | Pagina 75
+ * E8.5 - E779 | Tipo de combustible | Pagina 92
  */
-export const iTipIDVen = {
-  CedulaParaguaya: 1,
-  Pasaporte: 2,
-  CedulaExtranjera: 3,
-  CarnetResidencia: 4
+export const iTipComValues = {
+  Gasolina: 1,
+  Diesel: 2,
+  Etanol: 3,
+  GNV: 4,
+  Flex: 5,
+  Otro: 9
 } as const;
-export type ITipIDVen = ValueOf<typeof iTipIDVen>;
-export const dDTipIDVen = {
-  [iTipIDVen.CedulaParaguaya]: 'Cédula paraguaya',
-  [iTipIDVen.Pasaporte]: 'Pasaporte',
-  [iTipIDVen.CedulaExtranjera]: 'Cédula extranjera',
-  [iTipIDVen.CarnetResidencia]: 'Carnet de residencia'
-} as const;
-export type DDTipIDVen = ValueOf<typeof dDTipIDVen>;
-
-/**
- * E6 - E501 | Motivo de emisión | Pagina 79
- */
-export const iMotEmiNR = {
-  TrasladoVenta: 1,
-  TrasladoConsignacion: 2,
-  Exportacion: 3,
-  TrasladoCompra: 4,
-  Importacion: 5,
-  TrasladoDevolucion: 6,
-  TrasladoEntreLocales: 7,
-  TrasladoTransformacion: 8,
-  TrasladoReparacion: 9,
-  TrasladoEmisorMovil: 10,
-  ExhibicionDemostracion: 11,
-  ParticipacionFerias: 12,
-  TrasladoEncomienda: 13,
-  Decomiso: 14,
-  Otro: 99
-} as const;
-export type IMotEmiNR = ValueOf<typeof iMotEmiNR>;
-export const dDesMotEmiNR = {
-  [iMotEmiNR.TrasladoVenta]: 'Traslado por ventas',
-  [iMotEmiNR.TrasladoConsignacion]: 'Traslado por consignación',
-  [iMotEmiNR.Exportacion]: 'Exportación',
-  [iMotEmiNR.TrasladoCompra]: 'Traslado por compra',
-  [iMotEmiNR.Importacion]: 'Importación',
-  [iMotEmiNR.TrasladoDevolucion]: 'Traslado por devolución',
-  [iMotEmiNR.TrasladoEntreLocales]: 'Traslado entre locales de la empresa',
-  [iMotEmiNR.TrasladoTransformacion]: 'Traslado de bienes por transformación',
-  [iMotEmiNR.TrasladoReparacion]: 'Traslado de bienes por reparación',
-  [iMotEmiNR.TrasladoEmisorMovil]: 'Traslado por emisor móvil',
-  [iMotEmiNR.ExhibicionDemostracion]: 'Exhibición o Demostración',
-  [iMotEmiNR.ParticipacionFerias]: 'Participación en ferias',
-  [iMotEmiNR.TrasladoEncomienda]: 'Traslado de encomienda',
-  [iMotEmiNR.Decomiso]: 'Decomiso',
-  [iMotEmiNR.Otro]: 'Otro'
-} as const satisfies Record<IMotEmiNR, string>;
-export type DDesMotEmiNR = ValueOf<typeof dDesMotEmiNR>;
-
-/**
- * E6 - E503 | Responsable de la emisión de la Nota Remisión Electrónica | Pagina 79
- */
-export const iRespEmiNR = {
-  EmisorFactura: 1,
-  PoseedorFacturaBienes: 2,
-  EmpresaTransportista: 3,
-  DespachanteAduanas: 4,
-  AgenteTransporteIntermediario: 5
-} as const;
-export type IRespEmiNR = ValueOf<typeof iRespEmiNR>;
-export const dDesRespEmiNR = {
-  [iRespEmiNR.EmisorFactura]: 'Emisor de la factura',
-  [iRespEmiNR.PoseedorFacturaBienes]: 'Poseedor de la factura y bienes',
-  [iRespEmiNR.EmpresaTransportista]: 'Empresa transportista',
-  [iRespEmiNR.DespachanteAduanas]: 'Despachante de Aduanas',
-  [iRespEmiNR.AgenteTransporteIntermediario]: 'Agente de transporte o intermediario'
-} as const satisfies Record<IRespEmiNR, string>;
-export type DDesRespEmiNR = ValueOf<typeof dDesRespEmiNR>;
+export type ITipCom = ValueOf<typeof iTipComValues>;
+export const dDesTipComValues = {
+  [iTipComValues.Gasolina]: 'Gasolina',
+  [iTipComValues.Diesel]: 'Diésel',
+  [iTipComValues.Etanol]: 'Etanol',
+  [iTipComValues.GNV]: 'GNV',
+  [iTipComValues.Flex]: 'Flex',
+  [iTipComValues.Otro]: 'Otro'
+} as const satisfies Record<ITipCom, string>;
+export type DDesTipCom = ValueOf<typeof dDesTipComValues>;
 
 /**
  * E10 - E901 | Tipo de transporte | Pagina 96
@@ -572,46 +615,6 @@ export const iRespFlete = {
   TransportePropio: 5
 } as const;
 export type IRespFlete = ValueOf<typeof iRespFlete>;
-
-/**
- * E8.5 - E771 | Tipo de operación de venta de vehículos | Pagina 91
- */
-export const iTipOpVNValues = {
-  Representante: 1,
-  ConsumidorFinal: 2,
-  Gobierno: 3,
-  FlotaVehiculos: 4
-} as const;
-export type ITipOpVN = ValueOf<typeof iTipOpVNValues>;
-export const dDesTipOpVNValues = {
-  [iTipOpVNValues.Representante]: 'Venta a representante',
-  [iTipOpVNValues.ConsumidorFinal]: 'Venta al consumidor final',
-  [iTipOpVNValues.Gobierno]: 'Venta a gobierno',
-  [iTipOpVNValues.FlotaVehiculos]: 'Venta a flota de vehículos'
-} as const satisfies Record<ITipOpVN, string>;
-export type DDesTipOpVN = ValueOf<typeof dDesTipOpVNValues>;
-
-/**
- * E8.5 - E779 | Tipo de combustible | Pagina
- */
-export const iTipComValues = {
-  Gasolina: 1,
-  Diesel: 2,
-  Etanol: 3,
-  GNV: 4,
-  Flex: 5,
-  Otro: 9
-} as const;
-export type ITipCom = ValueOf<typeof iTipComValues>;
-export const dDesTipComValues = {
-  [iTipComValues.Gasolina]: 'Gasolina',
-  [iTipComValues.Diesel]: 'Diésel',
-  [iTipComValues.Etanol]: 'Etanol',
-  [iTipComValues.GNV]: 'GNV',
-  [iTipComValues.Flex]: 'Flex',
-  [iTipComValues.Otro]: 'Otro'
-} as const satisfies Record<ITipCom, string>;
-export type DDesTipCom = ValueOf<typeof dDesTipComValues>;
 
 /**
  * E10 - E906 | Condición de la negociación | Pagina 96
