@@ -203,6 +203,38 @@ export interface GCamNCDE {
 }
 
 /**
+ * E5 - E500 | Campos que componen la Nota de Remisión Electrónica | Pagina 77
+ */
+export interface GCamNRE {
+  /**
+   * E6 - E501 | Motivo de emisión | Pagina 78
+   */
+  iMotEmiNR: IMotEmiNR;
+  /**
+   * E6 - E502 | Descripción del motivo de emisión | Pagina 79
+   */
+  dDesMotEmiNR: DDesMotEmiNR;
+  /**
+   * E6 - E503 | Responsable de la emisión de la Nota Remisión Electrónica | Pagina 79
+   */
+  iRespEmiNR: IRespEmiNR;
+  /**
+   * E6 - E504 | Descripción del responsable de la emisión de la Nota de Remisión Electrónica | Pagina 79
+   */
+  dDesRespEmiNR: DDesRespEmiNR;
+  /**
+   * E6 - E505 | Kilómetros estimados de recorrido | Pagina 79
+   */
+  dKmR?: number;
+  /**
+   * E6 - E506 | Fecha futura de emisión de la factura | Pagina 79
+   *
+   *Formato: AAAA-MM-DD
+   */
+  dFecEm?: string;
+}
+
+/**
  * E7 - E600 | Campos que describen la condición de la operación | Pagina 80
  */
 export interface GCamCond {
@@ -373,36 +405,6 @@ export interface GCuotas {
 }
 
 /**
- * E8.2 - E730 | Campos que describen el IVA de la operación por ítem | Pagina 89
- */
-export interface GCamIVA {
-  /**
-   * E8.2 - E731 | Forma de afectación tributaria del IVA | Pagina 89
-   */
-  iAfecIVA: IAfecIVA;
-  /**
-   * E8.2 - E732 | Descripción de la forma de afectación tributaria del IVA | Pagina 90
-   */
-  dDesAfecIVA: DDesAfecIVA;
-  /**
-   * E8.2 - E733 | Proporción gravada de IVA | Pagina 90
-   */
-  dPropIVA: number;
-  /**
-   * E8.2 - E734 | Tasa del IVA | Pagina 90
-   */
-  dTasaIVA: number;
-  /**
-   * E8.2 - E735 | Base gravada del IVA por ítem | Pagina 90
-   */
-  dBasGravIVA: number;
-  /**
-   * E8.2 - E736 | Liquidación del IVA por ítem | Pagina 90
-   */
-  dLiqIVAItem: number;
-}
-
-/**
  * E8 - E700 | Campos que describen los ítems de la operación | Pagina 85
  */
 export interface GCamItem {
@@ -557,7 +559,37 @@ export interface GValorRestaItem {
 }
 
 /**
- * E8.4 - E750 | Grupo de rastreo de la mercadería | Pagina
+ * E8.2 - E730 | Campos que describen el IVA de la operación por ítem | Pagina 89
+ */
+export interface GCamIVA {
+  /**
+   * E8.2 - E731 | Forma de afectación tributaria del IVA | Pagina 89
+   */
+  iAfecIVA: IAfecIVA;
+  /**
+   * E8.2 - E732 | Descripción de la forma de afectación tributaria del IVA | Pagina 90
+   */
+  dDesAfecIVA: DDesAfecIVA;
+  /**
+   * E8.2 - E733 | Proporción gravada de IVA | Pagina 90
+   */
+  dPropIVA: number;
+  /**
+   * E8.2 - E734 | Tasa del IVA | Pagina 90
+   */
+  dTasaIVA: number;
+  /**
+   * E8.2 - E735 | Base gravada del IVA por ítem | Pagina 90
+   */
+  dBasGravIVA: number;
+  /**
+   * E8.2 - E736 | Liquidación del IVA por ítem | Pagina 90
+   */
+  dLiqIVAItem: number;
+}
+
+/**
+ * E8.4 - E750 | Grupo de rastreo de la mercadería | Pagina 90
  */
 export interface GRasMerc {
   /**
@@ -672,38 +704,6 @@ export interface GVehNuevo {
    * E8.5 - E786 | Cilindradas del motor | Pagina 92
    */
   dCilin?: string;
-}
-
-/**
- * E5 - E500 | Campos que componen la Nota de Remisión Electrónica | Pagina 77
- */
-export interface GCamNRE {
-  /**
-   * E6 - E501 | Motivo de emisión | Pagina 78
-   */
-  iMotEmiNR: IMotEmiNR;
-  /**
-   * E6 - E502 | Descripción del motivo de emisión | Pagina 79
-   */
-  dDesMotEmiNR: DDesMotEmiNR;
-  /**
-   * E6 - E503 | Responsable de la emisión de la Nota Remisión Electrónica | Pagina 79
-   */
-  iRespEmiNR: IRespEmiNR;
-  /**
-   * E6 - E504 | Descripción del responsable de la emisión de la Nota de Remisión Electrónica | Pagina 79
-   */
-  dDesRespEmiNR: DDesRespEmiNR;
-  /**
-   * E6 - E505 | Kilómetros estimados de recorrido | Pagina 79
-   */
-  dKmR?: number;
-  /**
-   * E6 - E506 | Fecha futura de emisión de la factura | Pagina 79
-   *
-   *Formato: AAAA-MM-DD
-   */
-  dFecEm?: string;
 }
 
 /**
@@ -1047,40 +1047,6 @@ export interface GCamEnt {
 }
 
 /**
- * E10.3 - E960 | Campos que identifican el vehículo de traslado de mercaderías | Pagina 100
- */
-export interface GVehTras {
-  /**
-   * E10.3 - E961 | Tipo de vehículo | Pagina 100
-   */
-  dTiVehTras: string;
-  /**
-   * E10.3 - E962 | Marca del vehículo | Pagina 100
-   */
-  dMarVeh: string;
-  /**
-   * E10.3 - E967 | Tipo de Identificación del vehículo | Pagina 100
-   */
-  dTipIdenVeh: DTipIdenVeh;
-  /**
-   * E10.3 - E963 | Número de identificación del vehículo | Pagina 100
-   */
-  dNroIDVeh?: string;
-  /**
-   * E10.3 - E964 | Datos adicionales del vehículo | Pagina 100
-   */
-  dAdicVeh?: string;
-  /**
-   * E10.3 - E965 | Número de matrícula del vehiculo | Pagina 100
-   */
-  dNroMatVeh?: string;
-  /**
-   * E10.3 - E966 | Número de vuelo | Pagina 100
-   */
-  dNroVuelo?: string;
-}
-
-/**
  * E10.4 - E980 | Campos que identifican al transportista | Pagina 99
  */
 export interface GCamTrans {
@@ -1152,4 +1118,38 @@ export interface GCamTrans {
    * E10.4 - E997 | Dirección del agente | Pagina 102
    */
   dDirAge?: string;
+}
+
+/**
+ * E10.3 - E960 | Campos que identifican el vehículo de traslado de mercaderías | Pagina 100
+ */
+export interface GVehTras {
+  /**
+   * E10.3 - E961 | Tipo de vehículo | Pagina 100
+   */
+  dTiVehTras: string;
+  /**
+   * E10.3 - E962 | Marca del vehículo | Pagina 100
+   */
+  dMarVeh: string;
+  /**
+   * E10.3 - E967 | Tipo de Identificación del vehículo | Pagina 100
+   */
+  dTipIdenVeh: DTipIdenVeh;
+  /**
+   * E10.3 - E963 | Número de identificación del vehículo | Pagina 100
+   */
+  dNroIDVeh?: string;
+  /**
+   * E10.3 - E964 | Datos adicionales del vehículo | Pagina 100
+   */
+  dAdicVeh?: string;
+  /**
+   * E10.3 - E965 | Número de matrícula del vehiculo | Pagina 100
+   */
+  dNroMatVeh?: string;
+  /**
+   * E10.3 - E966 | Número de vuelo | Pagina 100
+   */
+  dNroVuelo?: string;
 }
