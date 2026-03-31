@@ -1,20 +1,6 @@
 import type { ValueOf } from 'type-fest';
 
 /**
- * A - A005 | Sistema de facturación | Pagina 61
- */
-export const dSisFact = {
-  SistemaContribuyente: 1,
-  SIFENSolucionGratuita: 2
-} as const;
-export type DSisFact = ValueOf<typeof dSisFact>;
-export const dDesSisFact = {
-  [dSisFact.SistemaContribuyente]: 'Sistema de facturación del contribuyente',
-  [dSisFact.SIFENSolucionGratuita]: 'SIFEN solución gratuita'
-} as const satisfies Record<DSisFact, string>;
-export type DDesSisFact = ValueOf<typeof dDesSisFact>;
-
-/**
  * B - B002 | Tipo de emisión | Pagina 62
  */
 export const iTipEmi = {
@@ -137,6 +123,40 @@ export const dDesCondAnt = {
   [iCondAnt.AnticipoPorItem]: 'Anticipo por Ítem'
 } as const satisfies Record<ICondAnt, string>;
 export type DDesCondAnt = ValueOf<typeof dDesCondAnt>;
+
+/**
+ * D1.1 - D031 | Codigo de la obligacion afectada | Pagina 1 NT-18
+ */
+export const cOblAfe = {
+  IRACISRegimenesEspeciales: 113,
+  TributoUnicoMaquila: 143,
+  IVAgravadasExoneradasExportadores: 211,
+  ISCgeneral: 311,
+  ISCcombustibles: 321,
+  IVAempresarialRegimenGeneral: 700,
+  IVAempresarialSimple: 701,
+  IVAzonaFranca: 703,
+  IVAempresarialResimple: 702,
+  IVApersonalServiciosPersonales: 715,
+  IVApersonalRentasGananciasCapital: 716
+} as const;
+export type COblAfe = ValueOf<typeof cOblAfe>;
+export const dDesOblAfe = {
+  [cOblAfe.IRACISRegimenesEspeciales]: 'IMPUESTO A LA RENTA IRACIS - REGÍMENES ESPECIALES',
+  [cOblAfe.TributoUnicoMaquila]: 'TRIBUTO UNICO MAQUILA',
+  [cOblAfe.IVAgravadasExoneradasExportadores]:
+    'IMPUESTO AL VALOR AGREGADO - GRAVADAS Y EXONERADAS - EXPORTADORES',
+  [cOblAfe.ISCgeneral]: 'IMPUESTO SELECTIVO AL CONSUMO - GENERAL',
+  [cOblAfe.ISCcombustibles]: 'IMPUESTO SELECTIVO AL CONSUMO COMBUSTIBLES',
+  [cOblAfe.IVAempresarialRegimenGeneral]: 'IMPUESTO A LA RENTA EMPRESARIAL - RÉGIMEN GENERAL',
+  [cOblAfe.IVAempresarialSimple]: 'IMPUESTO A LA RENTA EMPRESARIAL - SIMPLE',
+  [cOblAfe.IVAzonaFranca]: 'IMPUESTO DE ZONA FRANCA',
+  [cOblAfe.IVAempresarialResimple]: 'IMPUESTO A LA RENTA EMPRESARIAL - RESIMPLE',
+  [cOblAfe.IVApersonalServiciosPersonales]: 'IMPUESTO A LA RENTA PERSONAL - SERVICIOS PERSONALES',
+  [cOblAfe.IVApersonalRentasGananciasCapital]:
+    'IMPUESTO A LA RENTA PERSONAL - RENTAS Y GANANCIAS DE CAPITAL'
+} as const satisfies Record<COblAfe, string>;
+export type DDesOblAfe = ValueOf<typeof dDesOblAfe>;
 
 /**
  * D2 - D103 | Tipo de contribuyente | Pagina 68

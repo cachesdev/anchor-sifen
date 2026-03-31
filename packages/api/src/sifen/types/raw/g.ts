@@ -1,4 +1,4 @@
-import type { DescripcionUnidadMedida, UnidadMedida } from '../enums';
+import type { DescripcionUnidadMedida, UnidadMedida } from '../old_do_not_use/enums';
 import type { DDesCarCarga, ICarCarga } from './enums';
 
 /**
