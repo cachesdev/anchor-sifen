@@ -4,7 +4,9 @@ import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/dis
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
 import type {
+  COblAfe,
   DDesCondAnt,
+  DDesOblAfe,
   DDesTImp,
   DDesTipTra,
   DDTipIDRec,
@@ -65,6 +67,24 @@ export interface GOpeCom {
    * D1 - D020 | Descripción de la condición del Anticipo | Pagina 67
    */
   dDesCondAnt?: DDesCondAnt;
+  /**
+   * D1.1 - D030 | Grupo de campos que identifican las obligaciones afectadas | Pagina 1 NT-18
+   */
+  gOblAfe?: GOblAfe[];
+}
+
+/**
+ * D1.1 - D030 | Grupo de campos que identifican las obligaciones afectadas | Pagina 1 NT-18
+ */
+export interface GOblAfe {
+  /**
+   * D1.1 - D031 | Codigo de la obligacion afectada | Pagina 1 NT-18
+   */
+  cOblAfe: COblAfe;
+  /**
+   * D1.1 - D032 | Descripcion de la obligacion afectada | Pagina 1 NT-18
+   */
+  dDesOblAfe: DDesOblAfe;
 }
 
 /**

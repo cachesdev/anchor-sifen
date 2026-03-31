@@ -2,7 +2,7 @@ import type {
   CamposEspecificosTipoDEFE,
   FacturaElectronica,
   Timbrado
-} from '../sifen/types/factura';
+} from '../sifen/types/old_do_not_use/factura';
 import { create } from 'xmlbuilder2';
 import type {
   DocumentoElectronico,
@@ -16,7 +16,7 @@ import {
   type DatosGenerales,
   type ItemDE,
   type OperacionDE
-} from '../sifen/types';
+} from '../sifen/types/old_do_not_use';
 import {
   descripcionTipoDocumentoElectronico,
   descripcionIndicadorPresencia,
@@ -29,7 +29,7 @@ import {
   descripcionCodigoRelevancia,
   descripcionAfectacionIVA,
   tipoDocumentoElectronico
-} from '../sifen/types/enums';
+} from '../sifen/types/old_do_not_use/enums';
 import { DateTime } from 'luxon';
 import { codigoMoneda } from '../gen/monedas';
 import { descripcionCodigoDepartamento } from '../gen/departamentos';

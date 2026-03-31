@@ -1,6 +1,6 @@
 import type { GDatRec, GEmis, GOpeCom } from './d';
 import type { GCamAE, GCamCond, GCamEsp, GCamFE, GCamItem, GCamNCDE, GCamNRE, GTransp } from './e';
-import type { DDesTiDE, DDesTipEmi, DSisFact, ITiDE, ITipEmi } from './enums';
+import type { DDesTiDE, DDesTipEmi, ITiDE, ITipEmi } from './enums';
 import type { GTotSub } from './f';
 import type { GCamGen } from './g';
 import type { GCamDEAsoc } from './h';
@@ -43,7 +43,7 @@ export interface DE {
   /**
    * A - A005 | Sistema de facturación | Pagina 62
    */
-  dSisFact: DSisFact;
+  dSisFact: 1;
   /**
    * B - B001 | Campos inherentes a la operación de DE | Pagina 62
    */

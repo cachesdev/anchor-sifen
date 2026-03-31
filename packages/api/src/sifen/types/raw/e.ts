@@ -3,7 +3,7 @@ import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../..
 import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
-import type { DescripcionUnidadMedida, UnidadMedida } from '../enums';
+import type { DescripcionUnidadMedida, UnidadMedida } from '../clean/enums';
 import type {
   CCondNeg,
   CRelMerc,
@@ -225,13 +225,17 @@ export interface GCamNRE {
   /**
    * E6 - E505 | Kilómetros estimados de recorrido | Pagina 79
    */
-  dKmR?: number;
+  dKmR: number;
   /**
    * E6 - E506 | Fecha futura de emisión de la factura | Pagina 79
    *
    *Formato: AAAA-MM-DD
    */
   dFecEm?: string;
+  /**
+   * E6 - E507 | Costo del Flete | Pagina 3 NT-10
+   */
+  cPreFle?: number;
 }
 
 /**
@@ -586,6 +590,10 @@ export interface GCamIVA {
    * E8.2 - E736 | Liquidación del IVA por ítem | Pagina 90
    */
   dLiqIVAItem: number;
+  /**
+   * E8.2 - E737 | Base Exenta por Item | Pagina 1 NT-13
+   */
+  dBasExe: number;
 }
 
 /**
@@ -615,18 +623,6 @@ export interface GRasMerc {
    */
   dNumSegui?: string;
   /**
-   * E8.4 - E756 | Nombre del Importador | Pagina 91
-   */
-  dNomImp?: string;
-  /**
-   * E8.4 - E757 | Dirección de Importador | Pagina 91
-   */
-  dDirImp?: string;
-  /**
-   * E8.4 - E758 | Número de registro de la firma del importador | Pagina 91
-   */
-  dNumFir?: string;
-  /**
    * E8.4 - E759 | Número de registro del producto otorgado por el SENAVE | Pagina 91
    */
   dNumReg?: string;
@@ -634,6 +630,10 @@ export interface GRasMerc {
    * E8.4 - E760 | Número de registro de entidad comercial otorgado por el SENAVE | Pagina 91
    */
   dNumRegEntCom?: string;
+  /**
+   * E8.4 - E761 | Nombre del producto | Pagina 2 NT-10
+   */
+  dNomPro?: string;
 }
 
 /**
@@ -870,6 +870,10 @@ export interface GGrupAdi {
    * E9.5 - E826 | Saldo anterior | Pagina 96
    */
   dSalAnt?: number;
+  /**
+   * E9.5 - E827 | Codigo de contratacion de la DNCP | Pagina 1 NT-20
+   */
+  dCodConDncp?: number;
 }
 
 /**
@@ -1047,6 +1051,40 @@ export interface GCamEnt {
 }
 
 /**
+ * E10.3 - E960 | Campos que identifican el vehículo de traslado de mercaderías | Pagina 100
+ */
+export interface GVehTras {
+  /**
+   * E10.3 - E961 | Tipo de vehículo | Pagina 100
+   */
+  dTiVehTras: string;
+  /**
+   * E10.3 - E962 | Marca del vehículo | Pagina 100
+   */
+  dMarVeh: string;
+  /**
+   * E10.3 - E967 | Tipo de Identificación del vehículo | Pagina 100
+   */
+  dTipIdenVeh: DTipIdenVeh;
+  /**
+   * E10.3 - E963 | Número de identificación del vehículo | Pagina 100
+   */
+  dNroIDVeh?: string;
+  /**
+   * E10.3 - E964 | Datos adicionales del vehículo | Pagina 100
+   */
+  dAdicVeh?: string;
+  /**
+   * E10.3 - E965 | Número de matrícula del vehiculo | Pagina 100
+   */
+  dNroMatVeh?: string;
+  /**
+   * E10.3 - E966 | Número de vuelo | Pagina 100
+   */
+  dNroVuelo?: string;
+}
+
+/**
  * E10.4 - E980 | Campos que identifican al transportista | Pagina 99
  */
 export interface GCamTrans {
@@ -1097,11 +1135,11 @@ export interface GCamTrans {
   /**
    * E10.4 - E992 | Domicilio fiscal del transportista | Pagina 101
    */
-  dDomFisc?: string;
+  dDomFisc: string;
   /**
    * E10.4 - E993 | Dirección del chofer | Pagina 101
    */
-  dDirChof?: string;
+  dDirChof: string;
   /**
    * E10.4 - E994 | Nombre o razón social del agente | Pagina 101
    */
@@ -1118,38 +1156,4 @@ export interface GCamTrans {
    * E10.4 - E997 | Dirección del agente | Pagina 102
    */
   dDirAge?: string;
-}
-
-/**
- * E10.3 - E960 | Campos que identifican el vehículo de traslado de mercaderías | Pagina 100
- */
-export interface GVehTras {
-  /**
-   * E10.3 - E961 | Tipo de vehículo | Pagina 100
-   */
-  dTiVehTras: string;
-  /**
-   * E10.3 - E962 | Marca del vehículo | Pagina 100
-   */
-  dMarVeh: string;
-  /**
-   * E10.3 - E967 | Tipo de Identificación del vehículo | Pagina 100
-   */
-  dTipIdenVeh: DTipIdenVeh;
-  /**
-   * E10.3 - E963 | Número de identificación del vehículo | Pagina 100
-   */
-  dNroIDVeh?: string;
-  /**
-   * E10.3 - E964 | Datos adicionales del vehículo | Pagina 100
-   */
-  dAdicVeh?: string;
-  /**
-   * E10.3 - E965 | Número de matrícula del vehiculo | Pagina 100
-   */
-  dNroMatVeh?: string;
-  /**
-   * E10.3 - E966 | Número de vuelo | Pagina 100
-   */
-  dNroVuelo?: string;
 }

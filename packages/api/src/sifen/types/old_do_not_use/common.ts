@@ -1,11 +1,11 @@
 // SIFEN Common Type Definitions v150
 // Shared types used across different DTE types
 
-import type { CodigoCiudad } from '../../gen/ciudades';
-import type { CodigoDepartamento } from '../../gen/departamentos';
-import type { CodigoDistrito } from '../../gen/distritos';
-import type { CodigoMoneda } from '../../gen/monedas';
-import type { CodigoPais } from '../../gen/paises';
+import type { CodigoCiudad } from '../../../gen/ciudades';
+import type { CodigoDepartamento } from '../../../gen/departamentos';
+import type { CodigoDistrito } from '../../../gen/distritos';
+import type { CodigoMoneda } from '../../../gen/monedas';
+import type { CodigoPais } from '../../../gen/paises';
 import type {
   AfectacionIVA,
   CodigoRelevancia,

@@ -1,7 +1,7 @@
 import { CertificateManager, type CertificateData } from '../certificate';
 import { attachQRToSignedXML } from '../qr';
 import { getQRUrl } from '../qr/qr-generator';
-import type { FacturaElectronica } from '../sifen/types';
+import type { FacturaElectronica } from '../sifen/types/old_do_not_use';
 import { SifenSoapClient } from '../soap';
 import { XMLGen } from '../xml-gen';
 import { XMLSigner } from '../xml-sign';
@@ -52,7 +52,7 @@ export class SifenAPI {
   }
 
   async generateQR(signedXML: string): Promise<string> {
-    return getQRUrl(signedXML, this.config.idCSC, this.config.csc, this.config.environment)
+    return getQRUrl(signedXML, this.config.idCSC, this.config.csc, this.config.environment);
   }
 
   async attachQR(signedXML: string): Promise<string> {

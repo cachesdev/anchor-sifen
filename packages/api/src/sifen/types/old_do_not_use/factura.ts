@@ -10,7 +10,7 @@ import type {
   FormaProcesamientoPago,
   CondicionCredito
 } from './enums';
-import type { CodigoMoneda } from '../../gen/monedas';
+import type { CodigoMoneda } from '../../../gen/monedas';
 import type { Except, SetRequiredDeep } from 'type-fest';
 
 /**
@@ -76,37 +76,45 @@ export interface CamposEspecificosTipoDEFE {
 }
 
 /**
- * C001 | gTimb | Datos del timbrado | Pagina 64
+ * C - C001 | gTimb | Datos del timbrado | Pagina 63
  */
 export interface Timbrado {
   /**
-   * C002 | iTiDE | Tipo de Documento Electrónico | Pagina 64
+   * C - C002 | iTiDE | Tipo de Documento Electrónico | Pagina 63
    */
   tipoDocumento: TipoDocumentoElectronico;
   /**
-   * C004 | dNumTim | Número del timbrado | Pagina 64
+   * C - C004 | dNumTim | Número del timbrado | Pagina 63
    */
   numeroTimbrado: number;
   /**
-   * C005 | dEst | Establecimiento | Pagina 64
+   * C - C005 | dEst | Establecimiento | Pagina 64
+   *
+   * Leftpad manejado internamente.
    */
   establecimiento: number;
   /**
-   * C006 | dPunExp | Punto de expedición | Pagina 64
+   * C - C006 | dPunExp | Punto de expedición | Pagina 64
+   *
+   * Leftpad manejado internamente.
    */
   puntoExpedicion: number;
   /**
-   * C007 | dNumDoc | Número del documento | Pagina 64
+   * C - C007 | dNumDoc | Número del documento | Pagina 64
+   *
+   * Leftpad manejado internamente.
    */
   numeroDocumento: number;
   /**
-   * C008 | dFeIniT | Fecha inicio de vigencia del timbrado | Pagina 64
-   */
-  fechaInicioVigencia: Date; // Format: AAAA-MM-DD
-  /**
-   * C010 | dSerieNum | Serie del número de timbrado | Pagina 64
+   * C - C010 | dSerieNum | Serie del número de timbrado | Pagina 64
    */
   serieNumero?: string;
+  /**
+   * C - C008 | dFeIniT | Fecha inicio de vigencia del timbrado | Pagina 64
+   *
+   * Formato: AAAA-MM-DD
+   */
+  fechaInicioVigencia: Date;
 }
 
 /**
