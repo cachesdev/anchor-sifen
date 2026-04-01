@@ -1,11 +1,11 @@
 import type {
-  DDesTipCons,
-  DDesTipDocAso,
-  DDTipoDocAsoImpreso,
-  ITipCons,
-  ITipDocAso,
-  ITipoDocAsoImpreso
-} from './enums';
+  DescripcionTipoConstancia,
+  DescripcionTipoDocumentoAsociado,
+  DescripcionTipoDocumentoImpreso,
+  TipoConstancia,
+  TipoDocumentoAsociado,
+  TipoDocumentoImpreso
+} from '../enums';
 
 /**
  * H - H001 | Campos que identifican al DE asociado | Pagina 108
@@ -14,11 +14,11 @@ export interface GCamDEAsoc {
   /**
    * H - H002 | Tipo de documento asociado | Pagina 108
    */
-  iTipDocAso: ITipDocAso;
+  iTipDocAso: TipoDocumentoAsociado;
   /**
    * H - H003 | Descripción del tipo de documento asociado | Pagina 108
    */
-  dDesTipDocAso: DDesTipDocAso;
+  dDesTipDocAso: DescripcionTipoDocumentoAsociado;
   /**
    * H - H004 | CDC del DTE referenciado | Pagina 108
    */
@@ -42,11 +42,11 @@ export interface GCamDEAsoc {
   /**
    * H - H009 | Tipo de documento impreso | Pagina 109
    */
-  iTipoDocAso?: ITipoDocAsoImpreso;
+  iTipoDocAso?: TipoDocumentoImpreso;
   /**
    * H - H010 | Descripción del tipo de documento impreso | Pagina 109
    */
-  dDTipoDocAso?: DDTipoDocAsoImpreso;
+  dDTipoDocAso?: DescripcionTipoDocumentoImpreso;
   /**
    * H - H011 | Fecha de emisión del documento impreso de referencia | Pagina 109
    *
@@ -64,11 +64,11 @@ export interface GCamDEAsoc {
   /**
    * H - H014 | Tipo de constancia | Pagina 110
    */
-  iTipCons?: ITipCons;
+  iTipCons?: TipoConstancia;
   /**
    * H - H015 | Descripción del tipo de constancia | Pagina 110
    */
-  dDesTipCons?: DDesTipCons;
+  dDesTipCons?: DescripcionTipoConstancia;
   /**
    * H - H016 | Número de constancia | Pagina 110
    */

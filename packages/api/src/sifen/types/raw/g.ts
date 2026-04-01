@@ -1,5 +1,9 @@
-import type { DescripcionUnidadMedida, UnidadMedida } from '../old_do_not_use/enums';
-import type { DDesCarCarga, ICarCarga } from './enums';
+import type {
+  CaracteristicasCarga,
+  DescripcionCaracteristicasCarga,
+  DescripcionUnidadMedida,
+  UnidadMedida
+} from '../enums';
 
 /**
  * G - G001 | Campos de uso general | Pagina 106
@@ -54,9 +58,9 @@ export interface GCamCarg {
   /**
    * G1 - G057 | Características de la Carga | Pagina 108
    */
-  iCarCarga?: ICarCarga;
+  iCarCarga?: CaracteristicasCarga;
   /**
    * G1 - G058 | Descripción de las características de la carga | Pagina 108
    */
-  dDesCarCarga?: DDesCarCarga;
+  dDesCarCarga?: DescripcionCaracteristicasCarga;
 }

@@ -16,9 +16,15 @@ import type { UsoGeneral } from './g';
 import type { DocumentoElectronicoAsociado } from './h';
 
 /**
+ * NOTAS:
+ * DocumentoElectronico y DE tienen un sufijo `C` ya que sus tipos se llaman igual
+ * en `raw`.
+ */
+
+/**
  * AA | Documento Electrónico | Pagina 61
  */
-export interface DocumentoElectronico {
+export interface DocumentoElectronicoC {
   /**
    * AA - AA001 | rDE | Documento Electrónico elemento raíz | Pagina 61
    */
@@ -30,7 +36,7 @@ export interface DocumentoElectronico {
     /**
      * A - A001 | DE | Campos firmados del DE | Pagina 61
      */
-    DE: DE;
+    DE: DEC;
   };
 }
 
@@ -39,7 +45,7 @@ export interface DocumentoElectronico {
  *
  * A002 (CDC) Omitido, ya que es un atributo y no un campo del DE.
  */
-export interface DE {
+export interface DEC {
   /**
    * A - A003 | dDVId | Dígito verificador del identificador del DE | Pagina 61
    */

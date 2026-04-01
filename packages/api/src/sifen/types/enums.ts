@@ -311,22 +311,20 @@ export type DescripcionNaturalezaVendedor = ValueOf<typeof descripcionNaturaleza
 /**
  * E4 - E304 | iTipIDVen | Tipo de documento de identidad del vendedor | Pagina 75
  */
-export const tipoDocumentoIdentidadVendedor = {
+export const tipoDocumentoVendedor = {
   CedulaParaguaya: 1,
   Pasaporte: 2,
   CedulaExtranjera: 3,
   CarnetResidencia: 4
 } as const;
-export type TipoDocumentoIdentidadVendedor = ValueOf<typeof tipoDocumentoIdentidadVendedor>;
-export const descripcionTipoDocumentoIdentidadVendedor = {
-  [tipoDocumentoIdentidadVendedor.CedulaParaguaya]: 'Cédula paraguaya',
-  [tipoDocumentoIdentidadVendedor.Pasaporte]: 'Pasaporte',
-  [tipoDocumentoIdentidadVendedor.CedulaExtranjera]: 'Cédula extranjera',
-  [tipoDocumentoIdentidadVendedor.CarnetResidencia]: 'Carnet de residencia'
-} as const satisfies Record<TipoDocumentoIdentidadVendedor, string>;
-export type DescripcionTipoDocumentoIdentidadVendedor = ValueOf<
-  typeof descripcionTipoDocumentoIdentidadVendedor
->;
+export type TipoDocumentoVendedor = ValueOf<typeof tipoDocumentoVendedor>;
+export const descripcionTipoDocumentoVendedor = {
+  [tipoDocumentoVendedor.CedulaParaguaya]: 'Cédula paraguaya',
+  [tipoDocumentoVendedor.Pasaporte]: 'Pasaporte',
+  [tipoDocumentoVendedor.CedulaExtranjera]: 'Cédula extranjera',
+  [tipoDocumentoVendedor.CarnetResidencia]: 'Carnet de residencia'
+} as const satisfies Record<TipoDocumentoVendedor, string>;
+export type DescripcionTipoDocumentoVendedor = ValueOf<typeof descripcionTipoDocumentoVendedor>;
 
 /**
  * E5 - E401 | iMotEmiValues | Motivo de emisión | Pagina 77
@@ -422,16 +420,16 @@ export type DescripcionResponsableEmisionNotaRemision = ValueOf<
 /**
  * E7 - E601 | iCondOpe | Condición de la operación | Pagina 80
  */
-export const condicionOperacion = {
+export const condicionOperacionEnum = {
   Contado: 1,
   Credito: 2
 } as const;
-export type CondicionOperacion = ValueOf<typeof condicionOperacion>;
+export type CondicionOperacionEnum = ValueOf<typeof condicionOperacionEnum>;
 export const descripcionCondicionOperacion = {
-  [condicionOperacion.Contado]: 'Contado',
-  [condicionOperacion.Credito]: 'Crédito'
-} as const satisfies Record<CondicionOperacion, string>;
-export type DescripcionCondicionOperacion = ValueOf<typeof descripcionCondicionOperacion>;
+  [condicionOperacionEnum.Contado]: 'Contado',
+  [condicionOperacionEnum.Credito]: 'Crédito'
+} as const satisfies Record<CondicionOperacionEnum, string>;
+export type DescripcionCondicionOperacionEnum = ValueOf<typeof descripcionCondicionOperacion>;
 
 /**
  * E7.1 - E606 | iTiPago | Tipo de pago | Pagina 81
@@ -698,23 +696,21 @@ export type NaturalezaTransportista = ValueOf<typeof naturalezaTransportista>;
 /**
  * E10.4 - E985 | iTipIDTransValues | Tipo de documento de identidad del transportista | Pagina 101
  */
-export const tipoDocumentoIdentidadTransportista = {
+export const tipoDocumentoTransportista = {
   CedulaParaguaya: 1,
   Pasaporte: 2,
   CedulaExtranjera: 3,
   CarnetResidencia: 4
 } as const;
-export type TipoDocumentoIdentidadTransportista = ValueOf<
-  typeof tipoDocumentoIdentidadTransportista
->;
-export const descripcionTipoDocumentoIdentidadTransportista = {
-  [tipoDocumentoIdentidadTransportista.CedulaParaguaya]: 'Cédula paraguaya',
-  [tipoDocumentoIdentidadTransportista.Pasaporte]: 'Pasaporte',
-  [tipoDocumentoIdentidadTransportista.CedulaExtranjera]: 'Cédula extranjera',
-  [tipoDocumentoIdentidadTransportista.CarnetResidencia]: 'Carnet de residencia'
-} as const satisfies Record<TipoDocumentoIdentidadTransportista, string>;
-export type DescripcionTipoDocumentoIdentidadTransportista = ValueOf<
-  typeof descripcionTipoDocumentoIdentidadTransportista
+export type TipoDocumentoTransportista = ValueOf<typeof tipoDocumentoTransportista>;
+export const descripcionTipoDocumentoTransportista = {
+  [tipoDocumentoTransportista.CedulaParaguaya]: 'Cédula paraguaya',
+  [tipoDocumentoTransportista.Pasaporte]: 'Pasaporte',
+  [tipoDocumentoTransportista.CedulaExtranjera]: 'Cédula extranjera',
+  [tipoDocumentoTransportista.CarnetResidencia]: 'Carnet de residencia'
+} as const satisfies Record<TipoDocumentoTransportista, string>;
+export type DescripcionTipoDocumentoTransportista = ValueOf<
+  typeof descripcionTipoDocumentoTransportista
 >;
 
 /**
