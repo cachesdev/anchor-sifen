@@ -275,7 +275,7 @@ export const codigoDistrito = {
   Arroyito: 286,
   NuevaAsuncion: 287,
   PasoHorqueta: 288,
-  PuertoAdela_289: 289,
+  PuertoAdela_289: 289
 } as const;
 
 export type CodigoDistrito = ValueOf<typeof codigoDistrito>;
@@ -289,7 +289,7 @@ export const descripcionCodigoDistrito = {
   [codigoDistrito.Loreto]: 'LORETO',
   [codigoDistrito.Horqueta]: 'HORQUETA',
   [codigoDistrito.SanSalvador]: 'SAN SALVADOR',
-  [codigoDistrito.YbyYaU]: 'YBY YA\'U',
+  [codigoDistrito.YbyYaU]: "YBY YA'U",
   [codigoDistrito.SanPedroDeYcuamandyyu]: 'SAN PEDRO DE YCUAMANDYYU',
   [codigoDistrito.Antequera]: 'ANTEQUERA',
   [codigoDistrito.GralEAquino]: 'GRAL. E.AQUINO',
@@ -428,7 +428,7 @@ export const descripcionCodigoDistrito = {
   [codigoDistrito.CiudadDelEste]: 'CIUDAD DEL ESTE',
   [codigoDistrito.JuanLeonMallorquin]: 'JUAN LEON MALLORQUIN',
   [codigoDistrito.Itakyry]: 'ITAKYRY',
-  [codigoDistrito.JuanEOLeary]: 'JUAN E.O\'LEARY',
+  [codigoDistrito.JuanEOLeary]: "JUAN E.O'LEARY",
   [codigoDistrito.PresidenteFranco]: 'PRESIDENTE FRANCO',
   [codigoDistrito.Yguazu]: 'YGUAZU',
   [codigoDistrito.SanCristobal]: 'SAN CRISTOBAL',
@@ -552,7 +552,7 @@ export const descripcionCodigoDistrito = {
   [codigoDistrito.Arroyito]: 'ARROYITO',
   [codigoDistrito.NuevaAsuncion]: 'NUEVA ASUNCIÓN',
   [codigoDistrito.PasoHorqueta]: 'PASO HORQUETA',
-  [codigoDistrito.PuertoAdela_289]: 'PUERTO ADELA',
+  [codigoDistrito.PuertoAdela_289]: 'PUERTO ADELA'
 } as const satisfies Record<CodigoDistrito, string>;
 
 export type DescripcionCodigoDistrito = ValueOf<typeof descripcionCodigoDistrito>;

@@ -1,9 +1,9 @@
 import { CertificateManager, type CertificateData } from '../certificate';
 import { attachQRToSignedXML } from '../qr';
 import { getQRUrl } from '../qr/qr-generator';
-import type { FacturaElectronica } from '../sifen/types/old_do_not_use';
 import { SifenSoapClient } from '../soap';
-import { XMLGen } from '../xml-gen';
+import { generateFacturaElectronicaXML } from '../xml-gen';
+import type { BuiltDE } from '../xml-gen/factura-electronica';
 import { XMLSigner } from '../xml-sign';
 
 export interface SIFENConfig {
@@ -17,7 +17,6 @@ export interface SIFENConfig {
 export class SifenAPI {
   private readonly config: SIFENConfig;
   private readonly certManager: CertificateManager;
-  private readonly xmlGen: XMLGen;
   private readonly xmlSigner: XMLSigner;
 
   // @ts-expect-error — Usado luego
@@ -27,7 +26,6 @@ export class SifenAPI {
   constructor(config: SIFENConfig) {
     this.config = config;
     this.certManager = new CertificateManager();
-    this.xmlGen = new XMLGen();
     this.xmlSigner = new XMLSigner();
 
     this.certificateData = this.certManager.loadPKCS12(
@@ -43,8 +41,8 @@ export class SifenAPI {
     });
   }
 
-  async generateFEXML(data: FacturaElectronica): Promise<string> {
-    return this.xmlGen.generateFacturaElectronica(data);
+  async generateFEXML(data: BuiltDE): Promise<string> {
+    return generateFacturaElectronicaXML(data);
   }
 
   async signXML(xml: string): Promise<string> {

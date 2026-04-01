@@ -21,7 +21,7 @@ export const codigoDepartamento = {
   PteHayes: 15,
   Boqueron: 16,
   AltoParaguay: 17,
-  Canindeyu: 18,
+  Canindeyu: 18
 } as const;
 
 export type CodigoDepartamento = ValueOf<typeof codigoDepartamento>;
@@ -44,7 +44,7 @@ export const descripcionCodigoDepartamento = {
   [codigoDepartamento.PteHayes]: 'PTE. HAYES',
   [codigoDepartamento.Boqueron]: 'BOQUERON',
   [codigoDepartamento.AltoParaguay]: 'ALTO PARAGUAY',
-  [codigoDepartamento.Canindeyu]: 'CANINDEYU',
+  [codigoDepartamento.Canindeyu]: 'CANINDEYU'
 } as const satisfies Record<CodigoDepartamento, string>;
 
 export type DescripcionCodigoDepartamento = ValueOf<typeof descripcionCodigoDepartamento>;
