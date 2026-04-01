@@ -5,8 +5,8 @@ import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
 import { mapSoapError } from './errors.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
-import type { SIFENConsRUCResponse } from '../sifen/types/response.js';
 import { escapeXml } from './validation.js';
+import type { SIFENConsRUCResponse } from '../sifen/types/api.js';
 
 // FIXME: no coincide
 export interface RUCQueryResult {

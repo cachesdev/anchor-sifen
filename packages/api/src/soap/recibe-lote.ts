@@ -3,12 +3,12 @@ import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
 import { mapSoapError } from './errors.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
-import type { SIFENRecepLoteDEResponse } from '../sifen/types/response.js';
 import { escapeXml } from './validation.js';
 import {
   createClientAsync,
   type RecibeLoteClient
 } from '../gen/soap/recibeLote/recibelote/client.js';
+import type { SIFENRecepLoteDEResponse } from '../sifen/types/api.js';
 
 export interface SifenRecibeLoteClientOptions {
   agent: Agent;
