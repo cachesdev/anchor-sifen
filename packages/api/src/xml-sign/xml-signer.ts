@@ -122,8 +122,6 @@ export class XMLSigner {
     return digestValue.trim();
   }
 
-
-
   /**
    * Extract CDC from DE element's Id attribute
    */
