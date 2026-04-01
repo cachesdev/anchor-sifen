@@ -179,25 +179,23 @@ export type DescripcionTipoContribuyente = ValueOf<typeof descripcionTipoContrib
 /**
  * D2.2 - D141 | iTipIDRespDE | Tipo de documento de identidad del responsable de la generación del DE | Pagina 70
  */
-export const tipoDocumentoIdentidadResponsableDE = {
+export const tipoDocumentoResponsableDE = {
   CedulaParaguaya: 1,
   Pasaporte: 2,
   CedulaExtranjera: 3,
   CarnetResidencia: 4,
   Otro: 9
 } as const;
-export type TipoDocumentoIdentidadResponsableDE = ValueOf<
-  typeof tipoDocumentoIdentidadResponsableDE
->;
-export const descripcionTipoDocumentoIdentidadResponsableDE = {
-  [tipoDocumentoIdentidadResponsableDE.CedulaParaguaya]: 'Cédula paraguaya',
-  [tipoDocumentoIdentidadResponsableDE.Pasaporte]: 'Pasaporte',
-  [tipoDocumentoIdentidadResponsableDE.CedulaExtranjera]: 'Cédula extranjera',
-  [tipoDocumentoIdentidadResponsableDE.CarnetResidencia]: 'Carnet de residencia',
-  [tipoDocumentoIdentidadResponsableDE.Otro]: 'Otro'
-} as const satisfies Record<TipoDocumentoIdentidadResponsableDE, string>;
-export type DescripcionTipoDocumentoIdentidadResponsableDE = ValueOf<
-  typeof descripcionTipoDocumentoIdentidadResponsableDE
+export type TipoDocumentoResponsableDE = ValueOf<typeof tipoDocumentoResponsableDE>;
+export const descripcionTipoDocumentoResponsableDE = {
+  [tipoDocumentoResponsableDE.CedulaParaguaya]: 'Cédula paraguaya',
+  [tipoDocumentoResponsableDE.Pasaporte]: 'Pasaporte',
+  [tipoDocumentoResponsableDE.CedulaExtranjera]: 'Cédula extranjera',
+  [tipoDocumentoResponsableDE.CarnetResidencia]: 'Carnet de residencia',
+  [tipoDocumentoResponsableDE.Otro]: 'Otro'
+} as const satisfies Record<TipoDocumentoResponsableDE, string>;
+export type DescripcionTipoDocumentoResponsableDE = ValueOf<
+  typeof descripcionTipoDocumentoResponsableDE
 >;
 
 /**
@@ -251,7 +249,7 @@ export type DescripcionTipoContribuyenteReceptor = ValueOf<
 /**
  * D3 - D208 | iTipIDRec | Tipo de documento de identidad del receptor | Pagina 71
  */
-export const tipoDocumentoIdentidadReceptor = {
+export const tipoDocumentoReceptor = {
   CedulaParaguaya: 1,
   Pasaporte: 2,
   CedulaExtranjera: 3,
@@ -260,19 +258,17 @@ export const tipoDocumentoIdentidadReceptor = {
   TarjetaDiplomatica: 6,
   Otro: 9
 } as const;
-export type TipoDocumentoIdentidadReceptor = ValueOf<typeof tipoDocumentoIdentidadReceptor>;
-export const descripcionTipoDocumentoIdentidadReceptor = {
-  [tipoDocumentoIdentidadReceptor.CedulaParaguaya]: 'Cédula paraguaya',
-  [tipoDocumentoIdentidadReceptor.Pasaporte]: 'Pasaporte',
-  [tipoDocumentoIdentidadReceptor.CedulaExtranjera]: 'Cédula extranjera',
-  [tipoDocumentoIdentidadReceptor.CarnetResidencia]: 'Carnet de residencia',
-  [tipoDocumentoIdentidadReceptor.Innominado]: 'Innominado',
-  [tipoDocumentoIdentidadReceptor.TarjetaDiplomatica]: 'Tarjeta Diplomática de exoneración fiscal',
-  [tipoDocumentoIdentidadReceptor.Otro]: 'Otro'
-} as const satisfies Record<TipoDocumentoIdentidadReceptor, string>;
-export type DescripcionTipoDocumentoIdentidadReceptor = ValueOf<
-  typeof descripcionTipoDocumentoIdentidadReceptor
->;
+export type TipoDocumentoReceptor = ValueOf<typeof tipoDocumentoReceptor>;
+export const descripcionTipoDocumentoReceptor = {
+  [tipoDocumentoReceptor.CedulaParaguaya]: 'Cédula paraguaya',
+  [tipoDocumentoReceptor.Pasaporte]: 'Pasaporte',
+  [tipoDocumentoReceptor.CedulaExtranjera]: 'Cédula extranjera',
+  [tipoDocumentoReceptor.CarnetResidencia]: 'Carnet de residencia',
+  [tipoDocumentoReceptor.Innominado]: 'Innominado',
+  [tipoDocumentoReceptor.TarjetaDiplomatica]: 'Tarjeta Diplomática de exoneración fiscal',
+  [tipoDocumentoReceptor.Otro]: 'Otro'
+} as const satisfies Record<TipoDocumentoReceptor, string>;
+export type DescripcionTipoDocumentoReceptor = ValueOf<typeof descripcionTipoDocumentoReceptor>;
 
 /**
  * E1 - E011 | iIndPres | Indicador de presencia | Pagina 74

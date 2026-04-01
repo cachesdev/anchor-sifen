@@ -4,13 +4,13 @@ import type {
   AutofacturaElectronica,
   CondicionOperacion,
   UsoComercial,
-  FacturaElectronica,
+  CamposFacturaElectronica,
   ItemOperacion,
   NotaCreditoDebitoElectronica,
   NotaRemisionElectronica,
   Transporte
 } from './e';
-import type { TipoDocumentoElectronico, TipoEmision } from './enums';
+import type { TipoDocumentoElectronico, TipoEmision } from '../enums';
 import type { SubtotalesTotales } from './f';
 import type { UsoGeneral } from './g';
 import type { DocumentoElectronicoAsociado } from './h';
@@ -171,7 +171,7 @@ export interface DatosEspecificosPorTipoDE {
   /**
    * E1 - E010 | gCamFE | Campos que componen la FE | Pagina 73
    */
-  facturaElectronica?: FacturaElectronica;
+  facturaElectronica?: CamposFacturaElectronica;
   /**
    * E4 - E300 | gCamAE | Campos que componen la Autofactura Electrónica | Pagina 75
    */

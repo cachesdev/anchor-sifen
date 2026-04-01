@@ -3,7 +3,7 @@ import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../..
 import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
-import type { DescripcionUnidadMedida, UnidadMedida } from '../clean/enums';
+import type { DescripcionUnidadMedida, UnidadMedida } from '../enums';
 import type {
   CCondNeg,
   CRelMerc,

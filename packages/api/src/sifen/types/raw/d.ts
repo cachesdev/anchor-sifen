@@ -4,24 +4,24 @@ import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/dis
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
 import type {
-  COblAfe,
-  DDesCondAnt,
-  DDesOblAfe,
-  DDesTImp,
-  DDesTipTra,
-  DDTipIDRec,
-  DDTipIDRespDE,
-  ICondAnt,
-  ICondTiCam,
-  INatRec,
-  ITiContRec,
-  ITImp,
-  ITiOpe,
-  ITipCont,
-  ITipIDRec,
-  ITipIDRespDE,
-  ITipTra
-} from './enums';
+  CondicionAnticipo,
+  CondicionTipoCambio,
+  DescripcionCondicionAnticipo,
+  DescripcionTipoDocumentoReceptor,
+  DescripcionTipoDocumentoResponsableDE,
+  DescripcionTipoImpuestoAfectado,
+  DescripcionTipoObligacion,
+  DescripcionTipoTransaccion,
+  NaturalezaReceptor,
+  TipoContribuyente,
+  TipoContribuyenteReceptor,
+  TipoDocumentoReceptor,
+  TipoDocumentoResponsableDE,
+  TipoImpuestoAfectado,
+  TipoObligacion,
+  TipoOperacion,
+  TipoTransaccion
+} from '../enums';
 
 /**
  * D1 - D010 | Campos inherentes a la operación comercial | Pagina 65
@@ -30,19 +30,19 @@ export interface GOpeCom {
   /**
    * D1 - D011 | Tipo de transacción | Pagina 66
    */
-  iTipTra?: ITipTra;
+  iTipTra?: TipoTransaccion;
   /**
    * D1 - D012 | Descripción del tipo de transacción | Pagina 66
    */
-  dDesTipTra?: DDesTipTra;
+  dDesTipTra?: DescripcionTipoTransaccion;
   /**
    * D1 - D013 | Tipo de impuesto afectado | Pagina 66
    */
-  iTImp: ITImp;
+  iTImp: TipoImpuestoAfectado;
   /**
    * D1 - D014 | Descripción del tipo de impuesto afectado | Pagina 67
    */
-  dDesTImp: DDesTImp;
+  dDesTImp: DescripcionTipoImpuestoAfectado;
   /**
    * D1 - D015 | Moneda de la operación | Pagina 67
    */
@@ -54,7 +54,7 @@ export interface GOpeCom {
   /**
    * D1 - D017 | Condición del tipo de cambio | Pagina 67
    */
-  dCondTiCam?: ICondTiCam;
+  dCondTiCam?: CondicionTipoCambio;
   /**
    * D1 - D018 | Tipo de cambio de la operación | Pagina 67
    */
@@ -62,11 +62,11 @@ export interface GOpeCom {
   /**
    * D1 - D019 | Condición del Anticipo | Pagina 67
    */
-  iCondAnt?: ICondAnt;
+  iCondAnt?: CondicionAnticipo;
   /**
    * D1 - D020 | Descripción de la condición del Anticipo | Pagina 67
    */
-  dDesCondAnt?: DDesCondAnt;
+  dDesCondAnt?: DescripcionCondicionAnticipo;
   /**
    * D1.1 - D030 | Grupo de campos que identifican las obligaciones afectadas | Pagina 1 NT-18
    */
@@ -80,11 +80,11 @@ export interface GOblAfe {
   /**
    * D1.1 - D031 | Codigo de la obligacion afectada | Pagina 1 NT-18
    */
-  cOblAfe: COblAfe;
+  cOblAfe: TipoObligacion;
   /**
    * D1.1 - D032 | Descripcion de la obligacion afectada | Pagina 1 NT-18
    */
-  dDesOblAfe: DDesOblAfe;
+  dDesOblAfe: DescripcionTipoObligacion;
 }
 
 /**
@@ -102,7 +102,7 @@ export interface GEmis {
   /**
    * D2 - D103 | Tipo de contribuyente | Pagina 68
    */
-  iTipCont: ITipCont;
+  iTipCont: TipoContribuyente;
   /**
    * D2 - D104 | Tipo de régimen | Pagina 68
    */
@@ -198,11 +198,11 @@ export interface GRespDE {
   /**
    * D2.2 - D141 | Tipo de documento de identidad del responsable de la generación del DE | Pagina 70
    */
-  iTipIDRespDE: ITipIDRespDE;
+  iTipIDRespDE: TipoDocumentoResponsableDE;
   /**
    * D2.2 - D142 | Descripción del tipo de documento de identidad del responsable de la generación del DE | Pagina 70
    */
-  dDTipIDRespDE: DDTipIDRespDE;
+  dDTipIDRespDE: DescripcionTipoDocumentoResponsableDE;
   /**
    * D2.2 - D143 | Número de documento de identidad del responsable de la generación del DE | Pagina 70
    */
@@ -224,11 +224,11 @@ export interface GDatRec {
   /**
    * D3 - D201 | Naturaleza del receptor | Pagina 71
    */
-  iNatRec: INatRec;
+  iNatRec: NaturalezaReceptor;
   /**
    * D3 - D202 | Tipo de operación | Pagina 71
    */
-  iTiOpe: ITiOpe;
+  iTiOpe: TipoOperacion;
   /**
    * D3 - D203 | Código de país del receptor | Pagina 71
    */
@@ -240,7 +240,7 @@ export interface GDatRec {
   /**
    * D3 - D205 | Tipo de contribuyente receptor | Pagina 71
    */
-  iTiContRec?: ITiContRec;
+  iTiContRec?: TipoContribuyenteReceptor;
   /**
    * D3 - D206 | RUC del receptor | Pagina 71
    */
@@ -252,11 +252,11 @@ export interface GDatRec {
   /**
    * D3 - D208 | Tipo de documento de identidad del receptor | Pagina 71
    */
-  iTipIDRec?: ITipIDRec;
+  iTipIDRec?: TipoDocumentoReceptor;
   /**
    * D3 - D209 | Descripción del tipo de documento de identidad | Pagina 72
    */
-  dDTipIDRec?: DDTipIDRec;
+  dDTipIDRec?: DescripcionTipoDocumentoReceptor;
   /**
    * D3 - D210 | Número de documento de identidad | Pagina 72
    */

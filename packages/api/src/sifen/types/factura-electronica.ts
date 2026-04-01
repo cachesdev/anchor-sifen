@@ -10,22 +10,41 @@ import type { DocumentoElectronicoAsociado } from './clean/h';
 import type { OmitDeep, SetFieldType, SetRequired, SetRequiredDeep } from 'type-fest';
 import type { ItemOperacion } from './clean/e';
 
+export type Timbrado_FE = OmitDeep<Timbrado, 'tipoDocumento'>;
+export type DatosEspecificosPorTipoDE_FE = SetFieldType<
+  SetRequiredDeep<
+    OmitDeep<
+      DatosEspecificosPorTipoDE,
+      'autofacturaElectronica' | 'notaCreditoDebitoElectronica' | 'notaRemisionElectronica'
+    >,
+    'facturaElectronica' | 'condicionOperacion' | 'itemsOperacion'
+  >,
+  'itemsOperacion',
+  SetRequired<ItemOperacion, 'valorItem'>[]
+>;
+
 /**
  * A - A001 | DE | DE Enfocado a Factura Electronica | Pagina 61
- *
- * A002 (CDC) Omitido, ya que es un atributo y no un campo del DE.
  */
 export interface FacturaElectronica {
   /**
-   * A - A003 | dDVId | Dígito verificador del identificador del DE | Pagina 61
+   * A - A002 | Id | Identificador del DE | Pagina 61
    */
-  digitoVerificadorId: number;
+  id_cdc: string;
+  /**
+   * A - A003 | dDVId | Dígito verificador del identificador del DE | Pagina 61
+   *
+   * Si no es proveido, es calculado internamente.
+   */
+  digitoVerificadorId?: number;
   /**
    * A - A004 | dFecFirma | Fecha de la firma | Pagina 62
    *
    * Formato: AAAA-MM-DDThh:mm:ss
+   *
+   * Si no es proveido, es calculado internamente.
    */
-  fechaFirma: Date;
+  fechaFirma?: Date;
   /**
    * B - B001 | gOpeDE | Campos inherentes a la operación de DE | Pagina 62
    */
@@ -33,7 +52,7 @@ export interface FacturaElectronica {
   /**
    * C - C001 | gTimb | Datos del timbrado | Pagina 63
    */
-  timbrado: OmitDeep<Timbrado, 'tipoDocumento'>;
+  timbrado: Timbrado_FE;
   /**
    * D - D001 | gDatGralOpe | Campos generales del DE | Pagina 65
    */
@@ -41,17 +60,7 @@ export interface FacturaElectronica {
   /**
    * E - E001 | gDtipDE | Campos específicos por tipo de Documento Electrónico | Pagina 73
    */
-  datosEspecificosPorTipoDE: SetFieldType<
-    SetRequiredDeep<
-      OmitDeep<
-        DatosEspecificosPorTipoDE,
-        'autofacturaElectronica' | 'notaCreditoDebitoElectronica' | 'notaRemisionElectronica'
-      >,
-      'facturaElectronica' | 'condicionOperacion' | 'itemsOperacion'
-    >,
-    'itemsOperacion',
-    SetRequired<ItemOperacion, 'valorItem'>[]
-  >;
+  datosEspecificosPorTipoDE: DatosEspecificosPorTipoDE_FE;
   /**
    * F - F001 | gTotSub | Campos de subtotales y totales | Pagina 102
    */
