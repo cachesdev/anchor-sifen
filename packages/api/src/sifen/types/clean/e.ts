@@ -10,7 +10,7 @@ import type {
   CondicionNegociacion,
   CodigoDatosRelevanciaMercaderias,
   CondicionOperacionCredito,
-  CondicionOperacion as CondicionOperacionEnum,
+  CondicionOperacionEnum as CondicionOperacionEnum,
   FormaAfectacionTributariaIVA,
   DenominacionTarjeta,
   IndicadorPresencia,
@@ -23,8 +23,8 @@ import type {
   TipoCombustible,
   TipoOperacionVentaVehiculos,
   TipoTransporte,
-  TipoDocumentoIdentidadTransportista,
-  TipoDocumentoIdentidadVendedor,
+  TipoDocumentoTransportista,
+  TipoDocumentoVendedor,
   TipoIdentificacionVehiculo,
   FormaProcesamientoPago,
   NaturalezaTransportista,
@@ -90,7 +90,7 @@ export interface AutofacturaElectronica {
   /**
    * E4 - E304 | iTipIDVen | Tipo de documento de identidad del vendedor | Pagina 75
    */
-  tipoDocumentoIdentidadVendedor: LiteralUnion<TipoDocumentoIdentidadVendedor, number>;
+  tipoDocumentoIdentidadVendedor: LiteralUnion<TipoDocumentoVendedor, number>;
   /**
    * E4 - E306 | dNumIDVen | Número de documento de identidad del vendedor | Pagina 75
    */
@@ -1045,7 +1045,7 @@ export interface Transportista {
   /**
    * E10.4 - E985 | iTipIDTrans | Tipo de documento de identidad del transportista | Pagina 101
    */
-  tipoDocumentoIdentidadTransportista?: LiteralUnion<TipoDocumentoIdentidadTransportista, number>;
+  tipoDocumentoIdentidadTransportista?: LiteralUnion<TipoDocumentoTransportista, number>;
   /**
    * E10.4 - E987 | dNumIDTrans | Número de documento de identidad del transportista | Pagina 101
    */

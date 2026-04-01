@@ -1,6 +1,11 @@
+import type {
+  DescripcionTipoDocumentoElectronico,
+  DescripcionTipoEmision,
+  TipoDocumentoElectronico,
+  TipoEmision
+} from '../enums';
 import type { GDatRec, GEmis, GOpeCom } from './d';
 import type { GCamAE, GCamCond, GCamEsp, GCamFE, GCamItem, GCamNCDE, GCamNRE, GTransp } from './e';
-import type { DDesTiDE, DDesTipEmi, ITiDE, ITipEmi } from './enums';
 import type { GTotSub } from './f';
 import type { GCamGen } from './g';
 import type { GCamDEAsoc } from './h';
@@ -81,11 +86,11 @@ export interface GOpeDE {
   /**
    * B - B002 | Tipo de emisión | Pagina 62
    */
-  iTipEmi: ITipEmi;
+  iTipEmi: TipoEmision;
   /**
    * B - B003 | Descripción del tipo de emisión | Pagina 62
    */
-  dDesTipEmi: DDesTipEmi;
+  dDesTipEmi: DescripcionTipoEmision;
   /**
    * B - B004 | Código de seguridad | Pagina 62
    */
@@ -107,11 +112,11 @@ export interface GTimb {
   /**
    * C - C002 | Tipo de Documento Electrónico | Pagina 63
    */
-  iTiDE: ITiDE;
+  iTiDE: TipoDocumentoElectronico;
   /**
    * C - C003 | Descripción del tipo de documento electrónico | Pagina 63
    */
-  dDesTiDE: DDesTiDE;
+  dDesTiDE: DescripcionTipoDocumentoElectronico;
   /**
    * C - C004 | Número del timbrado | Pagina 63
    */

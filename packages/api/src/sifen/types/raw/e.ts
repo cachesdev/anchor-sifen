@@ -3,48 +3,49 @@ import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../..
 import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
-import type { DescripcionUnidadMedida, UnidadMedida } from '../enums';
 import type {
-  CCondNeg,
-  CRelMerc,
-  DDCondCred,
-  DDCondOpe,
-  DDesAfecIVA,
-  DDesDenTarj,
-  DDesIndPres,
-  DDesModTrans,
-  DDesMotEmi,
-  DDesMotEmiNR,
-  DDesNatVen,
-  DDesRelMerc,
-  DDesRespEmiNR,
-  DDesTiPag,
-  DDesTipCom,
-  DDesTipOpVN,
-  DDesTipTrans,
-  DDTipIDTrans,
-  DDTipIDVen,
-  DTipIdenVeh,
-  IAfecIVA,
-  ICondCred,
-  ICondOpe,
-  IDenTarj,
-  IForProPa,
-  IIndPres,
-  IModTrans,
-  IMotEmi,
-  IMotEmiNR,
-  INatTrans,
-  INatVen,
-  IRespEmiNR,
-  IRespFlete,
-  ITiPago,
-  ITipCom,
-  ITipIDTrans,
-  ITipIDVen,
-  ITipOpVN,
-  ITipTrans
-} from './enums';
+  CodigoDatosRelevanciaMercaderias,
+  CondicionNegociacion,
+  CondicionOperacionCredito,
+  CondicionOperacionEnum,
+  DenominacionTarjeta,
+  DescripcionCodigoDatosRelevanciaMercaderias,
+  DescripcionCondicionOperacionCredito,
+  DescripcionCondicionOperacionEnum,
+  DescripcionDenominacionTarjeta,
+  DescripcionFormaAfectacionTributariaIVA,
+  DescripcionIndicadorPresencia,
+  DescripcionModalidadTransporte,
+  DescripcionMotivoEmision,
+  DescripcionMotivoEmisionNotaRemision,
+  DescripcionNaturalezaVendedor,
+  DescripcionResponsableEmisionNotaRemision,
+  DescripcionTipoCombustible,
+  DescripcionTipoDocumentoTransportista,
+  DescripcionTipoDocumentoVendedor,
+  DescripcionTipoOperacionVentaVehiculos,
+  DescripcionTipoPago,
+  DescripcionTipoTransporte,
+  DescripcionUnidadMedida,
+  FormaAfectacionTributariaIVA,
+  FormaProcesamientoPago,
+  IndicadorPresencia,
+  ModalidadTransporte,
+  MotivoEmision,
+  MotivoEmisionNotaRemision,
+  NaturalezaTransportista,
+  NaturalezaVendedor,
+  ResponsableCostoFlete,
+  ResponsableEmisionNotaRemision,
+  TipoCombustible,
+  TipoDocumentoTransportista,
+  TipoDocumentoVendedor,
+  TipoIdentificacionVehiculo,
+  TipoOperacionVentaVehiculos,
+  TipoPago,
+  TipoTransporte,
+  UnidadMedida
+} from '../enums';
 
 /**
  * E1 - E010 | Campos que componen la FE | Pagina 73
@@ -53,11 +54,11 @@ export interface GCamFE {
   /**
    * E1 - E011 | Indicador de presencia | Pagina 74
    */
-  iIndPres: IIndPres;
+  iIndPres: IndicadorPresencia;
   /**
    * E1 - E012 | Descripción del indicador de presencia | Pagina 74
    */
-  dDesIndPres: DDesIndPres;
+  dDesIndPres: DescripcionIndicadorPresencia;
   /**
    * E1 - E013 | Fecha futura del traslado de mercadería | Pagina 74
    *
@@ -105,19 +106,19 @@ export interface GCamAE {
   /**
    * E4 - E301 | Naturaleza del vendedor | Pagina 75
    */
-  iNatVen: INatVen;
+  iNatVen: NaturalezaVendedor;
   /**
    * E4 - E302 | Descripción de la naturaleza del vendedor | Pagina 75
    */
-  dDesNatVen: DDesNatVen;
+  dDesNatVen: DescripcionNaturalezaVendedor;
   /**
    * E4 - E304 | Tipo de documento de identidad del vendedor | Pagina 75
    */
-  iTipIDVen: ITipIDVen;
+  iTipIDVen: TipoDocumentoVendedor;
   /**
    * E4 - E305 | Descripción del tipo de documento de identidad del vendedor | Pagina 75
    */
-  dDTipIDVen: DDTipIDVen;
+  dDTipIDVen: DescripcionTipoDocumentoVendedor;
   /**
    * E4 - E306 | Número de documento de identidad del vendedor | Pagina 75
    */
@@ -195,11 +196,11 @@ export interface GCamNCDE {
   /**
    * E5 - E401 | Motivo de emisión | Pagina 77
    */
-  iMotEmi: IMotEmi;
+  iMotEmi: MotivoEmision;
   /**
    * E5 - E402 | Descripción del motivo de emisión | Pagina 77
    */
-  dDesMotEmi: DDesMotEmi;
+  dDesMotEmi: DescripcionMotivoEmision;
 }
 
 /**
@@ -209,19 +210,19 @@ export interface GCamNRE {
   /**
    * E6 - E501 | Motivo de emisión | Pagina 78
    */
-  iMotEmiNR: IMotEmiNR;
+  iMotEmiNR: MotivoEmisionNotaRemision;
   /**
    * E6 - E502 | Descripción del motivo de emisión | Pagina 79
    */
-  dDesMotEmiNR: DDesMotEmiNR;
+  dDesMotEmiNR: DescripcionMotivoEmisionNotaRemision;
   /**
    * E6 - E503 | Responsable de la emisión de la Nota Remisión Electrónica | Pagina 79
    */
-  iRespEmiNR: IRespEmiNR;
+  iRespEmiNR: ResponsableEmisionNotaRemision;
   /**
    * E6 - E504 | Descripción del responsable de la emisión de la Nota de Remisión Electrónica | Pagina 79
    */
-  dDesRespEmiNR: DDesRespEmiNR;
+  dDesRespEmiNR: DescripcionResponsableEmisionNotaRemision;
   /**
    * E6 - E505 | Kilómetros estimados de recorrido | Pagina 79
    */
@@ -245,11 +246,11 @@ export interface GCamCond {
   /**
    * E7 - E601 | Condición de la operación | Pagina 80
    */
-  iCondOpe: ICondOpe;
+  iCondOpe: CondicionOperacionEnum;
   /**
    * E7 - E602 | Descripción de la condición de operación | Pagina 80
    */
-  dDCondOpe: DDCondOpe;
+  dDCondOpe: DescripcionCondicionOperacionEnum;
   /**
    * E7.1 - E605 | Campos que describen la forma de pago al contado o del monto de la entrega inicial | Pagina 80
    */
@@ -267,11 +268,11 @@ export interface GPaConEIni {
   /**
    * E7.1 - E606 | Tipo de pago | Pagina 81
    */
-  iTiPago: ITiPago;
+  iTiPago: TipoPago;
   /**
    * E7.1 - E607 | Descripción del tipo de pago | Pagina 82
    */
-  dDesTiPag: DDesTiPag;
+  dDesTiPag: DescripcionTipoPago;
   /**
    * E7.1 - E608 | Monto por tipo de pago | Pagina 82
    */
@@ -305,11 +306,11 @@ export interface GPagTarCD {
   /**
    * E7.1.1 - E621 | Denominación de la tarjeta | Pagina 83
    */
-  iDenTarj: IDenTarj;
+  iDenTarj: DenominacionTarjeta;
   /**
    * E7.1.1 - E622 | Descripción de denominación de la tarjeta | Pagina 83
    */
-  dDesDenTarj: DDesDenTarj;
+  dDesDenTarj: DescripcionDenominacionTarjeta;
   /**
    * E7.1.1 - E623 | Razón social de la procesadora de tarjeta | Pagina 83
    */
@@ -325,7 +326,7 @@ export interface GPagTarCD {
   /**
    * E7.1.1 - E626 | Forma de procesamiento de pago | Pagina 83
    */
-  iForProPa: IForProPa;
+  iForProPa: FormaProcesamientoPago;
   /**
    * E7.1.1 - E627 | Código de autorización de la operación | Pagina 83
    */
@@ -361,11 +362,11 @@ export interface GPagCred {
   /**
    * E7.2 - E641 | Condición de la operación a crédito | Pagina 84
    */
-  iCondCred: ICondCred;
+  iCondCred: CondicionOperacionCredito;
   /**
    * E7.2 - E642 | Descripción de la condición de la operación a crédito | Pagina 84
    */
-  dDCondCred: DDCondCred;
+  dDCondCred: DescripcionCondicionOperacionCredito;
   /**
    * E7.2 - E643 | Plazo del crédito | Pagina 84
    */
@@ -471,11 +472,11 @@ export interface GCamItem {
   /**
    * E8 - E715 | Código de datos de relevancia de las mercaderías | Pagina 86
    */
-  cRelMerc?: CRelMerc;
+  cRelMerc?: CodigoDatosRelevanciaMercaderias;
   /**
    * E8 - E716 | Descripción del código de datos de relevancia de las mercaderías | Pagina 86
    */
-  dDesRelMerc?: DDesRelMerc;
+  dDesRelMerc?: DescripcionCodigoDatosRelevanciaMercaderias;
   /**
    * E8 - E717 | Cantidad de quiebra o merma | Pagina 87
    */
@@ -569,11 +570,11 @@ export interface GCamIVA {
   /**
    * E8.2 - E731 | Forma de afectación tributaria del IVA | Pagina 89
    */
-  iAfecIVA: IAfecIVA;
+  iAfecIVA: FormaAfectacionTributariaIVA;
   /**
    * E8.2 - E732 | Descripción de la forma de afectación tributaria del IVA | Pagina 90
    */
-  dDesAfecIVA: DDesAfecIVA;
+  dDesAfecIVA: DescripcionFormaAfectacionTributariaIVA;
   /**
    * E8.2 - E733 | Proporción gravada de IVA | Pagina 90
    */
@@ -643,11 +644,11 @@ export interface GVehNuevo {
   /**
    * E8.5 - E771 | Tipo de operación de venta de vehículos | Pagina 91
    */
-  iTipOpVN?: ITipOpVN;
+  iTipOpVN?: TipoOperacionVentaVehiculos;
   /**
    * E8.5 - E772 | Descripción del tipo de operación de venta de vehículos | Pagina 92
    */
-  dDesTipOpVN?: DDesTipOpVN;
+  dDesTipOpVN?: DescripcionTipoOperacionVentaVehiculos;
   /**
    * E8.5 - E773 | Chasis del vehículo | Pagina 92
    */
@@ -675,11 +676,11 @@ export interface GVehNuevo {
   /**
    * E8.5 - E779 | Tipo de combustible | Pagina 92
    */
-  iTipCom?: ITipCom;
+  iTipCom?: TipoCombustible;
   /**
    * E8.5 - E780 | Descripción del tipo de combustible | Pagina 92
    */
-  dDesTipCom?: DDesTipCom;
+  dDesTipCom?: DescripcionTipoCombustible;
   /**
    * E8.5 - E781 | Número del motor | Pagina 92
    */
@@ -883,27 +884,27 @@ export interface GTransp {
   /**
    * E10 - E901 | Tipo de transporte | Pagina 96
    */
-  iTipTrans?: ITipTrans;
+  iTipTrans?: TipoTransporte;
   /**
    * E10 - E902 | Descripción del tipo de transporte | Pagina 96
    */
-  dDesTipTrans?: DDesTipTrans;
+  dDesTipTrans?: DescripcionTipoTransporte;
   /**
    * E10 - E903 | Modalidad del transporte | Pagina 96
    */
-  iModTrans: IModTrans;
+  iModTrans: ModalidadTransporte;
   /**
    * E10 - E904 | Descripción de la modalidad del transporte | Pagina 96
    */
-  dDesModTrans: DDesModTrans;
+  dDesModTrans: DescripcionModalidadTransporte;
   /**
    * E10 - E905 | Responsable del costo del flete | Pagina 96
    */
-  iRespFlete: IRespFlete;
+  iRespFlete: ResponsableCostoFlete;
   /**
    * E10 - E906 | Condición de la negociación | Pagina 96
    */
-  cCondNeg?: CCondNeg;
+  cCondNeg?: CondicionNegociacion;
   /**
    * E10 - E907 | Número de manifiesto o conocimiento de carga | Pagina 97
    */
@@ -1065,7 +1066,7 @@ export interface GVehTras {
   /**
    * E10.3 - E967 | Tipo de Identificación del vehículo | Pagina 100
    */
-  dTipIdenVeh: DTipIdenVeh;
+  dTipIdenVeh: TipoIdentificacionVehiculo;
   /**
    * E10.3 - E963 | Número de identificación del vehículo | Pagina 100
    */
@@ -1091,7 +1092,7 @@ export interface GCamTrans {
   /**
    * E10.4 - E981 | Naturaleza del transportista | Pagina 100
    */
-  iNatTrans: INatTrans;
+  iNatTrans: NaturalezaTransportista;
   /**
    * E10.4 - E982 | Nombre o razón social del transportista | Pagina 100
    */
@@ -1107,11 +1108,11 @@ export interface GCamTrans {
   /**
    * E10.4 - E985 | Tipo de documento de identidad del transportista | Pagina 101
    */
-  iTipIDTrans?: ITipIDTrans;
+  iTipIDTrans?: TipoDocumentoTransportista;
   /**
    * E10.4 - E986 | Número de documento de identidad del transportista | Pagina 101
    */
-  dDTipIDTrans?: DDTipIDTrans;
+  dDTipIDTrans?: DescripcionTipoDocumentoTransportista;
   /**
    * E10.4 - E987 | Número de documento de identidad del transportista | Pagina 101
    */
