@@ -1,3 +1,3 @@
-export { XMLGen } from './old_generator';
-export type { XMLGenerator } from './old_generator';
+export { generateFacturaElectronicaXML } from './generator';
+export * from './factura-electronica';
 export * from './mapper';
