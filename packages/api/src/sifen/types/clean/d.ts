@@ -12,11 +12,11 @@ import type {
   TipoImpuestoAfectado,
   TipoOperacion,
   TipoContribuyente,
-  TipoDocumentoIdentidadReceptor,
-  TipoDocumentoIdentidadResponsableDE,
+  TipoDocumentoReceptor,
+  TipoDocumentoResponsableDE,
   TipoTransaccion,
   TipoObligacion
-} from './enums';
+} from '../enums';
 
 /**
  * D1 - D010 | gOpeCom | Campos inherentes a la operación comercial | Pagina 65
@@ -179,7 +179,7 @@ export interface ResponsableDE {
   /**
    * D2.2 - D141 | iTipIDRespDE | Tipo de documento de identidad del responsable de la generación del DE | Pagina 70
    */
-  tipoDocumentoIdentidadResponsableDE: LiteralUnion<TipoDocumentoIdentidadResponsableDE, number>;
+  tipoDocumentoIdentidadResponsableDE: LiteralUnion<TipoDocumentoResponsableDE, number>;
   /**
    * D2.2 - D143 | dNumIDRespDE | Número de documento de identidad del responsable de la generación del DE | Pagina 70
    */
@@ -231,7 +231,7 @@ export interface Receptor {
   /**
    * D3 - D208 | iTipIDRec | Tipo de documento de identidad del receptor | Pagina 71
    */
-  tipoDocumentoIdentidadReceptor?: LiteralUnion<TipoDocumentoIdentidadReceptor, number>;
+  tipoDocumentoIdentidadReceptor?: LiteralUnion<TipoDocumentoReceptor, number>;
   /**
    * D3 - D210 | dNumIDRec | Número de documento de identidad | Pagina 72
    */

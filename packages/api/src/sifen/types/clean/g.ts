@@ -1,6 +1,6 @@
 import type { LiteralUnion } from 'type-fest';
 import type { UnidadMedida } from '../old_do_not_use/enums';
-import type { CaracteristicasCarga } from './enums';
+import type { CaracteristicasCarga } from '../enums';
 
 /**
  * G - G001 | gCamGen | Campos de uso general | Pagina 106

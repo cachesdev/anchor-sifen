@@ -77,4 +77,8 @@ export interface GCamDEAsoc {
    * H - H017 | Número de control de la constancia | Pagina 110
    */
   dNumControl?: string;
+  /**
+   * H - H018 | RUC fusionado | Pagina 2 NT-23
+   */
+  dRucFus?: string;
 }

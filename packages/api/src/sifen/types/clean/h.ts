@@ -1,5 +1,5 @@
 import type { LiteralUnion } from 'type-fest';
-import type { TipoConstancia, TipoDocumentoAsociado, TipoDocumentoImpreso } from './enums';
+import type { TipoConstancia, TipoDocumentoAsociado, TipoDocumentoImpreso } from '../enums';
 
 /**
  * H - H001 | gCamDEAsoc | Campos que identifican al DE asociado | Pagina 108

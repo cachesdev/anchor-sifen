@@ -29,12 +29,12 @@ import type {
   FormaProcesamientoPago,
   NaturalezaTransportista,
   ResponsableCostoFlete
-} from './enums';
+} from '../enums';
 
 /**
  * E1 - E010 | gCamFE | Campos que componen la FE | Pagina 73
  */
-export interface FacturaElectronica {
+export interface CamposFacturaElectronica {
   /**
    * E1 - E011 | iIndPres | Indicador de presencia | Pagina 74
    */
