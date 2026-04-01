@@ -41,8 +41,8 @@ import {
   descripcionNaturalezaVendedor,
   descripcionResponsableEmisionNotaRemision,
   descripcionTipoCombustible,
-  descripcionTipoDocumentoIdentidadTransportista,
-  descripcionTipoDocumentoIdentidadVendedor,
+  descripcionTipoDocumentoTransportista,
+  descripcionTipoDocumentoVendedor,
   descripcionTipoOperacionVentaVehiculos,
   descripcionTipoPago,
   descripcionTipoTransporte,
@@ -140,7 +140,7 @@ export function mapAutofacturaElectronicaToRaw(data: AutofacturaElectronica): GC
     dDTipIDVen: resolveRequiredDescription(
       'tipoDocumentoIdentidadVendedor',
       data.tipoDocumentoIdentidadVendedor,
-      descripcionTipoDocumentoIdentidadVendedor as Record<string, string>
+      descripcionTipoDocumentoVendedor as Record<string, string>
     ),
     dNumIDVen: data.numeroDocumentoIdentidadVendedor,
     dNomVen: data.nombreVendedor,
@@ -577,7 +577,7 @@ export function mapTransportistaToRaw(data: Transportista): GCamTrans {
     iTipIDTrans: data.tipoDocumentoIdentidadTransportista,
     dDTipIDTrans: resolveOptionalDescription(
       data.tipoDocumentoIdentidadTransportista,
-      descripcionTipoDocumentoIdentidadTransportista as Record<string, string>
+      descripcionTipoDocumentoTransportista as Record<string, string>
     ),
     dNumIDTrans: data.numeroDocumentoIdentidadTransportista,
     cNacTrans: data.nacionalidadTransportista,
