@@ -1,11 +1,12 @@
 import type { RequiredKeysOf } from 'type-fest';
-import type { DatosGeneralesOperacion, OperacionDE, Timbrado } from '../sifen/types/clean/de';
+import type { OperacionDE, Timbrado } from '../sifen/types/clean/de';
 import type { SubtotalesTotales } from '../sifen/types/clean/f';
 import type { UsoGeneral } from '../sifen/types/clean/g';
 import type { DocumentoElectronicoAsociado } from '../sifen/types/clean/h';
 import { tipoDocumentoElectronico } from '../sifen/types/enums';
 import type {
   DatosEspecificosPorTipoDE_FE,
+  DatosGeneralesOperacion_FE,
   FacturaElectronica,
   Timbrado_FE
 } from '../sifen/types/factura-electronica';
@@ -31,8 +32,13 @@ export interface BuiltDE {
 /**
  * Builder para FacturaEletronica que asegura que los campos requeridos sean seteados
  * en tiempo de compilación.
+ *
+ * Requiere llamar todas los metodos requeridos para poder llamar `build` sin errores
+ * de compilacion.
  */
 export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronica = never> {
+  // Workaround para triggerear TSC al llamar `build`
+  declare protected _filled: TFilled;
   private state: Partial<FacturaElectronica> = {};
 
   private constructor(
@@ -60,7 +66,7 @@ export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronica 
   }: Pick<
     FacturaElectronica,
     'id_cdc' | 'digitoVerificadorId' | 'fechaFirma'
-  >): FacturaElectronicaBuilder<'id_cdc' | 'digitoVerificadorId' | 'fechaFirma'> {
+  >): FacturaElectronicaBuilder<'id_cdc'> {
     return new FacturaElectronicaBuilder({
       id_cdc,
       digitoVerificadorId,
@@ -79,7 +85,7 @@ export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronica 
   }
 
   withDatosGeneralesOperacion(
-    data: DatosGeneralesOperacion
+    data: DatosGeneralesOperacion_FE
   ): FacturaElectronicaBuilder<TFilled | 'datosGeneralesOperacion'> {
     this.state.datosGeneralesOperacion = data;
     return this;
@@ -119,6 +125,8 @@ export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronica 
 
   build(this: FacturaElectronicaBuilder<RequiredFields>): BuiltDE {
     const state = this.state as FacturaElectronica;
+
+    const processed = calculateFields(state);
 
     const timbradoFE: Timbrado = {
       ...state.timbrado,

@@ -50,9 +50,9 @@ export function mapTimbradoToRaw(data: Timbrado): GTimb {
       descripcionTipoDocumentoElectronico as Record<string, string>
     ),
     dNumTim: data.numeroTimbrado,
-    dEst: data.establecimiento,
-    dPunExp: data.puntoExpedicion,
-    dNumDoc: data.numeroDocumento,
+    dEst: data.establecimiento.toString().padEnd(3, '0'),
+    dPunExp: data.puntoExpedicion.toString().padEnd(3, '0'),
+    dNumDoc: data.numeroDocumento.toString().padEnd(7, '0'),
     dSerieNum: data.serieNumero,
     dFeIniT: requireDefined(formatDateOnly(data.fechaInicioVigencia), 'fechaInicioVigencia')
   } as GTimb;

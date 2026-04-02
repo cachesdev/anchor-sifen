@@ -62,7 +62,7 @@ export function mapOperacionComercialToRaw(data: OperacionComercial): GOpeCom {
       descripcionTipoImpuestoAfectado as Record<string, string>
     ),
     cMoneOpe: data.monedaOperacion,
-    dDesMoneOpe: resolveCurrencyDescription(data.monedaOperacion, data.descripcionMonedaOperacion),
+    dDesMoneOpe: resolveCurrencyDescription(data.monedaOperacion),
     dCondTiCam: data.condicionTipoCambio,
     dTiCam: data.tipoCambioOperacion,
     iCondAnt: data.condicionAnticipo,
@@ -110,17 +110,11 @@ export function mapEmisorToRaw(data: Emisor): GEmis {
     dCompDir1: data.complementoDireccion1,
     dCompDir2: data.complementoDireccion2,
     cDepEmi: data.departamentoEmision,
-    dDesDepEmi: resolveDepartmentDescription(
-      data.departamentoEmision,
-      data.descripcionDepartamentoEmision
-    ),
+    dDesDepEmi: resolveDepartmentDescription(data.departamentoEmision),
     cDisEmi: data.distritoEmision,
-    dDesDisEmi: resolveDistrictDescription(data.distritoEmision, data.descripcionDistritoEmision),
+    dDesDisEmi: resolveDistrictDescription(data.distritoEmision),
     cCiuEmi: data.ciudadEmision,
-    dDesCiuEmi: requireDefined(
-      resolveCityDescription(data.ciudadEmision, data.descripcionCiudadEmision),
-      'descripcionCiudadEmision'
-    ),
+    dDesCiuEmi: requireDefined(resolveCityDescription(data.ciudadEmision), 'ciudadEmision'),
     dTelEmi: data.telefonoEmision,
     dEmailE: data.correoElectronicoEmisor,
     dDenSuc: data.denominacionSucursal,
@@ -134,7 +128,7 @@ export function mapReceptorToRaw(data: Receptor): GDatRec {
     iNatRec: data.naturalezaReceptor,
     iTiOpe: data.tipoOperacion,
     cPaisRec: data.paisReceptor,
-    dDesPaisRe: resolveCountryDescription(data.paisReceptor, data.descripcionPaisReceptor),
+    dDesPaisRe: resolveCountryDescription(data.paisReceptor),
     iTiContRec: data.tipoContribuyenteReceptor,
     dRucRec: normalizeOptionalRuc(data.rucReceptor),
     dDVRec: resolveOptionalNumericDv(data.digitoVerificadorReceptor, data.rucReceptor),
@@ -151,15 +145,12 @@ export function mapReceptorToRaw(data: Receptor): GDatRec {
     dDepRec: data.departamentoReceptor,
     dDesDepRec:
       data.departamentoReceptor !== undefined
-        ? resolveDepartmentDescription(
-            data.departamentoReceptor,
-            data.descripcionDepartamentoReceptor
-          )
-        : data.descripcionDepartamentoReceptor,
+        ? resolveDepartmentDescription(data.departamentoReceptor)
+        : undefined,
     dDisRec: data.distritoReceptor,
-    dDesDisRec: resolveDistrictDescription(data.distritoReceptor, data.descripcionDistritoReceptor),
+    dDesDisRec: resolveDistrictDescription(data.distritoReceptor),
     cCiuRec: data.ciudadReceptor,
-    dDesCiuRec: resolveCityDescription(data.ciudadReceptor, data.descripcionCiudadReceptor),
+    dDesCiuRec: resolveCityDescription(data.ciudadReceptor),
     dTelRec: data.telefonoReceptor,
     dCelRec: data.celularReceptor,
     dEmailRec: data.correoElectronicoReceptor,

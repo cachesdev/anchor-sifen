@@ -147,33 +147,18 @@ export function mapAutofacturaElectronicaToRaw(data: AutofacturaElectronica): GC
     dDirVen: data.direccionVendedor,
     dNumCasVen: data.numeroCasaVendedor,
     cDepVen: data.departamentoVendedor,
-    dDesDepVen: resolveDepartmentDescription(
-      data.departamentoVendedor,
-      data.descripcionDepartamentoVendedor
-    ),
+    dDesDepVen: resolveDepartmentDescription(data.departamentoVendedor),
     cDisVen: data.distritoVendedor,
-    dDesDisVen: resolveDistrictDescription(data.distritoVendedor, data.descripcionDistritoVendedor),
+    dDesDisVen: resolveDistrictDescription(data.distritoVendedor),
     cCiuVen: data.ciudadVendedor,
-    dDesCiuVen: requireDefined(
-      resolveCityDescription(data.ciudadVendedor, data.descripcionCiudadVendedor),
-      'descripcionCiudadVendedor'
-    ),
+    dDesCiuVen: requireDefined(resolveCityDescription(data.ciudadVendedor), 'ciudadVendedor'),
     dDirProv: data.lugarTransaccion,
     cDepProv: data.departamentoTransaccion,
-    dDesDepProv: resolveDepartmentDescription(
-      data.departamentoTransaccion,
-      data.descripcionDepartamentoTransaccion
-    ),
+    dDesDepProv: resolveDepartmentDescription(data.departamentoTransaccion),
     cDisProv: data.distritoTransaccion,
-    dDesDisProv: resolveDistrictDescription(
-      data.distritoTransaccion,
-      data.descripcionDistritoTransaccion
-    ),
+    dDesDisProv: resolveDistrictDescription(data.distritoTransaccion),
     cCiuProv: data.ciudadTransaccion,
-    dDesCiuProv: requireDefined(
-      resolveCityDescription(data.ciudadTransaccion, data.descripcionCiudadTransaccion),
-      'descripcionCiudadTransaccion'
-    )
+    dDesCiuProv: requireDefined(resolveCityDescription(data.ciudadTransaccion), 'ciudadTransaccion')
   } as GCamAE;
 }
 
@@ -231,7 +216,7 @@ export function mapPagoContadoEntregaInicialToRaw(data: PagoContadoEntregaInicia
     ),
     dMonTiPag: data.montoTipoPago,
     cMoneTiPag: data.monedaTipoPago,
-    dDMoneTiPag: resolveCurrencyDescription(data.monedaTipoPago, data.descripcionMonedaTipoPago),
+    dDMoneTiPag: resolveCurrencyDescription(data.monedaTipoPago),
     dTiCamTiPag: data.tipoCambioTipoPago,
     gPagTarCD: data.pagoTarjetaCreditoDebito
       ? mapPagoTarjetaCreditoDebitoToRaw(data.pagoTarjetaCreditoDebito)
@@ -286,7 +271,7 @@ export function mapPagoCreditoToRaw(data: PagoCredito): GPagCred {
 export function mapCuotaToRaw(data: Cuota): GCuotas {
   return {
     cMoneCuo: data.monedaCuota,
-    dDMoneCuo: resolveCurrencyDescription(data.monedaCuota, data.descripcionMonedaCuota),
+    dDMoneCuo: resolveCurrencyDescription(data.monedaCuota),
     dMonCuota: data.montoCuota,
     dVencCuo: formatDateOnly(data.vencimientoCuota)
   } as GCuotas;
@@ -306,15 +291,12 @@ export function mapItemOperacionToRaw(data: ItemOperacion): GCamItem {
     dDesUniMed: resolveRequiredDescription(
       'unidadMedida',
       data.unidadMedida,
-      descripcionUnidadMedida,
-      data.descripcionUnidadMedida
+      descripcionUnidadMedida
     ),
     dCantProSer: data.cantidadProductoServicio,
     cPaisOrig: data.paisOrigen,
     dDesPaisOrig:
-      data.paisOrigen !== undefined
-        ? resolveCountryDescription(data.paisOrigen, data.descripcionPaisOrigen)
-        : data.descripcionPaisOrigen,
+      data.paisOrigen !== undefined ? resolveCountryDescription(data.paisOrigen) : undefined,
     dInfItem: data.informacionItem,
     cRelMerc: data.codigoDatosRelevanciaMercaderias,
     dDesRelMerc: resolveOptionalDescription(
@@ -500,9 +482,7 @@ export function mapTransporteToRaw(data: Transporte): GTransp {
     dFinTras: formatDateOnly(data.finEstimadoTraslado),
     cPaisDest: data.paisDestino,
     dDesPaisDest:
-      data.paisDestino !== undefined
-        ? resolveCountryDescription(data.paisDestino, data.descripcionPaisDestino)
-        : data.descripcionPaisDestino,
+      data.paisDestino !== undefined ? resolveCountryDescription(data.paisDestino) : undefined,
     gCamSal: data.localSalidaMercaderias
       ? mapLocalSalidaMercaderiasToRaw(data.localSalidaMercaderias)
       : undefined,
@@ -521,12 +501,12 @@ export function mapLocalSalidaMercaderiasToRaw(data: LocalSalidaMercaderias): GC
     cDepSal: data.departamentoSalida,
     dDesDepSal:
       data.departamentoSalida !== undefined
-        ? resolveDepartmentDescription(data.departamentoSalida, data.descripcionDepartamentoSalida)
-        : data.descripcionDepartamentoSalida,
+        ? resolveDepartmentDescription(data.departamentoSalida)
+        : undefined,
     cDisSal: data.distritoSalida,
-    dDesDisSal: resolveDistrictDescription(data.distritoSalida, data.descripcionDistritoSalida),
+    dDesDisSal: resolveDistrictDescription(data.distritoSalida),
     cCiuSal: data.ciudadSalida,
-    dDesCiuSal: resolveCityDescription(data.ciudadSalida, data.descripcionCiudadSalida),
+    dDesCiuSal: resolveCityDescription(data.ciudadSalida),
     dTelSal: data.telefonoLocalSalida
   } as GCamSal;
 }
@@ -538,17 +518,11 @@ export function mapLocalEntregaMercaderiasToRaw(data: LocalEntregaMercaderias): 
     dComp1Ent: data.complementoDireccion1Entrega,
     dComp2Ent: data.complementoDireccion2Entrega,
     cDepEnt: data.departamentoEntrega,
-    dDesDepEnt: resolveDepartmentDescription(
-      data.departamentoEntrega,
-      data.descripcionDepartamentoEntrega
-    ),
+    dDesDepEnt: resolveDepartmentDescription(data.departamentoEntrega),
     cDisEnt: data.distritoEntrega,
-    dDesDisEnt: resolveDistrictDescription(data.distritoEntrega, data.descripcionDistritoEntrega),
+    dDesDisEnt: resolveDistrictDescription(data.distritoEntrega),
     cCiuEnt: data.ciudadEntrega,
-    dDesCiuEnt: requireDefined(
-      resolveCityDescription(data.ciudadEntrega, data.descripcionCiudadEntrega),
-      'descripcionCiudadEntrega'
-    ),
+    dDesCiuEnt: requireDefined(resolveCityDescription(data.ciudadEntrega), 'ciudadEntrega'),
     dTelEnt: data.telefonoLocalEntrega
   } as GCamEnt;
 }
@@ -583,11 +557,8 @@ export function mapTransportistaToRaw(data: Transportista): GCamTrans {
     cNacTrans: data.nacionalidadTransportista,
     dDesNacTrans:
       data.nacionalidadTransportista !== undefined
-        ? resolveCountryDescription(
-            data.nacionalidadTransportista,
-            data.descripcionNacionalidadTransportista
-          )
-        : data.descripcionNacionalidadTransportista,
+        ? resolveCountryDescription(data.nacionalidadTransportista)
+        : undefined,
     dNumIDChof: data.numeroDocumentoIdentidadChofer,
     dNomChof: data.nombreChofer,
     dDomFisc: data.domicilioFiscalTransportista,
