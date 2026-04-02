@@ -1,9 +1,9 @@
 import type { LiteralUnion } from 'type-fest';
-import type { CodigoCiudad, DescripcionCodigoCiudad } from '../../../gen/ciudades';
-import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../../gen/departamentos';
-import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
-import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
-import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
+import type { CodigoCiudad } from '../../../gen/ciudades';
+import type { CodigoDepartamento } from '../../../gen/departamentos';
+import type { CodigoDistrito } from '../../../gen/distritos';
+import type { CodigoMoneda } from '../../../gen/monedas';
+import type { CodigoPais } from '../../../gen/paises';
 import type {
   CondicionAnticipo,
   CondicionTipoCambio,
@@ -33,11 +33,7 @@ export interface OperacionComercial {
   /**
    * D1 - D015 | cMoneOpe | Moneda de la operación | Pagina 67
    */
-  monedaOperacion: CodigoMoneda;
-  /**
-   * D1 - D016 | dDesMoneOpe | Descripción de la moneda de la operación | Pagina 67
-   */
-  descripcionMonedaOperacion: DescripcionCodigoMoneda;
+  monedaOperacion: LiteralUnion<CodigoMoneda, string>;
   /**
    * D1 - D017 | dCondTiCam | Condición del tipo de cambio | Pagina 67
    */
@@ -115,27 +111,15 @@ export interface Emisor {
   /**
    * D2 - D111 | cDepEmi | Código del departamento de emisión | Pagina 68
    */
-  departamentoEmision: CodigoDepartamento;
-  /**
-   * D2 - D112 | dDesDepEmi | Descripción del departamento de emisión | Pagina 68
-   */
-  descripcionDepartamentoEmision: DescripcionCodigoDepartamento;
+  departamentoEmision: LiteralUnion<CodigoDepartamento, number>;
   /**
    * D2 - D113 | cDisEmi | Código del distrito de emisión | Pagina 68
    */
-  distritoEmision?: CodigoDistrito;
-  /**
-   * D2 - D114 | dDesDisEmi | Descripción del distrito de emisión | Pagina 68
-   */
-  descripcionDistritoEmision?: DescripcionCodigoDistrito;
+  distritoEmision?: LiteralUnion<CodigoDistrito, number>;
   /**
    * D2 - D115 | cCiuEmi | Código de la ciudad de emisión | Pagina 69
    */
-  ciudadEmision: CodigoCiudad;
-  /**
-   * D2 - D116 | dDesCiuEmi | Descripción de la ciudad de emisión | Pagina 69
-   */
-  descripcionCiudadEmision: DescripcionCodigoCiudad;
+  ciudadEmision: LiteralUnion<CodigoCiudad, number>;
   /**
    * D2 - D117 | dTelEmi | Teléfono local de emisión de DE | Pagina 69
    */
@@ -209,11 +193,7 @@ export interface Receptor {
   /**
    * D3 - D203 | cPaisRec | Código de país del receptor | Pagina 71
    */
-  paisReceptor: CodigoPais;
-  /**
-   * D3 - D204 | dDesPaisRe | Descripción del país receptor | Pagina 71
-   */
-  descripcionPaisReceptor: DescripcionCodigoPais;
+  paisReceptor: LiteralUnion<CodigoPais, string>;
   /**
    * D3 - D205 | iTiContRec | Tipo de contribuyente receptor | Pagina 71
    */
@@ -255,27 +235,15 @@ export interface Receptor {
   /**
    * D3 - D219 | dDepRec | Código del departamento del receptor | Pagina 72
    */
-  departamentoReceptor?: CodigoDepartamento;
-  /**
-   * D3 - D220 | dDesDepRec | Descripción del departamento del receptor | Pagina 72
-   */
-  descripcionDepartamentoReceptor?: DescripcionCodigoDepartamento;
+  departamentoReceptor?: LiteralUnion<CodigoDepartamento, number>;
   /**
    * D3 - D221 | dDisRec | Código del distrito del receptor | Pagina 72
    */
-  distritoReceptor?: CodigoDistrito;
-  /**
-   * D3 - D222 | dDesDisRec | Descripción del distrito del receptor | Pagina 72
-   */
-  descripcionDistritoReceptor?: DescripcionCodigoDistrito;
+  distritoReceptor?: LiteralUnion<CodigoDistrito, number>;
   /**
    * D3 - D223 | cCiuRec | Código de la ciudad del receptor | Pagina 73
    */
-  ciudadReceptor?: CodigoCiudad;
-  /**
-   * D3 - D224 | dDesCiuRec | Descripción de la ciudad del receptor | Pagina 73
-   */
-  descripcionCiudadReceptor?: DescripcionCodigoCiudad;
+  ciudadReceptor?: LiteralUnion<CodigoCiudad, number>;
   /**
    * D3 - D214 | dTelRec | Número de teléfono del receptor | Pagina 73
    */

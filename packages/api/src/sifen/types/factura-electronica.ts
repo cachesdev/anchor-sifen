@@ -20,8 +20,11 @@ export type DatosEspecificosPorTipoDE_FE = SetFieldType<
     'facturaElectronica' | 'condicionOperacion' | 'itemsOperacion'
   >,
   'itemsOperacion',
-  SetRequired<ItemOperacion, 'valorItem'>[]
+  ItemOperacion_FE[]
 >;
+
+export type ItemOperacion_FE = SetRequired<ItemOperacion, 'valorItem'>;
+export type DatosGeneralesOperacion_FE = SetRequired<DatosGeneralesOperacion, 'operacionComercial'>;
 
 /**
  * A - A001 | DE | DE Enfocado a Factura Electronica | Pagina 61
@@ -56,7 +59,7 @@ export interface FacturaElectronica {
   /**
    * D - D001 | gDatGralOpe | Campos generales del DE | Pagina 65
    */
-  datosGeneralesOperacion: DatosGeneralesOperacion;
+  datosGeneralesOperacion: DatosGeneralesOperacion_FE;
   /**
    * E - E001 | gDtipDE | Campos específicos por tipo de Documento Electrónico | Pagina 73
    */

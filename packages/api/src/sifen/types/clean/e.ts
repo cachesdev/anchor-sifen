@@ -1,11 +1,10 @@
 import type { LiteralUnion } from 'type-fest';
-import type { CodigoCiudad, DescripcionCodigoCiudad } from '../../../gen/ciudades';
-import type { CodigoDepartamento, DescripcionCodigoDepartamento } from '../../../gen/departamentos';
-import type { CodigoDistrito, DescripcionCodigoDistrito } from '../../../gen/distritos';
-import type { CodigoMoneda, DescripcionCodigoMoneda } from '../../../gen/monedas';
-import type { CodigoPais, DescripcionCodigoPais } from '../../../gen/paises';
+import type { CodigoCiudad } from '../../../gen/ciudades';
+import type { CodigoDepartamento } from '../../../gen/departamentos';
+import type { CodigoDistrito } from '../../../gen/distritos';
+import type { CodigoMoneda } from '../../../gen/monedas';
+import type { CodigoPais } from '../../../gen/paises';
 import type {
-  DescripcionUnidadMedida,
   UnidadMedida,
   CondicionNegociacion,
   CodigoDatosRelevanciaMercaderias,
@@ -110,27 +109,15 @@ export interface AutofacturaElectronica {
   /**
    * E4 - E310 | cDepVen | Código del departamento del vendedor | Pagina 76
    */
-  departamentoVendedor: CodigoDepartamento;
-  /**
-   * E4 - E311 | dDesDepVen | Descripción del departamento del vendedor | Pagina 76
-   */
-  descripcionDepartamentoVendedor: DescripcionCodigoDepartamento;
+  departamentoVendedor: LiteralUnion<CodigoDepartamento, number>;
   /**
    * E4 - E312 | cDisVen | Código del distrito del vendedor | Pagina 76
    */
-  distritoVendedor?: CodigoDistrito;
-  /**
-   * E4 - E313 | dDesDisVen | Descripción del distrito del vendedor | Pagina 76
-   */
-  descripcionDistritoVendedor?: DescripcionCodigoDistrito;
+  distritoVendedor?: LiteralUnion<CodigoDistrito, number>;
   /**
    * E4 - E314 | cCiuVen | Código de la ciudad del vendedor | Pagina 76
    */
-  ciudadVendedor: CodigoCiudad;
-  /**
-   * E4 - E315 | dDesCiuVen | Descripción de la ciudad del vendedor | Pagina 76
-   */
-  descripcionCiudadVendedor: DescripcionCodigoCiudad;
+  ciudadVendedor: LiteralUnion<CodigoCiudad, number>;
   /**
    * E4 - E316 | dDirProv | Lugar de la transacción | Pagina 76
    */
@@ -138,27 +125,15 @@ export interface AutofacturaElectronica {
   /**
    * E4 - E317 | cDepProv | Código del departamento donde se realiza la transacción | Pagina 76
    */
-  departamentoTransaccion: CodigoDepartamento;
-  /**
-   * E4 - E318 | dDesDepProv | Descripción del departamento donde se realiza la transacción | Pagina 76
-   */
-  descripcionDepartamentoTransaccion: DescripcionCodigoDepartamento;
+  departamentoTransaccion: LiteralUnion<CodigoDepartamento, number>;
   /**
    * E4 - E319 | cDisProv | Código del distrito donde se realiza la transacción | Pagina 76
    */
-  distritoTransaccion?: CodigoDistrito;
-  /**
-   * E4 - E320 | dDesDisProv | Descripción del distrito donde se realiza la transacción | Pagina 76
-   */
-  descripcionDistritoTransaccion?: DescripcionCodigoDistrito;
+  distritoTransaccion?: LiteralUnion<CodigoDistrito, number>;
   /**
    * E4 - E321 | cCiuProv | Código de la ciudad donde se realiza la transacción | Pagina 76
    */
-  ciudadTransaccion: CodigoCiudad;
-  /**
-   * E4 - E322 | dDesCiuProv | Descripción de la ciudad donde se realiza la transacción | Pagina 76
-   */
-  descripcionCiudadTransaccion: DescripcionCodigoCiudad;
+  ciudadTransaccion: LiteralUnion<CodigoCiudad, number>;
 }
 
 /**
@@ -232,11 +207,7 @@ export interface PagoContadoEntregaInicial {
   /**
    * E7.1 - E609 | cMoneTiPag | Moneda por tipo de pago | Pagina 82
    */
-  monedaTipoPago: CodigoMoneda;
-  /**
-   * E7.1 - E610 | dDMoneTiPag | Descripción de la moneda por tipo de pago | Pagina 82
-   */
-  descripcionMonedaTipoPago: DescripcionCodigoMoneda;
+  monedaTipoPago: LiteralUnion<CodigoMoneda, string>;
   /**
    * E7.1 - E611 | dTiCamTiPag | Tipo de cambio por tipo de pago | Pagina 82
    */
@@ -338,11 +309,7 @@ export interface Cuota {
   /**
    * E7.2.1 - E653 | cMoneCuo | Moneda de las cuotas | Pagina 85
    */
-  monedaCuota: CodigoMoneda;
-  /**
-   * E7.2.1 - E654 | dDMoneCuo | Descripción de la moneda de las cuotas | Pagina 85
-   */
-  descripcionMonedaCuota: DescripcionCodigoMoneda;
+  monedaCuota: LiteralUnion<CodigoMoneda, string>;
   /**
    * E7.2.1 - E651 | dMonCuota | Monto de la cuota | Pagina 85
    */
@@ -396,21 +363,13 @@ export interface ItemOperacion {
    */
   unidadMedida: LiteralUnion<UnidadMedida, number>;
   /**
-   * E8 - E710 | dDesUniMed | Descripción de la unidad de medida | Pagina 86
-   */
-  descripcionUnidadMedida: DescripcionUnidadMedida;
-  /**
    * E8 - E711 | dCantProSer | Cantidad del producto y/o servicio | Pagina 86
    */
   cantidadProductoServicio: number;
   /**
    * E8 - E712 | cPaisOrig | Código del país de origen del producto | Pagina 86
    */
-  paisOrigen?: CodigoPais;
-  /**
-   * E8 - E713 | dDesPaisOrig | Descripción del país de origen del producto | Pagina 86
-   */
-  descripcionPaisOrigen?: DescripcionCodigoPais;
+  paisOrigen?: LiteralUnion<CodigoPais, string>;
   /**
    * E8 - E714 | dInfItem | Información de interés del emisor con respecto al ítem | Pagina 86
    */
@@ -862,11 +821,7 @@ export interface Transporte {
   /**
    * E10 - E911 | cPaisDest | Código del país de destino | Pagina 97
    */
-  paisDestino?: CodigoPais;
-  /**
-   * E10 - E912 | dDesPaisDest | Descripción del país de destino | Pagina 97
-   */
-  descripcionPaisDestino?: DescripcionCodigoPais;
+  paisDestino?: LiteralUnion<CodigoPais, string>;
   /**
    * E10.1 - E920 | gCamSal | Campos que identifican el local de salida de las mercaderías | Pagina 97
    */
@@ -909,27 +864,15 @@ export interface LocalSalidaMercaderias {
   /**
    * E10.1 - E925 | cDepSal | Código del departamento de salida | Pagina 98
    */
-  departamentoSalida?: CodigoDepartamento;
-  /**
-   * E10.1 - E926 | dDesDepSal | Descripción del departamento de salida | Pagina 98
-   */
-  descripcionDepartamentoSalida?: DescripcionCodigoDepartamento;
+  departamentoSalida?: LiteralUnion<CodigoDepartamento, number>;
   /**
    * E10.1 - E927 | cDisSal | Código del distrito de salida | Pagina 98
    */
-  distritoSalida?: CodigoDistrito;
-  /**
-   * E10.1 - E928 | dDesDisSal | Descripción del distrito de salida | Pagina 98
-   */
-  descripcionDistritoSalida?: DescripcionCodigoDistrito;
+  distritoSalida?: LiteralUnion<CodigoDistrito, number>;
   /**
    * E10.1 - E929 | cCiuSal | Código de la ciudad de salida | Pagina 98
    */
-  ciudadSalida?: CodigoCiudad;
-  /**
-   * E10.1 - E930 | dDesCiuSal | Descripción de la ciudad de salida | Pagina 98
-   */
-  descripcionCiudadSalida?: DescripcionCodigoCiudad;
+  ciudadSalida?: LiteralUnion<CodigoCiudad, number>;
   /**
    * E10.1 - E931 | dTelSal | Teléfono del local de salida | Pagina 98
    */
@@ -959,27 +902,15 @@ export interface LocalEntregaMercaderias {
   /**
    * E10.2 - E945 | cDepEnt | Código del departamento de entrega | Pagina 99
    */
-  departamentoEntrega: CodigoDepartamento;
-  /**
-   * E10.2 - E946 | dDesDepEnt | Descripción del departamento de entrega | Pagina 99
-   */
-  descripcionDepartamentoEntrega: DescripcionCodigoDepartamento;
+  departamentoEntrega: LiteralUnion<CodigoDepartamento, number>;
   /**
    * E10.2 - E947 | cDisEnt | Código del distrito de entrega | Pagina 99
    */
-  distritoEntrega?: CodigoDistrito;
-  /**
-   * E10.2 - E948 | dDesDisEnt | Descripción del distrito de entrega | Pagina 99
-   */
-  descripcionDistritoEntrega?: DescripcionCodigoDistrito;
+  distritoEntrega?: LiteralUnion<CodigoDistrito, number>;
   /**
    * E10.2 - E949 | cCiuEnt | Código de la ciudad de entrega | Pagina 99
    */
-  ciudadEntrega: CodigoCiudad;
-  /**
-   * E10.2 - E950 | dDesCiuEnt | Descripción de la ciudad de entrega | Pagina 99
-   */
-  descripcionCiudadEntrega: DescripcionCodigoCiudad;
+  ciudadEntrega: LiteralUnion<CodigoCiudad, number>;
   /**
    * E10.2 - E951 | dTelEnt | Teléfono del local de entrega | Pagina 99
    */
@@ -1053,11 +984,7 @@ export interface Transportista {
   /**
    * E10.4 - E988 | cNacTrans | Nacionalidad del transportista | Pagina 101
    */
-  nacionalidadTransportista?: CodigoPais;
-  /**
-   * E10.4 - E989 | dDesNacTrans | Descripción de la nacionalidad del transportista | Pagina 101
-   */
-  descripcionNacionalidadTransportista?: DescripcionCodigoPais;
+  nacionalidadTransportista?: LiteralUnion<CodigoPais, string>;
   /**
    * E10.4 - E990 | dNumIDChof | Número de documento de identidad del chofer | Pagina 101
    */
