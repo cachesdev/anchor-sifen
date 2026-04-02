@@ -99,7 +99,7 @@ export interface OperacionDE {
    *
    * Si no es proveido, entonces es autogenerado.
    */
-  codigoSeguridad: number;
+  codigoSeguridad?: number;
   /**
    * B - B005 | dInfoEmi | Información de interés del emisor respecto al DE | Pagina 62
    */
@@ -124,16 +124,22 @@ export interface Timbrado {
   numeroTimbrado: number;
   /**
    * C - C005 | dEst | Establecimiento | Pagina 64
+   *
+   * Padding agregado automaticamente
    */
-  establecimiento: string;
+  establecimiento: number;
   /**
    * C - C006 | dPunExp | Punto de expedición | Pagina 64
+   *
+   * Padding agregado automaticamente
    */
-  puntoExpedicion: string;
+  puntoExpedicion: number;
   /**
    * C - C007 | dNumDoc | Número del documento | Pagina 64
+   *
+   * Padding agregado automaticamente
    */
-  numeroDocumento: string;
+  numeroDocumento: number;
   /**
    * C - C010 | dSerieNum | Serie del número de timbrado | Pagina 64
    */
