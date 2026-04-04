@@ -1,3 +1,4 @@
+import type { Big } from 'big.js';
 import type { FacturaElectronica, ItemOperacion_FE } from '../../sifen/types';
 
 export function getOperacionComercial(doc: FacturaElectronica) {
@@ -12,7 +13,7 @@ export function getCondicionTipoCambio(doc: FacturaElectronica): number | undefi
   return getOperacionComercial(doc).condicionTipoCambio;
 }
 
-export function getTipoCambioOperacion(doc: FacturaElectronica): number | undefined {
+export function getTipoCambioOperacion(doc: FacturaElectronica): Big | undefined {
   return getOperacionComercial(doc).tipoCambioOperacion;
 }
 

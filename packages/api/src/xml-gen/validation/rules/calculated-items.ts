@@ -1,20 +1,92 @@
 import type { FacturaElectronica, ItemOperacion_FE } from '../../../sifen/types';
-import { formaAfectacionTributariaIVA } from '../../../sifen/types/enums';
-import { equalsCalculated, quantize, valueOrZero } from '../math';
+import { formaAfectacionTributariaIVA, tipoImpuestoAfectado } from '../../../sifen/types/enums';
+import { equalsCalculated, num, quantize, valueOrZero } from '../math';
 import type { ItemValidationRule } from '../types';
 
 export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOperacion_FE>[] = [
+  {
+    id: 'E730',
+    description: 'Grupo IVA por item es obligatorio para D013=1,3,4,5',
+    tags: ['item', 'iva', 'e730', 'presencia'],
+    when: (_, __, doc) => requiresIvaGroup(doc),
+    check: (item) => item.ivaItem !== undefined,
+    message: (_, index) =>
+      `Item ${index + 1}: E730 inválido, el grupo IVA es obligatorio para este tipo de impuesto.`
+  },
+  {
+    id: 'E730b',
+    description: 'Grupo IVA por item no debe existir para D013=ISC',
+    tags: ['item', 'iva', 'e730b', 'ausencia'],
+    when: (_, __, doc) => getOperacionImpuesto(doc) === tipoImpuestoAfectado.ISC,
+    check: (item) => item.ivaItem === undefined,
+    message: (_, index) =>
+      `Item ${index + 1}: E730b inválido, el grupo IVA no debe informarse cuando D013=ISC.`
+  },
+  {
+    id: 'E733',
+    description: 'Proporción gravada debe ser 100 para forma Gravado',
+    tags: ['item', 'iva', 'e733'],
+    when: (item) =>
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Gravado,
+    check: (item) => item.ivaItem!.proporcionGravadaIva.eq(100),
+    message: (item, index) =>
+      `Item ${index + 1}: E733 inválido, proporcionGravadaIva=${item.ivaItem!.proporcionGravadaIva}, esperado=100.`
+  },
+  {
+    id: 'E733a',
+    description: 'Proporción gravada debe ser 0 para forma Exonerado o Exento',
+    tags: ['item', 'iva', 'e733a'],
+    when: (item) =>
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exonerado ||
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exento,
+    check: (item) => item.ivaItem!.proporcionGravadaIva.eq(0),
+    message: (item, index) =>
+      `Item ${index + 1}: E733a inválido, proporcionGravadaIva=${item.ivaItem!.proporcionGravadaIva}, esperado=0.`
+  },
+  {
+    id: 'E733b',
+    description: 'Proporción gravada debe estar entre 0 y 100 para forma Gravado Parcial',
+    tags: ['item', 'iva', 'e733b'],
+    when: (item) =>
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.GravadoParcial,
+    check: (item) =>
+      item.ivaItem!.proporcionGravadaIva.gt(0) && item.ivaItem!.proporcionGravadaIva.lt(100),
+    message: (item, index) =>
+      `Item ${index + 1}: E733b inválido, proporcionGravadaIva=${item.ivaItem!.proporcionGravadaIva}, esperado entre 0 y 100.`
+  },
+  {
+    id: 'E734',
+    description: 'Tasa IVA debe ser 0 para forma Exonerado o Exento',
+    tags: ['item', 'iva', 'e734'],
+    when: (item) =>
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exonerado ||
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exento,
+    check: (item) => item.ivaItem!.tasaIva.eq(0),
+    message: (item, index) =>
+      `Item ${index + 1}: E734 inválido, tasaIva=${item.ivaItem!.tasaIva}, esperado=0.`
+  },
+  {
+    id: 'E734a',
+    description: 'Tasa IVA debe ser 5 o 10 para forma Gravado o Gravado Parcial',
+    tags: ['item', 'iva', 'e734a'],
+    when: (item) =>
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Gravado ||
+      item.ivaItem?.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.GravadoParcial,
+    check: (item) => item.ivaItem!.tasaIva.eq(5) || item.ivaItem!.tasaIva.eq(10),
+    message: (item, index) =>
+      `Item ${index + 1}: E734a inválido, tasaIva=${item.ivaItem!.tasaIva}, esperado=5 o 10.`
+  },
   {
     id: 'E727',
     description: 'Total bruto por item debe ser precio unitario por cantidad',
     tags: ['item', 'e727', 'precio'],
     when: () => true,
     check: (item) => {
-      const expected = item.valorItem.precioUnitario * item.cantidadProductoServicio;
+      const expected = item.valorItem.precioUnitario.times(item.cantidadProductoServicio);
       return equalsCalculated(expected, item.valorItem.totalBrutoOperacionItem);
     },
     message: (item, index) => {
-      const expected = quantize(item.valorItem.precioUnitario * item.cantidadProductoServicio);
+      const expected = quantize(item.valorItem.precioUnitario.times(item.cantidadProductoServicio));
       return `Item ${index + 1}: E727 inválido, dTotBruOpeItem=${item.valorItem.totalBrutoOperacionItem}, esperado=${expected}.`;
     }
   },
@@ -23,7 +95,7 @@ export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOpe
     description:
       'Porcentaje de descuento particular debe coincidir con EA002*100/E721 cuando EA002 > 0',
     tags: ['item', 'ea003', 'descuento'],
-    when: (item) => valueOrZero(item.valorItem.valorRestaItem.descuentoParticularItem) > 0,
+    when: (item) => valueOrZero(item.valorItem.valorRestaItem.descuentoParticularItem).gt(0),
     check: (item) => {
       if (item.valorItem.valorRestaItem.porcentajeDescuentoItem === undefined) {
         return false;
@@ -31,13 +103,19 @@ export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOpe
 
       const precioUnitario = item.valorItem.precioUnitario;
       const descuento = valueOrZero(item.valorItem.valorRestaItem.descuentoParticularItem);
-      const expected = precioUnitario > 0 ? (descuento * 100) / precioUnitario : 0;
-      return equalsCalculated(expected, item.valorItem.valorRestaItem.porcentajeDescuentoItem);
+      const expected = precioUnitario.gt(0)
+        ? descuento.times(num(100)).div(precioUnitario)
+        : num(0);
+
+      const received = item.valorItem.valorRestaItem.porcentajeDescuentoItem;
+      return equalsCalculated(expected, received) || withinTolerance(expected, received, num(0.8));
     },
     message: (item, index) => {
       const precioUnitario = item.valorItem.precioUnitario;
       const descuento = valueOrZero(item.valorItem.valorRestaItem.descuentoParticularItem);
-      const expected = precioUnitario > 0 ? quantize((descuento * 100) / precioUnitario) : 0;
+      const expected = precioUnitario.gt(0)
+        ? quantize(descuento.times(num(100)).div(precioUnitario))
+        : quantize(num(0));
       return `Item ${index + 1}: EA003 inválido, dPorcDesIt=${item.valorItem.valorRestaItem.porcentajeDescuentoItem}, esperado=${expected}.`;
     }
   },
@@ -48,25 +126,24 @@ export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOpe
     when: () => true,
     check: (item) => {
       const valorResta = item.valorItem.valorRestaItem;
-      const expected =
-        (item.valorItem.precioUnitario -
-          valueOrZero(valorResta.descuentoParticularItem) -
-          valueOrZero(valorResta.descuentoGlobalItem) -
-          valueOrZero(valorResta.anticipoParticularItem) -
-          valueOrZero(valorResta.anticipoGlobalItem)) *
-        item.cantidadProductoServicio;
+      const expected = item.valorItem.precioUnitario
+        .minus(valueOrZero(valorResta.descuentoParticularItem))
+        .minus(valueOrZero(valorResta.descuentoGlobalItem))
+        .minus(valueOrZero(valorResta.anticipoParticularItem))
+        .minus(valueOrZero(valorResta.anticipoGlobalItem))
+        .times(item.cantidadProductoServicio);
 
       return equalsCalculated(expected, valorResta.valorTotalOperacionItem);
     },
     message: (item, index) => {
       const valorResta = item.valorItem.valorRestaItem;
       const expected = quantize(
-        (item.valorItem.precioUnitario -
-          valueOrZero(valorResta.descuentoParticularItem) -
-          valueOrZero(valorResta.descuentoGlobalItem) -
-          valueOrZero(valorResta.anticipoParticularItem) -
-          valueOrZero(valorResta.anticipoGlobalItem)) *
-          item.cantidadProductoServicio
+        item.valorItem.precioUnitario
+          .minus(valueOrZero(valorResta.descuentoParticularItem))
+          .minus(valueOrZero(valorResta.descuentoGlobalItem))
+          .minus(valueOrZero(valorResta.anticipoParticularItem))
+          .minus(valueOrZero(valorResta.anticipoGlobalItem))
+          .times(item.cantidadProductoServicio)
       );
 
       return `Item ${index + 1}: EA008 inválido, dTotOpeItem=${valorResta.valorTotalOperacionItem}, esperado=${expected}.`;
@@ -83,13 +160,14 @@ export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOpe
         return false;
       }
 
-      const expected =
-        item.valorItem.valorRestaItem.valorTotalOperacionItem * item.valorItem.tipoCambioItem!;
+      const expected = item.valorItem.valorRestaItem.valorTotalOperacionItem.times(
+        item.valorItem.tipoCambioItem!
+      );
       return equalsCalculated(expected, valorGs);
     },
     message: (item, index) => {
       const expected = quantize(
-        item.valorItem.valorRestaItem.valorTotalOperacionItem * item.valorItem.tipoCambioItem!
+        item.valorItem.valorRestaItem.valorTotalOperacionItem.times(item.valorItem.tipoCambioItem!)
       );
 
       return `Item ${index + 1}: EA009 inválido, dTotOpeGs=${item.valorItem.valorRestaItem.valorTotalOperacionItemGs}, esperado=${expected}.`;
@@ -132,64 +210,91 @@ export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOpe
     when: (item) => item.ivaItem !== undefined,
     check: (item) => {
       const iva = item.ivaItem!;
-      const expected = Math.max(
-        0,
-        item.valorItem.valorRestaItem.valorTotalOperacionItem -
-          iva.baseGravadaIvaItem -
-          iva.liquidacionIvaItem
-      );
+      const expected = item.valorItem.valorRestaItem.valorTotalOperacionItem
+        .minus(iva.baseGravadaIvaItem)
+        .minus(iva.liquidacionIvaItem)
+        .gt(0)
+        ? item.valorItem.valorRestaItem.valorTotalOperacionItem
+            .minus(iva.baseGravadaIvaItem)
+            .minus(iva.liquidacionIvaItem)
+        : num(0);
       return equalsCalculated(expected, iva.baseExenta);
     },
     message: (item, index) => {
       const iva = item.ivaItem!;
       const expected = quantize(
-        Math.max(
-          0,
-          item.valorItem.valorRestaItem.valorTotalOperacionItem -
-            iva.baseGravadaIvaItem -
-            iva.liquidacionIvaItem
-        )
+        item.valorItem.valorRestaItem.valorTotalOperacionItem
+          .minus(iva.baseGravadaIvaItem)
+          .minus(iva.liquidacionIvaItem)
+          .gt(0)
+          ? item.valorItem.valorRestaItem.valorTotalOperacionItem
+              .minus(iva.baseGravadaIvaItem)
+              .minus(iva.liquidacionIvaItem)
+          : num(0)
       );
       return `Item ${index + 1}: E737 inválido, dBasExe=${iva.baseExenta}, esperado=${expected}.`;
     }
   }
 ];
 
-function expectedBaseGravada(item: ItemOperacion_FE): number {
+function expectedBaseGravada(item: ItemOperacion_FE): ReturnType<typeof num> {
   const iva = item.ivaItem!;
   if (
     iva.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exento ||
     iva.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exonerado ||
-    iva.tasaIva <= 0 ||
-    iva.proporcionGravadaIva <= 0
+    iva.tasaIva.lte(0) ||
+    iva.proporcionGravadaIva.lte(0)
   ) {
-    return 0;
+    return num(0);
   }
 
-  const baseCalculo =
-    (item.valorItem.valorRestaItem.valorTotalOperacionItem * iva.proporcionGravadaIva) / 100;
+  const baseCalculo = item.valorItem.valorRestaItem.valorTotalOperacionItem
+    .times(iva.proporcionGravadaIva)
+    .div(num(100));
 
-  if (iva.tasaIva === 10) {
-    return baseCalculo / 1.1;
+  if (iva.tasaIva.eq(10)) {
+    return baseCalculo.div(1.1);
   }
 
-  if (iva.tasaIva === 5) {
-    return baseCalculo / 1.05;
+  if (iva.tasaIva.eq(5)) {
+    return baseCalculo.div(1.05);
   }
 
-  return baseCalculo / (1 + iva.tasaIva / 100);
+  return baseCalculo.div(num(1).plus(iva.tasaIva.div(num(100))));
 }
 
-function expectedLiquidacion(item: ItemOperacion_FE): number {
+function expectedLiquidacion(item: ItemOperacion_FE): ReturnType<typeof num> {
   const iva = item.ivaItem!;
   if (
     iva.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exento ||
     iva.formaAfectacionTributariaIVA === formaAfectacionTributariaIVA.Exonerado ||
-    iva.tasaIva <= 0
+    iva.tasaIva.lte(0)
   ) {
-    return 0;
+    return num(0);
   }
 
   const base = expectedBaseGravada(item);
-  return (base * iva.tasaIva) / 100;
+  return base.times(iva.tasaIva).div(num(100));
+}
+
+function getOperacionImpuesto(doc: FacturaElectronica): number {
+  return doc.datosGeneralesOperacion.operacionComercial.tipoImpuestoAfectado;
+}
+
+function requiresIvaGroup(doc: FacturaElectronica): boolean {
+  const impuesto = getOperacionImpuesto(doc);
+  return (
+    impuesto === tipoImpuestoAfectado.IVA ||
+    impuesto === tipoImpuestoAfectado.Renta ||
+    impuesto === tipoImpuestoAfectado.Ninguno ||
+    impuesto === tipoImpuestoAfectado.IVA_Renta
+  );
+}
+
+function withinTolerance(
+  expected: ReturnType<typeof num>,
+  received: ReturnType<typeof num>,
+  tolerance: ReturnType<typeof num>
+): boolean {
+  return expected.minus(received).abs().lte(tolerance);
 }
