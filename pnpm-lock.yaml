@@ -10,9 +10,15 @@ importers:
 
   packages/api:
     dependencies:
+      '@praha/error-factory':
+        specifier: ^1.4.0
+        version: 1.4.0
       '@xmldom/xmldom':
         specifier: ^0.8.11
         version: 0.8.11
+      big.js:
+        specifier: ^7.0.1
+        version: 7.0.1
       fast-xml-parser:
         specifier: ^5.3.3
         version: 5.3.3
@@ -44,6 +50,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.2
         version: 9.39.2
+      '@types/big.js':
+        specifier: ^6.2.2
+        version: 6.2.2
       '@types/luxon':
         specifier: ^3.7.1
         version: 3.7.1
@@ -411,6 +420,9 @@ packages:
   '@paralleldrive/cuid2@2.3.1':
     resolution: {integrity: sha512-XO7cAxhnTZl0Yggq6jOgjiOHhbgcO4NqFqwSmQpjK3b6TEE6Uj/jfSk6wzYyemh3+I0sHirKSetjQwn5cZktFw==}
 
+  '@praha/error-factory@1.4.0':
+    resolution: {integrity: sha512-Yb+dOngCP44RTzu37YsJI6CdO8/eLIy4r9yrZyxP9hiTZSA0FgfvnAe139wVChABbPJBeU0bbTY21EOswgOlLg==}
+
   '@quansync/fs@1.0.0':
     resolution: {integrity: sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ==}
 
@@ -639,6 +651,9 @@ packages:
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
+
+  '@types/big.js@6.2.2':
+    resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -872,6 +887,9 @@ packages:
   big-integer@1.6.52:
     resolution: {integrity: sha512-QxD8cf2eVqJOOz63z6JIN9BzvVs/dlySa5HGSBH5xtR8dPteIRQnBxxKqkNTiT6jbDTF6jAfrd4oMcND9RGbQg==}
     engines: {node: '>=0.6'}
+
+  big.js@7.0.1:
+    resolution: {integrity: sha512-iFgV784tD8kq4ccF1xtNMZnXeZzVuXWWM+ERFzKQjv+A5G9HC8CY3DuV45vgzFFcW+u2tIvmF95+AzWgs6BjCg==}
 
   binary@0.3.0:
     resolution: {integrity: sha512-D4H1y5KYwpJgK8wk1Cue5LLPgmwHKYSChkbspQg5JtVuR5ulGckxfR62H3AE9UDkdMC8yyXlqYihuz3Aqg2XZg==}
@@ -2531,6 +2549,8 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
 
+  '@praha/error-factory@1.4.0': {}
+
   '@quansync/fs@1.0.0':
     dependencies:
       quansync: 1.0.0
@@ -2667,6 +2687,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@types/big.js@6.2.2': {}
 
   '@types/chai@5.2.3':
     dependencies:
@@ -2985,6 +3007,8 @@ snapshots:
   base64-js@1.5.1: {}
 
   big-integer@1.6.52: {}
+
+  big.js@7.0.1: {}
 
   binary@0.3.0:
     dependencies:
