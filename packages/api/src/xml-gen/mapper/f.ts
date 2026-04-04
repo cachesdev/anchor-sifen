@@ -1,32 +1,33 @@
-import type { SubtotalesTotales } from '../../sifen/types/clean/f';
+import type { SubtotalesTotales_FE } from '../../sifen/types/factura-electronica';
 import type { GTotSub } from '../../sifen/types/raw/f';
+import { bigToRawNumber, optionalBigToRawNumber } from './helpers';
 
-export function mapSubtotalesTotalesToRaw(data: SubtotalesTotales): GTotSub {
+export function mapSubtotalesTotalesToRaw(data: SubtotalesTotales_FE): GTotSub {
   return {
-    dSubExe: data.subtotalExenta,
-    dSubExo: data.subtotalExonerada,
-    dSub5: data.subtotalIva5,
-    dSub10: data.subtotalIva10,
-    dTotOpe: data.totalBrutoOperacion,
-    dTotDesc: data.totalDescuentoParticular,
-    dTotDescGlotem: data.totalDescuentoGlobal,
-    dTotAntItem: data.totalAnticipoItem,
-    dTotAnt: data.totalAnticipoGlobal,
-    dPorcDescTotal: data.porcentajeDescuentoGlobal,
-    dDescTotal: data.totalDescuentosOperacion,
-    dAnticipo: data.totalAnticiposOperacion,
-    dRedon: data.redondeoOperacion,
-    dComi: data.comisionOperacion,
-    dTotGralOpe: data.totalNetoOperacion,
-    dIVA5: data.liquidacionIva5,
-    dIVA10: data.liquidacionIva10,
-    dLiqTotIVA5: data.liquidacionTotalIva5,
-    dLiqTotIVA10: data.liquidacionTotalIva10,
-    dIVAComi: data.liquidacionIvaComision,
-    dTotIVA: data.liquidacionTotalIva,
-    dBaseGrav5: data.totalBaseGravada5,
-    dBaseGrav10: data.totalBaseGravada10,
-    dTBasGraIVA: data.totalBaseGravadaIva,
-    dTotalGs: data.totalOperacionGs
+    dSubExe: optionalBigToRawNumber(data.subtotalExenta),
+    dSubExo: optionalBigToRawNumber(data.subtotalExonerada),
+    dSub5: optionalBigToRawNumber(data.subtotalIva5),
+    dSub10: optionalBigToRawNumber(data.subtotalIva10),
+    dTotOpe: bigToRawNumber(data.totalBrutoOperacion),
+    dTotDesc: bigToRawNumber(data.totalDescuentoParticular),
+    dTotDescGlotem: bigToRawNumber(data.totalDescuentoGlobal),
+    dTotAntItem: bigToRawNumber(data.totalAnticipoItem),
+    dTotAnt: bigToRawNumber(data.totalAnticipoGlobal),
+    dPorcDescTotal: bigToRawNumber(data.porcentajeDescuentoGlobal),
+    dDescTotal: bigToRawNumber(data.totalDescuentosOperacion),
+    dAnticipo: bigToRawNumber(data.totalAnticiposOperacion),
+    dRedon: bigToRawNumber(data.redondeoOperacion),
+    dComi: optionalBigToRawNumber(data.comisionOperacion),
+    dTotGralOpe: bigToRawNumber(data.totalNetoOperacion),
+    dIVA5: optionalBigToRawNumber(data.liquidacionIva5),
+    dIVA10: optionalBigToRawNumber(data.liquidacionIva10),
+    dLiqTotIVA5: optionalBigToRawNumber(data.liquidacionTotalIva5),
+    dLiqTotIVA10: optionalBigToRawNumber(data.liquidacionTotalIva10),
+    dIVAComi: optionalBigToRawNumber(data.liquidacionIvaComision),
+    dTotIVA: optionalBigToRawNumber(data.liquidacionTotalIva),
+    dBaseGrav5: optionalBigToRawNumber(data.totalBaseGravada5),
+    dBaseGrav10: optionalBigToRawNumber(data.totalBaseGravada10),
+    dTBasGraIVA: optionalBigToRawNumber(data.totalBaseGravadaIva),
+    dTotalGs: optionalBigToRawNumber(data.totalOperacionGs)
   };
 }

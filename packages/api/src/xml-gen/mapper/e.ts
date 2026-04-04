@@ -6,8 +6,6 @@ import type {
   Cuota,
   DatosAdicionalesUsoComercial,
   DetalleVehiculoNuevo,
-  IvaItem,
-  ItemOperacion,
   LocalEntregaMercaderias,
   LocalSalidaMercaderias,
   NotaCreditoDebitoElectronica,
@@ -24,10 +22,14 @@ import type {
   Transporte,
   Transportista,
   UsoComercial,
-  ValorItem,
-  ValorRestaItem,
   VehiculoTrasladoMercaderias
 } from '../../sifen/types/clean/e';
+import type {
+  IvaItem_FE,
+  ItemOperacion_FE,
+  ValorItem_FE,
+  ValorRestaItem_FE
+} from '../../sifen/types/factura-electronica';
 import {
   descripcionCodigoDatosRelevanciaMercaderias,
   descripcionCondicionOperacion,
@@ -82,6 +84,8 @@ import {
   formatDateOnly,
   formatDateTime,
   parseRuc,
+  bigToRawNumber,
+  optionalBigToRawNumber,
   requireDefined,
   resolveCityDescription,
   resolveCountryDescription,
@@ -277,7 +281,7 @@ export function mapCuotaToRaw(data: Cuota): GCuotas {
   } as GCuotas;
 }
 
-export function mapItemOperacionToRaw(data: ItemOperacion): GCamItem {
+export function mapItemOperacionToRaw(data: ItemOperacion_FE): GCamItem {
   return {
     dCodInt: data.codigoInterno,
     dParAranc: data.partidaArancelaria,
@@ -293,7 +297,7 @@ export function mapItemOperacionToRaw(data: ItemOperacion): GCamItem {
       data.unidadMedida,
       descripcionUnidadMedida
     ),
-    dCantProSer: data.cantidadProductoServicio,
+    dCantProSer: bigToRawNumber(data.cantidadProductoServicio),
     cPaisOrig: data.paisOrigen,
     dDesPaisOrig:
       data.paisOrigen !== undefined ? resolveCountryDescription(data.paisOrigen) : undefined,
@@ -315,28 +319,28 @@ export function mapItemOperacionToRaw(data: ItemOperacion): GCamItem {
   } as GCamItem;
 }
 
-export function mapValorItemToRaw(data: ValorItem): GValorItem {
+export function mapValorItemToRaw(data: ValorItem_FE): GValorItem {
   return {
-    dPUniProSer: data.precioUnitario,
-    dTiCamIt: data.tipoCambioItem,
-    dTotBruOpeItem: data.totalBrutoOperacionItem,
+    dPUniProSer: bigToRawNumber(data.precioUnitario),
+    dTiCamIt: optionalBigToRawNumber(data.tipoCambioItem),
+    dTotBruOpeItem: bigToRawNumber(data.totalBrutoOperacionItem),
     gValorRestaItem: mapValorRestaItemToRaw(data.valorRestaItem)
   } as GValorItem;
 }
 
-export function mapValorRestaItemToRaw(data: ValorRestaItem): GValorRestaItem {
+export function mapValorRestaItemToRaw(data: ValorRestaItem_FE): GValorRestaItem {
   return {
-    dDescItem: data.descuentoParticularItem,
-    dPorcDesIt: data.porcentajeDescuentoItem,
-    dDescGloItem: data.descuentoGlobalItem,
-    dAntPreUniIt: data.anticipoParticularItem,
-    dAntGloPreUniIt: data.anticipoGlobalItem,
-    dTotOpeItem: data.valorTotalOperacionItem,
-    dTotOpeGs: data.valorTotalOperacionItemGs
+    dDescItem: optionalBigToRawNumber(data.descuentoParticularItem),
+    dPorcDesIt: bigToRawNumber(data.porcentajeDescuentoItem),
+    dDescGloItem: optionalBigToRawNumber(data.descuentoGlobalItem),
+    dAntPreUniIt: optionalBigToRawNumber(data.anticipoParticularItem),
+    dAntGloPreUniIt: optionalBigToRawNumber(data.anticipoGlobalItem),
+    dTotOpeItem: bigToRawNumber(data.valorTotalOperacionItem),
+    dTotOpeGs: optionalBigToRawNumber(data.valorTotalOperacionItemGs)
   } as GValorRestaItem;
 }
 
-export function mapIvaItemToRaw(data: IvaItem): GCamIVA {
+export function mapIvaItemToRaw(data: IvaItem_FE): GCamIVA {
   return {
     iAfecIVA: data.formaAfectacionTributariaIVA,
     dDesAfecIVA: resolveRequiredDescription(
@@ -344,11 +348,11 @@ export function mapIvaItemToRaw(data: IvaItem): GCamIVA {
       data.formaAfectacionTributariaIVA,
       descripcionFormaAfectacionTributariaIVA as Record<string, string>
     ),
-    dPropIVA: data.proporcionGravadaIva,
-    dTasaIVA: data.tasaIva,
-    dBasGravIVA: data.baseGravadaIvaItem,
-    dLiqIVAItem: data.liquidacionIvaItem,
-    dBasExe: data.baseExenta
+    dPropIVA: bigToRawNumber(data.proporcionGravadaIva),
+    dTasaIVA: bigToRawNumber(data.tasaIva),
+    dBasGravIVA: bigToRawNumber(data.baseGravadaIvaItem),
+    dLiqIVAItem: bigToRawNumber(data.liquidacionIvaItem),
+    dBasExe: bigToRawNumber(data.baseExenta)
   } as GCamIVA;
 }
 

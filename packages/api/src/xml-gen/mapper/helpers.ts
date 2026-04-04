@@ -1,3 +1,4 @@
+import type { Big } from 'big.js';
 import { DateTime } from 'luxon';
 import { descripcionCodigoCiudad } from '../../gen/ciudades';
 import { descripcionCodigoDepartamento } from '../../gen/departamentos';
@@ -28,6 +29,14 @@ function formatDate(value: Date, format: 'date' | 'date-time'): string {
   }
 
   return dt.toFormat("yyyy-MM-dd'T'HH:mm:ss");
+}
+
+export function bigToRawNumber(value: Big): number {
+  return Number(value.toString());
+}
+
+export function optionalBigToRawNumber(value: Big | undefined): number | undefined {
+  return value !== undefined ? bigToRawNumber(value) : undefined;
 }
 
 export function formatDateOnly(value?: Date): string | undefined {

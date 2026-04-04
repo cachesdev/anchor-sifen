@@ -1,9 +1,9 @@
+import type { Timbrado } from '../../sifen/types/clean/de';
 import type {
-  DatosEspecificosPorTipoDE,
-  DatosGeneralesOperacion,
-  OperacionDE,
-  Timbrado
-} from '../../sifen/types/clean/de';
+  DatosEspecificosPorTipoDE_FE,
+  DatosGeneralesOperacion_FE,
+  OperacionDE_FE
+} from '../../sifen/types/factura-electronica';
 import {
   descripcionTipoDocumentoElectronico,
   descripcionTipoEmision
@@ -11,9 +11,6 @@ import {
 import type { GDatGralOpe, GDtipDE, GOpeDE, GTimb } from '../../sifen/types/raw/de';
 import {
   mapCamposFacturaElectronicaToRaw,
-  mapAutofacturaElectronicaToRaw,
-  mapNotaCreditoDebitoElectronicaToRaw,
-  mapNotaRemisionElectronicaToRaw,
   mapCondicionOperacionToRaw,
   mapItemOperacionToRaw,
   mapUsoComercialToRaw,
@@ -27,7 +24,7 @@ import {
   resolveRequiredDescription
 } from './helpers';
 
-export function mapOperacionDEToRaw(data: OperacionDE): GOpeDE {
+export function mapOperacionDEToRaw(data: OperacionDE_FE): GOpeDE {
   return {
     iTipEmi: data.tipoEmision,
     dDesTipEmi: resolveRequiredDescription(
@@ -58,7 +55,7 @@ export function mapTimbradoToRaw(data: Timbrado): GTimb {
   } as GTimb;
 }
 
-export function mapDatosGeneralesOperacionToRaw(data: DatosGeneralesOperacion): GDatGralOpe {
+export function mapDatosGeneralesOperacionToRaw(data: DatosGeneralesOperacion_FE): GDatGralOpe {
   return {
     dFeEmiDE: requireDefined(formatDateTime(data.fechaEmisionDE), 'fechaEmisionDE'),
     gOpeCom: data.operacionComercial
@@ -69,19 +66,10 @@ export function mapDatosGeneralesOperacionToRaw(data: DatosGeneralesOperacion): 
   } as GDatGralOpe;
 }
 
-export function mapDatosEspecificosPorTipoDEToRaw(data: DatosEspecificosPorTipoDE): GDtipDE {
+export function mapDatosEspecificosPorTipoDEToRaw(data: DatosEspecificosPorTipoDE_FE): GDtipDE {
   return {
     gCamFE: data.facturaElectronica
       ? mapCamposFacturaElectronicaToRaw(data.facturaElectronica)
-      : undefined,
-    gCamAE: data.autofacturaElectronica
-      ? mapAutofacturaElectronicaToRaw(data.autofacturaElectronica)
-      : undefined,
-    gCamNCDE: data.notaCreditoDebitoElectronica
-      ? mapNotaCreditoDebitoElectronicaToRaw(data.notaCreditoDebitoElectronica)
-      : undefined,
-    gCamNRE: data.notaRemisionElectronica
-      ? mapNotaRemisionElectronicaToRaw(data.notaRemisionElectronica)
       : undefined,
     gCamCond: data.condicionOperacion
       ? mapCondicionOperacionToRaw(data.condicionOperacion)
