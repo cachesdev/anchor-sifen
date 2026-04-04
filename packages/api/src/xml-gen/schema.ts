@@ -52,6 +52,8 @@ import {
   unidadMedida
 } from '../sifen/types/enums';
 
+import { calculateFieldsResult } from './calculate';
+
 const operacionDESchema = v.object({
   tipoEmision: v.enum(tipoEmision),
   codigoSeguridad: v.optional(v.number()),
@@ -476,9 +478,26 @@ export const facturaElectronicaSchema = v.object({
   camposDocumentoElectronicoAsociado: v.optional(camposDocumentoElectronicoAsociadoSchema)
 }) satisfies v.GenericSchema<FacturaElectronica>;
 
+export const facturaElectronicaCalculatedSchema = v.pipe(
+  facturaElectronicaSchema,
+  v.rawTransform(({ dataset, addIssue, NEVER }) => {
+    if (!dataset.typed) {
+      return NEVER;
+    }
+
+    const result = calculateFieldsResult(dataset.value);
+    if (!result.ok) {
+      addIssue({ message: result.error.message });
+      return NEVER;
+    }
+
+    return result.value;
+  })
+) satisfies v.GenericSchema<FacturaElectronica>;
+
 type Assert<T extends true> = T;
 
-// El schema es intencionalmente mas estricto para enums: debe ser subtipo de FacturaElectronica.
+// Checkea en tiempo de compilacion si hay type drift entre el schema y el tipo concreto
 type _Check = Assert<
   [v.InferInput<typeof facturaElectronicaSchema>] extends [FacturaElectronica] ? true : false
 >;

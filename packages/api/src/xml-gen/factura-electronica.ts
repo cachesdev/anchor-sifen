@@ -1,4 +1,5 @@
 import type { RequiredKeysOf } from 'type-fest';
+import * as v from 'valibot';
 import type { OperacionDE, Timbrado } from '../sifen/types/clean/de';
 import type { SubtotalesTotales } from '../sifen/types/clean/f';
 import type { UsoGeneral } from '../sifen/types/clean/g';
@@ -21,6 +22,7 @@ import { mapSubtotalesTotalesToRaw } from './mapper/f';
 import { mapUsoGeneralToRaw } from './mapper/g';
 import { mapDocumentoElectronicoAsociadoToRaw } from './mapper/h';
 import { formatDateTime } from './mapper/helpers';
+import { facturaElectronicaCalculatedSchema } from './schema';
 
 export type RequiredFields = RequiredKeysOf<FacturaElectronica>;
 
@@ -126,29 +128,31 @@ export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronica 
   build(this: FacturaElectronicaBuilder<RequiredFields>): BuiltDE {
     const state = this.state as FacturaElectronica;
 
-    const processed = calculateFields(state);
+    const processed = v.parse(facturaElectronicaCalculatedSchema, state);
 
     const timbradoFE: Timbrado = {
-      ...state.timbrado,
+      ...processed.timbrado,
       tipoDocumento: tipoDocumentoElectronico.FacturaElectronica
     };
 
     return {
       de: {
-        dDVId: state.digitoVerificadorId!,
-        dFecFirma: formatDateTime(state.fechaFirma)!,
+        dDVId: processed.digitoVerificadorId!,
+        dFecFirma: formatDateTime(processed.fechaFirma)!,
         dSisFact: 1,
-        gOpeDE: mapOperacionDEToRaw(state.operacionDE),
+        gOpeDE: mapOperacionDEToRaw(processed.operacionDE),
         gTimb: mapTimbradoToRaw(timbradoFE),
-        gDatGralOpe: mapDatosGeneralesOperacionToRaw(state.datosGeneralesOperacion),
-        gDtipDE: mapDatosEspecificosPorTipoDEToRaw(state.datosEspecificosPorTipoDE),
-        gTotSub: mapSubtotalesTotalesToRaw(state.subtotalesTotales),
-        gCamGen: state.camposUsoGeneral ? mapUsoGeneralToRaw(state.camposUsoGeneral) : undefined,
-        gCamDEAsoc: state.camposDocumentoElectronicoAsociado
-          ? mapDocumentoElectronicoAsociadoToRaw(state.camposDocumentoElectronicoAsociado)
+        gDatGralOpe: mapDatosGeneralesOperacionToRaw(processed.datosGeneralesOperacion),
+        gDtipDE: mapDatosEspecificosPorTipoDEToRaw(processed.datosEspecificosPorTipoDE),
+        gTotSub: mapSubtotalesTotalesToRaw(processed.subtotalesTotales),
+        gCamGen: processed.camposUsoGeneral
+          ? mapUsoGeneralToRaw(processed.camposUsoGeneral)
+          : undefined,
+        gCamDEAsoc: processed.camposDocumentoElectronicoAsociado
+          ? mapDocumentoElectronicoAsociadoToRaw(processed.camposDocumentoElectronicoAsociado)
           : undefined
       },
-      cdc: state.id_cdc!
+      cdc: processed.id_cdc!
     };
   }
 }
