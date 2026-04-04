@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as fs from 'fs';
 import * as path from 'path';
-import $RefParser from '@apidevtools/json-schema-ref-parser';
+import { $RefParser } from '@apidevtools/json-schema-ref-parser';
 
 // ---- config (edit these) ---------------------------------------------------
 
@@ -30,18 +30,54 @@ function randomDate() {
   return d.toISOString();
 }
 
-function fakeFromSchema(schema: any, depth = 0): any {
-  if (!schema || typeof schema !== 'object') return null;
+interface SchemaLike {
+  allOf?: unknown[];
+  anyOf?: unknown[];
+  oneOf?: unknown[];
+  enum?: unknown[];
+  const?: unknown;
+  type?: string | string[];
+  properties?: Record<string, unknown>;
+  items?: unknown;
+  minItems?: number;
+  maxItems?: number;
+  format?: string;
+  minLength?: number;
+  minimum?: number;
+  maximum?: number;
+}
+
+function asSchemaLike(value: unknown): SchemaLike | null {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  return value as SchemaLike;
+}
+
+function fakeFromSchema(schemaInput: unknown, depth = 0): unknown {
+  const schema = asSchemaLike(schemaInput);
+  if (!schema) return null;
   if (depth > 10) return null; // safety limit
 
   // handle allOf / anyOf / oneOf by picking first
-  if (schema.allOf)
-    return fakeFromSchema({ ...schema, ...schema.allOf[0], allOf: undefined }, depth);
-  if (schema.anyOf) return fakeFromSchema(schema.anyOf[0], depth);
-  if (schema.oneOf) return fakeFromSchema(schema.oneOf[0], depth);
+  if (Array.isArray(schema.allOf) && schema.allOf.length > 0) {
+    const merged = asSchemaLike(schema.allOf[0]);
+    return fakeFromSchema({ ...schema, ...(merged ?? {}), allOf: undefined }, depth);
+  }
+
+  if (Array.isArray(schema.anyOf) && schema.anyOf.length > 0) {
+    return fakeFromSchema(schema.anyOf[0], depth);
+  }
+
+  if (Array.isArray(schema.oneOf) && schema.oneOf.length > 0) {
+    return fakeFromSchema(schema.oneOf[0], depth);
+  }
 
   // enum
-  if (schema.enum) return schema.enum[randomInt(0, schema.enum.length - 1)];
+  if (Array.isArray(schema.enum) && schema.enum.length > 0) {
+    return schema.enum[randomInt(0, schema.enum.length - 1)];
+  }
 
   // const
   if ('const' in schema) return schema.const;
@@ -50,13 +86,10 @@ function fakeFromSchema(schema: any, depth = 0): any {
 
   switch (type) {
     case 'object': {
-      const result: any = {};
-      const props: Record<string, any> = schema.properties ?? {};
-      const required: string[] = schema.required ?? [];
+      const result: Record<string, unknown> = {};
+      const props = schema.properties ?? {};
       for (const [key, val] of Object.entries(props)) {
-        if (true) {
-          result[key] = fakeFromSchema(val as any, depth + 1);
-        }
+        result[key] = fakeFromSchema(val, depth + 1);
       }
       return result;
     }
@@ -97,14 +130,36 @@ function fakeFromSchema(schema: any, depth = 0): any {
 
 async function main() {
   const schemaPath = path.resolve(SCHEMA_PATH);
-  const raw = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
+  const parsed = JSON.parse(fs.readFileSync(schemaPath, 'utf-8')) as unknown;
+  if (!parsed || typeof parsed !== 'object') {
+    throw new Error('El schema.json no es un objeto JSON valido.');
+  }
+
+  const raw = parsed as Record<string, unknown>;
 
   // Resolve root $ref then dereference everything
-  const rootRef: string | undefined = raw.$ref;
+  const rootRef = typeof raw.$ref === 'string' ? raw.$ref : undefined;
   if (rootRef?.startsWith('#/definitions/')) {
+    const definitions = raw.definitions;
+    if (!definitions || typeof definitions !== 'object') {
+      throw new Error('No se encontro "definitions" para resolver el $ref raiz.');
+    }
+
+    const definitionsObject = definitions as Record<string, unknown>;
     const defName = rootRef.slice('#/definitions/'.length);
-    raw.definitions[defName] = { ...raw.definitions[defName], definitions: raw.definitions };
-    Object.assign(raw, raw.definitions[defName]);
+    const definition = definitionsObject[defName];
+
+    if (!definition || typeof definition !== 'object') {
+      throw new Error(`No se encontro la definicion raiz "${defName}".`);
+    }
+
+    const resolvedDefinition = {
+      ...(definition as Record<string, unknown>),
+      definitions: definitionsObject
+    };
+
+    definitionsObject[defName] = resolvedDefinition;
+    Object.assign(raw, resolvedDefinition);
     delete raw.$ref;
   }
 
@@ -118,7 +173,7 @@ async function main() {
   console.log(`✅  Written to ${OUTPUT_PATH} (${kb} KB)`);
 }
 
-main().catch((err) => {
-  console.error('❌  Error:', err.message ?? err);
+main().catch((error: unknown) => {
+  console.error('❌  Error:', error instanceof Error ? error.message : String(error));
   process.exit(1);
 });

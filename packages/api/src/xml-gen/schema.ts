@@ -1,18 +1,20 @@
+import { Big } from 'big.js';
 import * as v from 'valibot';
 import type {
+  DatosEspecificosPorTipoDE_FE_Input,
+  DatosGeneralesOperacion_FE_Input,
   FacturaElectronica,
-  DatosEspecificosPorTipoDE_FE,
-  DatosGeneralesOperacion_FE,
-  ItemOperacion_FE,
-  Timbrado_FE
+  FacturaElectronicaInput,
+  ItemOperacion_FE_Input,
+  OperacionDE_FE_Input,
+  SubtotalesTotales_FE_Input,
+  Timbrado_FE_Input
 } from '../sifen/types';
-import type { OperacionDE } from '../sifen/types/clean/de';
 import type {
   CamposFacturaElectronica,
   CondicionOperacion,
   Transporte
 } from '../sifen/types/clean/e';
-import type { SubtotalesTotales } from '../sifen/types/clean/f';
 import type { UsoGeneral } from '../sifen/types/clean/g';
 import type { DocumentoElectronicoAsociado } from '../sifen/types/clean/h';
 import {
@@ -52,15 +54,11 @@ import {
   unidadMedida
 } from '../sifen/types/enums';
 
-import { calculateFieldsResult } from './calculate';
-import { validateCalculated } from './validation';
-
 const operacionDESchema = v.object({
   tipoEmision: v.enum(tipoEmision),
-  codigoSeguridad: v.optional(v.number()),
   informacionEmisor: v.optional(v.string()),
   informacionFisco: v.optional(v.string())
-}) satisfies v.GenericSchema<OperacionDE>;
+}) satisfies v.GenericSchema<OperacionDE_FE_Input>;
 
 const timbradoFESchema = v.object({
   numeroTimbrado: v.number(),
@@ -69,7 +67,7 @@ const timbradoFESchema = v.object({
   numeroDocumento: v.number(),
   serieNumero: v.optional(v.string()),
   fechaInicioVigencia: v.date()
-}) satisfies v.GenericSchema<Timbrado_FE>;
+}) satisfies v.GenericSchema<Timbrado_FE_Input>;
 
 const obligacionesAfectadasSchema = v.object({
   codigoObligacion: v.enum(tipoObligacion)
@@ -99,7 +97,6 @@ const responsableDESchema = v.object({
 
 const emisorSchema = v.object({
   rucEmisor: v.string(),
-  digitoVerificadorEmisor: v.optional(v.number()),
   tipoContribuyente: v.enum(tipoContribuyente),
   tipoRegimen: v.optional(v.number()),
   nombreEmisor: v.string(),
@@ -124,7 +121,6 @@ const receptorSchema = v.object({
   paisReceptor: v.string(),
   tipoContribuyenteReceptor: v.optional(v.enum(tipoContribuyenteReceptor)),
   rucReceptor: v.optional(v.string()),
-  digitoVerificadorReceptor: v.optional(v.number()),
   tipoDocumentoIdentidadReceptor: v.optional(v.enum(tipoDocumentoReceptor)),
   numeroDocumentoIdentidad: v.optional(v.string()),
   nombreReceptor: v.string(),
@@ -145,7 +141,7 @@ const datosGeneralesOperacionFESchema = v.object({
   operacionComercial: operacionComercialSchema,
   emisor: emisorSchema,
   receptor: receptorSchema
-}) satisfies v.GenericSchema<DatosGeneralesOperacion_FE>;
+}) satisfies v.GenericSchema<DatosGeneralesOperacion_FE_Input>;
 
 const comprasPublicasSchema = v.object({
   modalidadContratacion: v.string(),
@@ -165,7 +161,6 @@ const pagoTarjetaCreditoDebitoSchema = v.object({
   denominacionTarjeta: v.enum(denominacionTarjeta),
   razonSocialProcesadoraTarjeta: v.optional(v.string()),
   rucProcesadoraTarjeta: v.optional(v.string()),
-  digitoVerificadorProcesadoraTarjeta: v.optional(v.number()),
   formaProcesamientoPago: v.enum(formaProcesamientoPago),
   codigoAutorizacionOperacion: v.optional(v.string()),
   nombreTitularTarjeta: v.optional(v.string()),
@@ -208,28 +203,21 @@ const condicionOperacionSchema = v.object({
 
 const valorRestaItemSchema = v.object({
   descuentoParticularItem: v.optional(v.number()),
-  porcentajeDescuentoItem: v.optional(v.number()),
   descuentoGlobalItem: v.optional(v.number()),
   anticipoParticularItem: v.optional(v.number()),
-  anticipoGlobalItem: v.optional(v.number()),
-  valorTotalOperacionItem: v.number(),
-  valorTotalOperacionItemGs: v.optional(v.number())
+  anticipoGlobalItem: v.optional(v.number())
 });
 
 const valorItemSchema = v.object({
   precioUnitario: v.number(),
   tipoCambioItem: v.optional(v.number()),
-  totalBrutoOperacionItem: v.number(),
   valorRestaItem: valorRestaItemSchema
 });
 
 const ivaItemSchema = v.object({
   formaAfectacionTributariaIVA: v.enum(formaAfectacionTributariaIVA),
   proporcionGravadaIva: v.number(),
-  tasaIva: v.number(),
-  baseGravadaIvaItem: v.number(),
-  liquidacionIvaItem: v.number(),
-  baseExenta: v.number()
+  tasaIva: v.number()
 });
 
 const rastreoMercaderiaSchema = v.object({
@@ -281,7 +269,7 @@ const itemOperacionFESchema = v.object({
   ivaItem: v.optional(ivaItemSchema),
   rastreoMercaderia: v.optional(rastreoMercaderiaSchema),
   vehiculoNuevo: v.optional(detalleVehiculoNuevoSchema)
-}) satisfies v.GenericSchema<ItemOperacion_FE>;
+}) satisfies v.GenericSchema<ItemOperacion_FE_Input>;
 
 const sectorEnergiaElectricaSchema = v.object({
   numeroMedidor: v.optional(v.string()),
@@ -368,7 +356,6 @@ const transportistaSchema = v.object({
   naturalezaTransportista: v.enum(naturalezaTransportista),
   nombreTransportista: v.string(),
   rucTransportista: v.optional(v.string()),
-  digitoVerificadorRucTransportista: v.optional(v.number()),
   tipoDocumentoIdentidadTransportista: v.optional(v.enum(tipoDocumentoTransportista)),
   numeroDocumentoIdentidadTransportista: v.optional(v.string()),
   nacionalidadTransportista: v.optional(v.string()),
@@ -378,7 +365,6 @@ const transportistaSchema = v.object({
   direccionChofer: v.string(),
   nombreAgente: v.optional(v.string()),
   rucAgente: v.optional(v.string()),
-  digitoVerificadorRucAgente: v.optional(v.string()),
   direccionAgente: v.optional(v.string())
 });
 
@@ -404,35 +390,11 @@ const datosEspecificosPorTipoDESchema = v.object({
   itemsOperacion: v.array(itemOperacionFESchema),
   usosComerciales: v.optional(usoComercialSchema),
   transporte: v.optional(transporteSchema)
-}) satisfies v.GenericSchema<DatosEspecificosPorTipoDE_FE>;
+}) satisfies v.GenericSchema<DatosEspecificosPorTipoDE_FE_Input>;
 
 const subtotalesTotalesSchema = v.object({
-  subtotalExenta: v.optional(v.number()),
-  subtotalExonerada: v.optional(v.number()),
-  subtotalIva5: v.optional(v.number()),
-  subtotalIva10: v.optional(v.number()),
-  totalBrutoOperacion: v.number(),
-  totalDescuentoParticular: v.number(),
-  totalDescuentoGlobal: v.number(),
-  totalAnticipoItem: v.number(),
-  totalAnticipoGlobal: v.number(),
-  porcentajeDescuentoGlobal: v.number(),
-  totalDescuentosOperacion: v.number(),
-  totalAnticiposOperacion: v.number(),
-  redondeoOperacion: v.number(),
-  comisionOperacion: v.optional(v.number()),
-  totalNetoOperacion: v.number(),
-  liquidacionIva5: v.optional(v.number()),
-  liquidacionIva10: v.optional(v.number()),
-  liquidacionTotalIva5: v.optional(v.number()),
-  liquidacionTotalIva10: v.optional(v.number()),
-  liquidacionIvaComision: v.optional(v.number()),
-  liquidacionTotalIva: v.optional(v.number()),
-  totalBaseGravada5: v.optional(v.number()),
-  totalBaseGravada10: v.optional(v.number()),
-  totalBaseGravadaIva: v.optional(v.number()),
-  totalOperacionGs: v.optional(v.number())
-}) satisfies v.GenericSchema<SubtotalesTotales>;
+  comisionOperacion: v.optional(v.number())
+}) satisfies v.GenericSchema<SubtotalesTotales_FE_Input>;
 
 const cargaSchema = v.object({
   unidadMedidaTotalVolumen: v.optional(v.enum(unidadMedida)),
@@ -466,10 +428,8 @@ const camposDocumentoElectronicoAsociadoSchema = v.object({
   rucFusionado: v.optional(v.string())
 }) satisfies v.GenericSchema<DocumentoElectronicoAsociado>;
 
-export const facturaElectronicaSchema = v.object({
+export const facturaElectronicaInputSchema = v.object({
   id_cdc: v.string(),
-  digitoVerificadorId: v.optional(v.number()),
-  fechaFirma: v.optional(v.date()),
   operacionDE: operacionDESchema,
   timbrado: timbradoFESchema,
   datosGeneralesOperacion: datosGeneralesOperacionFESchema,
@@ -477,41 +437,134 @@ export const facturaElectronicaSchema = v.object({
   subtotalesTotales: subtotalesTotalesSchema,
   camposUsoGeneral: v.optional(camposUsoGeneralSchema),
   camposDocumentoElectronicoAsociado: v.optional(camposDocumentoElectronicoAsociadoSchema)
-}) satisfies v.GenericSchema<FacturaElectronica>;
+}) satisfies v.GenericSchema<FacturaElectronicaInput>;
 
-export const facturaElectronicaCalculatedSchema = v.pipe(
-  facturaElectronicaSchema,
-  v.rawTransform(({ dataset, addIssue, NEVER }) => {
+function toBig(value: number): Big {
+  return new Big(value);
+}
+
+function toOptionalBig(value: number | undefined): Big | undefined {
+  return value !== undefined ? new Big(value) : undefined;
+}
+
+function toFacturaElectronica(input: FacturaElectronicaInput): FacturaElectronica {
+  const out = structuredClone(input) as unknown as FacturaElectronica;
+
+  out.digitoVerificadorId = 0;
+  out.fechaFirma = new Date(0);
+  out.operacionDE.codigoSeguridad = 0;
+
+  out.datosGeneralesOperacion.operacionComercial.tipoCambioOperacion = toOptionalBig(
+    input.datosGeneralesOperacion.operacionComercial.tipoCambioOperacion
+  );
+
+  out.datosGeneralesOperacion.emisor.digitoVerificadorEmisor = 0;
+  out.datosGeneralesOperacion.receptor.digitoVerificadorReceptor = undefined;
+
+  for (const pago of out.datosEspecificosPorTipoDE.condicionOperacion.pagoContadoEntregaInicial ??
+    []) {
+    if (!pago.pagoTarjetaCreditoDebito) {
+      continue;
+    }
+
+    pago.pagoTarjetaCreditoDebito.digitoVerificadorProcesadoraTarjeta = undefined;
+  }
+
+  const transportista = out.datosEspecificosPorTipoDE.transporte?.transportista;
+  if (transportista) {
+    transportista.digitoVerificadorRucTransportista = undefined;
+    transportista.digitoVerificadorRucAgente = undefined;
+  }
+
+  for (const [index, item] of out.datosEspecificosPorTipoDE.itemsOperacion.entries()) {
+    const inputItem = input.datosEspecificosPorTipoDE.itemsOperacion[index]!;
+
+    item.cantidadProductoServicio = toBig(inputItem.cantidadProductoServicio);
+
+    item.valorItem.precioUnitario = toBig(inputItem.valorItem.precioUnitario);
+    item.valorItem.tipoCambioItem = toOptionalBig(inputItem.valorItem.tipoCambioItem);
+    item.valorItem.totalBrutoOperacionItem = toBig(0);
+
+    item.valorItem.valorRestaItem.descuentoParticularItem = toOptionalBig(
+      inputItem.valorItem.valorRestaItem.descuentoParticularItem
+    );
+    item.valorItem.valorRestaItem.descuentoGlobalItem = toOptionalBig(
+      inputItem.valorItem.valorRestaItem.descuentoGlobalItem
+    );
+    item.valorItem.valorRestaItem.anticipoParticularItem = toOptionalBig(
+      inputItem.valorItem.valorRestaItem.anticipoParticularItem
+    );
+    item.valorItem.valorRestaItem.anticipoGlobalItem = toOptionalBig(
+      inputItem.valorItem.valorRestaItem.anticipoGlobalItem
+    );
+    item.valorItem.valorRestaItem.porcentajeDescuentoItem = toBig(0);
+    item.valorItem.valorRestaItem.valorTotalOperacionItem = toBig(0);
+    item.valorItem.valorRestaItem.valorTotalOperacionItemGs = undefined;
+
+    if (!item.ivaItem) {
+      continue;
+    }
+
+    item.ivaItem.proporcionGravadaIva = toBig(inputItem.ivaItem!.proporcionGravadaIva);
+    item.ivaItem.tasaIva = toBig(inputItem.ivaItem!.tasaIva);
+    item.ivaItem.baseGravadaIvaItem = toBig(0);
+    item.ivaItem.liquidacionIvaItem = toBig(0);
+    item.ivaItem.baseExenta = toBig(0);
+  }
+
+  out.subtotalesTotales = {
+    subtotalExenta: undefined,
+    subtotalExonerada: undefined,
+    subtotalIva5: undefined,
+    subtotalIva10: undefined,
+    totalBrutoOperacion: toBig(0),
+    totalDescuentoParticular: toBig(0),
+    totalDescuentoGlobal: toBig(0),
+    totalAnticipoItem: toBig(0),
+    totalAnticipoGlobal: toBig(0),
+    porcentajeDescuentoGlobal: toBig(0),
+    totalDescuentosOperacion: toBig(0),
+    totalAnticiposOperacion: toBig(0),
+    redondeoOperacion: toBig(0),
+    comisionOperacion: toOptionalBig(input.subtotalesTotales.comisionOperacion),
+    totalNetoOperacion: toBig(0),
+    liquidacionIva5: undefined,
+    liquidacionIva10: undefined,
+    liquidacionTotalIva5: undefined,
+    liquidacionTotalIva10: undefined,
+    liquidacionIvaComision: undefined,
+    liquidacionTotalIva: undefined,
+    totalBaseGravada5: undefined,
+    totalBaseGravada10: undefined,
+    totalBaseGravadaIva: undefined,
+    totalOperacionGs: undefined
+  };
+
+  return out;
+}
+
+export const facturaElectronicaSchema = v.pipe(
+  facturaElectronicaInputSchema,
+  v.rawTransform(({ dataset, NEVER }) => {
     if (!dataset.typed) {
       return NEVER;
     }
 
-    const result = calculateFieldsResult(dataset.value);
-    if (!result.ok) {
-      addIssue({ message: result.error.message });
-      return NEVER;
-    }
-
-    const calculatedErrors = validateCalculated(result.value);
-    if (calculatedErrors.length > 0) {
-      for (const error of calculatedErrors) {
-        addIssue({
-          label: error.id,
-          message: error.message
-        });
-      }
-
-      return NEVER;
-    }
-
-    return result.value;
+    return toFacturaElectronica(dataset.value);
   })
-) satisfies v.GenericSchema<FacturaElectronica>;
+) satisfies v.GenericSchema<FacturaElectronicaInput, FacturaElectronica>;
 
 type Assert<T extends true> = T;
 
-// Checkea en tiempo de compilacion si hay type drift entre el schema y el tipo concreto
-type _Check = Assert<
-  [v.InferInput<typeof facturaElectronicaSchema>] extends [FacturaElectronica] ? true : false
+// Checkea en tiempo de compilacion si hay type drift entre el schema de entrada y el tipo concreto.
+type _CheckInput = Assert<
+  [v.InferInput<typeof facturaElectronicaInputSchema>] extends [FacturaElectronicaInput]
+    ? true
+    : false
 >;
-declare const _: _Check;
+declare const _: _CheckInput;
+
+type _CheckOutput = Assert<
+  [v.InferOutput<typeof facturaElectronicaSchema>] extends [FacturaElectronica] ? true : false
+>;
+declare const __: _CheckOutput;

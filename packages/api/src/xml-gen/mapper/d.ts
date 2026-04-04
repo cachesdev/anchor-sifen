@@ -2,10 +2,10 @@ import type {
   ActividadEconomica,
   Emisor,
   ObligacionesAfectadas,
-  OperacionComercial,
   Receptor,
   ResponsableDE
 } from '../../sifen/types/clean/d';
+import type { OperacionComercial_FE } from '../../sifen/types/factura-electronica';
 import {
   descripcionCondicionAnticipo,
   descripcionTipoDocumentoReceptor,
@@ -25,6 +25,7 @@ import {
   resolveDistrictDescription,
   resolveOptionalDescription,
   resolveRequiredDescription,
+  optionalBigToRawNumber,
   resolveOptionalNumericDv,
   resolveRequiredNumericDv
 } from './helpers';
@@ -48,7 +49,7 @@ export function mapObligacionAfectadaToRaw(data: ObligacionesAfectadas): GOblAfe
   } as GOblAfe;
 }
 
-export function mapOperacionComercialToRaw(data: OperacionComercial): GOpeCom {
+export function mapOperacionComercialToRaw(data: OperacionComercial_FE): GOpeCom {
   return {
     iTipTra: data.tipoTransaccion,
     dDesTipTra: resolveOptionalDescription(
@@ -64,7 +65,7 @@ export function mapOperacionComercialToRaw(data: OperacionComercial): GOpeCom {
     cMoneOpe: data.monedaOperacion,
     dDesMoneOpe: resolveCurrencyDescription(data.monedaOperacion),
     dCondTiCam: data.condicionTipoCambio,
-    dTiCam: data.tipoCambioOperacion,
+    dTiCam: optionalBigToRawNumber(data.tipoCambioOperacion),
     iCondAnt: data.condicionAnticipo,
     dDesCondAnt: resolveOptionalDescription(
       data.condicionAnticipo,
