@@ -231,11 +231,6 @@ export interface FacturaElectronica {
   camposDocumentoElectronicoAsociado?: DocumentoElectronicoAsociado;
 }
 
-type ValorRestaItemCalculatedKeys =
-  | 'porcentajeDescuentoItem'
-  | 'valorTotalOperacionItem'
-  | 'valorTotalOperacionItemGs';
-
 type IvaItemCalculatedKeys = 'baseGravadaIvaItem' | 'liquidacionIvaItem' | 'baseExenta';
 
 type CondicionOperacionPagoArray = NonNullable<
@@ -247,14 +242,8 @@ type PagoTarjetaCreditoDebito_FE = NonNullable<
   PagoContadoEntregaInicial_FE['pagoTarjetaCreditoDebito']
 >;
 
-type ValorRestaItem_FE_Input = Simplify<
-  Except<ItemOperacion_FE_Base['valorItem']['valorRestaItem'], ValorRestaItemCalculatedKeys>
->;
-
 type ValorItem_FE_Input = Simplify<
-  Except<ItemOperacion_FE_Base['valorItem'], 'totalBrutoOperacionItem' | 'valorRestaItem'> & {
-    valorRestaItem: ValorRestaItem_FE_Input;
-  }
+  Except<ItemOperacion_FE_Base['valorItem'], 'totalBrutoOperacionItem' | 'valorRestaItem'>
 >;
 
 type IvaItem_FE_Input = Simplify<

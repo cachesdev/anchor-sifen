@@ -485,18 +485,10 @@ function toFacturaElectronica(input: FacturaElectronicaInput): FacturaElectronic
     item.valorItem.tipoCambioItem = toOptionalBig(inputItem.valorItem.tipoCambioItem);
     item.valorItem.totalBrutoOperacionItem = toBig(0);
 
-    item.valorItem.valorRestaItem.descuentoParticularItem = toOptionalBig(
-      inputItem.valorItem.valorRestaItem.descuentoParticularItem
-    );
-    item.valorItem.valorRestaItem.descuentoGlobalItem = toOptionalBig(
-      inputItem.valorItem.valorRestaItem.descuentoGlobalItem
-    );
-    item.valorItem.valorRestaItem.anticipoParticularItem = toOptionalBig(
-      inputItem.valorItem.valorRestaItem.anticipoParticularItem
-    );
-    item.valorItem.valorRestaItem.anticipoGlobalItem = toOptionalBig(
-      inputItem.valorItem.valorRestaItem.anticipoGlobalItem
-    );
+    item.valorItem.valorRestaItem.descuentoParticularItem = undefined;
+    item.valorItem.valorRestaItem.descuentoGlobalItem = undefined;
+    item.valorItem.valorRestaItem.anticipoParticularItem = undefined;
+    item.valorItem.valorRestaItem.anticipoGlobalItem = undefined;
     item.valorItem.valorRestaItem.porcentajeDescuentoItem = toBig(0);
     item.valorItem.valorRestaItem.valorTotalOperacionItem = toBig(0);
     item.valorItem.valorRestaItem.valorTotalOperacionItemGs = undefined;
