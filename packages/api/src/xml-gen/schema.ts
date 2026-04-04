@@ -53,6 +53,7 @@ import {
 } from '../sifen/types/enums';
 
 import { calculateFieldsResult } from './calculate';
+import { validateCalculated } from './validation';
 
 const operacionDESchema = v.object({
   tipoEmision: v.enum(tipoEmision),
@@ -488,6 +489,18 @@ export const facturaElectronicaCalculatedSchema = v.pipe(
     const result = calculateFieldsResult(dataset.value);
     if (!result.ok) {
       addIssue({ message: result.error.message });
+      return NEVER;
+    }
+
+    const calculatedErrors = validateCalculated(result.value);
+    if (calculatedErrors.length > 0) {
+      for (const error of calculatedErrors) {
+        addIssue({
+          label: error.id,
+          message: error.message
+        });
+      }
+
       return NEVER;
     }
 
