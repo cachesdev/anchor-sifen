@@ -181,6 +181,8 @@ export type SubtotalesTotales_FE = Simplify<
 
 /**
  * A - A001 | DE | DE Enfocado a Factura Electronica | Pagina 61
+ *
+ * Representacion legible de uso interno de la factura electronica.
  */
 export interface FacturaElectronica {
   /**
@@ -321,7 +323,7 @@ export type SubtotalesTotales_FE_Input = Simplify<
 >;
 
 /**
- * Tipo de entrada de usuario: excluye completamente los campos calculados internamente.
+ * Representa el input usado en el Builder de factura electronica.
  */
 export type FacturaElectronicaInput = SimplifyDeep<
   Except<
