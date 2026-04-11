@@ -1,39 +1,42 @@
 import { formaAfectacionTributariaIVA, type FacturaElectronica } from '../../sifen/types';
-import { bigOrZero, HUNDRED, ONE, quantizeGeneral, ZERO } from './big';
+import { getItemsOperacion } from '../fe-accessors';
+import { bigOrZero, HUNDRED, ONE, ZERO } from './big';
 
 export function applyItemDerivedFields(out: FacturaElectronica): void {
-  for (const item of out.datosEspecificosPorTipoDE.itemsOperacion) {
+  for (const item of getItemsOperacion(out)) {
     const valorItem = item.valorItem;
     const valorRestaItem = valorItem.valorRestaItem;
 
     const cantidad = item.cantidadProductoServicio;
     const precioUnitario = valorItem.precioUnitario;
 
-    const totalBrutoOperacionItem = quantizeGeneral(precioUnitario.times(cantidad));
+    // dTotBrutOpeItem
+    const totalBrutoOperacionItem = precioUnitario.times(cantidad);
     valorItem.totalBrutoOperacionItem = totalBrutoOperacionItem;
 
+    // FIXME: No revisado segun MT
     const descuentoParticular = bigOrZero(valorRestaItem.descuentoParticularItem);
     const descuentoGlobal = bigOrZero(valorRestaItem.descuentoGlobalItem);
     const anticipoParticular = bigOrZero(valorRestaItem.anticipoParticularItem);
     const anticipoGlobal = bigOrZero(valorRestaItem.anticipoGlobalItem);
 
-    valorRestaItem.porcentajeDescuentoItem = quantizeGeneral(
-      precioUnitario.gt(0) ? descuentoParticular.times(HUNDRED).div(precioUnitario) : ZERO
-    );
+    // FIXME: No revisado segun MT
+    valorRestaItem.porcentajeDescuentoItem = precioUnitario.gt(0)
+      ? descuentoParticular.times(HUNDRED).div(precioUnitario)
+      : ZERO;
 
-    const totalOperacionItem = quantizeGeneral(
-      precioUnitario
-        .minus(descuentoParticular)
-        .minus(descuentoGlobal)
-        .minus(anticipoParticular)
-        .minus(anticipoGlobal)
-        .times(cantidad)
-    );
+    // FIXME: Descuentos y anticipos no revisados segun MT
+    const totalOperacionItem = precioUnitario
+      .minus(anticipoGlobal)
+      .minus(descuentoParticular)
+      .minus(descuentoGlobal)
+      .minus(anticipoParticular)
+      .times(cantidad);
 
     valorRestaItem.valorTotalOperacionItem = totalOperacionItem;
     valorRestaItem.valorTotalOperacionItemGs =
       valorItem.tipoCambioItem !== undefined
-        ? quantizeGeneral(totalOperacionItem.times(valorItem.tipoCambioItem))
+        ? totalOperacionItem.times(valorItem.tipoCambioItem)
         : undefined;
 
     const ivaItem = item.ivaItem;
@@ -42,7 +45,9 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
     }
 
     const forma = ivaItem.formaAfectacionTributariaIVA;
-    const proporcion = ivaItem.proporcionGravadaIva;
+    // INFO: La proporcion gravada es generalmente 100% en todos los casos, con excepcion a exenta y exonerada donde es 0% y parcial, donde es variable entre 0 a 100.
+    const proporcionGravada = ivaItem.proporcionGravadaIva;
+    // FIXME: Tasa es una enumeracion, no hace falta usar Big
     const tasa = ivaItem.tasaIva;
 
     let baseGravada = ZERO;
@@ -52,24 +57,34 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
       forma !== formaAfectacionTributariaIVA.Exonerado &&
       forma !== formaAfectacionTributariaIVA.Exento &&
       tasa.gt(0) &&
-      proporcion.gt(0)
+      proporcionGravada.gt(0)
     ) {
-      const baseCalculo = totalOperacionItem.times(proporcion).div(HUNDRED);
+      const baseCalculo = totalOperacionItem.times(proporcionGravada).div(HUNDRED);
 
       if (tasa.eq(10)) {
         baseGravada = baseCalculo.div(1.1);
       } else if (tasa.eq(5)) {
         baseGravada = baseCalculo.div(1.05);
       } else {
+        // Fallback
         baseGravada = baseCalculo.div(ONE.plus(tasa.div(HUNDRED)));
       }
 
       liquidacion = baseGravada.times(tasa).div(HUNDRED);
     }
 
-    ivaItem.baseGravadaIvaItem = quantizeGeneral(baseGravada);
-    ivaItem.liquidacionIvaItem = quantizeGeneral(liquidacion);
-    const baseExenta = totalOperacionItem.minus(baseGravada).minus(liquidacion);
-    ivaItem.baseExenta = quantizeGeneral(baseExenta.gt(0) ? baseExenta : ZERO);
+    ivaItem.baseGravadaIvaItem = baseGravada;
+    ivaItem.liquidacionIvaItem = liquidacion;
+    let baseExenta = ZERO;
+    if (forma === formaAfectacionTributariaIVA.GravadoParcial) {
+      const numerador = HUNDRED
+        .times(totalOperacionItem)
+        .times(HUNDRED.minus(proporcionGravada));
+      const denominador = HUNDRED.times(HUNDRED).plus(tasa.times(proporcionGravada));
+
+      baseExenta = denominador.gt(0) ? numerador.div(denominador) : ZERO;
+    }
+
+    ivaItem.baseExenta = baseExenta.gt(0) ? baseExenta : ZERO;
   }
 }

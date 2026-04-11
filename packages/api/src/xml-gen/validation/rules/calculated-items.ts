@@ -205,34 +205,17 @@ export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOpe
   },
   {
     id: 'E737',
-    description: 'Base exenta por item debe ser EA008 - E735 - E736',
+    description: 'Base exenta por item debe seguir formula NT-13',
     tags: ['item', 'iva', 'e737'],
     when: (item) => item.ivaItem !== undefined,
     check: (item) => {
       const iva = item.ivaItem!;
-      const expected = item.valorItem.valorRestaItem.valorTotalOperacionItem
-        .minus(iva.baseGravadaIvaItem)
-        .minus(iva.liquidacionIvaItem)
-        .gt(0)
-        ? item.valorItem.valorRestaItem.valorTotalOperacionItem
-            .minus(iva.baseGravadaIvaItem)
-            .minus(iva.liquidacionIvaItem)
-        : num(0);
+      const expected = expectedBaseExenta(item);
       return equalsCalculated(expected, iva.baseExenta);
     },
     message: (item, index) => {
-      const iva = item.ivaItem!;
-      const expected = quantize(
-        item.valorItem.valorRestaItem.valorTotalOperacionItem
-          .minus(iva.baseGravadaIvaItem)
-          .minus(iva.liquidacionIvaItem)
-          .gt(0)
-          ? item.valorItem.valorRestaItem.valorTotalOperacionItem
-              .minus(iva.baseGravadaIvaItem)
-              .minus(iva.liquidacionIvaItem)
-          : num(0)
-      );
-      return `Item ${index + 1}: E737 inválido, dBasExe=${iva.baseExenta}, esperado=${expected}.`;
+      const expected = quantize(expectedBaseExenta(item));
+      return `Item ${index + 1}: E737 inválido, dBasExe=${item.ivaItem!.baseExenta}, esperado=${expected}.`;
     }
   }
 ];
@@ -275,6 +258,25 @@ function expectedLiquidacion(item: ItemOperacion_FE): ReturnType<typeof num> {
 
   const base = expectedBaseGravada(item);
   return base.times(iva.tasaIva).div(num(100));
+}
+
+function expectedBaseExenta(item: ItemOperacion_FE): ReturnType<typeof num> {
+  const iva = item.ivaItem!;
+  if (iva.formaAfectacionTributariaIVA !== formaAfectacionTributariaIVA.GravadoParcial) {
+    return num(0);
+  }
+
+  const totalOperacionItem = item.valorItem.valorRestaItem.valorTotalOperacionItem;
+  const numerador = num(100)
+    .times(totalOperacionItem)
+    .times(num(100).minus(iva.proporcionGravadaIva));
+  const denominador = num(10000).plus(iva.tasaIva.times(iva.proporcionGravadaIva));
+  if (denominador.lte(0)) {
+    return num(0);
+  }
+
+  const baseExenta = numerador.div(denominador);
+  return baseExenta.gt(0) ? baseExenta : num(0);
 }
 
 function getOperacionImpuesto(doc: FacturaElectronica): number {

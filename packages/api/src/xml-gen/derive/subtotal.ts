@@ -4,7 +4,7 @@ import {
   formaAfectacionTributariaIVA,
   type FacturaElectronica
 } from '../../sifen/types';
-import { HUNDRED, quantizeGeneral, quantizeRedondeo, ZERO } from './big';
+import { HUNDRED, quantizeRedondeo, ZERO } from './big';
 
 type OperacionComercial = FacturaElectronica['datosGeneralesOperacion']['operacionComercial'];
 type ItemOperacion = FacturaElectronica['datosEspecificosPorTipoDE']['itemsOperacion'][number];
@@ -116,65 +116,55 @@ function accumulateItems(doc: FacturaElectronica): ItemAccumulation {
 function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): DerivedSubtotales {
   const operacionComercial = doc.datosGeneralesOperacion.operacionComercial;
   const comisionOperacion = bigOrZero(doc.subtotalesTotales.comisionOperacion);
-  const comisionOperacionNormalizada = comisionOperacion.gt(0)
-    ? quantizeGeneral(comisionOperacion)
-    : ZERO;
+  const comisionOperacionNormalizada = comisionOperacion.gt(0) ? comisionOperacion : ZERO;
 
   const redondeoOperacion = calculateRedondeo(
     acc.totalBrutoOperacion,
     operacionComercial.monedaOperacion
   );
 
-  const totalDescuentosOperacion = quantizeGeneral(
-    acc.totalDescuentoParticular.plus(acc.totalDescuentoGlobal)
-  );
-  const totalAnticiposOperacion = quantizeGeneral(
-    acc.totalAnticipoItem.plus(acc.totalAnticipoGlobal)
-  );
-
-  const totalNetoOperacion = quantizeGeneral(
-    acc.totalBrutoOperacion
-      .minus(totalDescuentosOperacion)
-      .minus(totalAnticiposOperacion)
-      .minus(redondeoOperacion)
-  );
-
+  const totalDescuentosOperacion = acc.totalDescuentoParticular.plus(acc.totalDescuentoGlobal);
+  const totalAnticiposOperacion = acc.totalAnticipoItem.plus(acc.totalAnticipoGlobal);
+  const totalNetoOperacion = acc.totalBrutoOperacion
+    .minus(totalDescuentosOperacion)
+    .minus(totalAnticiposOperacion)
+    .minus(redondeoOperacion);
   const redondeoDistribuido = distributeRedondeo(redondeoOperacion, acc);
-  const liquidacionIva5 = acc.hasIva5 ? quantizeGeneral(acc.liquidacionIva5) : undefined;
-  const liquidacionIva10 = acc.hasIva10 ? quantizeGeneral(acc.liquidacionIva10) : undefined;
+  const liquidacionIva5 = acc.hasIva5 ? acc.liquidacionIva5 : undefined;
+  const liquidacionIva10 = acc.hasIva10 ? acc.liquidacionIva10 : undefined;
   const liquidacionTotalIva5 = redondeoDistribuido.iva5.gt(0)
-    ? quantizeGeneral(redondeoDistribuido.iva5.times(5).div(105))
+    ? redondeoDistribuido.iva5.times(5).div(105)
     : undefined;
   const liquidacionTotalIva10 = redondeoDistribuido.iva10.gt(0)
-    ? quantizeGeneral(redondeoDistribuido.iva10.times(10).div(110))
+    ? redondeoDistribuido.iva10.times(10).div(110)
     : undefined;
   const liquidacionIvaComision = comisionOperacionNormalizada.gt(0)
-    ? quantizeGeneral(comisionOperacionNormalizada.times(10).div(110))
+    ? comisionOperacionNormalizada.times(10).div(110)
     : undefined;
 
   const hasAnyIva = acc.hasIva5 || acc.hasIva10;
   const liquidacionTotalIva = hasAnyIva
-    ? quantizeGeneral(bigOrZero(liquidacionIva5).plus(bigOrZero(liquidacionIva10)))
+    ? bigOrZero(liquidacionIva5).plus(bigOrZero(liquidacionIva10))
     : undefined;
 
-  const totalBaseGravada5 = acc.hasIva5 ? quantizeGeneral(acc.totalBaseGravada5) : undefined;
-  const totalBaseGravada10 = acc.hasIva10 ? quantizeGeneral(acc.totalBaseGravada10) : undefined;
+  const totalBaseGravada5 = acc.hasIva5 ? acc.totalBaseGravada5 : undefined;
+  const totalBaseGravada10 = acc.hasIva10 ? acc.totalBaseGravada10 : undefined;
   const totalBaseGravadaIva = hasAnyIva
-    ? quantizeGeneral(bigOrZero(totalBaseGravada5).plus(bigOrZero(totalBaseGravada10)))
+    ? bigOrZero(totalBaseGravada5).plus(bigOrZero(totalBaseGravada10))
     : undefined;
 
   return {
-    subtotalExenta: acc.hasExenta ? quantizeGeneral(acc.subtotalExenta) : undefined,
-    subtotalExonerada: acc.hasExonerada ? quantizeGeneral(acc.subtotalExonerada) : undefined,
-    subtotalIva5: acc.hasIva5 ? quantizeGeneral(acc.subtotalIva5) : undefined,
-    subtotalIva10: acc.hasIva10 ? quantizeGeneral(acc.subtotalIva10) : undefined,
-    totalBrutoOperacion: quantizeGeneral(acc.totalBrutoOperacion),
-    totalDescuentoParticular: quantizeGeneral(acc.totalDescuentoParticular),
-    totalDescuentoGlobal: quantizeGeneral(acc.totalDescuentoGlobal),
-    totalAnticipoItem: quantizeGeneral(acc.totalAnticipoItem),
-    totalAnticipoGlobal: quantizeGeneral(acc.totalAnticipoGlobal),
+    subtotalExenta: acc.hasExenta ? acc.subtotalExenta : undefined,
+    subtotalExonerada: acc.hasExonerada ? acc.subtotalExonerada : undefined,
+    subtotalIva5: acc.hasIva5 ? acc.subtotalIva5 : undefined,
+    subtotalIva10: acc.hasIva10 ? acc.subtotalIva10 : undefined,
+    totalBrutoOperacion: acc.totalBrutoOperacion,
+    totalDescuentoParticular: acc.totalDescuentoParticular,
+    totalDescuentoGlobal: acc.totalDescuentoGlobal,
+    totalAnticipoItem: acc.totalAnticipoItem,
+    totalAnticipoGlobal: acc.totalAnticipoGlobal,
     porcentajeDescuentoGlobal: acc.totalBrutoOperacion.gt(0)
-      ? quantizeGeneral(acc.totalDescuentoGlobal.times(HUNDRED).div(acc.totalBrutoOperacion))
+      ? acc.totalDescuentoGlobal.times(HUNDRED).div(acc.totalBrutoOperacion)
       : ZERO,
     totalDescuentosOperacion,
     totalAnticiposOperacion,
@@ -333,15 +323,15 @@ function deriveTotalOperacionGs(
     operacionComercial.condicionTipoCambio === condicionTipoCambio.Global &&
     operacionComercial.tipoCambioOperacion !== undefined
   ) {
-    return quantizeGeneral(totalNetoOperacion.times(operacionComercial.tipoCambioOperacion));
+    return totalNetoOperacion.times(operacionComercial.tipoCambioOperacion);
   }
 
   if (operacionComercial.condicionTipoCambio === condicionTipoCambio.PorItem) {
-    return quantizeGeneral(acc.totalOperacionGsPorItem);
+    return acc.totalOperacionGsPorItem;
   }
 
   return operacionComercial.tipoCambioOperacion !== undefined
-    ? quantizeGeneral(totalNetoOperacion.times(operacionComercial.tipoCambioOperacion))
+    ? totalNetoOperacion.times(operacionComercial.tipoCambioOperacion)
     : undefined;
 }
 
