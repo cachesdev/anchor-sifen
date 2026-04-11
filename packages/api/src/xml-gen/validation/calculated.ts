@@ -1,5 +1,5 @@
 import type { FacturaElectronica } from '../../sifen/types';
-import { getItems } from './accessors';
+import { getItems } from '../fe-accessors';
 import { validate, validateItems } from './runner';
 import { calculatedDocumentRules } from './rules/calculated-document';
 import { calculatedItemRules } from './rules/calculated-items';

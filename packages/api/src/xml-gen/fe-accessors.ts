@@ -1,5 +1,5 @@
 import type { Big } from 'big.js';
-import type { FacturaElectronica, ItemOperacion_FE } from '../../sifen/types';
+import type { FacturaElectronica, ItemOperacion_FE } from '../sifen/types';
 
 export function getOperacionComercial(doc: FacturaElectronica) {
   return doc.datosGeneralesOperacion.operacionComercial;
@@ -23,4 +23,16 @@ export function getItems(doc: FacturaElectronica): ReadonlyArray<ItemOperacion_F
 
 export function getSubtotales(doc: FacturaElectronica) {
   return doc.subtotalesTotales;
+}
+
+export function getEmisor(doc: FacturaElectronica) {
+  return doc.datosGeneralesOperacion.emisor;
+}
+
+export function getReceptor(doc: FacturaElectronica) {
+  return doc.datosGeneralesOperacion.receptor;
+}
+
+export function getTransportista(doc: FacturaElectronica) {
+  return doc.datosEspecificosPorTipoDE.transporte?.transportista;
 }
