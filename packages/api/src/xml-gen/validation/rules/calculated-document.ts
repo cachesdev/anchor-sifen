@@ -10,7 +10,7 @@ import {
   getMonedaOperacion,
   getSubtotales,
   getTipoCambioOperacion
-} from '../accessors';
+} from '../../fe-accessors';
 import { equalsCalculated, num, quantize, valueOrZero } from '../math';
 import type { ValidationRule } from '../types';
 

@@ -3,6 +3,8 @@ import { Err, Ok, type Result } from '../result';
 import type { FacturaElectronica } from '../sifen/types';
 import { condicionTipoCambio, formaAfectacionTributariaIVA } from '../sifen/types/enums';
 import { XMLGenCalculationError } from './errors';
+import { getEmisor, getReceptor, getTransportista } from './fe-accessors';
+import { calcularDv, extraerRuc } from './ruc';
 
 const SCALE_GENERAL = 8;
 const SCALE_REDONDEO = 4;
@@ -80,35 +82,6 @@ function generateCodigoSeguridad(): number {
   return (buffer[0]! % 900_000_000) + 100_000_000;
 }
 
-/**
- * Calcula el dígito verificador numérico para un RUC/CI alfanumérico
- * usando el algoritmo módulo 11.
- */
-export function calcularDV(rucCi: string, baseMax = 11): number {
-  let numeroExpandido = '';
-  for (const char of rucCi) {
-    const upper = char.toUpperCase();
-    const code = upper.charCodeAt(0);
-    if (code >= 48 && code <= 57) {
-      numeroExpandido += upper;
-    } else {
-      numeroExpandido += code.toString();
-    }
-  }
-
-  let k = 2;
-  let total = 0;
-  for (let i = numeroExpandido.length - 1; i >= 0; i--) {
-    if (k > baseMax) k = 2;
-    const digitValue = Number(numeroExpandido[i]);
-    total += digitValue * k;
-    k++;
-  }
-
-  const resto = total % 11;
-  return resto > 1 ? 11 - resto : 0;
-}
-
 function quantizeGeneral(value: Big): Big {
   return value.round(SCALE_GENERAL, Big.roundHalfUp);
 }
@@ -121,31 +94,22 @@ function bigOrZero(value: Big | undefined): Big {
   return value ?? ZERO;
 }
 
-function normalizeRucForDv(rawRuc: string): string {
-  const normalized = rawRuc.trim().toUpperCase();
-  const separatorIndex = normalized.lastIndexOf('-');
-  const withoutDv = separatorIndex > 0 ? normalized.slice(0, separatorIndex) : normalized;
-  const compact = withoutDv.replace(/[^0-9A-Z]/g, '');
-
-  if (!compact) {
-    throw new Error(`No se pudo normalizar RUC para calcular DV: ${rawRuc}.`);
-  }
-
-  return compact;
-}
-
-function deriveNumericDvFromRuc(rawRuc: string): number;
-function deriveNumericDvFromRuc(rawRuc?: string): number | undefined;
-function deriveNumericDvFromRuc(rawRuc?: string): number | undefined {
+/**
+ * Deriva DV manejando campos opcionales. en caso de que el ruc sea indefinido,
+ * retornamos undefined.
+ */
+function deriveDv(rawRuc: string): number;
+function deriveDv(rawRuc?: string): number | undefined;
+function deriveDv(rawRuc?: string): number | undefined {
   if (!rawRuc) {
     return undefined;
   }
 
-  return calcularDV(normalizeRucForDv(rawRuc));
+  return calcularDv(extraerRuc(rawRuc));
 }
 
-function deriveStringDvFromRuc(rawRuc?: string): string | undefined {
-  const dv = deriveNumericDvFromRuc(rawRuc);
+function deriveDvString(rawRuc?: string): string | undefined {
+  const dv = deriveDv(rawRuc);
   return dv !== undefined ? String(dv) : undefined;
 }
 
@@ -163,7 +127,8 @@ function calculateRedondeo(totalBrutoOperacion: Big, monedaOperacion: string): B
   return quantizeRedondeo(totalBrutoOperacion.minus(rounded));
 }
 
-function applyHeaderDerivedFields(out: FacturaElectronica): void {
+/** Deriva campos calculables base */
+function applyBaseDerivedFields(out: FacturaElectronica): void {
   const parsed = Number.parseInt(out.id_cdc.slice(-1), 10);
   if (Number.isNaN(parsed)) {
     throw new Error('No se pudo derivar digito verificador del CDC.');
@@ -173,17 +138,19 @@ function applyHeaderDerivedFields(out: FacturaElectronica): void {
   out.fechaFirma = new Date();
 }
 
+/** Deriva campos relacionados con operacionDE */
 function applyOperacionDerivedFields(out: FacturaElectronica): void {
   out.operacionDE.codigoSeguridad = generateCodigoSeguridad();
 }
 
+/** Deriva todos los digitos verificadores */
 function applyDvDerivedFields(out: FacturaElectronica): void {
-  const emisor = out.datosGeneralesOperacion.emisor;
-  emisor.digitoVerificadorEmisor = deriveNumericDvFromRuc(emisor.rucEmisor);
+  const emisor = getEmisor(out);
+  emisor.digitoVerificadorEmisor = deriveDv(emisor.rucEmisor);
 
-  const receptor = out.datosGeneralesOperacion.receptor;
+  const receptor = getReceptor(out);
   if (receptor.rucReceptor) {
-    receptor.digitoVerificadorReceptor = deriveNumericDvFromRuc(receptor.rucReceptor);
+    receptor.digitoVerificadorReceptor = deriveDv(receptor.rucReceptor);
   }
 
   for (const pago of out.datosEspecificosPorTipoDE.condicionOperacion.pagoContadoEntregaInicial ??
@@ -193,24 +160,20 @@ function applyDvDerivedFields(out: FacturaElectronica): void {
       continue;
     }
 
-    tarjeta.digitoVerificadorProcesadoraTarjeta = deriveNumericDvFromRuc(
-      tarjeta.rucProcesadoraTarjeta
-    );
+    tarjeta.digitoVerificadorProcesadoraTarjeta = deriveDv(tarjeta.rucProcesadoraTarjeta);
   }
 
-  const transportista = out.datosEspecificosPorTipoDE.transporte?.transportista;
+  const transportista = getTransportista(out);
   if (!transportista) {
     return;
   }
 
   if (transportista.rucTransportista) {
-    transportista.digitoVerificadorRucTransportista = deriveNumericDvFromRuc(
-      transportista.rucTransportista
-    );
+    transportista.digitoVerificadorRucTransportista = deriveDv(transportista.rucTransportista);
   }
 
   if (transportista.rucAgente) {
-    transportista.digitoVerificadorRucAgente = deriveStringDvFromRuc(transportista.rucAgente);
+    transportista.digitoVerificadorRucAgente = deriveDvString(transportista.rucAgente);
   }
 }
 
@@ -578,7 +541,7 @@ function applySubtotalesDerivedFields(out: FacturaElectronica): void {
 export function calculateFields(fe: FacturaElectronica): FacturaElectronica {
   const out = structuredClone(fe);
 
-  applyHeaderDerivedFields(out);
+  applyBaseDerivedFields(out);
   applyOperacionDerivedFields(out);
   applyDvDerivedFields(out);
   applyItemDerivedFields(out);
