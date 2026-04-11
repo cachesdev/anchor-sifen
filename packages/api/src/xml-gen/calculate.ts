@@ -576,7 +576,7 @@ function applySubtotalesDerivedFields(out: FacturaElectronica): void {
  * 5) Subtotales y totales (accumulate -> derive -> apply)
  */
 export function calculateFields(fe: FacturaElectronica): FacturaElectronica {
-  const out = fe;
+  const out = structuredClone(fe);
 
   applyHeaderDerivedFields(out);
   applyOperacionDerivedFields(out);
