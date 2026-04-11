@@ -4,7 +4,8 @@ import {
   formaAfectacionTributariaIVA,
   type FacturaElectronica
 } from '../../sifen/types';
-import { HUNDRED, quantizeRedondeo, ZERO } from './big';
+import { HUNDRED, ZERO } from './big';
+import { getItemsOperacion, getOperacionComercial } from '../fe-accessors';
 
 type OperacionComercial = FacturaElectronica['datosGeneralesOperacion']['operacionComercial'];
 type ItemOperacion = FacturaElectronica['datosEspecificosPorTipoDE']['itemsOperacion'][number];
@@ -29,11 +30,6 @@ interface ItemAccumulation {
   hasIva10: boolean;
   hasExenta: boolean;
   hasExonerada: boolean;
-}
-
-interface RedondeoDistribution {
-  iva5: Big;
-  iva10: Big;
 }
 
 interface DerivedSubtotales {
@@ -77,9 +73,10 @@ export function applySubtotalesDerivedFields(out: FacturaElectronica): void {
 function accumulateItems(doc: FacturaElectronica): ItemAccumulation {
   const acc = createEmptyItemAccumulation();
 
-  for (const item of doc.datosEspecificosPorTipoDE.itemsOperacion) {
+  for (const item of getItemsOperacion(doc)) {
     const valorItem = item.valorItem;
     const valorRestaItem = valorItem.valorRestaItem;
+    // EA008
     const valorTotalItem = valorRestaItem.valorTotalOperacionItem;
     const cantidad = item.cantidadProductoServicio;
 
@@ -114,9 +111,8 @@ function accumulateItems(doc: FacturaElectronica): ItemAccumulation {
 }
 
 function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): DerivedSubtotales {
-  const operacionComercial = doc.datosGeneralesOperacion.operacionComercial;
+  const operacionComercial = getOperacionComercial(doc);
   const comisionOperacion = bigOrZero(doc.subtotalesTotales.comisionOperacion);
-  const comisionOperacionNormalizada = comisionOperacion.gt(0) ? comisionOperacion : ZERO;
 
   const redondeoOperacion = calculateRedondeo(
     acc.totalBrutoOperacion,
@@ -126,25 +122,30 @@ function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): Deriv
   const totalDescuentosOperacion = acc.totalDescuentoParticular.plus(acc.totalDescuentoGlobal);
   const totalAnticiposOperacion = acc.totalAnticipoItem.plus(acc.totalAnticipoGlobal);
   const totalNetoOperacion = acc.totalBrutoOperacion
-    .minus(totalDescuentosOperacion)
-    .minus(totalAnticiposOperacion)
-    .minus(redondeoOperacion);
-  const redondeoDistribuido = distributeRedondeo(redondeoOperacion, acc);
+    .minus(redondeoOperacion)
+    .plus(comisionOperacion);
   const liquidacionIva5 = acc.hasIva5 ? acc.liquidacionIva5 : undefined;
   const liquidacionIva10 = acc.hasIva10 ? acc.liquidacionIva10 : undefined;
-  const liquidacionTotalIva5 = redondeoDistribuido.iva5.gt(0)
-    ? redondeoDistribuido.iva5.times(5).div(105)
-    : undefined;
-  const liquidacionTotalIva10 = redondeoDistribuido.iva10.gt(0)
-    ? redondeoDistribuido.iva10.times(10).div(110)
-    : undefined;
-  const liquidacionIvaComision = comisionOperacionNormalizada.gt(0)
-    ? comisionOperacionNormalizada.times(10).div(110)
+  const liquidacionTotalIva5 =
+    acc.hasIva5 && redondeoOperacion.gt(0) ? redondeoOperacion.times(5).div(105) : undefined;
+  const liquidacionTotalIva10 =
+    acc.hasIva10 && redondeoOperacion.gt(0) ? redondeoOperacion.times(10).div(110) : undefined;
+  const liquidacionIvaComision = comisionOperacion.gt(0)
+    ? comisionOperacion.times(10).div(110)
     : undefined;
 
   const hasAnyIva = acc.hasIva5 || acc.hasIva10;
-  const liquidacionTotalIva = hasAnyIva
-    ? bigOrZero(liquidacionIva5).plus(bigOrZero(liquidacionIva10))
+  const hasAnyLiquidacionIva =
+    hasAnyIva ||
+    liquidacionTotalIva5 !== undefined ||
+    liquidacionTotalIva10 !== undefined ||
+    liquidacionIvaComision !== undefined;
+  const liquidacionTotalIva = hasAnyLiquidacionIva
+    ? bigOrZero(liquidacionIva5)
+        .plus(bigOrZero(liquidacionIva10))
+        .minus(bigOrZero(liquidacionTotalIva5))
+        .minus(bigOrZero(liquidacionTotalIva10))
+        .plus(bigOrZero(liquidacionIvaComision))
     : undefined;
 
   const totalBaseGravada5 = acc.hasIva5 ? acc.totalBaseGravada5 : undefined;
@@ -169,9 +170,7 @@ function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): Deriv
     totalDescuentosOperacion,
     totalAnticiposOperacion,
     redondeoOperacion,
-    comisionOperacion: comisionOperacionNormalizada.gt(0)
-      ? comisionOperacionNormalizada
-      : undefined,
+    comisionOperacion: comisionOperacion.gt(0) ? comisionOperacion : undefined,
     totalNetoOperacion,
     liquidacionIva5,
     liquidacionIva10,
@@ -276,38 +275,11 @@ function calculateRedondeo(totalBrutoOperacion: Big, monedaOperacion: string): B
 
   if (monedaOperacion === 'PYG') {
     const rounded = totalBrutoOperacion.div(50).round(0, Big.roundDown).times(50);
-    return quantizeRedondeo(totalBrutoOperacion.minus(rounded));
+    return totalBrutoOperacion.minus(rounded);
   }
 
   const rounded = totalBrutoOperacion.times(2).round(0, Big.roundDown).div(2);
-  return quantizeRedondeo(totalBrutoOperacion.minus(rounded));
-}
-
-function distributeRedondeo(redondeoOperacion: Big, acc: ItemAccumulation): RedondeoDistribution {
-  if (redondeoOperacion.lte(0)) {
-    return { iva5: ZERO, iva10: ZERO };
-  }
-
-  if (acc.hasIva5 && acc.hasIva10) {
-    const totalSubIva = acc.subtotalIva5.plus(acc.subtotalIva10);
-    if (totalSubIva.gt(0)) {
-      const iva5 = redondeoOperacion.times(acc.subtotalIva5).div(totalSubIva);
-      return {
-        iva5,
-        iva10: redondeoOperacion.minus(iva5)
-      };
-    }
-  }
-
-  if (acc.hasIva5) {
-    return { iva5: redondeoOperacion, iva10: ZERO };
-  }
-
-  if (acc.hasIva10) {
-    return { iva5: ZERO, iva10: redondeoOperacion };
-  }
-
-  return { iva5: ZERO, iva10: ZERO };
+  return totalBrutoOperacion.minus(rounded);
 }
 
 function deriveTotalOperacionGs(
