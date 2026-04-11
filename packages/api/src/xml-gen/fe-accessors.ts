@@ -19,12 +19,6 @@ export function getTipoCambioOperacion(doc: FacturaElectronica) {
   return getOperacionComercial(doc).tipoCambioOperacion;
 }
 
-export function getItems(
-  doc: FacturaElectronica
-): Get<FacturaElectronica, 'datosEspecificosPorTipoDE.itemsOperacion'> {
-  return doc.datosEspecificosPorTipoDE.itemsOperacion;
-}
-
 export function getSubtotales(
   doc: FacturaElectronica
 ): Get<FacturaElectronica, 'subtotalesTotales'> {
@@ -56,4 +50,10 @@ export function getPagoContadoEntregaInicial(
   'datosEspecificosPorTipoDE.condicionOperacion.pagoContadoEntregaInicial'
 > {
   return doc.datosEspecificosPorTipoDE.condicionOperacion.pagoContadoEntregaInicial;
+}
+
+export function getItemsOperacion(
+  doc: FacturaElectronica
+): Get<FacturaElectronica, 'datosEspecificosPorTipoDE.itemsOperacion'> {
+  return doc.datosEspecificosPorTipoDE.itemsOperacion;
 }
