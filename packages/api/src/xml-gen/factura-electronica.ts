@@ -23,7 +23,6 @@ import { mapSubtotalesTotalesToRaw } from './mapper/f';
 import { mapUsoGeneralToRaw } from './mapper/g';
 import { mapDocumentoElectronicoAsociadoToRaw } from './mapper/h';
 import { formatDateTime } from './mapper/helpers';
-import { calculateFieldsResult } from './calculate';
 import {
   XMLGenBusinessValidationError,
   XMLGenInputValidationError,
@@ -33,6 +32,7 @@ import type { XMLGenBuildError } from './errors';
 import { facturaElectronicaSchema } from './schema';
 import { validateCalculated } from './validation';
 import { Err, Ok, type Result } from '../result';
+import { calculateFieldsResult } from './derive';
 
 export type RequiredFields = RequiredKeysOf<FacturaElectronicaInput>;
 
