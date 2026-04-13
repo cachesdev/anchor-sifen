@@ -59,6 +59,7 @@
     "xmlbuilder2": "^4.0.3"
   },
   "inlinedDependencies": {
+    "tagged-tag": "1.0.0",
     "type-fest": "5.5.0"
   }
 }

@@ -50,8 +50,8 @@ interface DerivedSubtotales {
   totalNetoOperacion: Big;
   liquidacionIva5?: Big;
   liquidacionIva10?: Big;
-  liquidacionTotalIva5?: Big;
-  liquidacionTotalIva10?: Big;
+  liquidacionIvaRedondeo5?: Big;
+  liquidacionIvaRedondeo10?: Big;
   liquidacionIvaComision?: Big;
   liquidacionTotalIva?: Big;
   totalBaseGravada5?: Big;
@@ -126,10 +126,12 @@ function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): Deriv
     .plus(comisionOperacion);
   const liquidacionIva5 = acc.hasIva5 ? acc.liquidacionIva5 : undefined;
   const liquidacionIva10 = acc.hasIva10 ? acc.liquidacionIva10 : undefined;
-  const liquidacionTotalIva5 =
-    acc.hasIva5 && redondeoOperacion.gt(0) ? redondeoOperacion.times(5).div(105) : undefined;
-  const liquidacionTotalIva10 =
-    acc.hasIva10 && redondeoOperacion.gt(0) ? redondeoOperacion.times(10).div(110) : undefined;
+  const hasIva5Only = acc.hasIva5 && !acc.hasIva10;
+  const hasIva10Only = acc.hasIva10 && !acc.hasIva5;
+  const liquidacionIvaRedondeo5 =
+    hasIva5Only && redondeoOperacion.gt(0) ? redondeoOperacion.times(5).div(105) : undefined;
+  const liquidacionIvaRedondeo10 =
+    hasIva10Only && redondeoOperacion.gt(0) ? redondeoOperacion.times(10).div(110) : undefined;
   const liquidacionIvaComision = comisionOperacion.gt(0)
     ? comisionOperacion.times(10).div(110)
     : undefined;
@@ -137,14 +139,14 @@ function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): Deriv
   const hasAnyIva = acc.hasIva5 || acc.hasIva10;
   const hasAnyLiquidacionIva =
     hasAnyIva ||
-    liquidacionTotalIva5 !== undefined ||
-    liquidacionTotalIva10 !== undefined ||
+    liquidacionIvaRedondeo5 !== undefined ||
+    liquidacionIvaRedondeo10 !== undefined ||
     liquidacionIvaComision !== undefined;
   const liquidacionTotalIva = hasAnyLiquidacionIva
     ? bigOrZero(liquidacionIva5)
         .plus(bigOrZero(liquidacionIva10))
-        .minus(bigOrZero(liquidacionTotalIva5))
-        .minus(bigOrZero(liquidacionTotalIva10))
+        .minus(bigOrZero(liquidacionIvaRedondeo5))
+        .minus(bigOrZero(liquidacionIvaRedondeo10))
         .plus(bigOrZero(liquidacionIvaComision))
     : undefined;
 
@@ -174,8 +176,8 @@ function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): Deriv
     totalNetoOperacion,
     liquidacionIva5,
     liquidacionIva10,
-    liquidacionTotalIva5,
-    liquidacionTotalIva10,
+    liquidacionIvaRedondeo5,
+    liquidacionIvaRedondeo10,
     liquidacionIvaComision,
     liquidacionTotalIva,
     totalBaseGravada5,
@@ -205,8 +207,8 @@ function applySubtotales(out: FacturaElectronica, derived: DerivedSubtotales): v
   subtotales.totalNetoOperacion = derived.totalNetoOperacion;
   subtotales.liquidacionIva5 = derived.liquidacionIva5;
   subtotales.liquidacionIva10 = derived.liquidacionIva10;
-  subtotales.liquidacionTotalIva5 = derived.liquidacionTotalIva5;
-  subtotales.liquidacionTotalIva10 = derived.liquidacionTotalIva10;
+  subtotales.liquidacionTotalIva5 = derived.liquidacionIvaRedondeo5;
+  subtotales.liquidacionTotalIva10 = derived.liquidacionIvaRedondeo10;
   subtotales.liquidacionIvaComision = derived.liquidacionIvaComision;
   subtotales.liquidacionTotalIva = derived.liquidacionTotalIva;
   subtotales.totalBaseGravada5 = derived.totalBaseGravada5;
@@ -278,6 +280,7 @@ function calculateRedondeo(totalBrutoOperacion: Big, monedaOperacion: string): B
     return totalBrutoOperacion.minus(rounded);
   }
 
+  // FIXME: Segun manual tecnico se redondea a 50 centimos mas cercano, pero aparentemente esto tiene que funcionar con todas las monedas del XSD.
   const rounded = totalBrutoOperacion.times(2).round(0, Big.roundDown).div(2);
   return totalBrutoOperacion.minus(rounded);
 }

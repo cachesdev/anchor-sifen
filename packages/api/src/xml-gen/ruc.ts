@@ -1,5 +1,7 @@
 /**
  * Extrae la porcion del frente del ruc, quitando el dash y el DV.
+ *
+ * Ejemplo: "12345678 -  9" -> "12345678"
  */
 export function extraerRuc(ruc: string): string {
   if (!ruc) {
