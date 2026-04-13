@@ -77,9 +77,7 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
     ivaItem.liquidacionIvaItem = liquidacion;
     let baseExenta = ZERO;
     if (forma === formaAfectacionTributariaIVA.GravadoParcial) {
-      const numerador = HUNDRED
-        .times(totalOperacionItem)
-        .times(HUNDRED.minus(proporcionGravada));
+      const numerador = HUNDRED.times(totalOperacionItem).times(HUNDRED.minus(proporcionGravada));
       const denominador = HUNDRED.times(HUNDRED).plus(tasa.times(proporcionGravada));
 
       baseExenta = denominador.gt(0) ? numerador.div(denominador) : ZERO;
