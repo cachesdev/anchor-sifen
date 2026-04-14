@@ -4,6 +4,7 @@ import type { CodigoDepartamento } from '../../../gen/departamentos';
 import type { CodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais } from '../../../gen/paises';
+import type { Big } from 'big.js';
 import type {
   UnidadMedida,
   CondicionNegociacion,
@@ -203,7 +204,7 @@ export interface PagoContadoEntregaInicial {
   /**
    * E7.1 - E608 | dMonTiPag | Monto por tipo de pago | Pagina 82
    */
-  montoTipoPago: number;
+  montoTipoPago: Big;
   /**
    * E7.1 - E609 | cMoneTiPag | Moneda por tipo de pago | Pagina 82
    */
@@ -211,7 +212,7 @@ export interface PagoContadoEntregaInicial {
   /**
    * E7.1 - E611 | dTiCamTiPag | Tipo de cambio por tipo de pago | Pagina 82
    */
-  tipoCambioTipoPago?: number;
+  tipoCambioTipoPago?: Big;
   /**
    * E7.1.1 - E620 | gPagTarCD | Campos que describen el pago o entrega inicial de la operación con tarjeta de crédito/débito | Pagina 83
    */
@@ -295,7 +296,7 @@ export interface PagoCredito {
   /**
    * E7.2 - E645 | dMonEnt | Monto de la entrega inicial | Pagina 84
    */
-  montoEntregaInicial?: number;
+  montoEntregaInicial?: Big;
   /**
    * E7.2.1 - E650 | gCuotas | Campos que describen las cuotas | Pagina 85
    */
@@ -313,7 +314,7 @@ export interface Cuota {
   /**
    * E7.2.1 - E651 | dMonCuota | Monto de la cuota | Pagina 85
    */
-  montoCuota: number;
+  montoCuota: Big;
   /**
    * E7.2.1 - E652 | dVencCuo | Vencimiento de la cuota | Pagina 84
    *
@@ -365,7 +366,7 @@ export interface ItemOperacion {
   /**
    * E8 - E711 | dCantProSer | Cantidad del producto y/o servicio | Pagina 86
    */
-  cantidadProductoServicio: number;
+  cantidadProductoServicio: Big;
   /**
    * E8 - E712 | cPaisOrig | Código del país de origen del producto | Pagina 86
    */
@@ -381,11 +382,11 @@ export interface ItemOperacion {
   /**
    * E8 - E717 | dCanQuiMer | Cantidad de quiebra o merma | Pagina 87
    */
-  cantidadQuiebraMerma?: number;
+  cantidadQuiebraMerma?: Big;
   /**
    * E8 - E718 | dPorQuiMer | Porcentaje de quiebra o merma | Pagina 87
    */
-  porcentajeQuiebraMerma?: number;
+  porcentajeQuiebraMerma?: Big;
   /**
    * E8 - E719 | dCDCAnticipo | CDC del anticipo | Pagina 87
    */
@@ -415,15 +416,15 @@ export interface ValorItem {
   /**
    * E8.1 - E721 | dPUniProSer | Precio unitario del producto y/o servicio (incluidos impuestos) | Pagina 87
    */
-  precioUnitario: number;
+  precioUnitario: Big;
   /**
    * E8.1 - E725 | dTiCamIt | Tipo de cambio por ítem | Pagina 87
    */
-  tipoCambioItem?: number;
+  tipoCambioItem?: Big;
   /**
    * E8.1 - E727 | dTotBruOpeItem | Total bruto de la operación por ítem | Pagina 87
    */
-  totalBrutoOperacionItem: number;
+  totalBrutoOperacionItem: Big;
   /**
    * E8.1.1 - EA001 | gValorRestaItem | Campos que describen descuentos, anticipos y valor total por ítem | Pagina 87
    */
@@ -437,37 +438,37 @@ export interface ValorRestaItem {
   /**
    * E8.1.1 - EA002 | dDescItem | Descuento particular sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  descuentoParticularItem?: number;
+  descuentoParticularItem?: Big;
   /**
    * E8.1.1 - EA003 | dPorcDesIt | Porcentaje de descuento particular por ítem | Pagina 88
    *
    * Si no es proveido, es calculado internamente.
    */
-  porcentajeDescuentoItem?: number;
+  porcentajeDescuentoItem?: Big;
   /**
    * E8.1.1 - EA004 | dDescGloItem | Descuento global sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  descuentoGlobalItem?: number;
+  descuentoGlobalItem?: Big;
   /**
    * E8.1.1 - EA006 | dAntPreUniIt | Anticipo particular sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  anticipoParticularItem?: number;
+  anticipoParticularItem?: Big;
   /**
    * E8.1.1 - EA007 | dAntGloPreUniIt | Anticipo global sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  anticipoGlobalItem?: number;
+  anticipoGlobalItem?: Big;
   /**
    * E8.1.1 - EA008 | dTotOpeItem | Valor total de la operación por ítem | Pagina 89
    *
    * Si no es proveido, es calculado internamente.
    */
-  valorTotalOperacionItem: number;
+  valorTotalOperacionItem: Big;
   /**
    * E8.1.1 - EA009 | dTotOpeGs | Valor total de la operación por ítem en guaraníes | Pagina 89
    *
    * Si no es proveido, es calculado internamente.
    */
-  valorTotalOperacionItemGs?: number;
+  valorTotalOperacionItemGs?: Big;
 }
 
 /**
@@ -481,7 +482,7 @@ export interface IvaItem {
   /**
    * E8.2 - E733 | dPropIVA | Proporción gravada de IVA | Pagina 90
    */
-  proporcionGravadaIva: number;
+  proporcionGravadaIva: Big;
   /**
    * E8.2 - E734 | dTasaIVA | Tasa del IVA | Pagina 90
    */
@@ -491,19 +492,19 @@ export interface IvaItem {
    *
    * Si no es proveido, es calculado internamente.
    */
-  baseGravadaIvaItem: number;
+  baseGravadaIvaItem: Big;
   /**
    * E8.2 - E736 | dLiqIVAItem | Liquidación del IVA por ítem | Pagina 90
    *
    * Si no es proveido, es calculado internamente.
    */
-  liquidacionIvaItem: number;
+  liquidacionIvaItem: Big;
   /**
    * E8.2 - E737 | dBasExe | Base Exenta por Item | Pagina 1 NT-13
    *
    * Si no es proveido, es calculado internamente.
    */
-  baseExenta: number;
+  baseExenta: Big;
 }
 
 /**
@@ -573,11 +574,11 @@ export interface DetalleVehiculoNuevo {
   /**
    * E8.5 - E777 | dPNet | Peso Neto | Pagina 92
    */
-  pesoNeto?: number;
+  pesoNeto?: Big;
   /**
    * E8.5 - E778 | dPBruto | Peso Bruto | Pagina 92
    */
-  pesoBruto?: number;
+  pesoBruto?: Big;
   /**
    * E8.5 - E779 | iTipCom | Tipo de combustible | Pagina 92
    */
@@ -589,7 +590,7 @@ export interface DetalleVehiculoNuevo {
   /**
    * E8.5 - E782 | dCapTracc | Capacidad máxima de tracción | Pagina 92
    */
-  capacidadMaximaTraccion?: number;
+  capacidadMaximaTraccion?: Big;
   /**
    * E8.5 - E783 | dAnoFab | Año de fabricación | Pagina 92
    */
@@ -649,15 +650,15 @@ export interface SectorEnergiaElectrica {
   /**
    * E9.2 - E795 | dLecAnt | Lectura anterior | Pagina 93
    */
-  lecturaAnterior?: number;
+  lecturaAnterior?: Big;
   /**
    * E9.2 - E796 | dLecAct | Lectura actual | Pagina 93
    */
-  lecturaActual?: number;
+  lecturaActual?: Big;
   /**
    * E9.2 - E797 | dConKwh | Consumo | Pagina 93
    */
-  consumoKwh?: number;
+  consumoKwh?: Big;
 }
 
 /**
@@ -689,7 +690,7 @@ export interface PolizaSeguros {
   /**
    * E9.3.1 - EA793 | dVigencia | Vigencia de la póliza | Pagina 94
    */
-  vigenciaPoliza: number;
+  vigenciaPoliza: Big;
   /**
    * E9.3.1 - EA794 | dNumPoliza | Número de la póliza | Pagina 94
    */
@@ -723,15 +724,15 @@ export interface SectorSupermercados {
   /**
    * E9.4 - E812 | dEfectivo | Efectivo | Pagina 95
    */
-  efectivo?: number;
+  efectivo?: Big;
   /**
    * E9.4 - E813 | dVuelto | Vuelto | Pagina 95
    */
-  vuelto?: number;
+  vuelto?: Big;
   /**
    * E9.4 - E814 | dDonac | Monto de la donación | Pagina 95
    */
-  montoDonacion?: number;
+  montoDonacion?: Big;
   /**
    * E9.4 - E815 | dDesDonac | Descripción de la donación | Pagina 95
    */
@@ -771,7 +772,7 @@ export interface DatosAdicionalesUsoComercial {
   /**
    * E9.5 - E826 | dSalAnt | Saldo anterior | Pagina 96
    */
-  saldoAnterior?: number;
+  saldoAnterior?: Big;
   /**
    * E9.5 - E827 | dCodConDncp | Codigo de contratacion de la DNCP | Pagina 1 NT-20
    */

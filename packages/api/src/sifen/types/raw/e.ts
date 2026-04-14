@@ -276,7 +276,7 @@ export interface GPaConEIni {
   /**
    * E7.1 - E608 | Monto por tipo de pago | Pagina 82
    */
-  dMonTiPag: number;
+  dMonTiPag: string;
   /**
    * E7.1 - E609 | Moneda por tipo de pago | Pagina 82
    */
@@ -288,7 +288,7 @@ export interface GPaConEIni {
   /**
    * E7.1 - E611 | Tipo de cambio por tipo de pago | Pagina 82
    */
-  dTiCamTiPag?: number;
+  dTiCamTiPag?: string;
   /**
    * E7.1.1 - E620 | Campos que describen el pago o entrega inicial de la operación con tarjeta de crédito/débito | Pagina 83
    */
@@ -378,7 +378,7 @@ export interface GPagCred {
   /**
    * E7.2 - E645 | Monto de la entrega inicial | Pagina 84
    */
-  dMonEnt?: number;
+  dMonEnt?: string;
   /**
    * E7.2.1 - E650 | Campos que describen las cuotas | Pagina 85
    */
@@ -400,7 +400,7 @@ export interface GCuotas {
   /**
    * E7.2.1 - E651 | Monto de la cuota | Pagina 85
    */
-  dMonCuota: number;
+  dMonCuota: string;
   /**
    * E7.2.1 - E652 | Vencimiento de la cuota | Pagina 84
    *
@@ -456,7 +456,7 @@ export interface GCamItem {
   /**
    * E8 - E711 | Cantidad del producto y/o servicio | Pagina 86
    */
-  dCantProSer: number;
+  dCantProSer: string;
   /**
    * E8 - E712 | Código del país de origen del producto | Pagina 86
    */
@@ -480,11 +480,11 @@ export interface GCamItem {
   /**
    * E8 - E717 | Cantidad de quiebra o merma | Pagina 87
    */
-  dCanQuiMer?: number;
+  dCanQuiMer?: string;
   /**
    * E8 - E718 | Porcentaje de quiebra o merma | Pagina 87
    */
-  dPorQuiMer?: number;
+  dPorQuiMer?: string;
   /**
    * E8 - E719 | CDC del anticipo | Pagina 87
    */
@@ -514,15 +514,15 @@ export interface GValorItem {
   /**
    * E8.1 - E721 | Precio unitario del producto y/o servicio (incluidos impuestos) | Pagina 87
    */
-  dPUniProSer: number;
+  dPUniProSer: string;
   /**
    * E8.1 - E725 | Tipo de cambio por ítem | Pagina 87
    */
-  dTiCamIt?: number;
+  dTiCamIt?: string;
   /**
    * E8.1 - E727 | Total bruto de la operación por ítem | Pagina 87
    */
-  dTotBruOpeItem: number;
+  dTotBruOpeItem: string;
   /**
    * E8.1.1 - EA001 | Campos que describen descuentos, anticipos y valor total por ítem | Pagina 87
    */
@@ -536,31 +536,31 @@ export interface GValorRestaItem {
   /**
    * E8.1.1 - EA002 | Descuento particular sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  dDescItem?: number;
+  dDescItem?: string;
   /**
    * E8.1.1 - EA003 | Porcentaje de descuento particular por ítem | Pagina 88
    */
-  dPorcDesIt?: number;
+  dPorcDesIt?: string;
   /**
    * E8.1.1 - EA004 | Descuento global sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  dDescGloItem?: number;
+  dDescGloItem?: string;
   /**
    * E8.1.1 - EA006 | Anticipo particular sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  dAntPreUniIt?: number;
+  dAntPreUniIt?: string;
   /**
    * E8.1.1 - EA007 | Anticipo global sobre el precio unitario por ítem (incluidos impuestos) | Pagina 88
    */
-  dAntGloPreUniIt?: number;
+  dAntGloPreUniIt?: string;
   /**
    * E8.1.1 - EA008 | Valor total de la operación por ítem | Pagina 89
    */
-  dTotOpeItem: number;
+  dTotOpeItem: string;
   /**
    * E8.1.1 - EA009 | Valor total de la operación por ítem en guaraníes | Pagina 89
    */
-  dTotOpeGs?: number;
+  dTotOpeGs?: string;
 }
 
 /**
@@ -578,7 +578,7 @@ export interface GCamIVA {
   /**
    * E8.2 - E733 | Proporción gravada de IVA | Pagina 90
    */
-  dPropIVA: number;
+  dPropIVA: string;
   /**
    * E8.2 - E734 | Tasa del IVA | Pagina 90
    */
@@ -586,15 +586,15 @@ export interface GCamIVA {
   /**
    * E8.2 - E735 | Base gravada del IVA por ítem | Pagina 90
    */
-  dBasGravIVA: number;
+  dBasGravIVA: string;
   /**
    * E8.2 - E736 | Liquidación del IVA por ítem | Pagina 90
    */
-  dLiqIVAItem: number;
+  dLiqIVAItem: string;
   /**
    * E8.2 - E737 | Base Exenta por Item | Pagina 1 NT-13
    */
-  dBasExe: number;
+  dBasExe: string;
 }
 
 /**
@@ -668,11 +668,11 @@ export interface GVehNuevo {
   /**
    * E8.5 - E777 | Peso Neto | Pagina 92
    */
-  dPNet?: number;
+  dPNet?: string;
   /**
    * E8.5 - E778 | Peso Bruto | Pagina 92
    */
-  dPBruto?: number;
+  dPBruto?: string;
   /**
    * E8.5 - E779 | Tipo de combustible | Pagina 92
    */
@@ -688,7 +688,7 @@ export interface GVehNuevo {
   /**
    * E8.5 - E782 | Capacidad máxima de tracción | Pagina 92
    */
-  dCapTracc?: number;
+  dCapTracc?: string;
   /**
    * E8.5 - E783 | Año de fabricación | Pagina 92
    */
@@ -748,15 +748,15 @@ export interface GGrupEner {
   /**
    * E9.2 - E795 | Lectura anterior | Pagina 93
    */
-  dLecAnt?: number;
+  dLecAnt?: string;
   /**
    * E9.2 - E796 | Lectura actual | Pagina 93
    */
-  dLecAct?: number;
+  dLecAct?: string;
   /**
    * E9.2 - E797 | Consumo | Pagina 93
    */
-  dConKwh?: number;
+  dConKwh?: string;
 }
 
 /**
@@ -788,7 +788,7 @@ export interface GGrupPolSeg {
   /**
    * E9.3.1 - EA793 | Vigencia de la póliza | Pagina 94
    */
-  dVigencia: number;
+  dVigencia: string;
   /**
    * E9.3.1 - EA794 | Número de la póliza | Pagina 94
    */
@@ -822,15 +822,15 @@ export interface GGrupSup {
   /**
    * E9.4 - E812 | Efectivo | Pagina 95
    */
-  dEfectivo?: number;
+  dEfectivo?: string;
   /**
    * E9.4 - E813 | Vuelto | Pagina 95
    */
-  dVuelto?: number;
+  dVuelto?: string;
   /**
    * E9.4 - E814 | Monto de la donación | Pagina 95
    */
-  dDonac?: number;
+  dDonac?: string;
   /**
    * E9.4 - E815 | Descripción de la donación | Pagina 95
    */
@@ -870,7 +870,7 @@ export interface GGrupAdi {
   /**
    * E9.5 - E826 | Saldo anterior | Pagina 96
    */
-  dSalAnt?: number;
+  dSalAnt?: string;
   /**
    * E9.5 - E827 | Codigo de contratacion de la DNCP | Pagina 1 NT-20
    */

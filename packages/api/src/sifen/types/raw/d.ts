@@ -58,7 +58,7 @@ export interface GOpeCom {
   /**
    * D1 - D018 | Tipo de cambio de la operación | Pagina 67
    */
-  dTiCam?: number;
+  dTiCam?: string;
   /**
    * D1 - D019 | Condición del Anticipo | Pagina 67
    */

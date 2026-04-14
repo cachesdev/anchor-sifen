@@ -84,8 +84,9 @@ import {
   formatDateOnly,
   formatDateTime,
   parseRuc,
+  bigToRawDecimal,
   bigToRawNumber,
-  optionalBigToRawNumber,
+  optionalBigToRawDecimal,
   requireDefined,
   resolveCityDescription,
   resolveCountryDescription,
@@ -218,10 +219,10 @@ export function mapPagoContadoEntregaInicialToRaw(data: PagoContadoEntregaInicia
       data.tipoPago,
       descripcionTipoPago as Record<string, string>
     ),
-    dMonTiPag: data.montoTipoPago,
+    dMonTiPag: bigToRawDecimal(data.montoTipoPago, 4),
     cMoneTiPag: data.monedaTipoPago,
     dDMoneTiPag: resolveCurrencyDescription(data.monedaTipoPago),
-    dTiCamTiPag: data.tipoCambioTipoPago,
+    dTiCamTiPag: optionalBigToRawDecimal(data.tipoCambioTipoPago, 4),
     gPagTarCD: data.pagoTarjetaCreditoDebito
       ? mapPagoTarjetaCreditoDebitoToRaw(data.pagoTarjetaCreditoDebito)
       : undefined,
@@ -267,7 +268,7 @@ export function mapPagoCreditoToRaw(data: PagoCredito): GPagCred {
     ),
     dPlazoCre: data.plazoCredito,
     dCuotas: data.cantidadCuotas,
-    dMonEnt: data.montoEntregaInicial,
+    dMonEnt: optionalBigToRawDecimal(data.montoEntregaInicial, 4),
     gCuotas: data.cuotas?.map(mapCuotaToRaw)
   } as GPagCred;
 }
@@ -276,7 +277,7 @@ export function mapCuotaToRaw(data: Cuota): GCuotas {
   return {
     cMoneCuo: data.monedaCuota,
     dDMoneCuo: resolveCurrencyDescription(data.monedaCuota),
-    dMonCuota: data.montoCuota,
+    dMonCuota: bigToRawDecimal(data.montoCuota, 4),
     dVencCuo: formatDateOnly(data.vencimientoCuota)
   } as GCuotas;
 }
@@ -297,7 +298,7 @@ export function mapItemOperacionToRaw(data: ItemOperacion_FE): GCamItem {
       data.unidadMedida,
       descripcionUnidadMedida
     ),
-    dCantProSer: bigToRawNumber(data.cantidadProductoServicio),
+    dCantProSer: bigToRawDecimal(data.cantidadProductoServicio, 4),
     cPaisOrig: data.paisOrigen,
     dDesPaisOrig:
       data.paisOrigen !== undefined ? resolveCountryDescription(data.paisOrigen) : undefined,
@@ -307,8 +308,8 @@ export function mapItemOperacionToRaw(data: ItemOperacion_FE): GCamItem {
       data.codigoDatosRelevanciaMercaderias,
       descripcionCodigoDatosRelevanciaMercaderias as Record<string, string>
     ),
-    dCanQuiMer: data.cantidadQuiebraMerma,
-    dPorQuiMer: data.porcentajeQuiebraMerma,
+    dCanQuiMer: optionalBigToRawDecimal(data.cantidadQuiebraMerma, 4),
+    dPorQuiMer: optionalBigToRawDecimal(data.porcentajeQuiebraMerma, 8),
     dCDCAnticipo: data.cdcAnticipo,
     gValorItem: data.valorItem ? mapValorItemToRaw(data.valorItem) : undefined,
     gCamIVA: data.ivaItem ? mapIvaItemToRaw(data.ivaItem) : undefined,
@@ -321,22 +322,22 @@ export function mapItemOperacionToRaw(data: ItemOperacion_FE): GCamItem {
 
 export function mapValorItemToRaw(data: ValorItem_FE): GValorItem {
   return {
-    dPUniProSer: bigToRawNumber(data.precioUnitario),
-    dTiCamIt: optionalBigToRawNumber(data.tipoCambioItem),
-    dTotBruOpeItem: bigToRawNumber(data.totalBrutoOperacionItem),
+    dPUniProSer: bigToRawDecimal(data.precioUnitario, 8),
+    dTiCamIt: optionalBigToRawDecimal(data.tipoCambioItem, 4),
+    dTotBruOpeItem: bigToRawDecimal(data.totalBrutoOperacionItem, 8),
     gValorRestaItem: mapValorRestaItemToRaw(data.valorRestaItem)
   } as GValorItem;
 }
 
 export function mapValorRestaItemToRaw(data: ValorRestaItem_FE): GValorRestaItem {
   return {
-    dDescItem: optionalBigToRawNumber(data.descuentoParticularItem),
-    dPorcDesIt: bigToRawNumber(data.porcentajeDescuentoItem),
-    dDescGloItem: optionalBigToRawNumber(data.descuentoGlobalItem),
-    dAntPreUniIt: optionalBigToRawNumber(data.anticipoParticularItem),
-    dAntGloPreUniIt: optionalBigToRawNumber(data.anticipoGlobalItem),
-    dTotOpeItem: bigToRawNumber(data.valorTotalOperacionItem),
-    dTotOpeGs: optionalBigToRawNumber(data.valorTotalOperacionItemGs)
+    dDescItem: optionalBigToRawDecimal(data.descuentoParticularItem, 8),
+    dPorcDesIt: bigToRawDecimal(data.porcentajeDescuentoItem, 8),
+    dDescGloItem: optionalBigToRawDecimal(data.descuentoGlobalItem, 8),
+    dAntPreUniIt: optionalBigToRawDecimal(data.anticipoParticularItem, 8),
+    dAntGloPreUniIt: optionalBigToRawDecimal(data.anticipoGlobalItem, 8),
+    dTotOpeItem: bigToRawDecimal(data.valorTotalOperacionItem, 8),
+    dTotOpeGs: optionalBigToRawDecimal(data.valorTotalOperacionItemGs, 8)
   } as GValorRestaItem;
 }
 
@@ -348,11 +349,11 @@ export function mapIvaItemToRaw(data: IvaItem_FE): GCamIVA {
       data.formaAfectacionTributariaIVA,
       descripcionFormaAfectacionTributariaIVA as Record<string, string>
     ),
-    dPropIVA: bigToRawNumber(data.proporcionGravadaIva),
+    dPropIVA: bigToRawDecimal(data.proporcionGravadaIva, 8),
     dTasaIVA: bigToRawNumber(data.tasaIva),
-    dBasGravIVA: bigToRawNumber(data.baseGravadaIvaItem),
-    dLiqIVAItem: bigToRawNumber(data.liquidacionIvaItem),
-    dBasExe: bigToRawNumber(data.baseExenta)
+    dBasGravIVA: bigToRawDecimal(data.baseGravadaIvaItem, 8),
+    dLiqIVAItem: bigToRawDecimal(data.liquidacionIvaItem, 8),
+    dBasExe: bigToRawDecimal(data.baseExenta, 8)
   } as GCamIVA;
 }
 
@@ -380,15 +381,15 @@ export function mapDetalleVehiculoNuevoToRaw(data: DetalleVehiculoNuevo): GVehNu
     dColor: data.colorVehiculo,
     dPotencia: data.potenciaMotor,
     dCapMot: data.capacidadMotor,
-    dPNet: data.pesoNeto,
-    dPBruto: data.pesoBruto,
+    dPNet: optionalBigToRawDecimal(data.pesoNeto, 4),
+    dPBruto: optionalBigToRawDecimal(data.pesoBruto, 4),
     iTipCom: data.tipoCombustible,
     dDesTipCom: resolveOptionalDescription(
       data.tipoCombustible,
       descripcionTipoCombustible as Record<string, string>
     ),
     dNroMotor: data.numeroMotor,
-    dCapTracc: data.capacidadMaximaTraccion,
+    dCapTracc: optionalBigToRawDecimal(data.capacidadMaximaTraccion, 4),
     dAnoFab: data.anoFabricacion,
     cTipVeh: data.tipoVehiculo,
     dCapac: data.capacidadMaximaPasajeros,
@@ -416,9 +417,9 @@ export function mapSectorEnergiaElectricaToRaw(data: SectorEnergiaElectrica): GG
     dNroMed: data.numeroMedidor,
     dActiv: data.codigoActividad,
     dCateg: data.codigoCategoria,
-    dLecAnt: data.lecturaAnterior,
-    dLecAct: data.lecturaActual,
-    dConKwh: data.consumoKwh
+    dLecAnt: optionalBigToRawDecimal(data.lecturaAnterior, 2),
+    dLecAct: optionalBigToRawDecimal(data.lecturaActual, 2),
+    dConKwh: optionalBigToRawDecimal(data.consumoKwh, 2)
   } as GGrupEner;
 }
 
@@ -433,7 +434,7 @@ export function mapPolizaSegurosToRaw(data: PolizaSeguros): GGrupPolSeg {
   return {
     dPoliza: data.codigoPoliza,
     dUnidVig: data.unidadVigencia,
-    dVigencia: data.vigenciaPoliza,
+    dVigencia: bigToRawDecimal(data.vigenciaPoliza, 1),
     dNumPoliza: data.numeroPoliza,
     dFecIniVig: formatDateTime(data.fechaInicioVigencia),
     dFecFinVig: formatDateTime(data.fechaFinVigencia),
@@ -444,9 +445,9 @@ export function mapPolizaSegurosToRaw(data: PolizaSeguros): GGrupPolSeg {
 export function mapSectorSupermercadosToRaw(data: SectorSupermercados): GGrupSup {
   return {
     dNomCaj: data.nombreCajero,
-    dEfectivo: data.efectivo,
-    dVuelto: data.vuelto,
-    dDonac: data.montoDonacion,
+    dEfectivo: optionalBigToRawDecimal(data.efectivo, 4),
+    dVuelto: optionalBigToRawDecimal(data.vuelto, 4),
+    dDonac: optionalBigToRawDecimal(data.montoDonacion, 4),
     dDesDonac: data.descripcionDonacion
   } as GGrupSup;
 }
@@ -460,7 +461,7 @@ export function mapDatosAdicionalesUsoComercialToRaw(data: DatosAdicionalesUsoCo
       | string[]
       | undefined,
     dContrato: data.numeroContrato,
-    dSalAnt: data.saldoAnterior,
+    dSalAnt: optionalBigToRawDecimal(data.saldoAnterior, 4),
     dCodConDncp: data.codigoContratacionDNCP
   } as GGrupAdi;
 }

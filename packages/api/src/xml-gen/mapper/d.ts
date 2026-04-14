@@ -25,7 +25,7 @@ import {
   resolveDistrictDescription,
   resolveOptionalDescription,
   resolveRequiredDescription,
-  optionalBigToRawNumber,
+  optionalBigToRawDecimal,
   resolveOptionalNumericDv,
   resolveRequiredNumericDv
 } from './helpers';
@@ -65,7 +65,7 @@ export function mapOperacionComercialToRaw(data: OperacionComercial_FE): GOpeCom
     cMoneOpe: data.monedaOperacion,
     dDesMoneOpe: resolveCurrencyDescription(data.monedaOperacion),
     dCondTiCam: data.condicionTipoCambio,
-    dTiCam: optionalBigToRawNumber(data.tipoCambioOperacion),
+    dTiCam: optionalBigToRawDecimal(data.tipoCambioOperacion, 4),
     iCondAnt: data.condicionAnticipo,
     dDesCondAnt: resolveOptionalDescription(
       data.condicionAnticipo,

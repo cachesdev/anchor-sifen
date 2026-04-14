@@ -49,10 +49,12 @@ export class SifenAPI {
     return (await this.xmlSigner.signDocument(xml, this.certificateData)).signedXml;
   }
 
+  /** Retorna la URL del código QR */
   async generateQR(signedXML: string): Promise<string> {
     return getQRUrl(signedXML, this.config.idCSC, this.config.csc, this.config.environment);
   }
 
+  /** Genera y inserta la URL del código QR en el XML firmado */
   async attachQR(signedXML: string): Promise<string> {
     return attachQRToSignedXML(
       signedXML,
