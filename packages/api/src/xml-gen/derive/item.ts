@@ -1,6 +1,6 @@
 import { formaAfectacionTributariaIVA, type FacturaElectronica } from '../../sifen/types';
 import { getItemsOperacion } from '../fe-accessors';
-import { bigOrZero, HUNDRED, ONE, ZERO } from './big';
+import { bigOrZero, HUNDRED, ONE, toBig, ZERO } from '../big';
 
 export function applyItemDerivedFields(out: FacturaElectronica): void {
   for (const item of getItemsOperacion(out)) {
@@ -47,7 +47,7 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
     const forma = ivaItem.formaAfectacionTributariaIVA;
     // INFO: La proporcion gravada es generalmente 100% en todos los casos, con excepcion a exenta y exonerada donde es 0% y parcial, donde es variable entre 0 a 100.
     const proporcionGravada = ivaItem.proporcionGravadaIva;
-    // FIXME: Tasa es una enumeracion, no hace falta usar Big
+    // Tasa es una enumeracion tratada como numero por sifen (0, 5, 10).
     const tasa = ivaItem.tasaIva;
 
     let baseGravada = ZERO;
@@ -56,18 +56,18 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
     if (
       forma !== formaAfectacionTributariaIVA.Exonerado &&
       forma !== formaAfectacionTributariaIVA.Exento &&
-      tasa.gt(0) &&
+      tasa > 0 &&
       proporcionGravada.gt(0)
     ) {
       const baseCalculo = totalOperacionItem.times(proporcionGravada).div(HUNDRED);
 
-      if (tasa.eq(10)) {
+      if (tasa === 10) {
         baseGravada = baseCalculo.div(1.1);
-      } else if (tasa.eq(5)) {
+      } else if (tasa === 5) {
         baseGravada = baseCalculo.div(1.05);
       } else {
         // Fallback
-        baseGravada = baseCalculo.div(ONE.plus(tasa.div(HUNDRED)));
+        baseGravada = baseCalculo.div(ONE.plus(toBig(tasa).div(HUNDRED)));
       }
 
       liquidacion = baseGravada.times(tasa).div(HUNDRED);
@@ -78,7 +78,7 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
     let baseExenta = ZERO;
     if (forma === formaAfectacionTributariaIVA.GravadoParcial) {
       const numerador = HUNDRED.times(totalOperacionItem).times(HUNDRED.minus(proporcionGravada));
-      const denominador = HUNDRED.times(HUNDRED).plus(tasa.times(proporcionGravada));
+      const denominador = HUNDRED.times(HUNDRED).plus(proporcionGravada.times(tasa));
 
       baseExenta = denominador.gt(0) ? numerador.div(denominador) : ZERO;
     }
