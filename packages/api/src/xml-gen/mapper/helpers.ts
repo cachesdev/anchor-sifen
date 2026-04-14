@@ -31,23 +31,15 @@ function formatDate(value: Date, format: 'date' | 'date-time'): string {
   return dt.toFormat("yyyy-MM-dd'T'HH:mm:ss");
 }
 
-export function bigToRawNumber(value: Big): number {
-  return Number(value.toString());
-}
-
-export function optionalBigToRawNumber(value: Big | undefined): number | undefined {
-  return value !== undefined ? bigToRawNumber(value) : undefined;
-}
-
-export function bigToRawDecimal(value: Big, decimalPlaces: number): string {
+export function bigToFixed(value: Big, decimalPlaces: number): string {
   return value.toFixed(decimalPlaces);
 }
 
-export function optionalBigToRawDecimal(
+export function optionalBigToFixed(
   value: Big | undefined,
   decimalPlaces: number
 ): string | undefined {
-  return value !== undefined ? bigToRawDecimal(value, decimalPlaces) : undefined;
+  return value !== undefined ? bigToFixed(value, decimalPlaces) : undefined;
 }
 
 export function formatDateOnly(value?: Date): string | undefined {

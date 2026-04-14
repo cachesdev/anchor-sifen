@@ -1,10 +1,9 @@
-import { Big } from 'big.js';
 import {
   condicionTipoCambio,
   formaAfectacionTributariaIVA,
   type FacturaElectronica
 } from '../../sifen/types';
-import { HUNDRED, ZERO } from './big';
+import { Big, bigOrZero, HUNDRED, ZERO } from '../big';
 import { getItemsOperacion, getOperacionComercial } from '../fe-accessors';
 
 type OperacionComercial = FacturaElectronica['datosGeneralesOperacion']['operacionComercial'];
@@ -58,10 +57,6 @@ interface DerivedSubtotales {
   totalBaseGravada10?: Big;
   totalBaseGravadaIva?: Big;
   totalOperacionGs?: Big;
-}
-
-function bigOrZero(value: Big | undefined): Big {
-  return value ?? ZERO;
 }
 
 export function applySubtotalesDerivedFields(out: FacturaElectronica): void {
@@ -311,7 +306,7 @@ function deriveTotalOperacionGs(
 }
 
 function accumulateGravado(acc: ItemAccumulation, ivaItem: IvaItem, totalItem: Big): void {
-  if (ivaItem.tasaIva.eq(5)) {
+  if (ivaItem.tasaIva === 5) {
     acc.hasIva5 = true;
     acc.subtotalIva5 = acc.subtotalIva5.plus(totalItem);
     acc.liquidacionIva5 = acc.liquidacionIva5.plus(ivaItem.liquidacionIvaItem);
@@ -319,7 +314,7 @@ function accumulateGravado(acc: ItemAccumulation, ivaItem: IvaItem, totalItem: B
     return;
   }
 
-  if (ivaItem.tasaIva.eq(10)) {
+  if (ivaItem.tasaIva === 10) {
     acc.hasIva10 = true;
     acc.subtotalIva10 = acc.subtotalIva10.plus(totalItem);
     acc.liquidacionIva10 = acc.liquidacionIva10.plus(ivaItem.liquidacionIvaItem);

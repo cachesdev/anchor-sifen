@@ -9,175 +9,55 @@ import type { SubtotalesTotales } from './clean/f';
 import type { UsoGeneral } from './clean/g';
 import type { DocumentoElectronicoAsociado } from './clean/h';
 import type {
-  ConditionalKeys,
   Except,
   OmitDeep,
-  SetFieldType,
   SetRequired,
   SetRequiredDeep,
   Simplify,
   SimplifyDeep
 } from 'type-fest';
-import type { ItemOperacion } from './clean/e';
+
+type DeepBigToNumber<T> = T extends Big
+  ? number
+  : T extends Date
+    ? T
+    : T extends readonly (infer U)[]
+      ? DeepBigToNumber<U>[]
+      : T extends object
+        ? { [K in keyof T]: DeepBigToNumber<T[K]> }
+        : T;
+
+type DatosEspecificosPorTipoDE_FE_Base = OmitDeep<
+  DatosEspecificosPorTipoDE,
+  'autofacturaElectronica' | 'notaCreditoDebitoElectronica' | 'notaRemisionElectronica'
+>;
 
 export type Timbrado_FE = OmitDeep<Timbrado, 'tipoDocumento'>;
-type ItemOperacion_FE_Base = SetRequired<ItemOperacion, 'valorItem'>;
-type DatosGeneralesOperacion_FE_Base = SetRequired<DatosGeneralesOperacion, 'operacionComercial'>;
-type DatosEspecificosPorTipoDE_FE_Base = SetFieldType<
-  SetRequiredDeep<
-    OmitDeep<
-      DatosEspecificosPorTipoDE,
-      'autofacturaElectronica' | 'notaCreditoDebitoElectronica' | 'notaRemisionElectronica'
-    >,
-    'facturaElectronica' | 'condicionOperacion' | 'itemsOperacion'
-  >,
-  'itemsOperacion',
-  ItemOperacion_FE_Base[]
+export type OperacionDE_FE = Simplify<SetRequired<OperacionDE, 'codigoSeguridad'>>;
+
+export type DatosGeneralesOperacion_FE = SimplifyDeep<
+  SetRequiredDeep<DatosGeneralesOperacion, 'operacionComercial' | 'emisor.digitoVerificadorEmisor'>
 >;
 
-export type OperacionDE_FE = Simplify<
-  Except<OperacionDE, 'codigoSeguridad'> & { codigoSeguridad: number }
->;
-
-export type OperacionComercial_FE = Simplify<
-  Except<DatosGeneralesOperacion_FE_Base['operacionComercial'], 'tipoCambioOperacion'> & {
-    tipoCambioOperacion?: Big;
-  }
->;
-
-type Emisor_FE = Simplify<
-  Except<DatosGeneralesOperacion_FE_Base['emisor'], 'digitoVerificadorEmisor'> & {
-    digitoVerificadorEmisor: number;
-  }
->;
-
-type Receptor_FE = Simplify<
-  Except<DatosGeneralesOperacion_FE_Base['receptor'], 'digitoVerificadorReceptor'> & {
-    digitoVerificadorReceptor?: number;
-  }
->;
-
-export type DatosGeneralesOperacion_FE = Simplify<
-  Except<DatosGeneralesOperacion_FE_Base, 'operacionComercial' | 'emisor' | 'receptor'> & {
-    operacionComercial: OperacionComercial_FE;
-    emisor: Emisor_FE;
-    receptor: Receptor_FE;
-  }
->;
-
-export type ValorRestaItem_FE = Simplify<
-  Except<
-    ItemOperacion_FE_Base['valorItem']['valorRestaItem'],
-    | 'descuentoParticularItem'
-    | 'porcentajeDescuentoItem'
-    | 'descuentoGlobalItem'
-    | 'anticipoParticularItem'
-    | 'anticipoGlobalItem'
-    | 'valorTotalOperacionItem'
-    | 'valorTotalOperacionItemGs'
-  > & {
-    descuentoParticularItem?: Big;
-    porcentajeDescuentoItem: Big;
-    descuentoGlobalItem?: Big;
-    anticipoParticularItem?: Big;
-    anticipoGlobalItem?: Big;
-    valorTotalOperacionItem: Big;
-    valorTotalOperacionItemGs?: Big;
-  }
->;
-
-export type ValorItem_FE = Simplify<
-  Except<
-    ItemOperacion_FE_Base['valorItem'],
-    'precioUnitario' | 'tipoCambioItem' | 'totalBrutoOperacionItem' | 'valorRestaItem'
-  > & {
-    precioUnitario: Big;
-    tipoCambioItem?: Big;
-    totalBrutoOperacionItem: Big;
-    valorRestaItem: ValorRestaItem_FE;
-  }
->;
-
-export type IvaItem_FE = Simplify<
-  Except<
-    NonNullable<ItemOperacion_FE_Base['ivaItem']>,
-    'proporcionGravadaIva' | 'tasaIva' | 'baseGravadaIvaItem' | 'liquidacionIvaItem' | 'baseExenta'
-  > & {
-    proporcionGravadaIva: Big;
-    tasaIva: Big;
-    baseGravadaIvaItem: Big;
-    liquidacionIvaItem: Big;
-    baseExenta: Big;
-  }
->;
-
-export type ItemOperacion_FE = Simplify<
-  Except<ItemOperacion_FE_Base, 'cantidadProductoServicio' | 'valorItem' | 'ivaItem'> & {
-    cantidadProductoServicio: Big;
-    valorItem: ValorItem_FE;
-    ivaItem?: IvaItem_FE;
-  }
->;
-
-type CondicionOperacion_FE = Simplify<
-  Except<DatosEspecificosPorTipoDE_FE_Base['condicionOperacion'], 'pagoContadoEntregaInicial'> & {
-    pagoContadoEntregaInicial?: Array<
-      Except<
-        NonNullable<
-          DatosEspecificosPorTipoDE_FE_Base['condicionOperacion']['pagoContadoEntregaInicial']
-        >[number],
-        'pagoTarjetaCreditoDebito'
-      > & {
-        pagoTarjetaCreditoDebito?: Simplify<
-          Except<
-            NonNullable<
-              NonNullable<
-                NonNullable<
-                  DatosEspecificosPorTipoDE_FE_Base['condicionOperacion']['pagoContadoEntregaInicial']
-                >[number]['pagoTarjetaCreditoDebito']
-              >
-            >,
-            'digitoVerificadorProcesadoraTarjeta'
-          > & {
-            digitoVerificadorProcesadoraTarjeta?: number;
-          }
-        >;
-      }
-    >;
-  }
->;
-
-type Transporte_FE = Simplify<
-  Except<NonNullable<DatosEspecificosPorTipoDE_FE_Base['transporte']>, 'transportista'> & {
-    transportista?: Simplify<
-      Except<
-        NonNullable<NonNullable<DatosEspecificosPorTipoDE_FE_Base['transporte']>['transportista']>,
-        'digitoVerificadorRucTransportista' | 'digitoVerificadorRucAgente'
-      > & {
-        digitoVerificadorRucTransportista?: number;
-        digitoVerificadorRucAgente?: string;
-      }
-    >;
-  }
->;
+export type OperacionComercial_FE = DatosGeneralesOperacion_FE['operacionComercial'];
 
 export type DatosEspecificosPorTipoDE_FE = SimplifyDeep<
-  Except<
+  SetRequiredDeep<
     DatosEspecificosPorTipoDE_FE_Base,
-    'condicionOperacion' | 'itemsOperacion' | 'transporte'
-  > & {
-    condicionOperacion: CondicionOperacion_FE;
-    itemsOperacion: ItemOperacion_FE[];
-    transporte?: Transporte_FE;
-  }
+    | 'facturaElectronica'
+    | 'condicionOperacion'
+    | 'itemsOperacion'
+    | `itemsOperacion.${number}.valorItem`
+    | `itemsOperacion.${number}.valorItem.valorRestaItem.porcentajeDescuentoItem`
+  >
 >;
 
-type SubtotalesNumericKeys = ConditionalKeys<SubtotalesTotales, number | undefined>;
-export type SubtotalesTotales_FE = Simplify<
-  Except<SubtotalesTotales, SubtotalesNumericKeys> & {
-    [K in SubtotalesNumericKeys]: SubtotalesTotales[K] extends number ? Big : Big | undefined;
-  }
->;
+export type ItemOperacion_FE = DatosEspecificosPorTipoDE_FE['itemsOperacion'][number];
+export type ValorItem_FE = ItemOperacion_FE['valorItem'];
+export type ValorRestaItem_FE = ValorItem_FE['valorRestaItem'];
+export type IvaItem_FE = NonNullable<ItemOperacion_FE['ivaItem']>;
+
+export type SubtotalesTotales_FE = SubtotalesTotales;
 
 /**
  * A - A001 | DE | DE Enfocado a Factura Electronica | Pagina 61
@@ -233,81 +113,54 @@ export interface FacturaElectronica {
   camposDocumentoElectronicoAsociado?: DocumentoElectronicoAsociado;
 }
 
-type IvaItemCalculatedKeys = 'baseGravadaIvaItem' | 'liquidacionIvaItem' | 'baseExenta';
-
-type CondicionOperacionPagoArray = NonNullable<
-  DatosEspecificosPorTipoDE_FE_Base['condicionOperacion']['pagoContadoEntregaInicial']
+type Emisor_FE_Input = DeepBigToNumber<
+  OmitDeep<DatosGeneralesOperacion_FE['emisor'], 'digitoVerificadorEmisor'>
 >;
 
-type PagoContadoEntregaInicial_FE = CondicionOperacionPagoArray[number];
-type PagoTarjetaCreditoDebito_FE = NonNullable<
-  PagoContadoEntregaInicial_FE['pagoTarjetaCreditoDebito']
+type Receptor_FE_Input = DeepBigToNumber<
+  OmitDeep<DatosGeneralesOperacion_FE['receptor'], 'digitoVerificadorReceptor'>
 >;
 
-type ValorItem_FE_Input = Simplify<
-  Except<ItemOperacion_FE_Base['valorItem'], 'totalBrutoOperacionItem' | 'valorRestaItem'>
->;
-
-type IvaItem_FE_Input = Simplify<
-  Except<NonNullable<ItemOperacion_FE_Base['ivaItem']>, IvaItemCalculatedKeys>
->;
-
-type PagoTarjetaCreditoDebito_FE_Input = Simplify<
-  Except<PagoTarjetaCreditoDebito_FE, 'digitoVerificadorProcesadoraTarjeta'>
->;
-
-type PagoContadoEntregaInicial_FE_Input = Simplify<
-  Except<PagoContadoEntregaInicial_FE, 'pagoTarjetaCreditoDebito'> & {
-    pagoTarjetaCreditoDebito?: PagoTarjetaCreditoDebito_FE_Input;
-  }
->;
-
-type CondicionOperacion_FE_Input = Simplify<
-  Except<DatosEspecificosPorTipoDE_FE_Base['condicionOperacion'], 'pagoContadoEntregaInicial'> & {
-    pagoContadoEntregaInicial?: PagoContadoEntregaInicial_FE_Input[];
-  }
->;
-
-type Transportista_FE_Input = Simplify<
-  Except<
-    NonNullable<NonNullable<DatosEspecificosPorTipoDE_FE_Base['transporte']>['transportista']>,
-    'digitoVerificadorRucTransportista' | 'digitoVerificadorRucAgente'
-  >
->;
-
-type Transporte_FE_Input = Simplify<
-  Except<NonNullable<DatosEspecificosPorTipoDE_FE_Base['transporte']>, 'transportista'> & {
-    transportista?: Transportista_FE_Input;
-  }
->;
-
-type Emisor_FE_Input = Simplify<
-  Except<DatosGeneralesOperacion_FE_Base['emisor'], 'digitoVerificadorEmisor'>
->;
-type Receptor_FE_Input = Simplify<
-  Except<DatosGeneralesOperacion_FE_Base['receptor'], 'digitoVerificadorReceptor'>
->;
-
-export type OperacionDE_FE_Input = Simplify<Except<OperacionDE, 'codigoSeguridad'>>;
+export type OperacionDE_FE_Input = DeepBigToNumber<Except<OperacionDE_FE, 'codigoSeguridad'>>;
 export type Timbrado_FE_Input = Timbrado_FE;
+
 export type DatosGeneralesOperacion_FE_Input = Simplify<
-  Except<DatosGeneralesOperacion_FE_Base, 'emisor' | 'receptor'> & {
+  DeepBigToNumber<Except<DatosGeneralesOperacion_FE, 'emisor' | 'receptor'>> & {
     emisor: Emisor_FE_Input;
     receptor: Receptor_FE_Input;
   }
 >;
 
-export type ItemOperacion_FE_Input = Simplify<
-  Except<ItemOperacion_FE_Base, 'valorItem' | 'ivaItem'> & {
-    valorItem: ValorItem_FE_Input;
-    ivaItem?: IvaItem_FE_Input;
-  }
+type ItemOperacion_FE_Input_Base = OmitDeep<
+  ItemOperacion_FE,
+  | 'valorItem.totalBrutoOperacionItem'
+  | 'valorItem.valorRestaItem.porcentajeDescuentoItem'
+  | 'valorItem.valorRestaItem.valorTotalOperacionItem'
+  | 'valorItem.valorRestaItem.valorTotalOperacionItemGs'
+  | 'ivaItem.baseGravadaIvaItem'
+  | 'ivaItem.liquidacionIvaItem'
+  | 'ivaItem.baseExenta'
+>;
+
+export type ItemOperacion_FE_Input = DeepBigToNumber<ItemOperacion_FE_Input_Base>;
+
+type CondicionOperacion_FE_Input = DeepBigToNumber<
+  OmitDeep<
+    DatosEspecificosPorTipoDE_FE['condicionOperacion'],
+    `pagoContadoEntregaInicial.${number}.pagoTarjetaCreditoDebito.digitoVerificadorProcesadoraTarjeta`
+  >
+>;
+
+type Transporte_FE_Input = DeepBigToNumber<
+  OmitDeep<
+    NonNullable<DatosEspecificosPorTipoDE_FE['transporte']>,
+    'transportista.digitoVerificadorRucTransportista' | 'transportista.digitoVerificadorRucAgente'
+  >
 >;
 
 export type DatosEspecificosPorTipoDE_FE_Input = SimplifyDeep<
-  Except<
-    DatosEspecificosPorTipoDE_FE_Base,
-    'condicionOperacion' | 'itemsOperacion' | 'transporte'
+  DeepBigToNumber<
+    Except<DatosEspecificosPorTipoDE_FE, 'condicionOperacion' | 'itemsOperacion' | 'transporte'>
   > & {
     condicionOperacion: CondicionOperacion_FE_Input;
     itemsOperacion: ItemOperacion_FE_Input[];
@@ -315,11 +168,8 @@ export type DatosEspecificosPorTipoDE_FE_Input = SimplifyDeep<
   }
 >;
 
-type SubtotalesInputProjection = Pick<SubtotalesTotales, 'comisionOperacion'>;
-type SubtotalesCalculatedKeys = Exclude<keyof SubtotalesTotales, keyof SubtotalesInputProjection>;
-
-export type SubtotalesTotales_FE_Input = Simplify<
-  Except<SubtotalesTotales, SubtotalesCalculatedKeys>
+export type SubtotalesTotales_FE_Input = DeepBigToNumber<
+  Pick<SubtotalesTotales_FE, 'comisionOperacion'>
 >;
 
 /**
