@@ -4,6 +4,7 @@ import type { CodigoDepartamento } from '../../../gen/departamentos';
 import type { CodigoDistrito } from '../../../gen/distritos';
 import type { CodigoMoneda } from '../../../gen/monedas';
 import type { CodigoPais } from '../../../gen/paises';
+import type { Big } from 'big.js';
 import type {
   CondicionAnticipo,
   CondicionTipoCambio,
@@ -41,7 +42,7 @@ export interface OperacionComercial {
   /**
    * D1 - D018 | dTiCam | Tipo de cambio de la operación | Pagina 67
    */
-  tipoCambioOperacion?: number;
+  tipoCambioOperacion?: Big;
   /**
    * D1 - D019 | iCondAnt | Condición del Anticipo | Pagina 67
    */

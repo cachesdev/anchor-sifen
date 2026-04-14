@@ -39,6 +39,17 @@ export function optionalBigToRawNumber(value: Big | undefined): number | undefin
   return value !== undefined ? bigToRawNumber(value) : undefined;
 }
 
+export function bigToRawDecimal(value: Big, decimalPlaces: number): string {
+  return value.toFixed(decimalPlaces);
+}
+
+export function optionalBigToRawDecimal(
+  value: Big | undefined,
+  decimalPlaces: number
+): string | undefined {
+  return value !== undefined ? bigToRawDecimal(value, decimalPlaces) : undefined;
+}
+
 export function formatDateOnly(value?: Date): string | undefined {
   if (!value) {
     return undefined;
