@@ -2,6 +2,10 @@ import type { ValueOf } from 'type-fest';
 
 /**
  * B - B002 | iTipEmi | Tipo de emisión | Pagina 62
+    *
+    * Observaciones:
+    *   1= Normal
+    *   2= Contingencia
  */
 export const tipoEmision = {
   Normal: 1,
@@ -16,6 +20,16 @@ export type DescripcionTipoEmision = ValueOf<typeof descripcionTipoEmision>;
 
 /**
  * C - C002 | iTiDE | Tipo de Documento Electrónico | Pagina 63
+    *
+    * Observaciones:
+    *   1= Factura electrónica
+    *   2= Factura electrónica de exportación (Futuro)
+    *   3= Factura electrónica de importación (Futuro)
+    *   4= Autofactura electrónica
+    *   5= Nota de crédito electrónica
+    *   6= Nota de débito electrónica
+    *   7= Nota de remisión electrónica
+    *   8= Comprobante de retención electrónico (Futuro)
  */
 export const tipoDocumentoElectronico = {
   FacturaElectronica: 1,
@@ -44,6 +58,24 @@ export type DescripcionTipoDocumentoElectronico = ValueOf<
 
 /**
  * D1 - D011 | iTipTra | Tipo de transacción | Pagina 66
+    *
+    * Observaciones:
+    *   Obligatorio si C002 = 1 o 4
+    *   No informar si C002 ≠ 1 o 4
+    *   Tipo de transacción para el emisor
+    *   1= Venta de mercadería
+    *   2= Prestación de servicios
+    *   3= Mixto (Venta de mercadería y servicios)
+    *   4= Venta de activo fijo
+    *   5= Venta de divisas
+    *   6= Compra de divisas
+    *   7= Promoción o entrega de muestras
+    *   8= Donación
+    *   9= Anticipo
+    *   10= Compra de productos
+    *   11= Compra de servicios
+    *   12= Venta de crédito fiscal
+    *   13=Muestras médicas (Art. 3 RG 24/2014)
  */
 export const tipoTransaccion = {
   VentaMercaderia: 1,
@@ -80,6 +112,13 @@ export type DescripcionTipoTransaccion = ValueOf<typeof descripcionTipoTransacci
 
 /**
  * D1 - D013 | iTImp | Tipo de impuesto afectado | Pagina 66
+    *
+    * Observaciones:
+    *   1= IVA
+    *   2= ISC
+    *   3=Renta
+    *   4=Ninguno
+    *   5=IVA - Renta
  */
 export const tipoImpuestoAfectado = {
   IVA: 1,
@@ -100,6 +139,12 @@ export type DescripcionTipoImpuestoAfectado = ValueOf<typeof descripcionTipoImpu
 
 /**
  * D1 - D017 | iCondTiCam | Condición del tipo de cambio | Pagina 67
+    *
+    * Observaciones:
+    *   Obligatorio si D015 ≠ PYG
+    *   No informar si D015 = PYG
+    *   1= Global (un solo tipo de cambio para todo el DE)
+    *   2= Por ítem (tipo de cambio distinto por ítem)
  */
 export const condicionTipoCambio = {
   Global: 1,
@@ -114,6 +159,10 @@ export type DescripcionCondicionTipoCambio = ValueOf<typeof descripcionCondicion
 
 /**
  * D1 - D019 | iCondAnt | Condición del Anticipo | Pagina 66
+    *
+    * Observaciones:
+    *   1= Anticipo Global (un solo tipo de anticipo para todo el DE)
+    *   2= Anticipo por ítem (corresponde a la distribución de Anticipos facturados por ítem)
  */
 export const condicionAnticipo = {
   AnticipoGlobal: 1,
@@ -164,6 +213,10 @@ export type DescripcionTipoObligacion = ValueOf<typeof descripcionTipoObligacion
 
 /**
  * D2 - D103 | iTipCont | Tipo de contribuyente | Pagina 68
+    *
+    * Observaciones:
+    *   1= Persona Física
+    *   2= Persona Jurídica
  */
 export const tipoContribuyente = {
   PersonaFisica: 1,
@@ -178,6 +231,13 @@ export type DescripcionTipoContribuyente = ValueOf<typeof descripcionTipoContrib
 
 /**
  * D2.2 - D141 | iTipIDRespDE | Tipo de documento de identidad del responsable de la generación del DE | Pagina 70
+    *
+    * Observaciones:
+    *   1= Cédula paraguaya
+    *   2= Pasaporte
+    *   3= Cédula extranjera
+    *   4= Carnet de residencia
+    *   9= Otro
  */
 export const tipoDocumentoResponsableDE = {
   CedulaParaguaya: 1,
@@ -200,6 +260,10 @@ export type DescripcionTipoDocumentoResponsableDE = ValueOf<
 
 /**
  * D3 - D201 | iNatRec | Naturaleza del receptor | Pagina 71
+    *
+    * Observaciones:
+    *   1= contribuyente
+    *   2= no contribuyente
  */
 export const naturalezaReceptor = {
   Contribuyente: 1,
@@ -214,6 +278,13 @@ export type DescripcionNaturalezaReceptor = ValueOf<typeof descripcionNaturaleza
 
 /**
  * D3 - D202 | iTiOpe | Tipo de operación | Pagina 71
+    *
+    * Observaciones:
+    *   1= B2B
+    *   2= B2C
+    *   3= B2G
+    *   4= B2F
+    *   (Esta última opción debe utilizarse solo en caso de servicios para empresas o personas físicas del exterior)
  */
 export const tipoOperacion = {
   B2B: 1,
@@ -232,6 +303,12 @@ export type DescripcionTipoOperacion = ValueOf<typeof descripcionTipoOperacion>;
 
 /**
  * D3 - D205 | iTiContRec | Tipo de contribuyente receptor | Pagina 71
+    *
+    * Observaciones:
+    *   Obligatorio si D201 = 1
+    *   No informar si D201 = 2
+    *   1= Persona Física
+    *   2= Persona Jurídica
  */
 export const tipoContribuyenteReceptor = {
   PersonaFisica: 1,
@@ -248,6 +325,17 @@ export type DescripcionTipoContribuyenteReceptor = ValueOf<
 
 /**
  * D3 - D208 | iTipIDRec | Tipo de documento de identidad del receptor | Pagina 71
+    *
+    * Observaciones:
+    *   Obligatorio si D201 = 2 y D202 ≠ 4
+    *   No informar si D201 = 1 o D202=4
+    *   1= Cédula paraguaya
+    *   2= Pasaporte
+    *   3= Cédula extranjera
+    *   4= Carnet de residencia
+    *   5= Innominado
+    *   6=Tarjeta Diplomática de exoneración fiscal
+    *   9= Otro
  */
 export const tipoDocumentoReceptor = {
   CedulaParaguaya: 1,
@@ -272,6 +360,15 @@ export type DescripcionTipoDocumentoReceptor = ValueOf<typeof descripcionTipoDoc
 
 /**
  * E1 - E011 | iIndPres | Indicador de presencia | Pagina 74
+    *
+    * Observaciones:
+    *   1= Operación presencial
+    *   2= Operación electrónica
+    *   3= Operación telemarketing
+    *   4= Venta a domicilio
+    *   5= Operación bancaria
+    *   6= Operación cíclica
+    *   9= Otro
  */
 export const indicadorPresencia = {
   OperacionPresencial: 1,
@@ -296,6 +393,10 @@ export type DescripcionIndicadorPresencia = ValueOf<typeof descripcionIndicadorP
 
 /**
  * E4 - E301 | iNatVen | Naturaleza del vendedor | Pagina 75
+    *
+    * Observaciones:
+    *   1= No contribuyente
+    *   2= Extranjero
  */
 export const naturalezaVendedor = {
   NoContribuyente: 1,
@@ -310,6 +411,12 @@ export type DescripcionNaturalezaVendedor = ValueOf<typeof descripcionNaturaleza
 
 /**
  * E4 - E304 | iTipIDVen | Tipo de documento de identidad del vendedor | Pagina 75
+    *
+    * Observaciones:
+    *   1= Cédula paraguaya
+    *   2= Pasaporte
+    *   3= Cédula extranjera
+    *   4= Carnet de residencia
  */
 export const tipoDocumentoVendedor = {
   CedulaParaguaya: 1,
@@ -328,6 +435,16 @@ export type DescripcionTipoDocumentoVendedor = ValueOf<typeof descripcionTipoDoc
 
 /**
  * E5 - E401 | iMotEmiValues | Motivo de emisión | Pagina 77
+    *
+    * Observaciones:
+    *   1= Devolución y Ajuste de precios
+    *   2= Devolución
+    *   3= Descuento
+    *   4= Bonificación
+    *   5= Crédito incobrable
+    *   6= Recupero de costo
+    *   7= Recupero de gasto
+    *   8= Ajuste de precio
  */
 export const motivoEmision = {
   DevolucionAjustePrecios: 1,
@@ -354,6 +471,24 @@ export type DescripcionMotivoEmision = ValueOf<typeof descripcionMotivoEmision>;
 
 /**
  * E6 - E501 | iMotEmiNR | Motivo de emisión | Pagina 79
+    *
+    * Observaciones:
+    *   1= Traslado por venta
+    *   2= Traslado por consignación
+    *   3= Exportación
+    *   4= Traslado por compra
+    *   5= Importación
+    *   6= Traslado por devolución
+    *   7= Traslado entre locales de la empresa
+    *   8= Traslado de bienes por transformación
+    *   9= Traslado de bienes por reparación
+    *   10= Traslado por emisor móvil
+    *   11= Exhibición o demostración
+    *   12= Participación en ferias
+    *   13= Traslado de encomienda
+    *   14= Decomiso
+    *   99=Otro (deberá consignarse expresamente el o los motivos diferentes a los mencionados anteriormente)
+    *   Obs.: Cuando el motivo sea por operaciones internas de la empresa, el RUC del receptor debe ser igual al RUC del emisor.
  */
 export const motivoEmisionNotaRemision = {
   TrasladoVenta: 1,
@@ -396,6 +531,13 @@ export type DescripcionMotivoEmisionNotaRemision = ValueOf<
 
 /**
  * E6 - E503 | iRespEmiNR | Responsable de la emisión de la Nota Remisión Electrónica | Pagina 79
+    *
+    * Observaciones:
+    *   1= Emisor de la factura
+    *   2= Poseedor de la factura y bienes
+    *   3= Empresa transportista
+    *   4=Despachante de Aduanas
+    *   5= Agente de transporte o intermediario
  */
 export const responsableEmisionNotaRemision = {
   EmisorFactura: 1,
@@ -419,6 +561,10 @@ export type DescripcionResponsableEmisionNotaRemision = ValueOf<
 
 /**
  * E7 - E601 | iCondOpe | Condición de la operación | Pagina 80
+    *
+    * Observaciones:
+    *   1= Contado
+    *   2= Crédito
  */
 export const condicionOperacionEnum = {
   Contado: 1,
@@ -433,6 +579,30 @@ export type DescripcionCondicionOperacionEnum = ValueOf<typeof descripcionCondic
 
 /**
  * E7.1 - E606 | iTiPago | Tipo de pago | Pagina 81
+    *
+    * Observaciones:
+    *   1= Efectivo
+    *   2= Cheque
+    *   3= Tarjeta de crédito
+    *   4= Tarjeta de débito
+    *   5= Transferencia
+    *   6= Giro
+    *   7= Billetera electrónica
+    *   8= Tarjeta empresarial
+    *   9= Vale
+    *   10= Retención
+    *   11= Pago por anticipo
+    *   12= Valor fiscal
+    *   13= Valor comercial
+    *   14= Compensación
+    *   15= Permuta
+    *   16= Pago bancario (Informar solo si E011=5)
+    *   17 = Pago Móvil
+    *   18 = Donación
+    *   19 = Promoción
+    *   20 = Consumo Interno
+    *   21 = Pago Electrónico
+    *   99 = Otro
  */
 export const tipoPago = {
   Efectivo: 1,
@@ -487,6 +657,15 @@ export type DescripcionTipoPago = ValueOf<typeof descripcionTipoPago>;
 
 /**
  * E7.1.1 - E621 | iDenTarj | Denominación de la tarjeta | Pagina 83
+    *
+    * Observaciones:
+    *   1= Visa
+    *   2= Mastercard
+    *   3= American Express
+    *   4= Maestro
+    *   5= Panal
+    *   6= Cabal
+    *   99= Otro
  */
 export const denominacionTarjeta = {
   Visa: 1,
@@ -511,6 +690,11 @@ export type DescripcionDenominacionTarjeta = ValueOf<typeof descripcionDenominac
 
 /**
  * E7.1.1 - E626 | iForProPa | Forma de procesamiento de pago | Pagina 83
+    *
+    * Observaciones:
+    *   1= POS
+    *   2= Pago Electrónico (Ejemplo: compras por Internet)
+    *   9= Otro
  */
 export const formaProcesamientoPago = {
   POS: 1,
@@ -521,6 +705,10 @@ export type FormaProcesamientoPago = ValueOf<typeof formaProcesamientoPago>;
 
 /**
  * E7.2 - E641 | iCondCred | Condición de la operación a crédito | Pagina 84
+    *
+    * Observaciones:
+    *   1= Plazo
+    *   2= Cuota
  */
 export const condicionOperacionCredito = {
   Plazo: 1,
@@ -537,6 +725,12 @@ export type DescripcionCondicionOperacionCredito = ValueOf<
 
 /**
  * E8 - E715 | cRelMerc | Código de datos de relevancia de las mercaderías | Pagina 86
+    *
+    * Observaciones:
+    *   Opcional si C002 = 7
+    *   1=Tolerancia de quiebra
+    *   2= Tolerancia de merma
+    *   Según RG 41/14
  */
 export const codigoDatosRelevanciaMercaderias = {
   ToleranciaQuiebra: 1,
@@ -553,6 +747,12 @@ export type DescripcionCodigoDatosRelevanciaMercaderias = ValueOf<
 
 /**
  * E8.2 - E731 | iAfecIVA | Forma de afectación tributaria del IVA | Pagina 89
+    *
+    * Observaciones:
+    *   1= Gravado IVA
+    *   2= Exonerado (Art. 83- Ley 125/91)
+    *   3= Exento
+    *   4= Gravado parcial (Grav-Exento)
  */
 export const formaAfectacionTributariaIVA = {
   Gravado: 1,
@@ -573,6 +773,12 @@ export type DescripcionFormaAfectacionTributariaIVA = ValueOf<
 
 /**
  * E8.5 - E771 | iTipOpVNValues | Tipo de operación de venta de vehículos | Pagina 91
+    *
+    * Observaciones:
+    *   1= Venta a representante
+    *   2= Venta al consumidor final
+    *   3= Venta a gobierno
+    *   4= Venta a flota de vehículos
  */
 export const tipoOperacionVentaVehiculos = {
   Representante: 1,
@@ -593,6 +799,14 @@ export type DescripcionTipoOperacionVentaVehiculos = ValueOf<
 
 /**
  * E8.5 - E779 | iTipComValues | Tipo de combustible | Pagina 92
+    *
+    * Observaciones:
+    *   1= Gasolina
+    *   2= Diésel
+    *   3= Etanol
+    *   4= GNV
+    *   5= Flex
+    *   9= Otro
  */
 export const tipoCombustible = {
   Gasolina: 1,
@@ -615,6 +829,11 @@ export type DescripcionTipoCombustible = ValueOf<typeof descripcionTipoCombustib
 
 /**
  * E10 - E901 | iTipTrans | Tipo de transporte | Pagina 96
+    *
+    * Observaciones:
+    *   Obligatorio si C002 = 7
+    *   1= Propio
+    *   2= Tercero
  */
 export const tipoTransporte = {
   Propio: 1,
@@ -629,6 +848,12 @@ export type DescripcionTipoTransporte = ValueOf<typeof descripcionTipoTransporte
 
 /**
  * E10 - E903 | iModTrans | Modalidad del transporte | Pagina 96
+    *
+    * Observaciones:
+    *   1=Terrestre
+    *   2= Fluvial
+    *   3= Aéreo
+    *   4= Multimodal
  */
 export const modalidadTransporte = {
   Terrestre: 1,
@@ -647,6 +872,13 @@ export type DescripcionModalidadTransporte = ValueOf<typeof descripcionModalidad
 
 /**
  * E10 - E905 | iRespFlete | Responsable del costo del flete | Pagina 96
+    *
+    * Observaciones:
+    *   1= Emisor de la Factura Electrónica
+    *   2= Receptor de la Factura Electrónica
+    *   3= Tercero
+    *   4= Agente intermediario del transporte (cuando intervenga)
+    *   5= Transporte propio
  */
 export const responsableCostoFlete = {
   EmisorFactura: 1,
@@ -659,6 +891,7 @@ export type ResponsableCostoFlete = ValueOf<typeof responsableCostoFlete>;
 
 /**
  * E10 - E906 | cCondNegValues | Condición de la negociación | Pagina 96
+    * Observaciones: Según Tabla 10 - Incoterms
  */
 export const condicionNegociacion = {
   CFR: 'CFR',
@@ -677,6 +910,10 @@ export type CondicionNegociacion = ValueOf<typeof condicionNegociacion>;
 
 /**
  * E10.3 - E967 | dTipIdenVeh | Tipo de Identificación del vehículo | Pagina 100
+    *
+    * Observaciones:
+    *   1=Número de identificación del vehículo
+    *   2=Número de matrícula del vehículo
  */
 export const tipoIdentificacionVehiculo = {
   NumeroIdentificacion: 1,
@@ -686,6 +923,10 @@ export type TipoIdentificacionVehiculo = ValueOf<typeof tipoIdentificacionVehicu
 
 /**
  * E10.4 - E981 | iNatTrans | Naturaleza del transportista | Pagina 100
+    *
+    * Observaciones:
+    *   1= Contribuyente
+    *   2= No contribuyente
  */
 export const naturalezaTransportista = {
   Contribuyente: 1,
@@ -695,6 +936,14 @@ export type NaturalezaTransportista = ValueOf<typeof naturalezaTransportista>;
 
 /**
  * E10.4 - E985 | iTipIDTransValues | Tipo de documento de identidad del transportista | Pagina 101
+    *
+    * Observaciones:
+    *   Obligatorio si E981 = 2
+    *   No informar si E981 = 1
+    *   1= Cédula paraguaya
+    *   2= Pasaporte
+    *   3= Cédula extranjera
+    *   4= Carnet de residencia
  */
 export const tipoDocumentoTransportista = {
   CedulaParaguaya: 1,
@@ -715,6 +964,12 @@ export type DescripcionTipoDocumentoTransportista = ValueOf<
 
 /**
  * G1 - G057 | iCarCargaValues | Características de la Carga | Pagina 108
+    *
+    * Observaciones:
+    *   1 – Mercaderías con cadena de frío
+    *   2 – Carga peligrosa
+    *   3 – Otro de características similares (especificar)
+    *   Obligatorio cuando lo exige la RG 41/14
  */
 export const caracteristicasCarga = {
   MercaderiasCadenaFrio: 1,
@@ -731,6 +986,11 @@ export type DescripcionCaracteristicasCarga = ValueOf<typeof descripcionCaracter
 
 /**
  * H - H002 | iTipDocAsoValues | Tipo de documento asociado | Pagina 108
+    *
+    * Observaciones:
+    *   1= Electrónico
+    *   2= Impreso
+    *   3= Constancia Electrónica
  */
 export const tipoDocumentoAsociado = {
   Electronico: 1,
@@ -747,6 +1007,15 @@ export type DescripcionTipoDocumentoAsociado = ValueOf<typeof descripcionTipoDoc
 
 /**
  * H - H009 | iTipoDocAsoImpresoValues | Tipo de documento impreso | Pagina 109
+    *
+    * Observaciones:
+    *   Obligatorio si H002=2
+    *   No informar si H002 = 1 o 3
+    *   1= Factura
+    *   2= Nota de crédito
+    *   3= Nota de débito
+    *   4= Nota de remisión
+    *   5= Comprobante de retención
  */
 export const tipoDocumentoImpreso = {
   Factura: 1,
@@ -765,6 +1034,12 @@ export type DescripcionTipoDocumentoImpreso = ValueOf<typeof descripcionTipoDocu
 
 /**
  * H - H014 | iTipConsValues | Tipo de constancia | Pagina 110
+    *
+    * Observaciones:
+    *   Obligatorio cuando H002 = 3
+    *   No informar cuando H002 ≠ 3
+    *   1= Constancia de no ser contribuyente
+    *   2= Constancia de microproductores
  */
 export const tipoConstancia = {
   ConstanciaNoContribuyente: 1,
