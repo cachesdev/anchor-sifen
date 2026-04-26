@@ -4,7 +4,6 @@
 
 **Fecha:** 09/02/2024
 
-
 <table>
   <tbody>
     <tr>
@@ -20,7 +19,7 @@
 
 ### <u>Referencia</u>:
 
-*   Nueva validación para la imputación automática de las ventas al módulo RG90.
+- Nueva validación para la imputación automática de las ventas al módulo RG90.
 
 ### 1. <u>Validación nueva</u>
 
@@ -29,7 +28,6 @@
 **(Páginas 162,163)**
 
 #### D1.1. Campos que identifican las obligaciones afectadas (D030-D040)
-
 
 <table>
   <thead>
@@ -53,7 +51,6 @@
 </table>
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

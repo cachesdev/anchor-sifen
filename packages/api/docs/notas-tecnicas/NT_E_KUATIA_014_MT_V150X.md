@@ -6,7 +6,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 **Fecha:** 20/03/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -25,7 +24,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 ## 1. **<u>Formato de Campos XML</u>**
 
 **1.1** <u>Se agrega el Grupo: Evento de Nominación de Factura Electrónica (Formato del evento de nominación).</u>
-
 
 <table>
   <thead>
@@ -357,7 +355,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ## 2.1 <u>SE AGREGAN LAS SIGUIENTES REGLAS DE VALIDACIÓN PARA EL EVENTO NOMINACIÓN DE FACTURA ELECTRÓNICA</u>
 
-
 <table>
   <thead>
     <tr>
@@ -492,6 +489,7 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 ![decorative graphic](page_4_image_1_v2.jpg) ![e-kuatia logo](image_url_placeholder)
+
 # Sistema Integrado de Facturación Electrónica Nacional
 
 <table>
@@ -570,7 +568,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

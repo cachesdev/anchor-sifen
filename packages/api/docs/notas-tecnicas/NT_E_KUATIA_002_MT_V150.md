@@ -13,7 +13,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 1.1. Se modifican los siguientes campos:
 
-
 <table>
   <thead>
     <tr>
@@ -60,7 +59,6 @@ Páginas: 71, 72
 
 2.1. Se eliminan las siguientes validaciones:
 
-
 <table>
   <thead>
     <tr>
@@ -95,7 +93,6 @@ Páginas: 71, 72
 Páginas: 166, 167
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

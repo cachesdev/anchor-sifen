@@ -12,7 +12,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ## B. Campos inherentes a la operación de Documentos Electrónicos (B001-B099)
 
-
 <table>
   <thead>
     <tr>
@@ -55,7 +54,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ## Histórico del Documento
 
-
 <table>
   <thead>
     <tr>
@@ -81,6 +79,7 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ![logo](page_2_image_2_v2.jpg)
 ![logo](image_url_placeholder)
+
 # Sistema Integrado de Facturación Electrónica Nacional
 
 Ejemplo de Representación gráfica
@@ -106,24 +105,23 @@ Ciudad: Asunción
 
 ---
 
-* **Fecha y hora de emisión**: 22-01-2022 14:22:00
-* **RUC/Documento de identidad N°**: 2166160711
-* **Condición de Venta**:
-    * Contado [x]
-    * Crédito [ ]
-* **Nombre o razón social**: TLG Uruguay SA.
-* **Cuotas**:     
-* **Tipo de Cambio**: 6850
-* **Dirección**: Avda Las américas 8332 - Uruguay
-* **Moneda**: USD
-* **Teléfono**: 598 81539732
-* **Tipo de Cambio Global o por Item**: GLOBAL
-* **Correo electrónico**: jorges@gmail.com
-* **Tipo de transacción**: Venta de Mercadería
-* **Tipo de documento asociado**: FE o preimpreso
+- **Fecha y hora de emisión**: 22-01-2022 14:22:00
+- **RUC/Documento de identidad N°**: 2166160711
+- **Condición de Venta**:
+  - Contado [x]
+  - Crédito [ ]
+- **Nombre o razón social**: TLG Uruguay SA.
+- **Cuotas**:
+- **Tipo de Cambio**: 6850
+- **Dirección**: Avda Las américas 8332 - Uruguay
+- **Moneda**: USD
+- **Teléfono**: 598 81539732
+- **Tipo de Cambio Global o por Item**: GLOBAL
+- **Correo electrónico**: jorges@gmail.com
+- **Tipo de transacción**: Venta de Mercadería
+- **Tipo de documento asociado**: FE o preimpreso
 
 ---
-
 
 <table>
   <thead>
@@ -182,7 +180,6 @@ Ciudad: Asunción
 
 ---
 
-
 <table>
   <tbody>
     <tr>
@@ -236,6 +233,6 @@ CDC 0102 3654 3880 0100 1000 0001 1202 2012 2158 7326 0988
 ESTE DOCUMENTO ES UNA REPRESENTACIÓN GRÁFICA DE UN DOCUMENTO ELECTRÓNICO (XML)
 Información de interés del facturador electrónico emisor
 
-*Este campo se extrae de los datos e información del campo "Información adicional de interés del fisco respecto al DE", campo que se ha definido para registrar la información adicional que deben diligenciar los exportadores (Decreto N° 10797/2013 art. 20).
+\*Este campo se extrae de los datos e información del campo "Información adicional de interés del fisco respecto al DE", campo que se ha definido para registrar la información adicional que deben diligenciar los exportadores (Decreto N° 10797/2013 art. 20).
 
 2

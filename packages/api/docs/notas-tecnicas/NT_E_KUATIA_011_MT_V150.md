@@ -15,7 +15,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 #### 9.8. WS consulta masiva de RUC – rEnviConsArchivoRUCRequest
 
-
 <table>
   <tbody>
     <tr>
@@ -38,7 +37,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 El Request que consumirá este servicio estará construido en XML, según el Schema expuesto a Continuación:
 
 **Schema XML 20: WS_ConsultaArchivoRuc.xsd**
-
 
 <table>
   <thead>
@@ -78,7 +76,6 @@ El Request que consumirá este servicio estará construido en XML, según el Sch
 </table>
 
 **Schema XML 21: siConsultaArchivoRuc.xsd**
-
 
 <table>
   <thead>
@@ -145,7 +142,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 Tabla L – Resultados de Procesamiento del WS Consulta Masiva de RUC
 
-
 <table>
   <thead>
     <tr>
@@ -174,9 +170,6 @@ Tabla L – Resultados de Procesamiento del WS Consulta Masiva de RUC
 </table>
 
 ## 9.8.3. Flujo de proceso de web service de consulta masiva de RUC
-
-
-
 
 <table>
   <caption>9.8.3. Flujo de proceso de web service de consulta masiva de RUC</caption>
@@ -261,13 +254,10 @@ Tabla L – Resultados de Procesamiento del WS Consulta Masiva de RUC
   </tfoot>
 </table>
 
-
-
 ## 9.8.4. Protocolo de respuesta del web service
 
 El Response que consumirá este servicio estará construido en XML, según el Schema expuesto a continuación:
 Schema XML 22: WS_ConsultaArchivoRuc.xsd
-
 
 <table>
   <thead>
@@ -355,7 +345,6 @@ Schema XML 22: WS_ConsultaArchivoRuc.xsd
 
 **12.3.7.1. Área de datos del WS**
 
-
 <table>
   <thead>
     <tr>
@@ -400,7 +389,6 @@ Schema XML 22: WS_ConsultaArchivoRuc.xsd
 
 **12.1.1. Códigos de respuestas de las validaciones de los Servicios Web (Página 147)**
 
-
 <table>
   <thead>
     <tr>
@@ -425,7 +413,6 @@ Schema XML 22: WS_ConsultaArchivoRuc.xsd
 </table>
 
 **Histórico del Documento**
-
 
 <table>
   <thead>

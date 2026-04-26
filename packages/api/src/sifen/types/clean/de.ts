@@ -46,10 +46,14 @@ export interface DocumentoElectronicoC {
 
 /**
  * A - A001 | DE | Campos firmados del DE | Pagina 61
- *
- * A002 (CDC) Omitido, ya que es un atributo y no un campo del DE.
  */
 export interface DEC {
+  /**
+   * A - A002 | Id | Identificador del DE (CDC) | Pagina 61
+   *
+   * Atributo del elemento DE, expuesto aqui por conveniencia interna.
+   */
+  id_cdc: string;
   /**
    * A - A003 | dDVId | Dígito verificador del identificador del DE | Pagina 61
    * Observaciones: Según algoritmo módulo 11

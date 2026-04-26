@@ -15,7 +15,6 @@
 
 **D1. Campos inherentes a la operación comercial (D010-D099)**
 
-
 <table>
   <thead>
     <tr>
@@ -42,7 +41,6 @@
 Páginas: 162.
 
 **Histórico del Documento**
-
 
 <table>
   <thead>

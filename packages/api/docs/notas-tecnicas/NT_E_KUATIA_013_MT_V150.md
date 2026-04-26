@@ -5,7 +5,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 **Fecha:** 20/03/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -24,7 +23,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 ## 1. <u>Formato de Campos XML</u>
 
 **1.1** En Campos que describen el IVA de la operación por ítem (E730-E739) se modifica el siguiente campo de Observaciones. (**Página 90**)
-
 
 <table>
   <thead>
@@ -57,7 +55,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 **1.2** En Campos que describen el IVA de la operación por ítem (E730-E739) se agregan los siguientes campos. (**Página 90**)
 
-
 <table>
   <thead>
     <tr>
@@ -88,7 +85,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 **1.3** En Campos que describen los subtotales y totales de la transacción documentada (F001-F099) se modifican los siguientes campos de Observaciones. (**Página 103**)
-
 
 <table>
   <thead>
@@ -154,7 +150,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ## 2.1 En Campos que describen el IVA de la operación (E730-E739) se agrega la siguiente validación. (Página 178)
 
-
 <table>
   <thead>
     <tr>
@@ -179,7 +174,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 ## 2.2 En Campos que describen el IVA de la operación (E730-E739) se modifican los siguientes campos de Observación. (Página 178)
-
 
 <table>
   <thead>
@@ -245,7 +239,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 # Histórico del Documento
-
 
 <table>
   <thead>

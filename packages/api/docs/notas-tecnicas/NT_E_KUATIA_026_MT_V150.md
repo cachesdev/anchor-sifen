@@ -4,7 +4,6 @@
 
 **Fecha:** 06/06/2025
 
-
 <table>
   <tbody>
     <tr>
@@ -23,7 +22,6 @@
 ### **<u>1. Formato de Campos XML</u>**
 
 1.1. <u>En Campos que describen los ítems de la operación (E700-E899) se modifican las siguientes observaciones.</u>
-
 
 <table>
   <thead>
@@ -67,7 +65,6 @@
 
 1.2. <u>En Campos de informaciones de Compras Públicas (E020-E029) se modifica la siguiente observación.</u>
 
-
 <table>
   <thead>
     <tr>
@@ -100,7 +97,6 @@
 ### **<u>2. Validaciones</u>**
 
 2.1. <u>Se excluyen las siguientes reglas de validación en E1.1. GRUPO DE INFORMACIONES DE COMPRAS PÚBLICAS (E020-E029).</u>
-
 
 <table>
   <thead>
@@ -139,7 +135,6 @@ Electrónica Nacional
 
 2.2. <u>Se excluyen las siguientes reglas de validación E8. Campos que describen los ítems de la operación (E700-E899).</u>
 
-
 <table>
   <thead>
     <tr>
@@ -169,7 +164,6 @@ Electrónica Nacional
 </table>
 
 # Histórico del Documento
-
 
 <table>
   <thead>
