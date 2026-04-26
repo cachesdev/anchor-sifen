@@ -1,37 +1,7 @@
 import * as v from 'valibot';
 import type { FacturaElectronica, FacturaElectronicaInput } from '../../sifen/types';
 import { toBig, toOptionalBig } from '../big';
-import { operacionDEEnumSchema } from './de';
-import { operacionComercialEnumSchema, emisorEnumSchema, receptorEnumSchema } from './d';
-import {
-  facturaElectronicaEnumSchema,
-  condicionOperacionEnumSchema,
-  itemOperacionEnumSchema,
-  transporteEnumSchema
-} from './e';
-import { subtotalesTotalesEnumSchema } from './f';
-import { camposUsoGeneralEnumSchema } from './g';
-import { camposDocumentoElectronicoAsociadoEnumSchema } from './h';
-
-const facturaElectronicaInputEnumSchema = v.looseObject({
-  id_cdc: v.string(),
-  operacionDE: operacionDEEnumSchema,
-  timbrado: v.looseObject({}),
-  datosGeneralesOperacion: v.looseObject({
-    operacionComercial: v.optional(operacionComercialEnumSchema),
-    emisor: emisorEnumSchema,
-    receptor: receptorEnumSchema
-  }),
-  datosEspecificosPorTipoDE: v.looseObject({
-    facturaElectronica: facturaElectronicaEnumSchema,
-    condicionOperacion: v.optional(condicionOperacionEnumSchema),
-    itemsOperacion: v.array(itemOperacionEnumSchema),
-    transporte: v.optional(transporteEnumSchema)
-  }),
-  subtotalesTotales: subtotalesTotalesEnumSchema,
-  camposUsoGeneral: v.optional(camposUsoGeneralEnumSchema),
-  camposDocumentoElectronicoAsociado: v.optional(camposDocumentoElectronicoAsociadoEnumSchema)
-});
+import { enumsSchema } from './schema';
 
 function normalizeOperacionComercial(out: FacturaElectronica): void {
   out.datosGeneralesOperacion.operacionComercial.tipoCambioOperacion = toOptionalBig(
@@ -156,7 +126,7 @@ export function normalizeFacturaElectronica(input: FacturaElectronicaInput): Fac
 }
 
 export const facturaElectronicaSchema = v.pipe(
-  facturaElectronicaInputEnumSchema,
+  enumsSchema,
   v.rawTransform(({ dataset, NEVER }) => {
     if (!dataset.typed) return NEVER;
     return normalizeFacturaElectronica(dataset.value as FacturaElectronicaInput);
