@@ -2,6 +2,7 @@ import * as v from 'valibot';
 import type { FacturaElectronica } from '../sifen/types';
 import type { Timbrado } from '../sifen/types/clean/de';
 import type { DE } from '../sifen/types/raw/de';
+import { tipoDocumentoElectronico, type TipoDocumentoElectronicoLabel } from '../sifen/types/enums';
 import { Err, Ok, type Result } from '../result';
 import { calculateFieldsResult } from './derive';
 import { validateCalculated } from './validation';
@@ -21,18 +22,24 @@ import {
   XMLGenMappingError,
   type XMLGenBuildError
 } from './errors';
+import type { Simplify } from 'type-fest';
 
-export interface PreparedDE {
+export interface PreparedDEBase<TType extends TipoDocumentoElectronicoLabel, TClean> {
+  type: TType;
   raw: DE;
-  clean: FacturaElectronica;
+  clean: TClean;
   cdc: string;
 }
+
+export type PreparedDE = Simplify<PreparedDEBase<'FacturaElectronica', FacturaElectronica>>;
 
 export function prepareDE<TInput>(
   input: TInput,
   schema: v.GenericSchema<unknown, FacturaElectronica>,
-  tipoDocumento: number
+  deType: TipoDocumentoElectronicoLabel
 ): Result<PreparedDE, XMLGenBuildError> {
+  const tipoDocumento = tipoDocumentoElectronico[deType];
+
   const validated = v.safeParse(schema, input);
   if (!validated.success) {
     return Err(new XMLGenInputValidationError({ issues: validated.issues }));
@@ -53,6 +60,7 @@ export function prepareDE<TInput>(
 
   try {
     return Ok({
+      type: deType,
       cdc: de.id_cdc,
       clean: de,
       raw: {
@@ -64,14 +72,12 @@ export function prepareDE<TInput>(
         gDatGralOpe: mapDatosGeneralesOperacionToRaw(de.datosGeneralesOperacion),
         gDtipDE: mapDatosEspecificosPorTipoDEToRaw(de.datosEspecificosPorTipoDE),
         gTotSub: mapSubtotalesTotalesToRaw(de.subtotalesTotales),
-        gCamGen: de.camposUsoGeneral
-          ? mapUsoGeneralToRaw(de.camposUsoGeneral)
-          : undefined,
+        gCamGen: de.camposUsoGeneral ? mapUsoGeneralToRaw(de.camposUsoGeneral) : undefined,
         gCamDEAsoc: de.camposDocumentoElectronicoAsociado
           ? mapDocumentoElectronicoAsociadoToRaw(de.camposDocumentoElectronicoAsociado)
           : undefined
       }
-    });
+    } as PreparedDE);
   } catch (error) {
     return Err(
       new XMLGenMappingError({

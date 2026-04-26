@@ -116,8 +116,11 @@ export class CertificateManager {
    * Helper que elimina el header/footer y whitespace del certificado PEM
    */
   private pemToBase64(pem: string): string {
-    // TODO: Reemplazar uso de regex
-    return pem.replace(/-----(?:BEGIN|END) CERTIFICATE-----/g, '').replace(/\s+/g, '');
+    return pem
+      .split(/\r?\n/)
+      .filter((line) => line.length > 0 && !line.startsWith('-----'))
+      .map((line) => line.trim())
+      .join('');
   }
 
   /**
