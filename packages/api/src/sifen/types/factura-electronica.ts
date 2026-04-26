@@ -67,17 +67,17 @@ export type SubtotalesTotales_FE = SubtotalesTotales;
 export interface FacturaElectronica {
   /**
    * A - A002 | Id | Identificador del DE | Pagina 61
-    *
-    * Observaciones:
-    *   Atributo del Tag <DE>
-    *   NOTA: Con carácter excepcional cuando un RUC contenga letras para efectos del cálculo del Dígito verificador y la generación del CDC se realizará la conversión de dicha letra por su valor en código ASCII
+   *
+   * Observaciones:
+   *   Atributo del Tag <DE>
+   *   NOTA: Con carácter excepcional cuando un RUC contenga letras para efectos del cálculo del Dígito verificador y la generación del CDC se realizará la conversión de dicha letra por su valor en código ASCII
    */
   id_cdc: string;
   /**
    * A - A003 | dDVId | Dígito verificador del identificador del DE | Pagina 61
    *
    * Si no es proveido, es calculado internamente.
-    * Observaciones: Según algoritmo módulo 11
+   * Observaciones: Según algoritmo módulo 11
    */
   digitoVerificadorId: number;
   /**
@@ -86,12 +86,12 @@ export interface FacturaElectronica {
    * Formato: AAAA-MM-DDThh:mm:ss
    *
    * Si no es proveido, es calculado internamente.
-    *
-    * Observaciones:
-    *   La fecha y hora de la firma digital debe ser anterior a la fecha y hora de transmisión al SIFEN
-    *   El certificado digital debe estar vigente al momento de la firma digital del DE
-    *   Fecha y hora en el formato AAAA-MM-DDThh:mm:ss
-    *   El plazo límite de transmisión del DE al SIFEN para la aprobación normal es de 72 h contadas a partir de la fecha y hora de la firma digital.
+   *
+   * Observaciones:
+   *   La fecha y hora de la firma digital debe ser anterior a la fecha y hora de transmisión al SIFEN
+   *   El certificado digital debe estar vigente al momento de la firma digital del DE
+   *   Fecha y hora en el formato AAAA-MM-DDThh:mm:ss
+   *   El plazo límite de transmisión del DE al SIFEN para la aprobación normal es de 72 h contadas a partir de la fecha y hora de la firma digital.
    */
   fechaFirma: Date;
   /**
@@ -112,11 +112,11 @@ export interface FacturaElectronica {
   datosEspecificosPorTipoDE: DatosEspecificosPorTipoDE_FE;
   /**
    * F - F001 | gTotSub | Campos de subtotales y totales | Pagina 102
-    *
-    * Observaciones:
-    *   Obligatorio si C002 ≠ 7
-    *   No informar si C002 = 7
-    *   Cuando C002= 4, no informar F002, F003, F004, F005, F015, F016, F017, F018, F019, F020, F023, F025 y F026
+   *
+   * Observaciones:
+   *   Obligatorio si C002 ≠ 7
+   *   No informar si C002 = 7
+   *   Cuando C002= 4, no informar F002, F003, F004, F005, F015, F016, F017, F018, F019, F020, F023, F025 y F026
    */
   subtotalesTotales: SubtotalesTotales_FE;
   /**
@@ -125,10 +125,10 @@ export interface FacturaElectronica {
   camposUsoGeneral?: UsoGeneral;
   /**
    * H - H001 | gCamDEAsoc | Campos que identifican al DE asociado | Pagina 108
-    *
-    * Observaciones:
-    *   Obligatorio si C002 = 4, 5, 6
-    *   Opcional si C002=1 o 7
+   *
+   * Observaciones:
+   *   Obligatorio si C002 = 4, 5, 6
+   *   Opcional si C002=1 o 7
    */
   camposDocumentoElectronicoAsociado?: DocumentoElectronicoAsociado;
 }

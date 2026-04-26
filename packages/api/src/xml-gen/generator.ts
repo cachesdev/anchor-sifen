@@ -3,7 +3,6 @@ import type { PreparedDE } from './de-pipeline';
 
 const SIFEN_XSD_NAMESPACE = 'http://ekuatia.set.gov.py/sifen/xsd';
 const XSI_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
-// TODO: Puede ser mas de 1 endpoint
 const SCHEMA_LOCATION = `${SIFEN_XSD_NAMESPACE} siRecepDE_v150.xsd`;
 
 export function generateFacturaElectronicaXML({ raw: de, cdc }: PreparedDE): string {

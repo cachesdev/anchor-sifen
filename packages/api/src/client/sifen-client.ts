@@ -67,15 +67,49 @@ export class SifenAPI {
     return this.soap.rucClient.consultaRUC({ ruc, digitoControl });
   }
 
-  async sendDE(preparedDE: PreparedDE) {
+  async consultaDE({ digitoControl, cdc }: { digitoControl?: string | number; cdc: string }) {
+    return this.soap.consultaClient.consultaDE({ digitoControl, cdc });
+  }
+
+  async consultaLote({
+    digitoControl,
+    numeroLote
+  }: {
+    digitoControl?: string | number;
+    numeroLote: string;
+  }) {
+    return this.soap.consultaLoteClient.consultaLote({ digitoControl, numeroLote });
+  }
+
+  async enviarEvento({
+    digitoControl,
+    eventoXml
+  }: {
+    digitoControl?: string | number;
+    eventoXml: string;
+  }) {
+    return this.soap.eventoClient.enviarEvento({ digitoControl, eventoXml });
+  }
+
+  async sendDE(preparedDE: PreparedDE, opts?: { digitoControl?: string | number }) {
     const xml = generateFacturaElectronicaXML(preparedDE);
     const signed = await this.signXML(xml);
     const withQR = await this.attachQR(signed);
-    return this.soap.recibeLoteClient.recibeLote({ DE: withQR });
+    return this.soap.recibeLoteClient.recibeLote({
+      digitoControl: opts?.digitoControl,
+      DE: withQR
+    });
   }
 
-  async sendBatch(deList: PreparedDE[]) {
-    return Promise.all(deList.map((de) => this.sendDE(de)));
+  async sendBatch(deList: PreparedDE[], opts?: { digitoControl?: string | number }) {
+    const xmls = await Promise.all(
+      deList.map(async (de) => this.attachQR(await this.signXML(generateFacturaElectronicaXML(de))))
+    );
+    const lote = buildLoteXml(xmls);
+    return this.soap.recibeLoteClient.recibeLote({
+      digitoControl: opts?.digitoControl,
+      DE: lote
+    });
   }
 
   async recibeLote({
@@ -89,4 +123,13 @@ export class SifenAPI {
   }) {
     return this.soap.recibeLoteClient.recibeLote({ digitoControl, DE, payloadFormat });
   }
+}
+
+function buildLoteXml(deXmls: string[]): string {
+  const inner = deXmls.map((xml) => xml.replace(/<\?xml[^?]*\?>\s*/g, '').trim()).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rLoteDE xmlns="http://ekuatia.set.gov.py/sifen/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ekuatia.set.gov.py/sifen/xsd SiRecepLoteDE_v150.xsd">
+  <dVerFor>150</dVerFor>
+${inner}
+</rLoteDE>`;
 }
