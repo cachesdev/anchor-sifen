@@ -42,7 +42,7 @@ export function prepareDE<TInput>(
 
   const validated = v.safeParse(schema, input);
   if (!validated.success) {
-    return Err(new XMLGenInputValidationError({ issues: validated.issues }));
+    return Err(new XMLGenInputValidationError({ details: v.summarize(validated.issues) }));
   }
 
   const calculated = calculateFieldsResult(validated.output);

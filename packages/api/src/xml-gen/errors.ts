@@ -3,8 +3,8 @@ import type { ValidationError as RuleValidationError } from './validation/types'
 
 export class XMLGenInputValidationError extends ErrorFactory({
   name: 'XMLGenInputValidationError',
-  message: (f) => `Error durante validacion de entrada XML Gen: ${f.issues.length} issue(s).`,
-  fields: ErrorFactory.fields<{ issues: unknown[] }>()
+  message: (f) => `Error durante validacion de entrada XML Gen: ${f.details}.`,
+  fields: ErrorFactory.fields<{ details: string }>()
 }) {}
 
 export class XMLGenCalculationError extends ErrorFactory({
