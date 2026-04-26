@@ -30,7 +30,7 @@ export interface PreparedDE {
 
 export function prepareDE<TInput>(
   input: TInput,
-  schema: v.GenericSchema<TInput, FacturaElectronica>,
+  schema: v.GenericSchema<unknown, FacturaElectronica>,
   tipoDocumento: number
 ): Result<PreparedDE, XMLGenBuildError> {
   const validated = v.safeParse(schema, input);

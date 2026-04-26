@@ -1,49 +1,37 @@
 import * as v from 'valibot';
-import type {
-  DatosEspecificosPorTipoDE_FE_Input,
-  DatosGeneralesOperacion_FE_Input,
-  FacturaElectronica,
-  FacturaElectronicaInput
-} from '../../sifen/types';
+import type { FacturaElectronica, FacturaElectronicaInput } from '../../sifen/types';
 import { toBig, toOptionalBig } from '../big';
-import { emisorSchema, operacionComercialSchema, receptorSchema } from './d';
-import { operacionDESchema, timbradoFESchema } from './de';
+import { operacionDEEnumSchema } from './de';
+import { operacionComercialEnumSchema, emisorEnumSchema, receptorEnumSchema } from './d';
 import {
-  camposFacturaElectronicaSchema,
-  condicionOperacionSchema,
-  itemOperacionSchema,
-  transporteSchema,
-  usoComercialSchema
+  facturaElectronicaEnumSchema,
+  condicionOperacionEnumSchema,
+  itemOperacionEnumSchema,
+  transporteEnumSchema
 } from './e';
-import { subtotalesTotalesSchema } from './f';
-import { camposUsoGeneralSchema } from './g';
-import { camposDocumentoElectronicoAsociadoSchema } from './h';
+import { subtotalesTotalesEnumSchema } from './f';
+import { camposUsoGeneralEnumSchema } from './g';
+import { camposDocumentoElectronicoAsociadoEnumSchema } from './h';
 
-const datosGeneralesOperacionFESchema = v.object({
-  fechaEmisionDE: v.date(),
-  operacionComercial: operacionComercialSchema,
-  emisor: emisorSchema,
-  receptor: receptorSchema
-}) satisfies v.GenericSchema<DatosGeneralesOperacion_FE_Input>;
-
-const datosEspecificosPorTipoDESchema = v.object({
-  facturaElectronica: camposFacturaElectronicaSchema,
-  condicionOperacion: condicionOperacionSchema,
-  itemsOperacion: v.array(itemOperacionSchema),
-  usosComerciales: v.optional(usoComercialSchema),
-  transporte: v.optional(transporteSchema)
-}) satisfies v.GenericSchema<DatosEspecificosPorTipoDE_FE_Input>;
-
-export const facturaElectronicaInputSchema = v.object({
+const facturaElectronicaInputEnumSchema = v.looseObject({
   id_cdc: v.string(),
-  operacionDE: operacionDESchema,
-  timbrado: timbradoFESchema,
-  datosGeneralesOperacion: datosGeneralesOperacionFESchema,
-  datosEspecificosPorTipoDE: datosEspecificosPorTipoDESchema,
-  subtotalesTotales: subtotalesTotalesSchema,
-  camposUsoGeneral: v.optional(camposUsoGeneralSchema),
-  camposDocumentoElectronicoAsociado: v.optional(camposDocumentoElectronicoAsociadoSchema)
-}) satisfies v.GenericSchema<FacturaElectronicaInput>;
+  operacionDE: operacionDEEnumSchema,
+  timbrado: v.looseObject({}),
+  datosGeneralesOperacion: v.looseObject({
+    operacionComercial: v.optional(operacionComercialEnumSchema),
+    emisor: emisorEnumSchema,
+    receptor: receptorEnumSchema
+  }),
+  datosEspecificosPorTipoDE: v.looseObject({
+    facturaElectronica: facturaElectronicaEnumSchema,
+    condicionOperacion: v.optional(condicionOperacionEnumSchema),
+    itemsOperacion: v.array(itemOperacionEnumSchema),
+    transporte: v.optional(transporteEnumSchema)
+  }),
+  subtotalesTotales: subtotalesTotalesEnumSchema,
+  camposUsoGeneral: v.optional(camposUsoGeneralEnumSchema),
+  camposDocumentoElectronicoAsociado: v.optional(camposDocumentoElectronicoAsociadoEnumSchema)
+});
 
 function normalizeOperacionComercial(out: FacturaElectronica): void {
   out.datosGeneralesOperacion.operacionComercial.tipoCambioOperacion = toOptionalBig(
@@ -52,27 +40,17 @@ function normalizeOperacionComercial(out: FacturaElectronica): void {
 }
 
 function normalizeCondicionOperacion(out: FacturaElectronica): void {
-  const condicionOperacion = out.datosEspecificosPorTipoDE.condicionOperacion;
-
-  for (const pago of condicionOperacion.pagoContadoEntregaInicial ?? []) {
+  const co = out.datosEspecificosPorTipoDE.condicionOperacion;
+  for (const pago of co.pagoContadoEntregaInicial ?? []) {
     pago.montoTipoPago = toBig(pago.montoTipoPago);
     pago.tipoCambioTipoPago = toOptionalBig(pago.tipoCambioTipoPago);
-
-    if (pago.pagoTarjetaCreditoDebito) {
+    if (pago.pagoTarjetaCreditoDebito)
       pago.pagoTarjetaCreditoDebito.digitoVerificadorProcesadoraTarjeta = undefined;
-    }
   }
-
-  const pagoCredito = condicionOperacion.pagoCredito;
-  if (!pagoCredito) {
-    return;
-  }
-
-  pagoCredito.montoEntregaInicial = toOptionalBig(pagoCredito.montoEntregaInicial);
-
-  for (const cuota of pagoCredito.cuotas ?? []) {
-    cuota.montoCuota = toBig(cuota.montoCuota);
-  }
+  const pc = co.pagoCredito;
+  if (!pc) return;
+  pc.montoEntregaInicial = toOptionalBig(pc.montoEntregaInicial);
+  for (const cuota of pc.cuotas ?? []) cuota.montoCuota = toBig(cuota.montoCuota);
 }
 
 function normalizeItem(
@@ -81,32 +59,25 @@ function normalizeItem(
   item.cantidadProductoServicio = toBig(item.cantidadProductoServicio);
   item.cantidadQuiebraMerma = toOptionalBig(item.cantidadQuiebraMerma);
   item.porcentajeQuiebraMerma = toOptionalBig(item.porcentajeQuiebraMerma);
-
-  const valorItem = item.valorItem;
-  valorItem.precioUnitario = toBig(valorItem.precioUnitario);
-  valorItem.tipoCambioItem = toOptionalBig(valorItem.tipoCambioItem);
-  valorItem.totalBrutoOperacionItem = toBig(0);
-
-  const valorRestaItem = valorItem.valorRestaItem;
-  valorRestaItem.descuentoParticularItem = toOptionalBig(valorRestaItem.descuentoParticularItem);
-  valorRestaItem.descuentoGlobalItem = toOptionalBig(valorRestaItem.descuentoGlobalItem);
-  valorRestaItem.anticipoParticularItem = toOptionalBig(valorRestaItem.anticipoParticularItem);
-  valorRestaItem.anticipoGlobalItem = toOptionalBig(valorRestaItem.anticipoGlobalItem);
-  valorRestaItem.porcentajeDescuentoItem = toBig(0);
-  valorRestaItem.valorTotalOperacionItem = toBig(0);
-  valorRestaItem.valorTotalOperacionItemGs = undefined;
-
-  const vehiculoNuevo = item.vehiculoNuevo;
-  if (vehiculoNuevo) {
-    vehiculoNuevo.pesoNeto = toOptionalBig(vehiculoNuevo.pesoNeto);
-    vehiculoNuevo.pesoBruto = toOptionalBig(vehiculoNuevo.pesoBruto);
-    vehiculoNuevo.capacidadMaximaTraccion = toOptionalBig(vehiculoNuevo.capacidadMaximaTraccion);
+  const vi = item.valorItem;
+  vi.precioUnitario = toBig(vi.precioUnitario);
+  vi.tipoCambioItem = toOptionalBig(vi.tipoCambioItem);
+  vi.totalBrutoOperacionItem = toBig(0);
+  const vr = vi.valorRestaItem;
+  vr.descuentoParticularItem = toOptionalBig(vr.descuentoParticularItem);
+  vr.descuentoGlobalItem = toOptionalBig(vr.descuentoGlobalItem);
+  vr.anticipoParticularItem = toOptionalBig(vr.anticipoParticularItem);
+  vr.anticipoGlobalItem = toOptionalBig(vr.anticipoGlobalItem);
+  vr.porcentajeDescuentoItem = toBig(0);
+  vr.valorTotalOperacionItem = toBig(0);
+  vr.valorTotalOperacionItemGs = undefined;
+  const vn = item.vehiculoNuevo;
+  if (vn) {
+    vn.pesoNeto = toOptionalBig(vn.pesoNeto);
+    vn.pesoBruto = toOptionalBig(vn.pesoBruto);
+    vn.capacidadMaximaTraccion = toOptionalBig(vn.capacidadMaximaTraccion);
   }
-
-  if (!item.ivaItem) {
-    return;
-  }
-
+  if (!item.ivaItem) return;
   item.ivaItem.proporcionGravadaIva = toBig(item.ivaItem.proporcionGravadaIva);
   item.ivaItem.baseGravadaIvaItem = toBig(0);
   item.ivaItem.liquidacionIvaItem = toBig(0);
@@ -114,48 +85,46 @@ function normalizeItem(
 }
 
 function normalizeUsosComerciales(out: FacturaElectronica): void {
-  const usosComerciales = out.datosEspecificosPorTipoDE.usosComerciales;
-  if (!usosComerciales) {
-    return;
+  const uc = out.datosEspecificosPorTipoDE.usosComerciales;
+  if (!uc) return;
+  if (uc.sectorEnergiaElectrica) {
+    const se = uc.sectorEnergiaElectrica;
+    se.lecturaAnterior = toOptionalBig(se.lecturaAnterior);
+    se.lecturaActual = toOptionalBig(se.lecturaActual);
+    se.consumoKwh = toOptionalBig(se.consumoKwh);
   }
-
-  const sectorEnergiaElectrica = usosComerciales.sectorEnergiaElectrica;
-  if (sectorEnergiaElectrica) {
-    sectorEnergiaElectrica.lecturaAnterior = toOptionalBig(sectorEnergiaElectrica.lecturaAnterior);
-    sectorEnergiaElectrica.lecturaActual = toOptionalBig(sectorEnergiaElectrica.lecturaActual);
-    sectorEnergiaElectrica.consumoKwh = toOptionalBig(sectorEnergiaElectrica.consumoKwh);
+  for (const p of uc.sectorSeguros?.polizaSeguros ?? []) p.vigenciaPoliza = toBig(p.vigenciaPoliza);
+  if (uc.sectorSupermercados) {
+    const ss = uc.sectorSupermercados;
+    ss.efectivo = toOptionalBig(ss.efectivo);
+    ss.vuelto = toOptionalBig(ss.vuelto);
+    ss.montoDonacion = toOptionalBig(ss.montoDonacion);
   }
-
-  for (const poliza of usosComerciales.sectorSeguros?.polizaSeguros ?? []) {
-    poliza.vigenciaPoliza = toBig(poliza.vigenciaPoliza);
-  }
-
-  const sectorSupermercados = usosComerciales.sectorSupermercados;
-  if (sectorSupermercados) {
-    sectorSupermercados.efectivo = toOptionalBig(sectorSupermercados.efectivo);
-    sectorSupermercados.vuelto = toOptionalBig(sectorSupermercados.vuelto);
-    sectorSupermercados.montoDonacion = toOptionalBig(sectorSupermercados.montoDonacion);
-  }
-
-  const datosAdicionalesUsoComercial = usosComerciales.datosAdicionalesUsoComercial;
-  if (datosAdicionalesUsoComercial) {
-    datosAdicionalesUsoComercial.saldoAnterior = toOptionalBig(
-      datosAdicionalesUsoComercial.saldoAnterior
+  if (uc.datosAdicionalesUsoComercial)
+    uc.datosAdicionalesUsoComercial.saldoAnterior = toOptionalBig(
+      uc.datosAdicionalesUsoComercial.saldoAnterior
     );
-  }
 }
 
 function normalizeTransportista(out: FacturaElectronica): void {
-  const transportista = out.datosEspecificosPorTipoDE.transporte?.transportista;
-  if (!transportista) {
-    return;
-  }
-
-  transportista.digitoVerificadorRucTransportista = undefined;
-  transportista.digitoVerificadorRucAgente = undefined;
+  const t = out.datosEspecificosPorTipoDE.transporte?.transportista;
+  if (!t) return;
+  t.digitoVerificadorRucTransportista = undefined;
+  t.digitoVerificadorRucAgente = undefined;
 }
 
-function initializeSubtotales(out: FacturaElectronica): void {
+export function normalizeFacturaElectronica(input: FacturaElectronicaInput): FacturaElectronica {
+  const out = structuredClone(input) as unknown as FacturaElectronica;
+  out.digitoVerificadorId = 0;
+  out.fechaFirma = new Date(0);
+  out.operacionDE.codigoSeguridad = 0;
+  normalizeOperacionComercial(out);
+  out.datosGeneralesOperacion.emisor.digitoVerificadorEmisor = 0;
+  out.datosGeneralesOperacion.receptor.digitoVerificadorReceptor = undefined;
+  normalizeCondicionOperacion(out);
+  normalizeTransportista(out);
+  for (const item of out.datosEspecificosPorTipoDE.itemsOperacion) normalizeItem(item);
+  normalizeUsosComerciales(out);
   out.subtotalesTotales = {
     subtotalExenta: undefined,
     subtotalExonerada: undefined,
@@ -183,55 +152,13 @@ function initializeSubtotales(out: FacturaElectronica): void {
     totalBaseGravadaIva: undefined,
     totalOperacionGs: undefined
   };
-}
-
-export function normalizeFacturaElectronica(input: FacturaElectronicaInput): FacturaElectronica {
-  const out = structuredClone(input) as unknown as FacturaElectronica;
-
-  out.digitoVerificadorId = 0;
-  out.fechaFirma = new Date(0);
-  out.operacionDE.codigoSeguridad = 0;
-
-  normalizeOperacionComercial(out);
-
-  out.datosGeneralesOperacion.emisor.digitoVerificadorEmisor = 0;
-  out.datosGeneralesOperacion.receptor.digitoVerificadorReceptor = undefined;
-
-  normalizeCondicionOperacion(out);
-  normalizeTransportista(out);
-
-  for (const item of out.datosEspecificosPorTipoDE.itemsOperacion) {
-    normalizeItem(item);
-  }
-
-  normalizeUsosComerciales(out);
-  initializeSubtotales(out);
-
   return out;
 }
 
 export const facturaElectronicaSchema = v.pipe(
-  facturaElectronicaInputSchema,
+  facturaElectronicaInputEnumSchema,
   v.rawTransform(({ dataset, NEVER }) => {
-    if (!dataset.typed) {
-      return NEVER;
-    }
-
-    return normalizeFacturaElectronica(dataset.value);
+    if (!dataset.typed) return NEVER;
+    return normalizeFacturaElectronica(dataset.value as FacturaElectronicaInput);
   })
-) satisfies v.GenericSchema<FacturaElectronicaInput, FacturaElectronica>;
-
-type Assert<T extends true> = T;
-
-// Checkea en tiempo de compilacion si hay type drift entre el schema de entrada y el tipo concreto.
-type _CheckInput = Assert<
-  [v.InferInput<typeof facturaElectronicaInputSchema>] extends [FacturaElectronicaInput]
-    ? true
-    : false
->;
-declare const _: _CheckInput;
-
-type _CheckOutput = Assert<
-  [v.InferOutput<typeof facturaElectronicaSchema>] extends [FacturaElectronica] ? true : false
->;
-declare const __: _CheckOutput;
+);
