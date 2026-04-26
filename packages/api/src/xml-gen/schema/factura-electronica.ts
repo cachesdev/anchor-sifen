@@ -185,7 +185,7 @@ function initializeSubtotales(out: FacturaElectronica): void {
   };
 }
 
-function toFacturaElectronica(input: FacturaElectronicaInput): FacturaElectronica {
+export function normalizeFacturaElectronica(input: FacturaElectronicaInput): FacturaElectronica {
   const out = structuredClone(input) as unknown as FacturaElectronica;
 
   out.digitoVerificadorId = 0;
@@ -217,7 +217,7 @@ export const facturaElectronicaSchema = v.pipe(
       return NEVER;
     }
 
-    return toFacturaElectronica(dataset.value);
+    return normalizeFacturaElectronica(dataset.value);
   })
 ) satisfies v.GenericSchema<FacturaElectronicaInput, FacturaElectronica>;
 
