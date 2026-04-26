@@ -3,57 +3,57 @@ import { attachQRToSignedXML } from '../qr';
 import { getQRUrl } from '../qr/qr-generator';
 import { SifenSoapClient } from '../soap';
 import { generateFacturaElectronicaXML } from '../xml-gen';
-import type { PreparedDE } from '../xml-gen/factura-electronica';
+import type { PreparedDE } from '../xml-gen/de-pipeline';
 import { XMLSigner } from '../xml-sign';
 
 export interface SIFENConfig {
   environment: 'test' | 'prod';
-  certificatePath: string;
-  certificatePassword: string;
+  certificatePath?: string;
+  certificatePassword?: string;
+  certificateData?: CertificateData;
   idCSC: string;
   csc: string;
 }
 
 export class SifenAPI {
   private readonly config: SIFENConfig;
-  private readonly certManager: CertificateManager;
-  private readonly xmlSigner: XMLSigner;
-
-  private readonly sifenSoapClients: SifenSoapClient;
-  private readonly certificateData: CertificateData;
+  private readonly xmlSigner = new XMLSigner();
+  private _certData?: CertificateData;
+  private _soap?: SifenSoapClient;
 
   constructor(config: SIFENConfig) {
     this.config = config;
-    this.certManager = new CertificateManager();
-    this.xmlSigner = new XMLSigner();
-
-    this.certificateData = this.certManager.loadPKCS12(
-      config.certificatePath,
-      config.certificatePassword
-    );
-
-    // SOAP
-    this.sifenSoapClients = new SifenSoapClient({
-      certificatePem: this.certificateData.certificatePem,
-      certificatePemKey: this.certificateData.privateKeyPem,
-      environment: config.environment
-    });
+    this._certData = config.certificateData;
   }
 
-  async generateFEXML(data: PreparedDE): Promise<string> {
-    return generateFacturaElectronicaXML(data);
+  private get certData(): CertificateData {
+    if (this._certData) return this._certData;
+    this._certData = new CertificateManager().loadPKCS12(
+      this.config.certificatePath!,
+      this.config.certificatePassword!
+    );
+    return this._certData;
+  }
+
+  private get soap(): SifenSoapClient {
+    if (this._soap) return this._soap;
+    const cd = this.certData;
+    this._soap = new SifenSoapClient({
+      certificatePem: cd.certificatePem,
+      certificatePemKey: cd.privateKeyPem,
+      environment: this.config.environment
+    });
+    return this._soap;
   }
 
   async signXML(xml: string): Promise<string> {
-    return (await this.xmlSigner.sign(xml, this.certificateData)).signedXml;
+    return (await this.xmlSigner.sign(xml, this.certData)).signedXml;
   }
 
-  /** Retorna la URL del código QR */
   async generateQR(signedXML: string): Promise<string> {
     return getQRUrl(signedXML, this.config.idCSC, this.config.csc, this.config.environment);
   }
 
-  /** Genera y inserta la URL del código QR en el XML firmado */
   async attachQR(signedXML: string): Promise<string> {
     return attachQRToSignedXML(
       signedXML,
@@ -63,10 +63,20 @@ export class SifenAPI {
     );
   }
 
-  // async consultaRUC({ digitoControl, ruc }: { digitoControl: string; ruc: string }) {
-  //   const { rucClient } = this.sifenSoapClients;
-  //   return rucClient.consultaRUC({ ruc, digitoControl });
-  // }
+  async consultaRUC({ digitoControl, ruc }: { digitoControl: string; ruc: string }) {
+    return this.soap.rucClient.consultaRUC({ ruc, digitoControl });
+  }
+
+  async sendDE(preparedDE: PreparedDE) {
+    const xml = generateFacturaElectronicaXML(preparedDE);
+    const signed = await this.signXML(xml);
+    const withQR = await this.attachQR(signed);
+    return this.soap.recibeLoteClient.recibeLote({ DE: withQR });
+  }
+
+  async sendBatch(deList: PreparedDE[]) {
+    return Promise.all(deList.map((de) => this.sendDE(de)));
+  }
 
   async recibeLote({
     digitoControl,
@@ -77,7 +87,6 @@ export class SifenAPI {
     DE: string;
     payloadFormat?: 'xml' | 'zip-base64';
   }) {
-    const { recibeLoteClient } = this.sifenSoapClients;
-    return recibeLoteClient.recibeLote({ digitoControl, DE, payloadFormat });
+    return this.soap.recibeLoteClient.recibeLote({ digitoControl, DE, payloadFormat });
   }
 }

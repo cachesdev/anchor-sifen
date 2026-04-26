@@ -1,5 +1,5 @@
 import { create } from 'xmlbuilder2';
-import type { PreparedDE } from './factura-electronica';
+import type { PreparedDE } from './de-pipeline';
 
 const SIFEN_XSD_NAMESPACE = 'http://ekuatia.set.gov.py/sifen/xsd';
 const XSI_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
