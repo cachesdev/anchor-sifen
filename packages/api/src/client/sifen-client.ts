@@ -3,7 +3,7 @@ import { attachQRToSignedXML } from '../qr';
 import { getQRUrl } from '../qr/qr-generator';
 import { SifenSoapClient } from '../soap';
 import { generateFacturaElectronicaXML } from '../xml-gen';
-import type { BuiltDE } from '../xml-gen/factura-electronica';
+import type { PreparedDE } from '../xml-gen/factura-electronica';
 import { XMLSigner } from '../xml-sign';
 
 export interface SIFENConfig {
@@ -19,7 +19,6 @@ export class SifenAPI {
   private readonly certManager: CertificateManager;
   private readonly xmlSigner: XMLSigner;
 
-  // @ts-expect-error — Usado luego
   private readonly sifenSoapClients: SifenSoapClient;
   private readonly certificateData: CertificateData;
 
@@ -41,12 +40,12 @@ export class SifenAPI {
     });
   }
 
-  async generateFEXML(data: BuiltDE): Promise<string> {
+  async generateFEXML(data: PreparedDE): Promise<string> {
     return generateFacturaElectronicaXML(data);
   }
 
   async signXML(xml: string): Promise<string> {
-    return (await this.xmlSigner.signDocument(xml, this.certificateData)).signedXml;
+    return (await this.xmlSigner.sign(xml, this.certificateData)).signedXml;
   }
 
   /** Retorna la URL del código QR */
@@ -69,8 +68,16 @@ export class SifenAPI {
   //   return rucClient.consultaRUC({ ruc, digitoControl });
   // }
 
-  // async recibeLote({ digitoControl, DE }: { digitoControl: string; DE: string }) {
-  //   const { recibeLoteClient } = this.sifenSoapClients;
-  //   return recibeLoteClient.recibeLote({ digitoControl, DE });
-  // }
+  async recibeLote({
+    digitoControl,
+    DE,
+    payloadFormat
+  }: {
+    digitoControl?: string | number;
+    DE: string;
+    payloadFormat?: 'xml' | 'zip-base64';
+  }) {
+    const { recibeLoteClient } = this.sifenSoapClients;
+    return recibeLoteClient.recibeLote({ digitoControl, DE, payloadFormat });
+  }
 }

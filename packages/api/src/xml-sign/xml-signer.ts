@@ -11,17 +11,12 @@ export interface SignedDocumentResult {
 
 export class XMLSigner {
   /**
-   * Sign an XML document according to SIFEN specifications
-   * @param xml The XML string to sign (must contain DE element with Id attribute)
-   * @param certData Certificate data from CertificateManager
-   * @returns Object containing signed XML, DigestValue, and CDC
+   * Firma un XML segun SIFEN
    */
-  async signDocument(xml: string, certData: CertificateData): Promise<SignedDocumentResult> {
+  async sign(xml: string, certData: CertificateData): Promise<SignedDocumentResult> {
     try {
-      // Parse XML
       const doc = new DOMParser().parseFromString(xml, 'text/xml');
 
-      // Extract CDC (Id attribute from DE element)
       const cdc = this.extractCDC(doc);
 
       // Find the DE element to insert signature after it
