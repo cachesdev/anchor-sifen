@@ -2,8 +2,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ![abstract green shapes logo](page_1_image_1_v2.jpg) ![e-kuatia logo](image_url_placeholder)
 
-
-
 # NOTA TÉCNICA N° 4
 
 **Fecha:** 29/12/2020
@@ -15,7 +13,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 ### 1. <u>VALIDACIONES</u>
 
 **1.1. <u>Se elimina la siguiente validación:</u>**
-
 
 <table>
   <thead>
@@ -43,7 +40,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 Páginas: 163.
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

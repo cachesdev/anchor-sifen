@@ -13,7 +13,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 1.1. <u>Se modifican los siguientes campos:</u>
 
-
 <table>
   <thead>
     <tr>
@@ -57,7 +56,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 **Páginas: 71, 100.**
 
 **Histórico del Documento**
-
 
 <table>
   <thead>

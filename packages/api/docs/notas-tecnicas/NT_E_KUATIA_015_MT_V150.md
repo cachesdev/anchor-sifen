@@ -7,7 +7,6 @@ Electrónica Nacional
 
 **Fecha:** 14/08/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -28,7 +27,6 @@ Electrónica Nacional
 1.1. <u>En Campos que identifican al documento asociado (H001-H049) se agrega la siguiente validación.</u>
 
 (Páginas 189)
-
 
 <table>
   <thead>
@@ -51,10 +49,9 @@ Electrónica Nacional
   </tbody>
 </table>
 
-Observación: *Validación referente al Evento de Nominación de Factura Electrónica*
+Observación: _Validación referente al Evento de Nominación de Factura Electrónica_
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

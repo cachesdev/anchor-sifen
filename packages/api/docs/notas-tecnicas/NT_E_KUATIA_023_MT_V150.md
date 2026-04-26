@@ -7,7 +7,6 @@ Electrónica Nacional
 
 **Fecha:** 27/08/2024
 
-
 <table>
   <tbody>
     <tr>
@@ -26,7 +25,6 @@ Electrónica Nacional
 ## 1. FORMATO DE CAMPOS XML
 
 1.1. <u>En campos que identifican al receptor del Documento Electrónico DE (D200-D299) se modifican los siguientes campos:</u> (**Página 86**)
-
 
 <table>
   <thead>
@@ -72,7 +70,6 @@ Electrónica Nacional
 
 1.2. <u>En campos que describen los ítems de la operación (E700-E899) se modifica el siguiente campo en la Longitud.</u> (**Página 86**)
 
-
 <table>
   <thead>
     <tr>
@@ -107,7 +104,6 @@ Electrónica Nacional
 ![e-kuatia Sistema Integrado de Facturación Electrónica Nacional](page_2_image_1_v2.jpg)
 
 1.3. <u>En el de Sector Energía Eléctrica (E791-E799) se modifica el siguiente campo en la ocurrencia.</u> **(Página 93)**
-
 
 <table>
   <thead>
@@ -151,7 +147,6 @@ Electrónica Nacional
 
 1.4. <u>H. Campos que identifican al documento asociado (H001-H049) se incorpora el siguiente campo.</u> **(Página 110)**
 
-
 <table>
   <thead>
     <tr>
@@ -186,7 +181,6 @@ Electrónica Nacional
 ## 2. VALIDACIONES
 
 2.1. <u>En datos que identifican al receptor del Documento Electrónico DE (D200 - D299) se modifica la siguiente validación.</u> **(Página 167)**
-
 
 <table>
   <thead>
@@ -243,7 +237,6 @@ Electrónica Nacional
 
 ## 2.2. <u>H. Campos que identifican al documento asociado (H001-H049) se modifica la siguiente validación. (Página 191)</u>
 
-
 <table>
   <thead>
     <tr>
@@ -291,7 +284,6 @@ Electrónica Nacional
 ## 3. 1. Se amplía el listado de unidades de medidas (Páginas 211 y 212).
 
 **TABLA 5 – CODIFICACIÓN DE UNIDADES DE MEDIDA**
-
 
 <table>
   <thead>
@@ -481,7 +473,6 @@ Electrónica Nacional
 **Fuente:** Códigos para las Unidades de Medición que se usan en el Comercio Internacional.
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

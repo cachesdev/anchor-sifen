@@ -4,7 +4,6 @@
 
 **Fecha:** 23/04/2024
 
-
 <table>
   <tbody>
     <tr>
@@ -24,7 +23,6 @@
 
 1.1. <u>En la sección 11.6.1 REGLAS DE VALIDACIÓN PARA CANCELACIÓN se excluye la siguiente validación:</u>
 **(Página 134)**
-
 
 <table>
   <thead>
@@ -48,7 +46,6 @@
 </table>
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

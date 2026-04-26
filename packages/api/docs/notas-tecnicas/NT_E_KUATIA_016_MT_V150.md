@@ -4,7 +4,6 @@
 
 **Fecha:** 14/08/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -27,7 +26,6 @@
 **<u>Sección 7.6. Estándar de firma digital</u>**
 
 Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
-
 
 <table>
   <thead>
@@ -209,7 +207,6 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
 
 <u>1.2. Se eliminan los siguientes campos de la misma tabla</u>
 
-
 <table>
   <thead>
     <tr>
@@ -240,7 +237,6 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
 ![e-kuatia Sistema Integrado de Facturación Electrónica Nacional](page_3_image_1_v2.jpg)
 
 ## Sección 12.2.4 Validación de certificado de firma
-
 
 <table>
   <thead>
@@ -275,7 +271,6 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
 **Páginas**: 152.
 
 ## Sección 12.2.5 Validación de la firma digital
-
 
 <table>
   <thead>
@@ -354,7 +349,6 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
 
 ### <u>Subsección I. Información de la Firma Digital del DTE (I001-I049)</u>
 
-
 <table>
   <thead>
     <tr>
@@ -416,7 +410,6 @@ Páginas: 152.
 <mark>Retorna un html con el mensaje de error de Acceso Denegado por las políticas de acceso. Estas validaciones se realizan durante la conexion con el servicio y son propias del protocolo TLS.</mark>
 
 <mark>La siguiente tabla muestra las posibles causas</mark>
-
 
 <table>
   <thead>
@@ -499,7 +492,6 @@ Electrónica Nacional
 **Páginas:** 150.
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

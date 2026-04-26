@@ -12,7 +12,6 @@
 
 1.1. Se modifican los siguientes campos:
 
-
 <table>
   <thead>
     <tr>
@@ -59,7 +58,6 @@ Páginas: 72, 73.
 
 2.1. Se eliminan las siguientes validaciones:
 
-
 <table>
   <thead>
     <tr>
@@ -94,7 +92,6 @@ Páginas: 72, 73.
 Página: 167.
 
 **Histórico del Documento**
-
 
 <table>
   <thead>

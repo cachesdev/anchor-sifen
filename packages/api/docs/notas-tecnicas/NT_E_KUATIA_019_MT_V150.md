@@ -4,7 +4,6 @@
 
 **Fecha:** 17/11/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -23,7 +22,6 @@
 ## 1. <u>Formato de Campos XML</u>
 
 ### 1.1 <u>En Evento Notificación – Recepción DE/DTE (Formato del evento de Notificación – Recepción) se modifican los siguientes campos</u> (Página 123)
-
 
 <table>
   <thead>
@@ -66,7 +64,6 @@
 </table>
 
 ### 1.2 <u>En Evento Desconocimiento DE/DTE (Formato del evento de Desconocimiento DE/DTE) se modifican los siguientes campos</u> (Página 125)
-
 
 <table>
   <thead>
@@ -111,7 +108,6 @@
 ## 2. <u>Validaciones</u>
 
 ### 2.1 <u>EN REGLAS DE VALIDACIÓN PARA NOTIFICACIÓN – RECEPCIÓN DE/DTE SE MODIFICAN LOS SIGUIENTES CAMPOS</u> (Página 136)
-
 
 <table>
   <thead>
@@ -173,7 +169,6 @@
 
 ## 2.2. EN REGLAS DE VALIDACIÓN PARA EL EVENTO CONFORMIDAD SE MODIFICAN LOS SIGUIENTES CAMPOS (Página 137)
 
-
 <table>
   <thead>
     <tr>
@@ -233,7 +228,6 @@
 ## 2.3 EN REGLAS DE VALIDACIÓN PARA EL EVENTO DISCONFORMIDAD SE MODIFICAN LOS SIGUIENTES CAMPOS
 
 (Página 138)
-
 
 <table>
   <thead>
@@ -311,7 +305,6 @@
 
 2.4 <u>REGLAS DE VALIDACIÓN PARA EL EVENTO DESCONOCIMIENTO DE/DTE SE MODIFICAN LOS SIGUIENTES CAMPOS</u> (Página 139)
 
-
 <table>
   <thead>
     <tr>
@@ -362,8 +355,7 @@
 </table>
 
 3. <u>En la sección de “Validación de la firma digital” se agrega la siguiente:</u>
-(Página 153)
-
+   (Página 153)
 
 <table>
   <thead>
@@ -402,7 +394,6 @@ Referencia:
 <mark>~~Verde = puede realizarse luego del evento que se encuentra en el encabezado~~</mark>
 
 <mark>~~Rojo = no puede realizarse luego del evento que se encuentra en el encabezado~~</mark>
-
 
 <table>
   <thead>
@@ -504,11 +495,10 @@ Referencia:
 
 <mark>En el Sistema Integrado de Facturación Electrónica Nacional se podrá realizar el registro de cualquier evento del receptor siempre y cuando se encuentre dentro del plazo establecido para cada evento, quedando como válido e inalterable el último evento registrado.</mark>
 
-* <mark>✓ **Para los Documentos Electrónicos:** *El conteo del plazo de registro del evento comienza a partir de la fecha de emisión.*</mark>
-* <mark>✓ **Para los Documentos Tributarios Electrónicos:** *El conteo del plazo de registro del evento comienza a partir de la fecha de aprobación.*</mark>
+- <mark>✓ **Para los Documentos Electrónicos:** _El conteo del plazo de registro del evento comienza a partir de la fecha de emisión._</mark>
+- <mark>✓ **Para los Documentos Tributarios Electrónicos:** _El conteo del plazo de registro del evento comienza a partir de la fecha de aprobación._</mark>
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

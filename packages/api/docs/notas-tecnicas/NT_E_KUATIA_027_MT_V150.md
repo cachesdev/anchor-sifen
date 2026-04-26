@@ -4,7 +4,6 @@
 
 **Fecha:** 09/03/2026
 
-
 <table>
   <thead>
     <tr>
@@ -23,7 +22,6 @@
 ## 1. <u>**FORMATO DE CAMPOS DE XML**</u>
 
 1.1. <u>En el Evento de Nominación de Factura Electrónica (Formato del evento de nominación) se modifican los siguientes campos:</u>
-
 
 <table>
   <thead>
@@ -66,7 +64,6 @@
 </table>
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

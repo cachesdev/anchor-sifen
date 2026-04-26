@@ -14,7 +14,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ### 1.1. En el grupo de Póliza de seguros (EA790-EA799)se modifica el siguiente campo: (Página 94)
 
-
 <table>
   <thead>
     <tr>
@@ -46,7 +45,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ### 1.2. En el Campos que describen los subtotales y totales de la transacción documentada (F001-F099) se modifican y eliminan las fórmulas de los siguientes campos: (Página 106)
 
-
 <table>
   <thead>
     <tr>
@@ -77,7 +75,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

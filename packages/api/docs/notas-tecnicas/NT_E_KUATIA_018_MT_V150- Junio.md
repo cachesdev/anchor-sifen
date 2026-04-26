@@ -4,7 +4,6 @@
 
 **Fecha**: 17/11/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -20,8 +19,8 @@
 
 ## <u>Referencia</u>:
 
-* Nuevos campos y validaciones para la imputación automática de las ventas al módulo RG90.
-* Correcciones en el MT versión 150 referente a los códigos de mensajes que corresponden a la regla de validación para el evento de transporte.
+- Nuevos campos y validaciones para la imputación automática de las ventas al módulo RG90.
+- Correcciones en el MT versión 150 referente a los códigos de mensajes que corresponden a la regla de validación para el evento de transporte.
 
 ## 1. <u>Campos nuevos</u>
 
@@ -30,7 +29,6 @@
 **(Páginas 66,67)**
 
 **D1.1. Campos que identifican las obligaciones afectadas (D030-D040)**
-
 
 <table>
   <thead>
@@ -91,7 +89,6 @@
 
 **D1.1. Campos que identifican las obligaciones afectadas (D030-D040)**
 
-
 <table>
   <thead>
     <tr>
@@ -123,7 +120,6 @@
 ## 3. <u>Tabla nueva</u>
 
 **TABLA 12 - TIPO DE OBLIGACIONES**
-
 
 <table>
   <thead>
@@ -189,7 +185,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 ## **4. <u>Validaciones actualizadas</u>**
 
 11.6.7. REGLAS DE VALIDACIÓN PARA EL EVENTO POR ACTUALIZACIÓN DE DATOS: DATOS DEL TRANSPORTE
-
 
 <table>
   <thead>
@@ -298,7 +293,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 11.6.7. REGLAS DE VALIDACIÓN PARA EL EVENTO POR ACTUALIZACIÓN DE DATOS: DATOS DEL TRANSPORTE
 
-
 <table>
   <thead>
     <tr>
@@ -323,7 +317,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 ### **Histórico del Documento**
-
 
 <table>
   <thead>

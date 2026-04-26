@@ -4,7 +4,6 @@
 
 **Fecha**: 29/12/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -23,7 +22,6 @@
 ## 1. <u>Validaciones</u>
 
 1.1. <u>En Datos que identifican al receptor del Documento Electrónico DE (D200 - D299) se modifica la siguiente validación.</u> (Página 166)
-
 
 <table>
   <thead>
@@ -46,12 +44,11 @@
   </tbody>
 </table>
 
-**Observación**: *Conforme a lo dispuesto en el Artículo N° 6 del Decreto N° 872/2023*
+**Observación**: _Conforme a lo dispuesto en el Artículo N° 6 del Decreto N° 872/2023_
 
 VER NOTA TÉCNICA N° 24 DESDE EL 01/01/2025
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

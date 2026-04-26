@@ -4,7 +4,6 @@
 
 **Fecha:** 17/11/2023
 
-
 <table>
   <tbody>
     <tr>
@@ -23,7 +22,6 @@
 ## 1. Formato de Campos XML
 
 1.1. Se agrega el campo dCodConDncp dentro del grupo E9.5. Grupo de datos adicionales de uso comercial (E820-E829)
-
 
 <table>
   <thead>
@@ -60,7 +58,6 @@
 
 <u>(Página 165)</u>
 
-
 <table>
   <thead>
     <tr>
@@ -83,7 +80,6 @@
 </table>
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

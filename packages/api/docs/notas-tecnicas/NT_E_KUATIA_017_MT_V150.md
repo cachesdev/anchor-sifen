@@ -4,7 +4,6 @@
 
 **Fecha:** 14/08/2023
 
-
 <table>
   <thead>
     <tr>
@@ -27,7 +26,6 @@
 <u>(Páginas 167)</u>
 
 ### <u>D3. Campos que identifican al receptor del Documento Electrónico DE (D200-D299)</u>
-
 
 <table>
   <thead>
@@ -61,7 +59,6 @@
 </table>
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

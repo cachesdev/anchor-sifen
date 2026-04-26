@@ -129,6 +129,6 @@ export const facturaElectronicaSchema = v.pipe(
   enumsSchema,
   v.rawTransform(({ dataset, NEVER }) => {
     if (!dataset.typed) return NEVER;
-    return normalizeFacturaElectronica(dataset.value as FacturaElectronicaInput);
+    return normalizeFacturaElectronica(dataset.value as unknown as FacturaElectronicaInput);
   })
 );

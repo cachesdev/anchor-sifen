@@ -13,7 +13,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 1.1. <u>En el Campos que describen los ítems de la operación (E700-E899) se modifica el siguiente campo:</u> **(Página 85)**
 
-
 <table>
   <thead>
     <tr>
@@ -55,7 +54,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 ## Histórico del Documento
-
 
 <table>
   <thead>

@@ -12,7 +12,6 @@
 
 #### <u>1.1. En Campos inherentes a la operación comercial (D010-D099) se agrega la siguiente validación:</u>
 
-
 <table>
   <thead>
     <tr>
@@ -34,10 +33,9 @@
   </tbody>
 </table>
 
-**Observación:** *Conforme a lo dispuesto en el Dictamen DEINT N° 344 de fecha 27 de Diciembre del 2022*
+**Observación:** _Conforme a lo dispuesto en el Dictamen DEINT N° 344 de fecha 27 de Diciembre del 2022_
 
 ### Histórico del Documento
-
 
 <table>
   <thead>

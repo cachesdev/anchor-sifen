@@ -14,7 +14,6 @@
 
 1- Especificación de la fórmula a utilizar para hallar el Descuento global sobre el precio unitario por ítem (incluidos impuestos) (dDescGloItem) (Página 88)
 
-
 <table>
   <thead>
     <tr>
@@ -44,8 +43,7 @@
   </tbody>
 </table>
 
-2- En el grupo *Campos que describen los subtotales y totales de la transacción documentada (F001-F099)* se realizó una verificación de las fórmulas utilizadas. (Página 103)
-
+2- En el grupo _Campos que describen los subtotales y totales de la transacción documentada (F001-F099)_ se realizó una verificación de las fórmulas utilizadas. (Página 103)
 
 <table>
   <thead>
@@ -154,7 +152,6 @@
 
 **1- Las siguientes validaciones sufren modificaciones:**
 
-
 <table>
   <thead>
     <tr>
@@ -203,7 +200,6 @@
 ![e-kuatia logo](image_url_placeholder)
 
 # **2- Se agregan las siguientes validaciones:**
-
 
 <table>
   <thead>
@@ -255,7 +251,6 @@
 </table>
 
 # Histórico del Documento
-
 
 <table>
   <thead>

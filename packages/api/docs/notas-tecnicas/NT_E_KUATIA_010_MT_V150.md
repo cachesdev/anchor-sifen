@@ -14,7 +14,6 @@ Fecha: 04/02/2022
 
 1.1. <u>En campos firmados del Documento Electrónico (A001-A099) se elimina el siguiente campo:</u> **(Página 62)**
 
-
 <table>
   <thead>
     <tr>
@@ -45,7 +44,6 @@ Fecha: 04/02/2022
 </table>
 
 1.2. <u>En el Campos inherentes a la operación comercial (D010-D099) se modifica el siguiente campo:</u> **(Página 66)**
-
 
 <table>
   <thead>
@@ -78,7 +76,6 @@ Fecha: 04/02/2022
 
 1.3. <u>En el Campos que componen la Nota de Remisión Electrónica (E500-E599) se modifica el siguiente campo:</u> **(Página 79)**
 
-
 <table>
   <thead>
     <tr>
@@ -109,7 +106,6 @@ Fecha: 04/02/2022
 </table>
 
 1.4. <u>En el Grupo de rastreo de la mercadería (E750-<mark>E761</mark>) se modifica los campos de observación y longitud, se elimina los siguientes campos y se agrega los campos de nombre de producto:</u> **(Página 90 y 91)**
-
 
 <table>
   <thead>
@@ -168,9 +164,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 ![Logo](page_2_image_2_v2.jpg) ![e-kuatia](image_url_placeholder)
 
-
-
-
 <table>
   <tbody>
     <tr>
@@ -221,7 +214,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 1.5. <u>En el Campos que identifican al transportista (persona física o jurídica) (E980-E999) se modifica el siguiente campo:</u> **(Página 101)**
-
 
 <table>
   <thead>
@@ -276,7 +268,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 1.6. <u>En el Campos que identifican al documento asociado (H001-H049) se elimina la siguiente observación ya que no aplica:</u> **(Página 109)**
 
-
 <table>
   <thead>
     <tr>
@@ -319,7 +310,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 1.7. <u>En el Grupo: Evento Inutilización (Formato del evento de inutilización) Se agrega número de serie al evento de Inutilización: C3</u> **(Página 122)**
 
-
 <table>
   <thead>
     <tr>
@@ -350,7 +340,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 1.8. <u>En el campo XDe del Schema XML 2: siRecepDE_v150.xsd (WS Recepción DE) se modifica el siguiente campo</u> **(Página 45)**
-
 
 <table>
   <thead>
@@ -386,7 +375,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 1.9. <u>En el campo rEnviConsDe del schema XML 9: siConsDE_v150.xsd (WS Consulta DE) se modifica el siguiente campo</u> **(Página 50)**
 
-
 <table>
   <thead>
     <tr>
@@ -415,7 +403,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 1.10. <u>En el grupo E6 Campos que componen la Nota de Remisión Electrónica (E500-E599)</u> **(Página 79)**
-
 
 <table>
   <thead>
@@ -447,7 +434,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 1.11. <u>En el Campos de datos del Timbrado (C001-C099) se modifica en la observación</u> **(Página 64)**
-
 
 <table>
   <thead>
@@ -481,7 +467,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 # 2. **VALIDACIONES**
 
 2.1. <u>D3. Datos que identifican al receptor del Documento Electrónico DE (D200 - D299) se modifican y elimina las siguientes validaciones y se agrega nueva validación:</u> **(Páginas 165, 166, 167, 189)**
-
 
 <table>
   <thead>
@@ -537,7 +522,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 **2.2. <u>Se agregan las siguientes validaciones:</u>** D2.2 Campos que identifican al responsable de la generación del DE (D140-D160) (Página 164)
 
-
 <table>
   <thead>
     <tr>
@@ -562,7 +546,6 @@ Sistema Integrado de Facturación Electrónica Nacional
 </table>
 
 **2.3. <u>H. Campos que identifican al documento asociado (H001-H049) se agrega dos nuevas validaciones y se modifica una.</u> **C11** (Páginas 189)**
-
 
 <table>
   <thead>
@@ -610,7 +593,7 @@ Sistema Integrado de Facturación Electrónica Nacional
 Ambiente de Producción: <mark>https://ekuatia.set.gov.py/consultas/qr?</mark>
 Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
 
-### 4. **<u>Conformación del Código QR</u> **C18****
+### 4. **<u>Conformación del Código QR</u> **C18\*\*\*\*
 
 **En la Sección 13.8.2. se agregan las siguientes observaciones adicionales para el código QR: (Página 205)**
 
@@ -623,7 +606,6 @@ Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
 **5.1. Se Corrige en el manual la descripción en la Tabla 6 – Códigos de Afectación (Página 213)**
 
 #### TABLA 6 – CODIGOS DE AFECTACION
-
 
 <table>
   <thead>
@@ -652,7 +634,7 @@ Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
   </tbody>
 </table>
 
-### 6. **<u>Namespace</u> **C23****
+### 6. **<u>Namespace</u> **C23\*\*\*\*
 
 **6.1. Se modifica el ejemplo de namespace utilizado en Eventos: (Página 31)**
 
@@ -691,7 +673,6 @@ Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
 
 ## 7.1. Se Corrige en el manual la descripción en la Tabla B – Tipos de Datos en los Archivos XML (Página 33)
 
-
 <table>
   <thead>
     <tr>
@@ -708,7 +689,6 @@ Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
 </table>
 
 # Histórico del Documento
-
 
 <table>
   <thead>
