@@ -1,12 +1,12 @@
 import { create } from 'xmlbuilder2';
-import type { BuiltDE } from './factura-electronica';
+import type { PreparedDE } from './factura-electronica';
 
 const SIFEN_XSD_NAMESPACE = 'http://ekuatia.set.gov.py/sifen/xsd';
 const XSI_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
 // TODO: Puede ser mas de 1 endpoint
 const SCHEMA_LOCATION = `${SIFEN_XSD_NAMESPACE} siRecepDE_v150.xsd`;
 
-export function generateFacturaElectronicaXML({ de, cdc }: BuiltDE): string {
+export function generateFacturaElectronicaXML({ raw: de, cdc }: PreparedDE): string {
   const xmlPayload = {
     'rDE@http://ekuatia.set.gov.py/sifen/xsd': {
       '@xmlns:xsi': XSI_NAMESPACE,

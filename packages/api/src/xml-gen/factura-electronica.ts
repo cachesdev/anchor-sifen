@@ -7,6 +7,7 @@ import { tipoDocumentoElectronico } from '../sifen/types/enums';
 import type {
   DatosEspecificosPorTipoDE_FE_Input,
   DatosGeneralesOperacion_FE_Input,
+  FacturaElectronica,
   FacturaElectronicaInput,
   OperacionDE_FE_Input,
   SubtotalesTotales_FE_Input,
@@ -36,8 +37,9 @@ import { calculateFieldsResult } from './derive';
 
 export type RequiredFields = RequiredKeysOf<FacturaElectronicaInput>;
 
-export interface BuiltDE {
-  de: DE;
+export interface PreparedDE {
+  raw: DE;
+  clean: FacturaElectronica;
   cdc: string;
 }
 
@@ -116,7 +118,7 @@ export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronicaI
     return this;
   }
 
-  build(this: FacturaElectronicaBuilder<RequiredFields>): Result<BuiltDE, XMLGenBuildError> {
+  build(this: FacturaElectronicaBuilder<RequiredFields>): Result<PreparedDE, XMLGenBuildError> {
     const state = this.state as FacturaElectronicaInput;
     const validatedFactura = v.safeParse(facturaElectronicaSchema, state);
     if (!validatedFactura.success) {
@@ -150,7 +152,9 @@ export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronicaI
       };
 
       return Ok({
-        de: {
+        cdc: processed.id_cdc!,
+        clean: processed,
+        raw: {
           dDVId: processed.digitoVerificadorId!,
           dFecFirma: formatDateTime(processed.fechaFirma)!,
           dSisFact: 1,
@@ -165,8 +169,7 @@ export class FacturaElectronicaBuilder<TFilled extends keyof FacturaElectronicaI
           gCamDEAsoc: processed.camposDocumentoElectronicoAsociado
             ? mapDocumentoElectronicoAsociadoToRaw(processed.camposDocumentoElectronicoAsociado)
             : undefined
-        },
-        cdc: processed.id_cdc!
+        }
       });
     } catch (error) {
       return Err(

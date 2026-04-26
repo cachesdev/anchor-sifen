@@ -25,7 +25,6 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
       ? descuentoParticular.times(HUNDRED).div(precioUnitario)
       : ZERO;
 
-    // FIXME: Descuentos y anticipos no revisados segun MT
     const totalOperacionItem = precioUnitario
       .minus(anticipoGlobal)
       .minus(descuentoParticular)
