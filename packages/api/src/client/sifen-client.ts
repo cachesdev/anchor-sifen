@@ -1,9 +1,8 @@
+import { create, fragment } from 'xmlbuilder2';
 import { CertificateManager, type CertificateData } from '../certificate';
 import { attachQRToSignedXML } from '../qr';
 import { getQRUrl } from '../qr/qr-generator';
 import { SifenSoapClient } from '../soap';
-import { generateFacturaElectronicaXML } from '../xml-gen';
-import type { PreparedDE } from '../xml-gen/de-pipeline';
 import { XMLSigner } from '../xml-sign';
 
 export interface SIFENConfig {
@@ -91,45 +90,30 @@ export class SifenAPI {
     return this.soap.eventoClient.enviarEvento({ digitoControl, eventoXml });
   }
 
-  async sendDE(preparedDE: PreparedDE, opts?: { digitoControl?: string | number }) {
-    const xml = generateFacturaElectronicaXML(preparedDE);
-    const signed = await this.signXML(xml);
-    const withQR = await this.attachQR(signed);
-    return this.soap.recibeLoteClient.recibeLote({
-      digitoControl: opts?.digitoControl,
-      DE: withQR
-    });
-  }
-
-  async sendBatch(deList: PreparedDE[], opts?: { digitoControl?: string | number }) {
-    const xmls = await Promise.all(
-      deList.map(async (de) => this.attachQR(await this.signXML(generateFacturaElectronicaXML(de))))
-    );
-    const lote = buildLoteXml(xmls);
-    return this.soap.recibeLoteClient.recibeLote({
-      digitoControl: opts?.digitoControl,
-      DE: lote
-    });
-  }
-
   async recibeLote({
     digitoControl,
-    DE,
-    payloadFormat
+    DE
   }: {
     digitoControl?: string | number;
-    DE: string;
-    payloadFormat?: 'xml' | 'zip-base64';
+    DE: string | string[];
   }) {
-    return this.soap.recibeLoteClient.recibeLote({ digitoControl, DE, payloadFormat });
+    const loteXml = Array.isArray(DE) ? buildLote(DE) : DE;
+    return this.soap.recibeLoteClient.recibeLote({ digitoControl, DE: loteXml });
   }
 }
 
-function buildLoteXml(deXmls: string[]): string {
-  const inner = deXmls.map((xml) => xml.replace(/<\?xml[^?]*\?>\s*/g, '').trim()).join('\n');
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<rLoteDE xmlns="http://ekuatia.set.gov.py/sifen/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ekuatia.set.gov.py/sifen/xsd SiRecepLoteDE_v150.xsd">
-  <dVerFor>150</dVerFor>
-${inner}
-</rLoteDE>`;
+function buildLote(deXmls: string[]): string {
+  const root = create({ version: '1.0', encoding: 'UTF-8' })
+    .ele('http://ekuatia.set.gov.py/sifen/xsd', 'rLoteDE')
+    .att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+    .att('xsi:schemaLocation', 'http://ekuatia.set.gov.py/sifen/xsd SiRecepLoteDE_v150.xsd');
+
+  root.ele('dVerFor').txt('150').up();
+
+  for (const xml of deXmls) {
+    const stripped = xml.replace(/<\?xml[^?]*\?>\s*/g, '').trim();
+    root.import(fragment(stripped));
+  }
+
+  return root.end({ prettyPrint: true });
 }
