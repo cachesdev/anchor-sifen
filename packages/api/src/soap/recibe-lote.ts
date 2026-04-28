@@ -1,56 +1,22 @@
 import * as soap from 'soap';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { mapSoapError } from './errors.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
 import { normalizeControlId } from './validation.js';
-import {
-  createClientAsync,
-  type RecibeLoteClient
-} from '../gen/soap/recibeLote/recibelote/client.js';
+import { createClientAsync, type RecibeLoteClient } from '../gen/soap/recibeLote/recibelote/client.js';
 import type { SIFENRecepLoteDEResponse } from '../sifen/types/api.js';
 import { strToU8, zipSync } from 'fflate';
+import { Err, type Result } from '../result';
+import { SifenError } from './sifen-error';
+import { parseRecibeLote } from './response-parsers';
 
 const MAX_SIRECEPLOTEDE_SIZE_BYTES = 10000 * 1024;
-const LOTE_ZIP_FILE_NAME = 'lote.xml';
-
-interface ParsedRecibeLoteResponse {
-  dFecProc?: string;
-  dCodRes?: string;
-  dMsgRes?: string;
-  dProtConsLote?: string;
-  dTpoProces?: number;
-}
-
-function ensureRequiredField<T>(value: T | undefined, fieldName: string): T {
-  if (value === undefined || value === null) {
-    throw new Error(`Respuesta de SIFEN incompleta: falta ${fieldName}.`);
-  }
-  return value;
-}
-
-function parseNumericField(value: string | number, fieldName: string): number {
-  const numericValue =
-    typeof value === 'number' ? value : Number.parseInt(String(value).trim(), 10);
-  if (!Number.isFinite(numericValue)) {
-    throw new Error(`Respuesta de SIFEN invalida: ${fieldName} no es numerico.`);
-  }
-  return numericValue;
-}
-
-function parseDateField(value: string, fieldName: string): Date {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) {
-    throw new Error(`Respuesta de SIFEN invalida: ${fieldName} no tiene formato de fecha valido.`);
-  }
-  return parsed;
-}
 
 function encodeLoteToBase64Zip(loteXml: string): string {
   const trimmed = loteXml.trim();
   if (!trimmed) throw new Error('DE no puede estar vacio.');
 
-  const loteZip = zipSync({ [LOTE_ZIP_FILE_NAME]: strToU8(trimmed) });
+  const loteZip = zipSync({ 'lote.xml': strToU8(trimmed) });
   if (loteZip.byteLength > MAX_SIRECEPLOTEDE_SIZE_BYTES) {
     throw new Error(
       `DE comprimido no puede exceder 10000 KB. Tamano actual: ${loteZip.byteLength} bytes.`
@@ -69,8 +35,8 @@ export interface SifenRecibeLoteClientOptions {
 export class SifenRecibeLoteClient {
   private clientPromise: Promise<RecibeLoteClient> | undefined;
   private readonly environment: SifenEnvironment;
-  private readonly agent: Agent;
   private readonly cert: { pem: string; pemKey: string };
+  private readonly agent: Agent;
 
   constructor({ environment, certificatePem, certificatePemKey, agent }: SifenRecibeLoteClientOptions) {
     this.environment = environment;
@@ -104,7 +70,7 @@ export class SifenRecibeLoteClient {
   }: {
     digitoControl?: string | number;
     DE: string;
-  }): Promise<SIFENRecepLoteDEResponse> {
+  }): Promise<Result<SIFENRecepLoteDEResponse, SifenError>> {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
@@ -119,28 +85,12 @@ export class SifenRecibeLoteClient {
           }
         }
       );
-
-      const parsedResponse = parsed as ParsedRecibeLoteResponse;
-      const codigoResultado = parseNumericField(
-        ensureRequiredField(parsedResponse.dCodRes, 'dCodRes'),
-        'dCodRes'
-      );
-      const fechaProcesamiento = parseDateField(
-        ensureRequiredField(parsedResponse.dFecProc, 'dFecProc'),
-        'dFecProc'
-      );
-      const mensajeResultado = ensureRequiredField(parsedResponse.dMsgRes, 'dMsgRes');
-      const tiempoProcesamiento = parseNumericField(
-        ensureRequiredField(parsedResponse.dTpoProces, 'dTpoProces'),
-        'dTpoProces'
-      );
-      const numeroLote = parsedResponse.dProtConsLote
-        ? parseNumericField(parsedResponse.dProtConsLote, 'dProtConsLote')
-        : undefined;
-
-      return { codigoResultado, fechaProcesamiento, mensajeResultado, numeroLote, tiempoProcesamiento };
+      return parseRecibeLote(parsed);
     } catch (error) {
-      throw mapSoapError(error);
+      return Err(new SifenError({
+        details: 'Error en recibeLote',
+        cause: error
+      }));
     }
   }
 }

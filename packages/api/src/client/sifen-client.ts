@@ -62,43 +62,29 @@ export class SifenAPI {
     );
   }
 
-  async consultaRUC({ digitoControl, ruc }: { digitoControl: string; ruc: string }) {
-    return this.soap.rucClient.consultaRUC({ ruc, digitoControl });
+  consultaRUC(params: { digitoControl: string; ruc: string }) {
+    return this.soap.rucClient.consultaRUC(params);
   }
 
-  async consultaDE({ digitoControl, cdc }: { digitoControl?: string | number; cdc: string }) {
-    return this.soap.consultaClient.consultaDE({ digitoControl, cdc });
+  consultaDE(params: { digitoControl?: string | number; cdc: string }) {
+    return this.soap.consultaClient.consultaDE(params);
   }
 
-  async consultaLote({
-    digitoControl,
-    numeroLote
-  }: {
-    digitoControl?: string | number;
-    numeroLote: string;
-  }) {
-    return this.soap.consultaLoteClient.consultaLote({ digitoControl, numeroLote });
+  consultaLote(params: { digitoControl?: string | number; numeroLote: string }) {
+    return this.soap.consultaLoteClient.consultaLote(params);
   }
 
-  async enviarEvento({
-    digitoControl,
-    eventoXml
-  }: {
-    digitoControl?: string | number;
-    eventoXml: string;
-  }) {
-    return this.soap.eventoClient.enviarEvento({ digitoControl, eventoXml });
+  enviarEvento(params: { digitoControl?: string | number; eventoXml: string }) {
+    return this.soap.eventoClient.enviarEvento(params);
   }
 
-  async recibeLote({
-    digitoControl,
-    DE
-  }: {
-    digitoControl?: string | number;
-    DE: string | string[];
-  }) {
-    const loteXml = Array.isArray(DE) ? buildLote(DE) : DE;
-    return this.soap.recibeLoteClient.recibeLote({ digitoControl, DE: loteXml });
+  recibeLote(params: { digitoControl?: string | number; DE: string | string[] }) {
+    const loteXml = Array.isArray(params.DE) ? buildLote(params.DE) : params.DE;
+    return this.soap.recibeLoteClient.recibeLote({ digitoControl: params.digitoControl, DE: loteXml });
+  }
+
+  recibe(params: { digitoControl?: string | number; xmlDE: string }) {
+    return this.soap.recibeClient.recibe(params);
   }
 }
 

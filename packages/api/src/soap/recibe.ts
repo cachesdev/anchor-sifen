@@ -1,10 +1,13 @@
 import * as soap from 'soap';
+import { createClientAsync, type RecibeClient } from '../gen/soap/recibe/recibe/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { mapSoapError } from './errors.js';
 import { normalizeControlId } from './validation.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
-import { createClientAsync, type RecibeClient } from '../gen/soap/recibe/recibe/client.js';
+import type { SIFENRecibeResponse } from '../sifen/types/api.js';
+import { Err, type Result } from '../result';
+import { SifenError } from './sifen-error';
+import { parseRecibe } from './response-parsers';
 
 export interface SifenRecibeClientOptions {
   agent: Agent;
@@ -45,7 +48,13 @@ export class SifenRecibeClient {
     return this.clientPromise;
   }
 
-  async recibe({ digitoControl, xmlDE }: { digitoControl?: string | number; xmlDE: string }) {
+  async recibe({
+    digitoControl,
+    xmlDE
+  }: {
+    digitoControl?: string | number;
+    xmlDE: string;
+  }): Promise<Result<SIFENRecibeResponse, SifenError>> {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
@@ -55,9 +64,14 @@ export class SifenRecibeClient {
           xmlnsAttributes: [{ name: 'xmlns', value: SIFEN_NS }]
         }
       });
-      return result;
+      return parseRecibe(result);
     } catch (error) {
-      throw mapSoapError(error);
+      return Err(
+        new SifenError({
+          details: 'Error en recibe',
+          cause: error
+        })
+      );
     }
   }
 }

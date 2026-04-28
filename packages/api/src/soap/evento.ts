@@ -1,10 +1,13 @@
 import * as soap from 'soap';
+import { createClientAsync, type EventoClient } from '../gen/soap/evento/evento/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { mapSoapError } from './errors.js';
 import { normalizeControlId } from './validation.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
-import { createClientAsync, type EventoClient } from '../gen/soap/evento/evento/client.js';
+import type { SIFENEventoResponse } from '../sifen/types/api.js';
+import { Err, type Result } from '../result';
+import { SifenError } from './sifen-error';
+import { parseEvento } from './response-parsers';
 
 export interface SifenEventoClientOptions {
   agent: Agent;
@@ -51,7 +54,7 @@ export class SifenEventoClient {
   }: {
     digitoControl?: string | number;
     eventoXml: string;
-  }) {
+  }): Promise<Result<SIFENEventoResponse, SifenError>> {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
@@ -64,9 +67,14 @@ export class SifenEventoClient {
           }
         }
       );
-      return result;
+      return parseEvento(result);
     } catch (error) {
-      throw mapSoapError(error);
+      return Err(
+        new SifenError({
+          details: 'Error en enviarEvento',
+          cause: error
+        })
+      );
     }
   }
 }

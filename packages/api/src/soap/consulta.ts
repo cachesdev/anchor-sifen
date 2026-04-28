@@ -1,10 +1,13 @@
 import * as soap from 'soap';
+import { createClientAsync, type ConsultaClient } from '../gen/soap/consulta/consulta/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { mapSoapError } from './errors.js';
 import { normalizeControlId } from './validation.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
-import { createClientAsync, type ConsultaClient } from '../gen/soap/consulta/consulta/client.js';
+import type { SIFENConsultaResponse } from '../sifen/types/api.js';
+import { Err, type Result } from '../result';
+import { SifenError } from './sifen-error';
+import { parseConsultaDE } from './response-parsers';
 
 export interface SifenConsultaClientOptions {
   agent: Agent;
@@ -19,12 +22,7 @@ export class SifenConsultaClient {
   private readonly cert: { pem: string; pemKey: string };
   private readonly agent: Agent;
 
-  constructor({
-    environment,
-    certificatePem,
-    certificatePemKey,
-    agent
-  }: SifenConsultaClientOptions) {
+  constructor({ environment, certificatePem, certificatePemKey, agent }: SifenConsultaClientOptions) {
     this.environment = environment;
     this.agent = agent;
     this.cert = { pem: certificatePem, pemKey: certificatePemKey };
@@ -50,7 +48,13 @@ export class SifenConsultaClient {
     return this.clientPromise;
   }
 
-  async consultaDE({ digitoControl, cdc }: { digitoControl?: string | number; cdc: string }) {
+  async consultaDE({
+    digitoControl,
+    cdc
+  }: {
+    digitoControl?: string | number;
+    cdc: string;
+  }): Promise<Result<SIFENConsultaResponse, SifenError>> {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
@@ -63,9 +67,12 @@ export class SifenConsultaClient {
           }
         }
       );
-      return result;
+      return parseConsultaDE(result);
     } catch (error) {
-      throw mapSoapError(error);
+      return Err(new SifenError({
+        details: 'Error en consulta DE',
+        cause: error
+      }));
     }
   }
 }
