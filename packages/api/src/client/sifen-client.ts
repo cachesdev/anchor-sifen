@@ -1,7 +1,6 @@
 import { create, fragment } from 'xmlbuilder2';
 import { CertificateManager, type CertificateData } from '../certificate';
-import { attachQRToSignedXML } from '../qr';
-import { getQRUrl } from '../qr/qr-generator';
+import { attachQRToSignedXML, getQRUrl, type QRGenError } from '../qr';
 import { SifenSoapClient } from '../soap';
 import { XMLSigner, type XMLSignError } from '../xml-sign';
 import { Ok, type Result } from '../result';
@@ -52,11 +51,11 @@ export class SifenAPI {
     return Ok(result.value.signedXml);
   }
 
-  async generateQR(signedXML: string): Promise<string> {
+  async generateQR(signedXML: string): Promise<Result<string, QRGenError>> {
     return getQRUrl(signedXML, this.config.idCSC, this.config.csc, this.config.environment);
   }
 
-  async attachQR(signedXML: string): Promise<string> {
+  async attachQR(signedXML: string): Promise<Result<string, QRGenError>> {
     return attachQRToSignedXML(
       signedXML,
       this.config.idCSC,

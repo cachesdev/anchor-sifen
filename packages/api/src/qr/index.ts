@@ -1,1 +1,1 @@
-export { attachQRToSignedXML } from './qr-generator';
+export { attachQRToSignedXML, getQRUrl, QRGenError } from './qr-generator';

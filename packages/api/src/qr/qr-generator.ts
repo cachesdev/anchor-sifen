@@ -1,5 +1,13 @@
 import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 import crypto from 'crypto';
+import { Err, Ok, type Result } from '../result';
+import { ErrorFactory } from '@praha/error-factory';
+
+export class QRGenError extends ErrorFactory({
+  name: 'QRGenError',
+  message: (f) => f.details ?? 'Fallo al generar QR.',
+  fields: ErrorFactory.fields<{ details?: string }>()
+}) {}
 
 interface QRData {
   cdc: string;
@@ -23,28 +31,27 @@ const sha256 = (s: string) => crypto.createHash('sha256').update(s, 'utf8').dige
 function text(doc: Document, tag: string, required = true): string {
   const el = doc.getElementsByTagName(tag)[0];
   const value = el?.textContent?.trim() ?? '';
-  if (!value && required) throw new Error(`Elemento requerido <${tag}> no encontrado o vacío`);
+  if (!value && required) throw new Error(`Elemento requerido <${tag}> no encontrado o vacio.`);
   return value;
 }
 
-/** Lee el contenido de texto del primer elemento que coincida con `tag`, parseado como número. */
+/** Lee el contenido de texto del primer elemento que coincida con `tag`, parseado como numero. */
 function num(doc: Document, tag: string): number {
   return Number(text(doc, tag, false)) || 0;
 }
 
 function extractQRData(doc: Document): QRData {
   const deElement = doc.getElementsByTagName('DE')[0];
-  if (!deElement) throw new Error('Elemento DE no encontrado');
+  if (!deElement) throw new Error('Elemento DE no encontrado.');
 
   const cdc = deElement.getAttribute('Id');
-  if (!cdc) throw new Error('CDC no encontrado en elemento DE');
+  if (!cdc) throw new Error('CDC no encontrado en elemento DE.');
 
-  // Intenta primero con NS, luego con nombre local
   let dvElements = doc.getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#', 'DigestValue');
   if (!dvElements.length) dvElements = doc.getElementsByTagName('DigestValue');
 
   const digestValue = dvElements[0]?.textContent?.trim();
-  if (!digestValue) throw new Error('DigestValue no encontrado o vacío en XML firmado');
+  if (!digestValue) throw new Error('DigestValue no encontrado o vacio en XML firmado.');
 
   return {
     cdc,
@@ -59,7 +66,7 @@ function extractQRData(doc: Document): QRData {
 
 function buildQRUrl(data: QRData, idCSC: string, csc: string, env: 'test' | 'prod'): string {
   const params = [
-    `nVersion=150`,
+    'nVersion=150',
     `Id=${data.cdc}`,
     `dFeEmiDE=${toHex(data.fechaEmision)}`,
     `dRucRec=${data.rucReceptor}`,
@@ -75,48 +82,67 @@ function buildQRUrl(data: QRData, idCSC: string, csc: string, env: 'test' | 'pro
 }
 
 /**
- * Adjunta una URL de código QR a un XML firmado de SIFEN (Manual Técnico §13.8).
+ * Adjunta la URL del codigo QR a un XML firmado de SIFEN.
  *
- * Extrae todos los campos requeridos del XML firmado, calcula la URL del QR
- * (incluyendo el hash CSC), y agrega un elemento `<gCamFuFD><dCarQR>`.
+ * Extrae los campos requeridos del XML firmado, calcula la URL del QR y la agrega al documento.
  *
- * @returns La cadena XML completa con el elemento QR agregado.
  */
 export function attachQRToSignedXML(
   signedXml: string,
   idCSC: string,
   csc: string,
   env: 'test' | 'prod'
-): string {
-  const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
-  if (!doc.documentElement) throw new Error('Elemento raíz no encontrado en XML firmado');
+): Result<string, QRGenError> {
+  try {
+    const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
+    if (!doc.documentElement) {
+      return Err(new QRGenError({ details: 'Elemento raiz no encontrado en XML firmado.' }));
+    }
 
-  const qrUrl = buildQRUrl(extractQRData(doc), idCSC, csc, env);
+    const qrUrl = buildQRUrl(extractQRData(doc), idCSC, csc, env);
 
-  const gCamFuFD = doc.createElement('gCamFuFD');
-  const dCarQR = doc.createElement('dCarQR');
-  dCarQR.textContent = qrUrl;
-  gCamFuFD.appendChild(dCarQR);
-  doc.documentElement.appendChild(gCamFuFD);
+    const gCamFuFD = doc.createElement('gCamFuFD');
+    const dCarQR = doc.createElement('dCarQR');
+    dCarQR.textContent = qrUrl;
+    gCamFuFD.appendChild(dCarQR);
+    doc.documentElement.appendChild(gCamFuFD);
 
-  return new XMLSerializer().serializeToString(doc);
+    return Ok(new XMLSerializer().serializeToString(doc));
+  } catch (error) {
+    return Err(
+      new QRGenError({
+        details: 'Error desconocido al generar QR',
+        cause: error
+      })
+    );
+  }
 }
 
 /**
- * Construye y retorna la URL QR Code.
+ * Construye y retorna unicamente la URL del codigo QR.
  *
- * Extrae todos los campos requeridos del XML firmado, calcula la URL del QR y la retorna.
- *
- * @returns URL de QR Code.
+ * Extrae los campos requeridos del XML firmado y calcula la URL del QR,
+ * sin modificar el XML.
  */
 export function getQRUrl(
   signedXml: string,
   idCSC: string,
   csc: string,
   env: 'test' | 'prod'
-): string {
-  const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
-  if (!doc.documentElement) throw new Error('Elemento raíz no encontrado en XML firmado');
+): Result<string, QRGenError> {
+  try {
+    const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
+    if (!doc.documentElement) {
+      return Err(new QRGenError({ details: 'Elemento raiz no encontrado en XML firmado.' }));
+    }
 
-  return buildQRUrl(extractQRData(doc), idCSC, csc, env);
+    return Ok(buildQRUrl(extractQRData(doc), idCSC, csc, env));
+  } catch (error) {
+    return Err(
+      new QRGenError({
+        details: 'Error desconocido al generar URL QR',
+        cause: error
+      })
+    );
+  }
 }
