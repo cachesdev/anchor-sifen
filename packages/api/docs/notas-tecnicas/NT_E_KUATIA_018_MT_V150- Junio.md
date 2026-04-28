@@ -202,7 +202,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>26</td>
         <td>GET022</td>
         <td>Tipo de transporte requerido para el motivo Cambio de vehículo</td>
-        <td><mark>4325</mark></td>
+        <td><mark modificado>4325</mark></td>
         <td>Cuando el motivo del evento es cambio de vehículo (GET003=4), es obligatorio informar el tipo de transporte (GET022)</td>
         <td>R</td>
     </tr>
@@ -210,7 +210,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>27</td>
         <td>GET023</td>
         <td>Descripción del tipo de transporte es requerida</td>
-        <td><mark>4326</mark></td>
+        <td><mark modificado>4326</mark></td>
         <td>Cuando se informa el código de tipo de transporte (GET022), es obligatorio informar la descripción del tipo de transporte (GET023)</td>
         <td>R</td>
     </tr>
@@ -218,7 +218,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>28</td>
         <td>GET023a</td>
         <td>Descripción del tipo de transporte no corresponde al código</td>
-        <td><mark>4327</mark></td>
+        <td><mark modificado>4327</mark></td>
         <td>Descripción del tipo de transporte no coincidente con lo informado en el campo GET022</td>
         <td>R</td>
     </tr>
@@ -226,7 +226,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>29</td>
         <td>GET024</td>
         <td>Modalidad del transporte requerido para el motivo Cambio de vehículo</td>
-        <td><mark>4328</mark></td>
+        <td><mark modificado>4328</mark></td>
         <td>Cuando el motivo del evento es cambio de vehículo (GET003=4), es obligatorio informar la modalidad del transporte (GET024)</td>
         <td>R</td>
     </tr>
@@ -234,7 +234,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>30</td>
         <td>GET025</td>
         <td>Descripción de la modalidad del transporte es requerida</td>
-        <td><mark>4329</mark></td>
+        <td><mark modificado>4329</mark></td>
         <td>Cuando se informa el código de la modalidad del transporte (GET024), es obligatorio informar la descripción de la modalidad del transporte (GET025)</td>
         <td>R</td>
     </tr>
@@ -242,7 +242,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>31</td>
         <td>GET025a</td>
         <td>Descripción de la modalidad del transporte no corresponde al código</td>
-        <td><mark>4330</mark></td>
+        <td><mark modificado>4330</mark></td>
         <td>Descripción de la modalidad del transporte no coincidente con lo informado en el campo GET024</td>
         <td>R</td>
     </tr>
@@ -250,7 +250,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>32</td>
         <td>GET026</td>
         <td>Tipo de vehículo requerido para el motivo Cambio de vehículo</td>
-        <td><mark>4331</mark></td>
+        <td><mark modificado>4331</mark></td>
         <td>Cuando el motivo del evento es cambio de vehículo (GET003=4), es obligatorio informar el tipo de vehículo (GET026)</td>
         <td>R</td>
     </tr>
@@ -258,7 +258,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>33</td>
         <td>GET027</td>
         <td>Marca del vehículo requerida para el motivo Cambio de vehículo</td>
-        <td><mark>4332</mark></td>
+        <td><mark modificado>4332</mark></td>
         <td>Cuando el motivo del evento es cambio de vehículo (GET003=4), es obligatorio informar la marca del vehículo (GET027)</td>
         <td>R</td>
     </tr>
@@ -266,7 +266,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>34</td>
         <td>GET028</td>
         <td>Tipo de identificación del vehículo requerido para el motivo Cambio de vehículo</td>
-        <td><mark>4333</mark></td>
+        <td><mark modificado>4333</mark></td>
         <td>Cuando el motivo del evento es cambio de vehículo (GET003=4), es obligatorio informar el tipo de identificación del vehículo (GET028)</td>
         <td>R</td>
     </tr>
@@ -274,7 +274,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>35</td>
         <td>GET029</td>
         <td>Tipo de identificación del vehículo no informado</td>
-        <td><mark>4334</mark></td>
+        <td><mark modificado>4334</mark></td>
         <td>Se requiere el número de identificación del vehículo cuando el tipo de identificación del vehículo es 1 (GET028=1)</td>
         <td>R</td>
     </tr>
@@ -282,7 +282,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>36</td>
         <td>GET030</td>
         <td>Número de matrícula del vehículo no informado</td>
-        <td><mark>4335</mark></td>
+        <td><mark modificado>4335</mark></td>
         <td>Se requiere número de matrícula del vehículo cuando el tipo de identificación del vehículo es 2 (GET028=2)</td>
         <td>R</td>
     </tr>

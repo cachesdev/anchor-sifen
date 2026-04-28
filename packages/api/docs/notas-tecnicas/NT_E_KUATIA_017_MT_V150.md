@@ -42,17 +42,17 @@
     <tr>
         <td>71</td>
         <td>D222</td>
-        <td>Descripción del distrito del <mark>receptor</mark> no corresponde al código</td>
+        <td>Descripción del distrito del <mark modificado>receptor</mark> no corresponde al código</td>
         <td>1326</td>
-        <td>Descripción del distrito del <mark>receptor</mark> no coincidente con lo informado en el campo D221</td>
+        <td>Descripción del distrito del <mark modificado>receptor</mark> no coincidente con lo informado en el campo D221</td>
         <td>R</td>
     </tr>
     <tr>
         <td>74</td>
         <td>D224</td>
-        <td>Descripción de la ciudad del <mark>receptor</mark> no corresponde al código</td>
+        <td>Descripción de la ciudad del <mark modificado>receptor</mark> no corresponde al código</td>
         <td>1329</td>
-        <td>Descripción de la ciudad del <mark>receptor</mark> no coincidente con lo informado en el campo D223</td>
+        <td>Descripción de la ciudad del <mark modificado>receptor</mark> no coincidente con lo informado en el campo D223</td>
         <td>R</td>
     </tr>
   </tbody>
