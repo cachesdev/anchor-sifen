@@ -47,7 +47,7 @@
         <td>N</td>
         <td>1</td>
         <td>0-1</td>
-        <td>Obligatorio si GENFE004=2<br/>1=Cédula paraguaya<br/>2=Pasaporte<br/>3=Cédula extranjera<br/>4=Carnet de residencia<br/><mark>6</mark>=Tarjeta Diplomática de exoneración fiscal<br/>9=Otro</td>
+        <td>Obligatorio si GENFE004=2<br/>1=Cédula paraguaya<br/>2=Pasaporte<br/>3=Cédula extranjera<br/>4=Carnet de residencia<br/><mark modificado>6</mark>=Tarjeta Diplomática de exoneración fiscal<br/>9=Otro</td>
     </tr>
     <tr>
         <td>GDE</td>
@@ -58,7 +58,7 @@
         <td>A</td>
         <td>9-41</td>
         <td>0-1</td>
-        <td>Obligatorio si existe el campo GENFE010<br/>1= “Cédula paraguaya”<br/>2= “Pasaporte”<br/>3= “Cédula extranjera”<br/>4= “Carnet de residencia”<br/><mark>6</mark>= “Tarjeta Diplomática de exoneración fiscal”<br/>Si GENFE010=9 Se deberá informar el tipo de documento de identidad del receptor</td>
+        <td>Obligatorio si existe el campo GENFE010<br/>1= “Cédula paraguaya”<br/>2= “Pasaporte”<br/>3= “Cédula extranjera”<br/>4= “Carnet de residencia”<br/><mark modificado>6</mark>= “Tarjeta Diplomática de exoneración fiscal”<br/>Si GENFE010=9 Se deberá informar el tipo de documento de identidad del receptor</td>
     </tr>
   </tbody>
 </table>

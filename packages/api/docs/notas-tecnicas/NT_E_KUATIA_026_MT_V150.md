@@ -47,7 +47,7 @@
         <td>A</td>
         <td>8</td>
         <td>0-1</td>
-        <td><mark>Opcional</mark> si D202 = 3<br/>Informar se existe el código de la DNCP<br/>Colocar 0 (cero) a la izquierda para completar los espacios vacíos</td>
+        <td><mark modificado>Opcional</mark> si D202 = 3<br/>Informar se existe el código de la DNCP<br/>Colocar 0 (cero) a la izquierda para completar los espacios vacíos</td>
     </tr>
     <tr>
         <td>E8</td>
@@ -58,7 +58,7 @@
         <td>A</td>
         <td>3-4</td>
         <td>0-1</td>
-        <td><mark>Opcional</mark> si D202 = 3<br/>Informar se existe el código de la DNCP<br/>Colocar 0 (cero) a la izquierda para completar los espacios vacíos</td>
+        <td><mark modificado>Opcional</mark> si D202 = 3<br/>Informar se existe el código de la DNCP<br/>Colocar 0 (cero) a la izquierda para completar los espacios vacíos</td>
     </tr>
   </tbody>
 </table>
@@ -89,7 +89,7 @@
         <td>G</td>
         <td> </td>
         <td>0-1</td>
-        <td><mark>Opcional</mark> si D202 = 3 (Tipo de operación B2G)</td>
+        <td><mark modificado>Opcional</mark> si D202 = 3 (Tipo de operación B2G)</td>
     </tr>
   </tbody>
 </table>
@@ -109,20 +109,24 @@
     </tr>
   </thead>
   <tbody>
+  <mark eliminado>
     <tr>
-        <td><mark>E020</mark></td>
-        <td><mark>Grupo de informaciones de Compras Públicas es obligatorio</mark></td>
-        <td><mark>1400</mark></td>
-        <td><mark>El grupo de informaciones de Compras Públicas es obligatorio para tipo de operación B2G (D202=3)</mark></td>
-        <td><mark>R</mark></td>
+        <td>E020</td>
+        <td>Grupo de informaciones de Compras Públicas es obligatorio</td>
+        <td>1400</td>
+        <td>El grupo de informaciones de Compras Públicas es obligatorio para tipo de operación B2G (D202=3)</td>
+        <td>R</td>
     </tr>
+    </mark>
+    <mark eliminado>
     <tr>
-        <td><mark>E020a</mark></td>
-        <td><mark>Grupo de informaciones de Compras Públicas no requerido para el tipo de operación</mark></td>
-        <td><mark>1401</mark></td>
-        <td><mark>El grupo de informaciones de Compras Públicas solo es permitido para tipo de operación B2G (D202=3)</mark></td>
-        <td><mark>R</mark></td>
+        <td>E020a</td>
+        <td>Grupo de informaciones de Compras Públicas no requerido para el tipo de operación</td>
+        <td>1401</td>
+        <td>El grupo de informaciones de Compras Públicas solo es permitido para tipo de operación B2G (D202=3)</td>
+        <td>R</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -146,20 +150,24 @@ Electrónica Nacional
     </tr>
   </thead>
   <tbody>
+  <mark eliminado>
     <tr>
-        <td><mark>E704</mark></td>
-        <td><mark>Código de DNCP - Nivel General es obligatorio para el tipo de operación B2G</mark></td>
-        <td><mark>1800</mark></td>
-        <td><mark>Si el tipo de operación seleccionado es igual a B2G (D202=3), es obligatorio informar el Código DNCP – Nivel General (E704)</mark></td>
-        <td><mark>R</mark></td>
+        <td>E704</td>
+        <td>Código de DNCP - Nivel General es obligatorio para el tipo de operación B2G</td>
+        <td>1800</td>
+        <td>Si el tipo de operación seleccionado es igual a B2G (D202=3), es obligatorio informar el Código DNCP – Nivel General (E704)</td>
+        <td>R</td>
     </tr>
+    </mark>
+    <mark eliminado>
     <tr>
-        <td><mark>E705</mark></td>
-        <td><mark>Código de DNCP – Nivel Específico es obligatorio</mark></td>
-        <td><mark>1801</mark></td>
-        <td><mark>Si se informa el Código de DNCP – Nivel General (E704) es obligatorio informar el código de DNCP – Nivel Específico (E705)</mark></td>
-        <td><mark>R</mark></td>
+        <td>E705</td>
+        <td>Código de DNCP – Nivel Específico es obligatorio</td>
+        <td>1801</td>
+        <td>Si se informa el Código de DNCP – Nivel General (E704) es obligatorio informar el código de DNCP – Nivel Específico (E705)</td>
+        <td>R</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
