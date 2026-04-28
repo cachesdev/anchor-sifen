@@ -38,7 +38,7 @@
         <td>D208c</td>
         <td>Tipo de documento de identidad del receptor incorrecto para el total general de la operación en guaraníes</td>
         <td>1321</td>
-        <td><mark>Si el Tipo de transacción es distinto a Muestras médicas (D011≠13),</mark> El Tipo de documento de identidad del receptor no puede ser Innominado (D208≠5) cuando el total general de la operación en guaraníes (cuando la moneda es extranjera) o el total general de la operación (cuando la moneda es PYG) es mayor <mark>o igual</mark> a 35.000.000 (F023 &gt;= <mark>35000000</mark> o F014 &gt;= <mark>35000000</mark>)</td>
+        <td><mark eliminado>Si el Tipo de transacción es distinto a Muestras médicas (D011≠13),</mark> <mark modificado>El</mark> Tipo de documento de identidad del receptor no puede ser Innominado (D208≠5) cuando el total general de la operación en guaraníes (cuando la moneda es extranjera) o el total general de la operación (cuando la moneda es PYG) es mayor <mark eliminado>o igual</mark> a <mark modificado>35.000.000</mark> (F023 ><mark eliminado>=</mark> <mark modificado>35000000</mark> o F014 ><mark eliminado>=</mark> <mark modificado>35000000</mark>)</td>
         <td>R</td>
     </tr>
   </tbody>

@@ -35,13 +35,15 @@
     </tr>
   </thead>
   <tbody>
+  <mark eliminado>
     <tr>
-        <td><mark>GEC002c</mark></td>
-        <td><mark>CDC ya se ha confirmado por el receptor</mark></td>
-        <td><mark>4004</mark></td>
-        <td><mark>Cuando el último evento del receptor sobre un CDC (GEC002) es una confirmación parcial o total, no se permite realizar la cancelación por parte del emisor</mark></td>
-        <td><mark>R</mark></td>
+        <td>GEC002c</td>
+        <td>CDC ya se ha confirmado por el receptor</td>
+        <td>4004</td>
+        <td>Cuando el último evento del receptor sobre un CDC (GEC002) es una confirmación parcial o total, no se permite realizar la cancelación por parte del emisor</td>
+        <td>R</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
