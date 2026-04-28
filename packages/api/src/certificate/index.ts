@@ -1,2 +1,1 @@
-export { CertificateManager } from './certificate-manager';
-export type { CertificateData } from './certificate-manager';
+export { CertificateManager, CertError, type CertificateData } from './certificate-manager';

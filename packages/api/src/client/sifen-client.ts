@@ -1,9 +1,9 @@
 import { create, fragment } from 'xmlbuilder2';
 import { CertificateManager, type CertificateData } from '../certificate';
-import { attachQRToSignedXML, getQRUrl, type QRGenError } from '../qr';
+import { attachQRToSignedXML, getQRUrl } from '../qr';
 import { SifenSoapClient } from '../soap';
 import { XMLSigner, type XMLSignError } from '../xml-sign';
-import { Ok, type Result } from '../result';
+import type { Result } from '../result';
 
 export interface SIFENConfig {
   environment: 'test' | 'prod';
@@ -17,45 +17,36 @@ export interface SIFENConfig {
 export class SifenAPI {
   private readonly config: SIFENConfig;
   private readonly xmlSigner = new XMLSigner();
-  private _certData?: CertificateData;
-  private _soap?: SifenSoapClient;
+  private readonly certData: CertificateData;
+  private readonly soap: SifenSoapClient;
 
+  /**
+   * @throws Si el certificado no puede ser cargado.
+   */
   constructor(config: SIFENConfig) {
     this.config = config;
-    this._certData = config.certificateData;
-  }
+    this.certData =
+      config.certificateData ??
+      new CertificateManager().loadPKCS12(config.certificatePath!, config.certificatePassword!);
 
-  private get certData(): CertificateData {
-    if (this._certData) return this._certData;
-    this._certData = new CertificateManager().loadPKCS12(
-      this.config.certificatePath!,
-      this.config.certificatePassword!
-    );
-    return this._certData;
-  }
-
-  private get soap(): SifenSoapClient {
-    if (this._soap) return this._soap;
-    const cd = this.certData;
-    this._soap = new SifenSoapClient({
-      certificatePem: cd.certificatePem,
-      certificatePemKey: cd.privateKeyPem,
-      environment: this.config.environment
+    this.soap = new SifenSoapClient({
+      certificatePem: this.certData.certificatePem,
+      certificatePemKey: this.certData.privateKeyPem,
+      environment: config.environment
     });
-    return this._soap;
   }
 
   async signXML(xml: string): Promise<Result<string, XMLSignError>> {
     const result = await this.xmlSigner.sign(xml, this.certData);
     if (!result.success) return result;
-    return Ok(result.value.signedXml);
+    return { success: true, value: result.value.signedXml };
   }
 
-  async generateQR(signedXML: string): Promise<Result<string, QRGenError>> {
+  generateQR(signedXML: string) {
     return getQRUrl(signedXML, this.config.idCSC, this.config.csc, this.config.environment);
   }
 
-  async attachQR(signedXML: string): Promise<Result<string, QRGenError>> {
+  attachQR(signedXML: string) {
     return attachQRToSignedXML(
       signedXML,
       this.config.idCSC,
@@ -82,7 +73,10 @@ export class SifenAPI {
 
   recibeLote(params: { digitoControl?: string | number; DE: string | string[] }) {
     const loteXml = Array.isArray(params.DE) ? buildLote(params.DE) : params.DE;
-    return this.soap.recibeLoteClient.recibeLote({ digitoControl: params.digitoControl, DE: loteXml });
+    return this.soap.recibeLoteClient.recibeLote({
+      digitoControl: params.digitoControl,
+      DE: loteXml
+    });
   }
 
   recibe(params: { digitoControl?: string | number; xmlDE: string }) {
