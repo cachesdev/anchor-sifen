@@ -1,6 +1,14 @@
 # Índice — Manual Técnico SIFEN v150
 
-> **Nota sobre números de página:** Este documento fue convertido desde PDF. Los números de página aparecen al final de cada entrada como `— p. N`. En el archivo fuente, los saltos de página tienen el formato `septiembre de 2019 N` — el texto `septiembre de 2019` es un pie de página del PDF y el número final (ej. `9`) es el número de página real. puedes grepear el libro usando este sistema, y asi evitar el uso innecesario de tokens.
+## IMPORTANTE: Regla de páginas (obligatoria)
+
+**SIEMPRE usar los números de página en búsquedas y citas.**
+Sin página explícita, la referencia se considera incompleta.
+
+- En este índice, la página aparece al final como `— p. N`.
+- En el texto fuente del manual, los saltos de página siguen el patrón `septiembre de 2019 N`.
+- `septiembre de 2019` es el pie de página del PDF y `N` es el número real de página.
+- Para ahorrar tokens y evitar errores, grep/search siempre por número de página.
 
 ## Control de Versiones
 
@@ -9,6 +17,78 @@
 - Versión 140 — p. 11
 - Versión 141 — p. 12
 - Versión 150 — p. 12
+
+## Notas Técnicas (NT) v150
+
+Este índice cubre el Manual Técnico base y las notas técnicas ubicadas en `docs/notas-tecnicas/`.
+
+### Flujo recomendado (Manual + NT)
+
+1. Ubicar el tema en el índice base y anotar su `p. N`.
+2. Revisar en `notas-tecnicas/` si existe una NT que afecte esa sección/página.
+3. Si hay diferencias entre manual y NT, tomar como vigente la NT más reciente (número mayor).
+
+### Archivos de notas técnicas
+
+- `notas-tecnicas/NT_E_KUATIA_001_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_002_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_003_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_004_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_005_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_006_MT_V150 .md`
+- `notas-tecnicas/NT_E_KUATIA_007_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_008_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_009_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_010_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_011_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_012_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_013_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_014_MT_V150X.md`
+- `notas-tecnicas/NT_E_KUATIA_015_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_016_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_017_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_018_MT_V150- Junio.md`
+- `notas-tecnicas/NT_E_KUATIA_019_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_020_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_021_MT_V150 30.12.24.md`
+- `notas-tecnicas/NT_E_KUATIA_022_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_023_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_024_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_025_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_026_MT_V150.md`
+- `notas-tecnicas/NT_E_KUATIA_027_MT_V150.md`
+
+### Mapa rápido NT -> secciones/páginas
+
+| NT     | Secciones principales afectadas                | Páginas MT v150 referenciadas                                                     |
+| ------ | ---------------------------------------------- | --------------------------------------------------------------------------------- |
+| NT 001 | Descuento global, totales y validaciones       | 88, 103, 160, 176, 184                                                            |
+| NT 002 | Formato y validaciones del receptor            | 71, 72, 166, 167                                                                  |
+| NT 003 | Ubicación del receptor y validaciones          | 72, 73, 167                                                                       |
+| NT 004 | Validaciones de receptor/RUC                   | 163                                                                               |
+| NT 005 | País receptor y datos de vehículo              | 71, 100                                                                           |
+| NT 006 | Validación de tipo de transacción              | 162                                                                               |
+| NT 007 | Operación DE y KuDE exportación                | No explícita                                                                      |
+| NT 008 | Póliza de seguros y totales                    | 94, 106                                                                           |
+| NT 009 | Ítems de operación (E700-E899)                 | 85                                                                                |
+| NT 010 | Formato, WS, QR, tablas y validaciones         | 31, 33, 45, 50, 62, 64, 66, 79, 90-91, 101, 109, 122, 164-167, 189, 205, 208, 213 |
+| NT 011 | Web service consulta masiva RUC y códigos      | 147                                                                               |
+| NT 012 | Validación de moneda en autofactura            | No explícita                                                                      |
+| NT 013 | IVA por ítem, subtotales y validaciones        | 90, 103, 178                                                                      |
+| NT 014 | Evento nominación FE (formato y reglas)        | No explícita                                                                      |
+| NT 015 | Validaciones de nominación FE                  | 189                                                                               |
+| NT 016 | Firma digital y validaciones de formato        | 38, 150, 152, 153                                                                 |
+| NT 017 | Validaciones de datos del receptor             | 167                                                                               |
+| NT 018 | Campos nuevos y validaciones nuevas            | 66, 67, 162, 163                                                                  |
+| NT 019 | Eventos receptor y sus validaciones            | 123, 125, 136, 137, 138, 139, 153                                                 |
+| NT 020 | Entidades del gobierno y validaciones          | 165                                                                               |
+| NT 021 | Documento receptor y monto límite              | 166                                                                               |
+| NT 022 | Validaciones sobre obligaciones                | 162, 163                                                                          |
+| NT 023 | Receptor, ítems, asociado y unidades           | 86, 93, 110, 167, 191, 211, 212                                                   |
+| NT 024 | Validación de datos del receptor               | 166                                                                               |
+| NT 025 | Reglas de cancelación                          | 134                                                                               |
+| NT 026 | DNCP y compras públicas (formato/validaciones) | No explícita                                                                      |
+| NT 027 | Nominación FE: tipo doc. receptor              | No explícita                                                                      |
 
 ---
 

@@ -35,7 +35,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Descripción del país receptor</td>
         <td>D200</td>
         <td>A</td>
-        <td>4-<mark>50</mark></td>
+        <td>4-<mark modificado>50</mark></td>
         <td>1-1</td>
         <td> </td>
     </tr>
@@ -46,7 +46,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Número de matrícula del vehículo</td>
         <td>E960</td>
         <td>A</td>
-        <td><mark>6-7</mark></td>
+        <td><mark modificado>6-7</mark></td>
         <td>0-1</td>
         <td>Debe informarse cuando el E967=2</td>
     </tr>

@@ -289,14 +289,12 @@ Tabla J: Resumen de los eventos de SIFEN según los actores ....................
 Tabla K: Correcciones de los eventos del Receptor en el SIFEN................................... 119
 TABLA 1 – TIPO DE REGIMEN..................................................................................... 210
 TABLA 2.1 – DEPARTAMENTOS, DISTRITOS Y CIUDADES ...................................... 210
-TABLA 2.2 - CIUDADES................................................................................................ 210
 TABLA 3 – ACTIVIDADES ECONÓMICAS.................................................................... 211
 TABLA 4 – CODIFICACION DE PAISES ....................................................................... 211
 TABLA 5 – CODIFICACION DE UNIDADES DE MEDIDA............................................. 211
 TABLA 6 – CODIGOS DE AFECTACION ...................................................................... 212
 TABLA 7 – CATEGORIAS DEL ISC .............................................................................. 212
 TABLA 8 – TASAS DEL ISC .......................................................................................... 212
-TABLA 9 – TIPOS DE VEHÍCULOS .............................................................................. 212
 TABLA 10 – CONDICIONES DE NEGOCIACION - INCOTERMS ................................. 213
 TABLA 11 – REGÍMENES ADUANEROS...................................................................... 213
 
@@ -326,7 +324,7 @@ Sistema Integrado de Facturación Electrónica Nacional
 - Schema XML 16: resConsRUC_v150.xsd (Respuesta del WS Consulta RUC) ............... 54
 - Schema XML 17: ContenedorRUC_v150.xsd (Contenedor de RUC) ............................... 55
 - Schema XML 18: DE_v150.xsd (Documento Electrónico) ............................................... 61
-- Schema XML 19: Evento_v150.xsd (Formato de evento emisor)................................... 120
+- Schema XML 19: Evento_v150.xsd (Formato de evento)................................... 120
 
 septiembre de 2019 9
 
@@ -2903,7 +2901,7 @@ Schema XML 6: resRecepLoteDE_v150.xsd (Respuesta del WS Recepción Lote)
         <th>Número de Lote</th>
         <th>BRSch01</th>
         <th>N</th>
-        <th>1-15</th>
+        <th>?</th>
         <th>0-1</th>
         <th>Generado solamente si dCodRes=0300, Definido en el tópico correspondiente del capítulo 12</th>
     </tr>
@@ -3011,7 +3009,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <th>Número del lote</th>
         <th>CSch01</th>
         <th>N</th>
-        <th>1-15</th>
+        <th>?</th>
         <th>1-1</th>
         <th>Obtenido a partir del mensaje de respuesta al WS soRecepLoteDE(Schema XML 5)</th>
     </tr>
@@ -3167,7 +3165,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <th>Número de transacción</th>
         <th>CRSch05</th>
         <th>N</th>
-        <th>10</th>
+        <th>?</th>
         <th>0-1</th>
         <th>Generado para el DE del lote consultado si dCodResLot=0362</th>
     </tr>
@@ -4296,8 +4294,6 @@ A fin de facilitar la comprensión de la estructura de información de los docum
 - **E.** Campos específicos por tipo de Documento Electrónico (E001-E009)
   - **E1.** Campos que componen la Factura Electrónica FE (E010-E099)
     - **E1.1.** Campos de informaciones de Compras Públicas (E020-E029)
-  - **E2.** Campos que componen la Factura Electrónica de Exportación FEE (E100-E199)
-  - **E3.** Campos que componen la Factura Electrónica de Importación FEI (E200-E299)
   - **E4.** Campos que componen la Autofactura Electrónica AFE (E300-E399)
   - **E5.** Campos que componen la Nota de Crédito/Débito Electrónica NCE-NDE (E400-E499)
   - **E6.** Campos que componen la Nota de Remisión Electrónica (E500-E599)
@@ -4786,17 +4782,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <th>C008</th>
         <th>dFeIniT</th>
         <th>Fecha inicio de vigencia del timbrado</th>
-        <th>C001</th>
-        <th>F</th>
-        <th>10</th>
-        <th>1-1</th>
-        <th>Formato AAAA-MM-DD<br/>Para el KuDE el formato de la fecha de inicio de vigencia debe contener los guiones separadores. Ejemplo: 2018-05-31</th>
-    </tr>
-    <tr>
-        <th>C</th>
-        <th>C009</th>
-        <th>dFeFinT</th>
-        <th>Fecha fin de vigencia del timbrado</th>
         <th>C001</th>
         <th>F</th>
         <th>10</th>
@@ -7080,7 +7065,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>G</td>
         <td></td>
         <td>0-999</td>
-        <td>Se activa si E641 = 2</td>
+        <td></td>
     </tr>
     <tr>
         <td>E7.2.1</td>
@@ -7457,7 +7442,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1-5p(0-4)</td>
         <td>0-1</td>
-        <td>~~Obligatorio si D015 ≠ PYG~~<br/>Obligatorio si D017 = 2<br/>No informar si D017 = 1</td>
+        <td>Obligatorio si D017 = 2<br/>No informar si D017 = 1</td>
     </tr>
     <tr>
         <td>E8.1</td>
@@ -7529,7 +7514,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1-15p(0-8)</td>
         <td>0-1</td>
-        <td>Si no hay descuento por ítem completar con 0 (cero)</td>
+        <td></td>
     </tr>
     <tr>
         <td>E8.1.1</td>
@@ -9676,7 +9661,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <th>N</th>
         <th>1-15p(0-8)</th>
         <th>1-1</th>
-        <th>Cuando D013 = 1, 3, 4 o 5 corresponde a la suma de los subtotales de la operación (F002, F003, F004 y F005)<br/>Cuando D013 = 2 corresponde a F006<br/>Cuando C002=4 corresponde a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem)</th>
+        <th>Cuando D013 = 1, 3, 4 o 5 corresponde a la suma de los subtotales de la operación (F002, F003, F004 y F005)<br/>Cuando C002=4 corresponde a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem)</th>
     </tr>
     <tr>
         <th>F</th>
@@ -9975,17 +9960,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>1-15p(0-8)</td>
         <td>0-1</td>
         <td>Si D015 ≠ PYG y D017 = 1, corresponde al cálculo aritmético: F014 * D018<br/>Si D015 ≠ PYG y D017 = 2, corresponde a la suma de todas las ocurrencias de EA009<br/>Este campo no debe existir si D015=PYG<br/>No informar si D015 = PYG<br/>Cuando C002=4 corresponde a F014</td>
-    </tr>
-    <tr>
-        <td>F</td>
-        <td>F024</td>
-        <td>dTotCom</td>
-        <td>Total + comisión</td>
-        <td>F001</td>
-        <td>N</td>
-        <td>1-15p(0-8)</td>
-        <td>0-1</td>
-        <td></td>
     </tr>
   </tbody>
 </table>
@@ -11022,7 +10996,7 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 Para estructurar los diferentes eventos que afectan el estado de un DTE se toma como elemento base al Código de control (CDC), a excepción del evento de Inutilización de número de DE.
 
-Schema XML 19: Evento_v150.xsd (Formato de evento emisor)
+Schema XML 19: Evento_v150.xsd (Formato de evento)
 
 <table>
   <thead>
@@ -11130,17 +11104,6 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
     <tr>
         <td>GDE</td>
-        <td>GDE006</td>
-        <td>dTiGDE</td>
-        <td>Tipo de Evento</td>
-        <td>GDE002</td>
-        <td>N</td>
-        <td>1-2</td>
-        <td>1-1</td>
-        <td>Eventos del Emisor<br/>1 = Cancelación<br/>2 = Inutilización<br/>3 = Endoso (futuro)<br/>Eventos del Comprador<br/>10 = Acuse del DE (futuro)<br/>11 = Conformidad del DE (futuro)<br/>12 = Disconformidad del DE (futuro)<br/>13 = Desconocimiento del DE (futuro)</td>
-    </tr>
-    <tr>
-        <td>GDE</td>
         <td>GDE007</td>
         <td>gGroupTiEvt</td>
         <td>Grupo de campos del tipo de evento</td>
@@ -11148,7 +11111,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>G</td>
         <td></td>
         <td>1-1</td>
-        <td>Grupo correspondiente al evento según dTiGDE</td>
+        <td>Grupo correspondiente al evento</td>
     </tr>
     <tr>
         <td>GDE</td>
@@ -11192,7 +11155,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>G</td>
         <td>-</td>
         <td>-</td>
-        <td>Elemento raíz<br/>Obligatorio si campo dTiGDE=1 (Cancelación)</td>
+        <td>Elemento raíz</td>
     </tr>
     <tr>
         <td>GDE</td>
@@ -11248,7 +11211,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>-</td>
         <td>-</td>
         <td>-</td>
-        <td>Elemento raíz<br/>Obligatorio si campo dTiGDE=2 (Inutilización)</td>
+        <td>Elemento raíz</td>
     </tr>
     <tr>
         <td>GDE</td>
@@ -12896,7 +12859,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>GEC002</td>
         <td>CDC inválido</td>
         <td>4001</td>
-        <td>Debe validar que el CDC (GEC002) cuente con los 44 caracteres según las reglas de estructuración del CDC (longitud, orden de los campos del CDC, formato de la fecha invalida y/o dígito verificador)</td>
+        <td>Debe validar que el CDC (GEC002) cuente con los 44 caracteres según las reglas de estructuración del CDC (longitud, y/o dígito verificador)</td>
         <td>R</td>
     </tr>
     <tr>
@@ -12921,30 +12884,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>CDC ya se ha confirmado por el receptor</td>
         <td>4004</td>
         <td>Cuando el último evento del receptor sobre un CDC (GEC002) es una confirmación parcial o total, no se permite realizar la cancelación por parte del emisor</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>7</td>
-        <td>GDE008</td>
-        <td>Firmador no autorizado para realizar evento</td>
-        <td>4006</td>
-        <td>El RUC del certificado utilizado para firmar los eventos sobre DE y DTE, no corresponde al emisor/electrónico</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>8</td>
-        <td>GDE008a</td>
-        <td>Firma Digital inválida por certificado digital revocado</td>
-        <td>4007</td>
-        <td>El certificado digital que se utilizó para firmar el evento está revocado en la fecha de firma digital (GDE004)</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>9</td>
-        <td>GDE004</td>
-        <td>Fecha de firma digital del evento inválida</td>
-        <td>4008</td>
-        <td>La fecha y hora de firma digital del evento no puede ser posterior a la Fecha y hora de aprobación en el SIFEN</td>
         <td>R</td>
     </tr>
     <tr>
@@ -12982,14 +12921,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Código</td>
         <td>Observación</td>
         <td>E</td>
-    </tr>
-    <tr>
-        <td>9</td>
-        <td>GEI002</td>
-        <td>Número de timbrado inválido para el ambiente de pruebas.</td>
-        <td>4051</td>
-        <td>Cuando en ambiente de prueba es obligatorio el uso del timbrado de pruebas.</td>
-        <td>R</td>
     </tr>
     <tr>
         <td>8</td>
@@ -13061,30 +12992,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Número final de rango es inválido</td>
         <td>4068</td>
         <td>El número del final de rango (GEI006) debe ser mayor que el número de inicio del rango (GEI005)</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>19</td>
-        <td>GDE008</td>
-        <td>Firmador no autorizado para realizar evento</td>
-        <td>4069</td>
-        <td>El RUC del certificado utilizado para firmar los eventos no corresponde al emisor/electrónico</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>20</td>
-        <td>GDE008a</td>
-        <td>Firma Digital inválida por certificado digital revocado</td>
-        <td>4070</td>
-        <td>El certificado digital que se utilizó para firmar el evento está revocado en la fecha de firma digital (GDE004)</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>21</td>
-        <td>GDE004</td>
-        <td>Fecha de firma digital del evento inválida</td>
-        <td>4071</td>
-        <td>La fecha de firma digital del evento no puede ser posterior a la Fecha de SIFEN</td>
         <td>R</td>
     </tr>
   </tbody>
@@ -13994,14 +13901,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <th></th>
     </tr>
     <tr>
-        <th>AB01</th>
-        <th>0100</th>
-        <th>AB20</th>
-        <th>0119</th>
-        <th>Forma del área de datos de los mensajes de entrada de los WS</th>
-        <th></th>
-    </tr>
-    <tr>
         <th>AC01</th>
         <th>0120</th>
         <th>AC20</th>
@@ -14410,14 +14309,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>(E730-E739)</td>
     </tr>
     <tr>
-        <td>E740</td>
-        <td>2000</td>
-        <td>E745</td>
-        <td>2049</td>
-        <td>Campos que describen el ISC de la operación</td>
-        <td>(E740-E749)</td>
-    </tr>
-    <tr>
         <td>E822</td>
         <td>2050</td>
         <td>E824</td>
@@ -14754,75 +14645,6 @@ El emisor debe validar los archivos XML contra el Schema XSD correspondiente, co
 
 El área de datos correspondiente al mensaje de entrada de los WS tiene las siguientes validaciones.
 
-<table>
-  <tbody>
-    <tr>
-        <td>ID [thead]</td>
-        <td>Resultado de validación [thead]</td>
-        <td>Código [thead]</td>
-        <td>Obs. [thead]</td>
-        <td>E [thead]</td>
-        <td>V [thead]</td>
-    </tr>
-    <tr>
-        <td>AB01</td>
-        <td>Fallo de schema XML del área de datos</td>
-        <td>0100</td>
-        <td>I</td>
-        <td>R</td>
-        <td>150</td>
-    </tr>
-    <tr>
-        <td>AB02</td>
-        <td>Fallo de schema: no existe el campo raíz esperado para el mensaje</td>
-        <td>0101</td>
-        <td>I</td>
-        <td>R</td>
-        <td>150</td>
-    </tr>
-    <tr>
-        <td>AB03</td>
-        <td>Fallo de schema: no existe el atributo versión para el campo raíz esperado para el mensaje</td>
-        <td>0102</td>
-        <td>I</td>
-        <td>R</td>
-        <td>150</td>
-    </tr>
-    <tr>
-        <td>AB05</td>
-        <td>Existe algún namespace diferente del namespace estándar del DE</td>
-        <td>0104</td>
-        <td>I</td>
-        <td>R</td>
-        <td>150</td>
-    </tr>
-    <tr>
-        <td>AB06</td>
-        <td>Existe(n) carácter(es) de edición en el inicio o en el final del mensaje, o entre los campos XML</td>
-        <td>0105</td>
-        <td>I</td>
-        <td>R</td>
-        <td>150</td>
-    </tr>
-    <tr>
-        <td>AB07</td>
-        <td>Utilizado prefijo en el namespace</td>
-        <td>0106</td>
-        <td>I</td>
-        <td>R</td>
-        <td>150</td>
-    </tr>
-    <tr>
-        <td>AB08</td>
-        <td>Utilizada codificación diferente de UTF-8</td>
-        <td>0107</td>
-        <td>I</td>
-        <td>R</td>
-        <td>150</td>
-    </tr>
-  </tbody>
-</table>
-
 ### 12.2.4. Validación del certificado de firma
 
 <table>
@@ -14855,20 +14677,6 @@ El área de datos correspondiente al mensaje de entrada de los WS tiene las sigu
         <td>De Persona Física: en el OID, correspondiente al SubjectAlternativeName<br/>De Persona Jurídica: en el OID correspondiente al SerialNumber</td>
         <td>R</td>
     </tr>
-    <tr>
-        <td>AC04</td>
-        <td>Cadena de certificación inválida</td>
-        <td>0123</td>
-        <td>• Certificado del PSC no habilitado por el MIC<br/>• Certificado del PSC revocado<br/>• Certificado no está firmado por el PSC</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>AC05</td>
-        <td></td>
-        <td>0124</td>
-        <td>• Dirección de la LCR no informada (CRLDistributionPoint)</td>
-        <td>R</td>
-    </tr>
   </tbody>
 </table>
 
@@ -14876,44 +14684,6 @@ septiembre de 2019 152
 
 e-kuatia
 Sistema Integrado de Facturación Electrónica Nacional
-
-<table>
-  <tbody>
-    <tr>
-        <td>ID [thead]</td>
-        <td>Resultado de validación [thead]</td>
-        <td>Código [thead]</td>
-        <td>Observación [thead]</td>
-        <td>E [thead]</td>
-    </tr>
-    <tr>
-        <td rowspan="2"></td>
-        <td>Problema en la LCR del certificado de firma</td>
-        <td rowspan="2"></td>
-        <td>• Error en el acceso a la LCR</td>
-        <td rowspan="2"></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>• LCR inexistente</td>
-        <td colspan="3"></td>
-    </tr>
-    <tr>
-        <td>AC06</td>
-        <td>Certificado de firma revocado</td>
-        <td>0125</td>
-        <td></td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>AC07</td>
-        <td>Certificado raíz no corresponde al MIC</td>
-        <td>0126</td>
-        <td></td>
-        <td>R</td>
-    </tr>
-  </tbody>
-</table>
 
 ### 12.2.5. Validación de la firma digital
 
@@ -15652,14 +15422,6 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
     <tr>
         <td>18</td>
-        <td>C009</td>
-        <td>Fecha fin de vigencia del timbrado incorrecta</td>
-        <td>1108</td>
-        <td>Fecha fin de vigencia del timbrado no corresponde al timbrado autorizado para el contribuyente</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>18</td>
         <td>C010</td>
         <td>Serie informada incorrecta</td>
         <td>1110</td>
@@ -15749,14 +15511,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <th>Descripción del tipo de transacción no corresponde al código</th>
         <th>1203</th>
         <th>Descripción del tipo de transacción no coincidente con lo informado en el campo D011</th>
-        <th>R</th>
-    </tr>
-    <tr>
-        <th>28</th>
-        <th>D013</th>
-        <th>Tipo de impuesto afectado no informado</th>
-        <th>1204</th>
-        <th>Es obligatorio informar el tipo de impuesto afectado para Factura Electrónica y Autofactura Electrónica. Obligatorio si C002=1 o 4</th>
         <th>R</th>
     </tr>
     <tr>
@@ -15943,35 +15697,11 @@ Electrónica Nacional
         <td>R</td>
     </tr>
     <tr>
-        <td>44</td>
-        <td>D114</td>
-        <td>Es obligatorio indicar la descripción del código de distrito de emisión</td>
-        <td>1256</td>
-        <td>Si se informa el código del distrito de emisión (D113), es obligatorio informar la descripción del mismo (D114)</td>
-        <td>R</td>
-    </tr>
-    <tr>
         <td>41</td>
         <td>D114a</td>
         <td>Descripción del distrito de emisión no corresponde al código</td>
         <td>1257</td>
         <td>Descripción del distrito de emisión no coincidente con lo informado en el campo D113</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>43</td>
-        <td>D115</td>
-        <td>La ciudad de emisión no corresponde al departamento seleccionado</td>
-        <td>1258</td>
-        <td>El código de la ciudad de emisión (D115) debe corresponder al departamento seleccionado (D111)</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>44</td>
-        <td>D115a</td>
-        <td>La ciudad de emisión no corresponde al distrito seleccionado</td>
-        <td>1259</td>
-        <td>El código de la ciudad de emisión (D115) debe corresponder al distrito seleccionado (D113)<br/>No se aplica esta regla si no ha sido informado el distrito</td>
         <td>R</td>
     </tr>
     <tr>
@@ -16202,14 +15932,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>El tipo de documento de identidad del receptor no es requerido</td>
         <td>1322</td>
         <td>Si la naturaleza del receptor es Contribuyente (D201=1) o el tipo de operación es igual a B2F (D202=4), el tipo de documento de identidad no debe ser informado</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>60</td>
-        <td>D209</td>
-        <td>Descripción del tipo de documento de identidad del receptor no informada</td>
-        <td>1312</td>
-        <td>Si se informa el código de tipo de documento de identidad (D208), es obligatorio indicar la descripción correspondiente</td>
         <td>R</td>
     </tr>
   </tbody>
@@ -17025,14 +16747,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>E</td>
     </tr>
     <tr>
-        <td>117</td>
-        <td>E650</td>
-        <td>Grupo de los campos que describen las cuotas es obligatorio</td>
-        <td>1750</td>
-        <td>Si la condición de la operación a crédito seleccionada es igual a Cuota (E641=2), es obligatorio informar el grupo de los campos que describen las cuotas (E650)</td>
-        <td>R</td>
-    </tr>
-    <tr>
         <td>128</td>
         <td>E650a</td>
         <td>Grupo de los campos que describen las cuotas no requerido</td>
@@ -17085,14 +16799,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Descripción del país de origen del producto no corresponde al código</td>
         <td>1804</td>
         <td>Descripción del país de origen del producto no coincidente con lo informado en el campo E712</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>132</td>
-        <td>E715</td>
-        <td>Código de datos de relevancia de las mercaderías no informado para el tipo de documento electrónico</td>
-        <td>1805</td>
-        <td>Si el tipo de documento es Nota de remisión electrónica (C002=7), es obligatorio informar E715</td>
         <td>R</td>
     </tr>
     <tr>
@@ -17577,14 +17283,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>R</td>
     </tr>
     <tr>
-        <td>186</td>
-        <td>E912</td>
-        <td>Descripción del país de destino no informada</td>
-        <td>2112</td>
-        <td>Si se informa el código de país de destino (E911), es obligatorio indicar la descripción del país de destino (E912)</td>
-        <td>R</td>
-    </tr>
-    <tr>
         <td>177</td>
         <td>E912a</td>
         <td>Descripción del país de destino no corresponde al código</td>
@@ -17645,35 +17343,11 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>R</td>
     </tr>
     <tr>
-        <td>193</td>
-        <td>E928</td>
-        <td>Descripción del código de distrito del local de salida no informada</td>
-        <td>2154</td>
-        <td>Si se informa el código del distrito del local de salida (E927), la descripción del mismo es obligatoria</td>
-        <td>R</td>
-    </tr>
-    <tr>
         <td>182</td>
         <td>E928a</td>
         <td>Descripción del distrito del local de salida no corresponde al código</td>
         <td>2155</td>
         <td>Descripción del distrito del local de salida no coincidente con lo informado en el campo E927</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>159</td>
-        <td>E929</td>
-        <td>La ciudad del local de salida no corresponde al departamento seleccionado</td>
-        <td>2156</td>
-        <td>El código de la ciudad del local de salida (E929) debe corresponder al departamento seleccionado (E925)</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>160</td>
-        <td>E929a</td>
-        <td>La ciudad del local de salida no corresponde al distrito seleccionado</td>
-        <td>2157</td>
-        <td>El código de la ciudad del local de salida (E929) debe corresponder al distrito seleccionado (E927)<br/>No se aplica esta regla si no ha sido informado el distrito</td>
         <td>R</td>
     </tr>
     <tr>
@@ -17737,35 +17411,11 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>R</td>
     </tr>
     <tr>
-        <td>201</td>
-        <td>E948</td>
-        <td>Descripción del código del distrito del local de la entrega no informada</td>
-        <td>2204</td>
-        <td>Si se informa el código del distrito del local de entrega (E947), la descripción del mismo es obligatoria</td>
-        <td>R</td>
-    </tr>
-    <tr>
         <td>188</td>
         <td>E948a</td>
         <td>Descripción del distrito del local de entrega no corresponde al código</td>
         <td>2205</td>
         <td>Descripción del distrito del local de entrega no coincidente con lo informado en el campo E947</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>168</td>
-        <td>E949</td>
-        <td>La ciudad del local de entrega no corresponde al departamento seleccionado</td>
-        <td>2206</td>
-        <td>El código de la ciudad del local de entrega (E949) debe corresponder al departamento seleccionado (E945)</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>169</td>
-        <td>E949a</td>
-        <td>La ciudad del local de entrega no corresponde al distrito seleccionado</td>
-        <td>2207</td>
-        <td>El código de la ciudad del local de entrega (E949) debe corresponder al distrito seleccionado (E947)<br/>No se aplica esta regla si no ha sido informado el distrito</td>
         <td>R</td>
     </tr>
     <tr>
@@ -18424,22 +18074,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>R</td>
     </tr>
     <tr>
-        <td>247</td>
-        <td>H002c</td>
-        <td>CDC no requerido para el tipo de documento asociado</td>
-        <td>2419</td>
-        <td>Cuando el tipo de documento asociado es impreso no se debe informar el CDC del DTE (H004)</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>250</td>
-        <td>H002</td>
-        <td>CDC no informado</td>
-        <td>2416</td>
-        <td>Cuando el tipo de documento asociado es electrónico es obligatorio informar el CDC del DTE</td>
-        <td>R</td>
-    </tr>
-    <tr>
         <td>245</td>
         <td>H003</td>
         <td>Descripción del tipo de documento asociado no corresponde al código</td>
@@ -18665,14 +18299,6 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Fecha de emisión del documento impreso de referencia no requerida para el tipo de documento asociado</td>
         <td>2425</td>
         <td>Si el tipo de documento asociado es electrónico o es constancia electrónica (H002=1 o H002=3), no se debe informar la fecha de emisión del documento impreso</td>
-        <td>R</td>
-    </tr>
-    <tr>
-        <td>236</td>
-        <td>H012</td>
-        <td>Número de comprobante de retención no informado</td>
-        <td>2412</td>
-        <td>Si el tipo de pago informado es igual a Retenciones (E606=10), es obligatorio reportar número de comprobante de retención</td>
         <td>R</td>
     </tr>
     <tr>
@@ -18938,7 +18564,7 @@ En esta sección de la estructura del KuDE se encuentran los siguientes campos:
     <tr>
         <th>Espacio reservado para el logo del emisor (opcional)</th>
         <th colspan="2">Datos del emisor:<br/>Nombre o razón social del emisor: D105<br/>Nombre fantasía: D106<br/>Descripción de actividad: D131<br/>Dirección: D107<br/>Descripción ciudad: D116</th>
-        <th colspan="2">Datos de timbrado:<br/>RUC del emisor: D101<br/>Timbrado Nº: C004<br/>Fecha de inicio de vigencia: C008<br/>Fecha de fin de vigencia: C009<br/>Número de documento: C007</th>
+        <th colspan="2">Datos de timbrado:<br/>RUC del emisor: D101<br/>Timbrado Nº: C004<br/>Fecha de inicio de vigencia: C008<br/>Número de documento: C007</th>
     </tr>
   </thead>
   <tbody>
@@ -18958,7 +18584,7 @@ Ejemplo de encabezado de KuDE de FE:
     <tr>
         <th rowspan="2">LOGO</th>
         <th colspan="2">KuDE DE FACTURA ELECTRÓNICA<br/><br/>Marta Anahi Bordon Vidal<br/>Soluciones Informáticas<br/>Reparación de Equipos Informáticos<br/>Avenida González Vidal #1434<br/>Ciudad: Asunción</th>
-        <th colspan="2">RUC: 2365438-8<br/>Timbrado Nº 1000332<br/>Fecha de Inicio de Vigencia: 01/07/2018<br/>Fecha de Fin de Vigencia: 31/07/2019<br/>Factura Electrónica Nº 001-001-0000001</th>
+        <th colspan="2">RUC: 2365438-8<br/>Timbrado Nº 1000332<br/>Fecha de Inicio de Vigencia: 01/07/2018<br/>Factura Electrónica Nº 001-001-0000001</th>
     </tr>
   </thead>
   <tbody>
@@ -20332,7 +19958,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>323031372d30312d32355430393a33353a3137</td>
     </tr>
     <tr>
-        <td>dRucRec/dIdenRec</td>
+        <td>dRucRec</td>
         <td>88899990</td>
         <td>No</td>
     </tr>
@@ -20518,9 +20144,6 @@ TABLA 1 – TIPO DE REGIMEN
 TABLA 2.1 – DEPARTAMENTOS, DISTRITOS Y CIUDADES
 Enlace: <https://ekuatia.set.gov.py/portal/ekuatia/documentacion/documentaciontecnica>
 Archivo: CODIGO DE REFERENCIA GEOGRAFICA.xlsx
-
-TABLA 2.2 - CIUDADES
-Se incluirá un link de descarga dado el volumen del contenido.
 
 septiembre de 2019 | 210
 
@@ -20849,7 +20472,6 @@ TABLA 8 – TASAS DEL ISC
   </tbody>
 </table>
 
-~~TABLA 9 – TIPOS DE VEHÍCULOS~~
 
 septiembre de 2019
 212
@@ -20857,7 +20479,6 @@ septiembre de 2019
 e-kuatia
 Sistema Integrado de Facturación Electrónica Nacional
 
-Agregaremos un link de descarga con la codificación a fin de agilizar su implementación.
 
 #### TABLA 10 – CONDICIONES DE NEGOCIACION - INCOTERMS
 

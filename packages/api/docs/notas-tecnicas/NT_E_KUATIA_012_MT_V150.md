@@ -23,13 +23,15 @@
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
-        <td><mark>D022</mark></td>
-        <td><mark>Moneda de la operación no corresponde al tipo de documento informado</mark></td>
-        <td><mark>1213</mark></td>
-        <td><mark>Si el tipo de documento informado es Autofactura Electrónica (C002=4) la moneda de la operación debe ser igual a PYG (D015=PYG)</mark></td>
-        <td><mark>R</mark></td>
+        <td>D022</td>
+        <td>Moneda de la operación no corresponde al tipo de documento informado</td>
+        <td>1213</td>
+        <td>Si el tipo de documento informado es Autofactura Electrónica (C002=4) la moneda de la operación debe ser igual a PYG (D015=PYG)</td>
+        <td>R</td>
     </tr>
+      </mark>
   </tbody>
 </table>
 

@@ -41,7 +41,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
   <tbody>
     <tr>
       <td>XS02</td>
-      <td><mark>SignedInfo</mark></td>
+      <td><mark modificado>SignedInfo</mark></td>
       <td>G</td>
       <td>XS01</td>
       <td>1-1</td>
@@ -53,7 +53,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
       <td>G</td>
       <td>XS02</td>
       <td>1-1</td>
-      <td><mark>Grupo del método de canonicalización</mark></td>
+      <td><mark modificado>Grupo del método de canonicalización</mark></td>
     </tr>
     <tr>
       <td>XS04</td>
@@ -61,7 +61,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
       <td>A</td>
       <td>XS03</td>
       <td>1-1</td>
-      <td><mark>Atributo Algorithm de CanonicalizationMethod</mark><br/><br/><mark>Atributos válidos:</mark><br/><br/><mark>http://www.w3.org/TR/2001/REC-xml-c14n-20010315 (Inclusiva)</mark><br/><br/><mark>http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments (Inclusiva con comentarios)</mark><br/><br/><mark>http://www.w3.org/2001/10/xml-exc-c14n (Exclusiva)</mark><br/><br/><mark>http://www.w3.org/2001/10/xml-exc-c14n#WithComments (Exclusiva con comentarios)</mark></td>
+      <td><mark modificado>Atributo Algorithm de CanonicalizationMethod<br/><br/>Atributos válidos:<br/><br/>http://www.w3.org/TR/2001/REC-xml-c14n-20010315 (Inclusiva)<br/><br/>http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments (Inclusiva con comentarios)<br/><br/>http://www.w3.org/2001/10/xml-exc-c14n (Exclusiva)<br/><br/>http://www.w3.org/2001/10/xml-exc-c14n#WithComments (Exclusiva con comentarios)</mark></td>
     </tr>
     <tr>
       <td>XS05</td>
@@ -69,7 +69,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
       <td>G</td>
       <td>XS02</td>
       <td>1-1</td>
-      <td><mark>Tag del método de firma</mark></td>
+      <td><mark modificado>Tag del método de firma</mark></td>
     </tr>
     <tr>
       <td>XS06</td>
@@ -77,7 +77,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
       <td>A</td>
       <td>XS05</td>
       <td>1-1</td>
-      <td><mark>Atributo Algorithm de SignatureMethod</mark><br/><br/><mark>Atributos válidos:</mark><br/><br/><mark>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 (RSA-SHA-256)</mark></td>
+      <td><mark modificado>Atributo Algorithm de SignatureMethod<br/><br/>Atributos válidos:<br/><br/>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 (RSA-SHA-256) <br/> http://www.w3.org/2001/04/xmldsig-more#rsa-sha384 (RSA-SHA-384) <br/> http://www.w3.org/2001/04/xmldsig-more#rsa-sha512 (RSA-SHA-512)</mark></td>
     </tr>
   </tbody>
 </table>
@@ -89,28 +89,12 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
 <table>
   <tbody>
     <tr>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td><mark>http://www.w3.org/2001/04/xmldsig-more#rsa-sha384 (RSA-SHA-384)</mark></td>
-    </tr>
-    <tr>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td><mark>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512 (RSA-SHA-512)</mark></td>
-    </tr>
-    <tr>
         <td>XS07</td>
         <td>Reference</td>
         <td>G</td>
         <td>XS02</td>
         <td>1-1</td>
-        <td><mark>Grupo de referencia de la firma</mark></td>
+        <td><mark modificado>Grupo de referencia de la firma</mark></td>
     </tr>
     <tr>
         <td>XS08</td>
@@ -118,7 +102,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>A</td>
         <td>XS07</td>
         <td>1-1</td>
-        <td><mark>Atributo URI del tag Reference que identifica el grupo de campos que están firmados</mark></td>
+        <td><mark modificado>Atributo URI del tag Reference que identifica el grupo de campos que están firmados</mark></td>
     </tr>
     <tr>
         <td>XS10</td>
@@ -126,23 +110,23 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>G</td>
         <td>XS07</td>
         <td>1-1</td>
-        <td><mark>Grupo de algoritmos de transformación</mark></td>
+        <td><mark modificado>Grupo de algoritmos de transformación</mark></td>
     </tr>
     <tr>
-        <td><mark>XS12</mark></td>
-        <td><mark>Transform</mark></td>
+        <td><mark modificado>XS12</mark></td>
+        <td><mark modificado>Transform</mark></td>
         <td>G</td>
         <td>XS10</td>
-        <td><mark>1-1</mark></td>
-        <td><mark>Tag del algoritmo de transformación</mark></td>
+        <td><mark modificado>1-1</mark></td>
+        <td><mark modificado>Tag del algoritmo de transformación</mark></td>
     </tr>
     <tr>
         <td>XS13</td>
         <td>Algorithm</td>
         <td>A</td>
         <td>XS12</td>
-        <td><mark>1-1</mark></td>
-        <td><mark>Atributo Algorithm del tag Transform<br/>Atributo válido:<br/>http://www.w3.org/2000/09/xmldsig#enveloped-signature (Enveloped Signature)</mark></td>
+        <td><mark modificado>1-1</mark></td>
+        <td><mark modificado>Atributo Algorithm del tag Transform<br/>Atributo válido:<br/>http://www.w3.org/2000/09/xmldsig#enveloped-signature (Enveloped Signature)</mark></td>
     </tr>
     <tr>
         <td>XS15</td>
@@ -150,7 +134,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>G</td>
         <td>XS07</td>
         <td>1-1</td>
-        <td><mark>Grupo del DigestMethod</mark></td>
+        <td><mark modificado>Grupo del DigestMethod</mark></td>
     </tr>
     <tr>
         <td>XS16</td>
@@ -158,7 +142,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>A</td>
         <td>XS15</td>
         <td>1-1</td>
-        <td><mark>Atributo Algorithm del tag DigestMethod<br/><br/>Atributos válidos:<br/><br/>http://www.w3.org/2001/04/xmlenc#sha256 (SHA-256)<br/>http://www.w3.org/2001/04/xmldsig-more#sha384 (SHA-384)<br/>http://www.w3.org/2001/04/xmlenc#sha512 (SHA-512)</mark></td>
+        <td><mark modificado>Atributo Algorithm del tag DigestMethod<br/><br/>Atributos válidos:<br/><br/>http://www.w3.org/2001/04/xmlenc#sha256 (SHA-256)<br/>http://www.w3.org/2001/04/xmldsig-more#sha384 (SHA-384)<br/>http://www.w3.org/2001/04/xmlenc#sha512 (SHA-512)</mark></td>
     </tr>
     <tr>
         <td>XS17</td>
@@ -166,7 +150,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>E</td>
         <td>XS07</td>
         <td>1</td>
-        <td><mark>Digest Value (Valor retornado por el algoritmo definido en XS16)</mark></td>
+        <td><mark modificado>Digest Value (Valor retornado por el algoritmo definido en XS16)</mark></td>
     </tr>
     <tr>
         <td>XS18</td>
@@ -174,7 +158,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>E</td>
         <td>XS01</td>
         <td>1-1</td>
-        <td><mark>Signature Value (Valor de la firma retornado por el algoritmo definido en XS06)</mark></td>
+        <td><mark modificado>Signature Value (Valor de la firma retornado por el algoritmo definido en XS06)</mark></td>
     </tr>
     <tr>
         <td>XS19</td>
@@ -182,7 +166,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>G</td>
         <td>XS01</td>
         <td>1-1</td>
-        <td><mark>Grupo del KeyInfo (Información de la clave)</mark></td>
+        <td><mark modificado>Grupo del KeyInfo (Información de la clave)</mark></td>
     </tr>
     <tr>
         <td>XS20</td>
@@ -190,7 +174,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>G</td>
         <td>XS19</td>
         <td>1-1</td>
-        <td><mark>Grupo X509Data</mark></td>
+        <td><mark modificado>Grupo X509Data</mark></td>
     </tr>
     <tr>
         <td>XS21</td>
@@ -198,7 +182,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>E</td>
         <td>XS20</td>
         <td>1-1</td>
-        <td><mark>Certificado Cualificado de Firma Electrónica X509.v3</mark></td>
+        <td><mark modificado>Certificado Cualificado de Firma Electrónica X509.v3</mark></td>
     </tr>
   </tbody>
 </table>
@@ -219,14 +203,16 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
     </tr>
   </thead>
   <tbody>
+      <mark eliminado>
     <tr>
-        <td><mark>XS14</mark></td>
-        <td><mark>XPath</mark></td>
-        <td><mark>E</mark></td>
-        <td><mark>XS12</mark></td>
-        <td><mark>0-n</mark></td>
-        <td><mark>XPath</mark></td>
+        <td>XS14</td>
+        <td>XPath</td>
+        <td>E</td>
+        <td>XS12</td>
+        <td>0-n</td>
+        <td>XPath</td>
     </tr>
+      </mark>
   </tbody>
 </table>
 
@@ -263,7 +249,7 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td>KeyUsage no define &lt;b&gt;firma digital&lt;/b&gt; y no &lt;b&gt;Repudio&lt;/b&gt;</td>
     </tr>
     <tr>
-        <td><mark>Cadena de certificación inválida</mark></td>
+        <td><mark agregado>Cadena de certificación inválida</mark></td>
     </tr>
   </tbody>
 </table>
@@ -285,56 +271,56 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
   <tbody>
     <tr>
       <td rowspan="6">AD01</td>
-      <td rowspan="6">Firma difiere del estándar<br/><mark>[Detalle del error]</mark></td>
+      <td rowspan="6">Firma difiere del estándar<br/><mark agregado>[Detalle del error]</mark></td>
       <td rowspan="6">0140</td>
       <td>No fue firmado el documento completo (falta Reference URI en la firma)</td>
       <td rowspan="6">R</td>
     </tr>
     <tr>
-      <td>Transform Algorithm previsto en la firma (<mark>Enveloped Signature</mark>) no informado o no válido</td>
+      <td>Transform Algorithm previsto en la firma (<mark modificado>Enveloped Signature</mark>) no informado o no válido</td>
     </tr>
     <tr>
-      <td><mark>Canonicalization Method previsto en la firma no informado o no válido</mark></td>
+      <td><mark agregado>Canonicalization Method previsto en la firma no informado o no válido</mark></td>
     </tr>
     <tr>
-      <td><mark>Signature Method previsto en la firma no informado o no válido</mark></td>
+      <td><mark agregado>Signature Method previsto en la firma no informado o no válido</mark></td>
     </tr>
     <tr>
-      <td><mark>Digest Method previsto en la firma no informado o no válido</mark></td>
+      <td><mark agregado>Digest Method previsto en la firma no informado o no válido</mark></td>
     </tr>
     <tr>
-      <td><mark>Reference URI no coincide con el atributo Id del documento</mark></td>
+      <td><mark agregado>Reference URI no coincide con el atributo Id del documento</mark></td>
     </tr>
     <tr>
       <td rowspan="9">AD02</td>
-      <td rowspan="9">Valor de la firma<br/>(SignatureValue) diferente del<br/>calculado por el PKI <mark>[Detalle<br/>del error]</mark></td>
+      <td rowspan="9">Valor de la firma<br/>(SignatureValue) diferente del<br/>calculado por el PKI <mark agregado>[Detalle<br/>del error]</mark></td>
       <td rowspan="9">0141</td>
-      <td><mark>XML modificado luego de la firma o mal firmado</mark></td>
+      <td><mark agregado>XML modificado luego de la firma o mal firmado</mark></td>
       <td rowspan="9">R</td>
     </tr>
     <tr>
-      <td><mark>Certificado del PCSC no habilitado por el MIC</mark></td>
+      <td><mark eliminado>Certificado del PCSC no habilitado por el MIC</mark></td>
     </tr>
     <tr>
-      <td><mark>Certificado del PCSC revocado</mark></td>
+      <td><mark eliminado>Certificado del PCSC revocado</mark></td>
     </tr>
     <tr>
-      <td><mark>Certificado no está firmado por el PCSC</mark></td>
+      <td><mark eliminado>Certificado no está firmado por el PCSC</mark></td>
     </tr>
     <tr>
-      <td><mark>Dirección de la LCR no informada<br/>(CRLDistributionPoint)</mark></td>
+      <td><mark eliminado>Dirección de la LCR no informada<br/>(CRLDistributionPoint)</mark></td>
     </tr>
     <tr>
-      <td><mark>Error en el acceso a la LCR</mark></td>
+      <td><mark eliminado>Error en el acceso a la LCR</mark></td>
     </tr>
     <tr>
-      <td><mark>LCR inexistente</mark></td>
+      <td><mark eliminado>LCR inexistente</mark></td>
     </tr>
     <tr>
-      <td><mark>Certificado de firma revocado</mark></td>
+      <td><mark eliminado>Certificado de firma revocado</mark></td>
     </tr>
     <tr>
-      <td><mark>Certificado raíz no corresponde al MIC</mark></td>
+      <td><mark eliminado>Certificado raíz no corresponde al MIC</mark></td>
     </tr>
   </tbody>
 </table>
@@ -370,46 +356,46 @@ Schema XML 1: xmldsig-core-schema- v150.xsd (Estándar de la Firma Digital)
         <td rowspan="10">R</td>
     </tr>
     <tr>
-        <td><mark>Certificado del PCSC no habilitado por el MIC</mark></td>
+        <td><mark agregado>Certificado del PCSC no habilitado por el MIC</mark></td>
     </tr>
     <tr>
-        <td><mark>Certificado del PCSC revocado</mark></td>
+        <td><mark agregado>Certificado del PCSC revocado</mark></td>
     </tr>
     <tr>
-        <td><mark>Certificado no está firmado por el PCSC</mark></td>
+        <td><mark agregado>Certificado no está firmado por el PCSC</mark></td>
     </tr>
     <tr>
-        <td><mark>Dirección de la LCR no informada<br/>(CRLDistributionPoint)</mark></td>
+        <td><mark agregado>Dirección de la LCR no informada<br/>(CRLDistributionPoint)</mark></td>
     </tr>
     <tr>
-        <td><mark>Error en el acceso a la LCR</mark></td>
+        <td><mark agregado>Error en el acceso a la LCR</mark></td>
     </tr>
     <tr>
-        <td><mark>LCR inexistente</mark></td>
+        <td><mark agregado>LCR inexistente</mark></td>
     </tr>
     <tr>
-        <td><mark>Certificado de firma revocado</mark></td>
+        <td><mark agregado>Certificado de firma revocado</mark></td>
     </tr>
     <tr>
-        <td><mark>Certificado raíz no corresponde al MIC</mark></td>
+        <td><mark agregado>Certificado raíz no corresponde al MIC</mark></td>
     </tr>
     <tr>
-        <td><mark>Certificado expirado</mark></td>
+        <td><mark agregado>Certificado expirado</mark></td>
     </tr>
   </tbody>
 </table>
 
 Páginas: 152.
 
-<mark>PCSC : Prestadores Cualificados de Servicios de Confianza. Según Art 4. Definiciones #38 de la Ley 6822</mark>
+<mark agregado>PCSC : Prestadores Cualificados de Servicios de Confianza. Según Art 4. Definiciones #38 de la Ley 6822</mark>
 
 ### <u>1.4 Se modifica la siguiente</u>
 
 <u>Sección 12.2.1 Validaciones del certificado de transmisión. Protocolo TLS</u>
 
-<mark>Retorna un html con el mensaje de error de Acceso Denegado por las políticas de acceso. Estas validaciones se realizan durante la conexion con el servicio y son propias del protocolo TLS.</mark>
+<mark agregado>Retorna un html con el mensaje de error de Acceso Denegado por las políticas de acceso. Estas validaciones se realizan durante la conexion con el servicio y son propias del protocolo TLS.</mark>
 
-<mark>La siguiente tabla muestra las posibles causas</mark>
+<mark agregado>La siguiente tabla muestra las posibles causas</mark>
 
 <table>
   <thead>
@@ -483,7 +469,7 @@ Electrónica Nacional
         <td>Si el Certificado es de persona jurídica, el RUC debe estar informado en el campo SerialNumber en caso de ser del tipo de Persona Física el RUC, estará informado en el campo: SubjectAlternativeName</td>
     </tr>
     <tr>
-        <td><mark>Inconveniente temporal del SIFEN</mark></td>
+        <td><mark agregado>Inconveniente temporal del SIFEN</mark></td>
         <td> </td>
     </tr>
   </tbody>

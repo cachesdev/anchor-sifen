@@ -38,7 +38,7 @@ Fecha: 04/02/2022
         <td>N</td>
         <td>1</td>
         <td>1-1</td>
-        <td>1=Sistema de facturación del contribuyente<br/><mark>2=SIFEN solución gratuita</mark></td>
+        <td>1=Sistema de facturación del contribuyente<br/><mark eliminado>2=SIFEN solución gratuita</mark></td>
     </tr>
   </tbody>
 </table>
@@ -67,9 +67,9 @@ Fecha: 04/02/2022
         <td>Descripción del tipo de transacción</td>
         <td>D010</td>
         <td>A</td>
-        <td><mark>5-39</mark></td>
+        <td>5-<mark modificado>39</mark></td>
         <td>0-1</td>
-        <td>Obligatorio si existe el campo D011<br/>1= “Venta de mercadería”<br/>2= “Prestación de servicios”<br/>3= “Mixto (Venta de mercadería y servicios)”<br/>4= “Venta de activo fijo”<br/>5= “Venta de divisas”<br/>6= “Compra de divisas”<br/>7= “Promoción o entrega de muestras”<br/>8= “Donación”<br/>9= “Anticipo”<br/>10= “Compra de productos”<br/>11= “Compra de servicios”<br/>12= “Venta de crédito fiscal”<br/>13= ”Muestras médicas (Art. 3 RG 24/2014)”</td>
+        <td>Obligatorio si existe el campo D011<br/>1= “Venta de mercadería”<br/>2= “Prestación de servicios”<br/>3= “Mixto (Venta de mercadería y servicios)<mark modificado>”</mark><br/>4= “Venta de activo fijo”<br/>5= “Venta de divisas”<br/>6= “Compra de divisas”<br/>7= “Promoción o entrega de muestras”<br/>8= “Donación”<br/>9= “Anticipo”<br/>10= “Compra de productos”<br/>11= “Compra de servicios”<br/>12= “Venta de crédito fiscal”<br/>13= ”Muestras médicas (Art. 3 RG 24/2014)”</td>
     </tr>
   </tbody>
 </table>
@@ -99,13 +99,13 @@ Fecha: 04/02/2022
         <td>E500</td>
         <td>N</td>
         <td>1-5</td>
-        <td><mark>1-1</mark></td>
+        <td><mark modificado>1</mark>-1</td>
         <td> </td>
     </tr>
   </tbody>
 </table>
 
-1.4. <u>En el Grupo de rastreo de la mercadería (E750-<mark>E761</mark>) se modifica los campos de observación y longitud, se elimina los siguientes campos y se agrega los campos de nombre de producto:</u> **(Página 90 y 91)**
+1.4. <u>En el Grupo de rastreo de la mercadería (E750-<mark modificado>E761</mark>) se modifica los campos de observación y longitud, se elimina los siguientes campos y se agrega los campos de nombre de producto:</u> **(Página 90 y 91)**
 
 <table>
   <thead>
@@ -131,30 +131,32 @@ Fecha: 04/02/2022
         <td>A</td>
         <td>1-80</td>
         <td>0-1</td>
-        <td>Obligados por <mark>Art. 1 de la RG N° 106/2021 – Agroquímicos</mark></td>
+        <td><mark modificado>Obligados por Art. 1 de la RG N° 106/2021 – Agroquímicos</mark></td>
+    </tr>
+    <mark eliminado>
+    <tr>
+        <td>E8.4</td>
+        <td>E756</td>
+        <td>dNomImp</td>
+        <td>Nombre del Importador</td>
+        <td>E750</td>
+        <td>A</td>
+        <td>4-60</td>
+        <td>0-1</td>
+        <td>Obligados por la RG N° 16/2019 – Agroquímicos</td>
     </tr>
     <tr>
-        <td><mark>E8.4</mark></td>
-        <td><mark>E756</mark></td>
-        <td><mark>dNomImp</mark></td>
-        <td><mark>Nombre del Importador</mark></td>
-        <td><mark>E750</mark></td>
-        <td><mark>A</mark></td>
-        <td><mark>4-60</mark></td>
-        <td><mark>0-1</mark></td>
-        <td><mark>Obligados por la RG N° 16/2019 – Agroquímicos</mark></td>
+        <td>E8.4</td>
+        <td>E757</td>
+        <td>dDirImp</td>
+        <td>Dirección de Importador</td>
+        <td>E750</td>
+        <td>A</td>
+        <td>1-255</td>
+        <td>0-1</td>
+        <td>Obligados por la RG N° 16/2019 – Agroquímicos</td>
     </tr>
-    <tr>
-        <td><mark>E8.4</mark></td>
-        <td><mark>E757</mark></td>
-        <td><mark>dDirImp</mark></td>
-        <td><mark>Dirección de Importador</mark></td>
-        <td><mark>E750</mark></td>
-        <td><mark>A</mark></td>
-        <td><mark>1-255</mark></td>
-        <td><mark>0-1</mark></td>
-        <td><mark>Obligados por la RG N° 16/2019 – Agroquímicos</mark></td>
-    </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -166,17 +168,19 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 <table>
   <tbody>
+      <mark eliminado>
     <tr>
-        <td><mark>E8.4</mark></td>
-        <td><mark>E758</mark></td>
-        <td><mark>dNumFir</mark></td>
-        <td><mark>Número de registro de la firma del importador</mark></td>
-        <td><mark>E750</mark></td>
-        <td><mark>A</mark></td>
-        <td><mark>20</mark></td>
-        <td><mark>0-1</mark></td>
-        <td><mark>Obligados por la RG N° 16/2019 – Agroquímicos</mark></td>
+        <td>E8.4</td>
+        <td>E758</td>
+        <td>dNumFir</td>
+        <td>Número de registro de la firma del importador</td>
+        <td>E750</td>
+        <td>A</td>
+        <td>20</td>
+        <td>0-1</td>
+        <td>Obligados por la RG N° 16/2019 – Agroquímicos</td>
     </tr>
+      </mark>
     <tr>
         <td>E8.4</td>
         <td>E759</td>
@@ -184,9 +188,9 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Número de registro del producto otorgado por el SENAVE</td>
         <td>E750</td>
         <td>A</td>
-        <td><mark>1-20</mark></td>
+        <td><mark modificado>1</mark>-20</td>
         <td>0-1</td>
-        <td><mark>Obligados por el Art. 1 de la RG N° 106/2021 – Agroquímicos</mark></td>
+        <td><mark modificado>Obligados por el Art. 1 de la RG N° 106/2021 – Agroquímicos</mark></td>
     </tr>
     <tr>
         <td>E8.4</td>
@@ -195,21 +199,23 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Número de registro de entidad comercial otorgado por el SENAVE</td>
         <td>E750</td>
         <td>A</td>
-        <td><mark>1-20</mark></td>
+        <td><mark modificado>1</mark>-20</td>
         <td>0-1</td>
-        <td><mark>Obligados por el Art. 1 de la RG N° 106/2021 – Agroquímicos</mark></td>
+        <td><mark modificado>Obligados por el Art. 1 de la RG N° 106/2021 – Agroquímicos</mark></td>
     </tr>
+    <mark agregado>
     <tr>
-        <td><mark>E8.4</mark></td>
-        <td><mark>E761</mark></td>
-        <td><mark>dNomPro</mark></td>
-        <td><mark>Nombre del Producto</mark></td>
-        <td><mark>E750</mark></td>
-        <td><mark>A</mark></td>
-        <td><mark>1-30</mark></td>
-        <td><mark>0-1</mark></td>
-        <td><mark>Obligados por el Art. 1 de la RG N° 106/2021 – Agroquímicos</mark></td>
+        <td>E8.4</td>
+        <td>E761</td>
+        <td>dNomPro</td>
+        <td>Nombre del Producto</td>
+        <td>E750</td>
+        <td>A</td>
+        <td>1-30</td>
+        <td>0-1</td>
+        <td>Obligados por el Art. 1 de la RG N° 106/2021 – Agroquímicos</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -239,7 +245,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>G</td>
         <td> </td>
         <td>0-1</td>
-        <td>Obligatorio si C002 = 7<br/>No informar si C002 = 4, 5, 6<br/><mark>Opcional cuando E903=1 y E967=1</mark></td>
+        <td>Obligatorio si C002 = 7<br/>No informar si C002 = 4, 5, 6<br/><mark eliminado>Opcional cuando E903=1 y E967=1</mark></td>
     </tr>
     <tr>
         <td>E10.4</td>
@@ -249,8 +255,8 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>E980</td>
         <td>A</td>
         <td>1-150</td>
-        <td><mark>1-1</mark></td>
-        <td><mark>Obligatorio por RG N° 41/2014</mark></td>
+        <td><mark modificado>1</mark>-1</td>
+        <td><mark agregado>Obligatorio por RG N° 41/2014</mark></td>
     </tr>
     <tr>
         <td>E10.4</td>
@@ -260,8 +266,8 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>E980</td>
         <td>A</td>
         <td>1-255</td>
-        <td><mark>1-1</mark></td>
-        <td><mark>Obligatorio por por RG N° 41/2014</mark></td>
+        <td><mark modificado>1</mark>-1</td>
+        <td><mark agregado>Obligatorio por por RG N° 41/2014</mark></td>
     </tr>
   </tbody>
 </table>
@@ -292,7 +298,7 @@ Sistema Integrado de Facturación Electrónica Nacional
       <td>N</td>
       <td>1</td>
       <td>0-1</td>
-      <td>Obligatorio si H002=2<br/>No informar si H002 =<br/>1 o 3<br/>1= Factura<br/>2= Nota de crédito<br/>3= Nota de débito<br/>4= Nota de remisión<br/><mark>5= Comprobante de retención</mark></td>
+      <td>Obligatorio si H002=2<br/>No informar si H002 =<br/>1 o 3<br/>1= Factura<br/>2= Nota de crédito<br/>3= Nota de débito<br/>4= Nota de remisión<br/><mark eliminado>5= Comprobante de retención</mark></td>
     </tr>
     <tr>
       <td>H<br/><mark>C1</mark></td>
@@ -303,7 +309,7 @@ Sistema Integrado de Facturación Electrónica Nacional
       <td>A</td>
       <td>7-16</td>
       <td>0-1</td>
-      <td>Obligatorio si existe el<br/>campo H009<br/>1= “Factura”<br/>2= “Nota de crédito”<br/>3= “Nota de débito”<br/>4= “Nota de remisión”<br/><mark>5= “Comprobante de retención”</mark></td>
+      <td>Obligatorio si existe el<br/>campo H009<br/>1= “Factura”<br/>2= “Nota de crédito”<br/>3= “Nota de débito”<br/>4= “Nota de remisión”<br/><mark eliminado>5= “Comprobante de retención”</mark></td>
     </tr>
   </tbody>
 </table>
@@ -325,17 +331,19 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
-        <td><mark>GDE</mark></td>
-        <td><mark>GEI009</mark></td>
-        <td><mark>dSerieNum</mark></td>
-        <td><mark>Serie del número del documento</mark></td>
-        <td><mark>GEI001</mark></td>
-        <td><mark>A</mark></td>
-        <td><mark>2</mark></td>
-        <td><mark>0-1</mark></td>
+        <td>GDE</td>
+        <td>GEI009</td>
+        <td>dSerieNum</td>
+        <td>Serie del número del documento</td>
+        <td>GEI001</td>
+        <td>A</td>
+        <td>2</td>
+        <td>0-1</td>
         <td> </td>
     </tr>
+      </mark>
   </tbody>
 </table>
 
@@ -357,7 +365,7 @@ Sistema Integrado de Facturación Electrónica Nacional
   <tbody>
     <tr>
         <td>ASch03</td>
-        <td><mark>xDE</mark></td>
+        <td><mark modificado>xDE</mark></td>
         <td>XML del DE transmitido</td>
         <td>ASch01</td>
         <td>XML</td>
@@ -391,7 +399,7 @@ Sistema Integrado de Facturación Electrónica Nacional
   <tbody>
     <tr>
         <td>DSch01</td>
-        <td><mark>rEnviConsDeRequest</mark></td>
+        <td><mark modificado>rEnviConsDeRequest</mark></td>
         <td>Raíz</td>
         <td>-</td>
         <td>-</td>
@@ -419,17 +427,19 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
-        <td><mark>E6</mark></td>
-        <td><mark>E507</mark></td>
-        <td><mark>cPreFle</mark></td>
-        <td><mark>Costo del Flete</mark></td>
-        <td><mark>E500</mark></td>
-        <td><mark>N</mark></td>
-        <td><mark>1-15p(0-8)</mark></td>
-        <td><mark>0-1</mark></td>
-        <td><mark>Precio del Flete para Situaciones particulares conforme al Art. 3° de la Resolución General N° 41/14</mark></td>
+        <td>E6</td>
+        <td>E507</td>
+        <td>cPreFle</td>
+        <td>Costo del Flete</td>
+        <td>E500</td>
+        <td>N</td>
+        <td>1-15p(0-8)</td>
+        <td>0-1</td>
+        <td>Precio del Flete para Situaciones particulares conforme al Art. 3° de la Resolución General N° 41/14</td>
     </tr>
+      </mark>
   </tbody>
 </table>
 
@@ -459,7 +469,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>F</td>
         <td>10</td>
         <td>1-1</td>
-        <td>Formato AAAA-MM-DD. Ejemplo <mark>2018-05-31</mark>.<br/><br/>Para el KuDE el formato de la fecha de inicio de vigencia debe contener los guiones separadores y representarse con el formato DD-MM-AAAA. Ejemplo: <mark>31-05-2018</mark></td>
+        <td>Formato AAAA-MM-DD. Ejemplo <mark modificado>2018-05-31</mark>.<br/><br/>Para el KuDE el formato de la fecha de inicio de vigencia debe contener los guiones separadores <mark modificado>y representarse con el formato DD-MM-AAAA. Ejemplo: 31-05-2018</mark></td>
     </tr>
   </tbody>
 </table>
@@ -485,33 +495,37 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>D202</td>
         <td>El tipo de operación no compatible con la naturaleza del receptor</td>
         <td>1300</td>
-        <td>Si el tipo de documento no es autofactura (C002 ≠ 4) y si la naturaleza del receptor es No contribuyente (D201=2), el tipo de operación debe ser B2C (D202=2).<br/><br/><mark>Si la naturaleza del receptor es No contribuyente (D201=2), el tipo de operación debe ser B2C (D202=2) o B2F (D202=4).</mark></td>
+        <td>Si el tipo de documento no es autofactura (C002 ≠ 4) y si la naturaleza del receptor es No contribuyente (D201=2), el tipo de operación debe ser B2C (D202=2).<br/><br/><mark modificado>Si la naturaleza del receptor es No contribuyente (D201=2), el tipo de operación debe ser B2C (D202=2) o B2F (D202=4).</mark></td>
         <td>R</td>
     </tr>
     <tr>
         <td>70</td>
         <td>D220</td>
-        <td>Descripción del departamento del receptor no corresponde al código</td>
+        <td>Descripción del departamento del <mark modificado>receptor</mark> no corresponde al código</td>
         <td>1325</td>
-        <td>Descripción del departamento del <mark>receptor</mark> no coincidente con lo informado en el campo D219</td>
+        <td>Descripción del departamento del <mark modificado>receptor</mark> no coincidente con lo informado en el campo D219</td>
         <td>R</td>
     </tr>
+    <mark eliminado>
     <tr>
         <td> </td>
-        <td><mark>D208b</mark></td>
-        <td><mark>Tipo de documento de identidad del receptor incorrecto para el tipo de operación</mark></td>
-        <td><mark>1319</mark></td>
-        <td><mark>El Tipo de documento de identidad del receptor no puede ser innominado (D208=5), cuando el tipo de operación es distinto a B2C (D202 ≠ 2)</mark></td>
-        <td><mark>R</mark></td>
+        <td><b</td>
+        <td>Tipo de documento de identidad del receptor incorrecto para el tipo de operación</td>
+        <td>1319</td>
+        <td>El Tipo de documento de identidad del receptor no puede ser innominado (D208=5), cuando el tipo de operación es distinto a B2C (D202 ≠ 2)</td>
+        <td>R</td>
     </tr>
+    </mark>
+    <mark agregado>
     <tr>
         <td> </td>
-        <td><mark>D208e</mark></td>
-        <td><mark>El adquiriente del comprobante de venta informado no se encuentra identificado. Favor verifique el dato ingresado.</mark></td>
-        <td><mark>1331</mark></td>
-        <td><mark>Si el tipo de documento electrónico es Nota de Crédito (C002 = 5) o Nota de Débito (C002 = 6), el tipo de documento de identidad del receptor no puede ser INNOMINADO (D208 ≠ 5)</mark></td>
-        <td><mark>R</mark></td>
+        <td>D208e</td>
+        <td>El adquiriente del comprobante de venta informado no se encuentra identificado. Favor verifique el dato ingresado.</td>
+        <td>1331</td>
+        <td>Si el tipo de documento electrónico es Nota de Crédito (C002 = 5) o Nota de Débito (C002 = 6), el tipo de documento de identidad del receptor no puede ser INNOMINADO (D208 ≠ 5)</td>
+        <td>R</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -534,14 +548,16 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
         <td> </td>
-        <td><mark>D142</mark></td>
-        <td><mark>Descripción del tipo de documento de identidad del responsable de la generación del DE no corresponde al código</mark></td>
-        <td><mark>1265</mark></td>
-        <td><mark>Descripción del tipo de documento de identidad del responsable de la generación del DE no coincidente a lo informado en el campo D141</mark></td>
-        <td><mark>R</mark></td>
+        <td></td>
+        <td>Descripción del tipo de documento de identidad del responsable de la generación del DE no corresponde al código</td>
+        <td>1265</td>
+        <td>Descripción del tipo de documento de identidad del responsable de la generación del DE no coincidente a lo informado en el campo D141</td>
+        <td>R</td>
     </tr>
+      </mark>
   </tbody>
 </table>
 
@@ -559,26 +575,28 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
         <td> </td>
-        <td><mark>H004g</mark></td>
-        <td><mark>El CDC asociado no corresponde al emisor del documento electrónico.</mark></td>
-        <td><mark>2439</mark></td>
-        <td><mark>Si el tipo de documento asociado es electrónico (H002=1) el CDC debe corresponder al emisor del documento al cual se asocia.</mark></td>
-        <td><mark>R</mark></td>
+        <td>H004g</td>
+        <td>El CDC asociado no corresponde al emisor del documento electrónico.</td>
+        <td>2439</td>
+        <td>Si el tipo de documento asociado es electrónico (H002=1) el CDC debe corresponder al emisor del documento al cual se asocia.</td>
+        <td>R</td>
     </tr>
     <tr>
         <td> </td>
-        <td><mark>H004h</mark></td>
-        <td><mark>El CDC asociado no corresponde al receptor del documento electrónico.</mark></td>
-        <td><mark>2441</mark></td>
-        <td><mark>Si el tipo de documento asociado es electrónico (H002=1) el CDC debe coincidir al receptor del documento al cual se asocia.</mark></td>
-        <td><mark>R</mark></td>
+        <td>H004h</td>
+        <td>El CDC asociado no corresponde al receptor del documento electrónico.</td>
+        <td>2441</td>
+        <td>Si el tipo de documento asociado es electrónico (H002=1) el CDC debe coincidir al receptor del documento al cual se asocia.</td>
+        <td>R</td>
     </tr>
+    </mark>
     <tr>
         <td>255<br/>**C22**</td>
         <td>H005b</td>
-        <td>El número de timbrado informado corresponde a un timbrado electrónico existente en la base de datos del SIFEN</td>
+        <td><mark modificado> El número de timbrado informado corresponde a un timbrado electrónico existente en la base de datos del SIFEN</mark></td>
         <td>2440</td>
         <td>Si el tipo de documento asociado seleccionado es igual a impreso (H002=2), no se debe informar un timbrado electrónico.</td>
         <td>R</td>
@@ -590,8 +608,8 @@ Sistema Integrado de Facturación Electrónica Nacional
 
 **3.1. Se modifica la URL de Consulta QR: (Página 208)**
 
-Ambiente de Producción: <mark>https://ekuatia.set.gov.py/consultas/qr?</mark>
-Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
+Ambiente de Producción: <mark modificado>https://ekuatia.set.gov.py/consultas/qr?</mark>
+Ambiente de Test: <mark modificado>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
 
 ### 4. **<u>Conformación del Código QR</u> **C18\*\*\*\*
 
@@ -621,7 +639,7 @@ Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
     </tr>
     <tr>
         <td>2</td>
-        <td>Exonerado (<mark>Art. 100 - Ley 6380/2019</mark>)</td>
+        <td>Exonerado (<mark modificado>Art. 100 - Ley 6380/2019</mark>)</td>
     </tr>
     <tr>
         <td>3</td>
@@ -683,7 +701,7 @@ Ambiente de Test: <mark>https://ekuatia.set.gov.py/consultas-test/qr?</mark>
   <tbody>
     <tr>
         <td>N</td>
-        <td>Numérico: Vea los diversos formatos en la Tabla <mark>D</mark></td>
+        <td>Numérico: Vea los diversos formatos en la Tabla <mark modificado>D</mark></td>
     </tr>
   </tbody>
 </table>

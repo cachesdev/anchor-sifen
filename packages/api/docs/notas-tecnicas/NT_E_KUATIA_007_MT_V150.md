@@ -36,7 +36,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>G</td>
         <td> </td>
         <td>1-1</td>
-        <td>Esta información debe ser<br/>impresa en el KuDE.<br/>Cuando el tipo de documento<br/>es Nota de remisión (C002=7)<br/>es obligatorio informar el<br/>mensaje según el Art. 3 Inc. 7<br/>de la Resolución general Nro.<br/>41/2014</td>
+        <td></td>
     </tr>
     <tr>
         <td>B</td>
@@ -47,7 +47,9 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>A</td>
         <td>1-3000</td>
         <td>0-1</td>
-        <td><mark>En caso de realizar Factura<br/>Exportación, en este campo en<br/>la FE se debe completar con los<br/>siguientes datos y en este orden<br/>de conformidad al Art 20<br/>numeral 15 del Decreto N°<br/>10797/2013:<br/>a) Tipo de Operación,<br/>b) Condición de Negociación,<br/>(CIF, FOB, otros.)<br/>c) País de Destino,<br/>d) Empresa Fletera o Exportador<br/>Nacional,<br/>e) Agente de Transporte,<br/>f) Instrucciones de Pago para el<br/>cliente (Beneficiario, Banco, N°<br/>de cuenta, Código SWIFT,<br/>Cartas de Crédito, otro).<br/>g) Número/s de Conocimiento/s<br/>de Embarque.<br/>h) Número/s de Manifiesto/s<br/>Internacional/es de Carga.<br/>i) Número de barcaza o<br/>remolcador, descripción y<br/>cantidad del bien transportado<br/>(en los casos de Flete<br/>Internacional),<br/>j) Las demás informaciones que<br/>sean fijadas por la<br/>Administración Tributaria, en<br/>normas de carácter general ".</mark></td>
+        <td>
+            Esta información debe ser<br/>impresa en el KuDE.<br/>Cuando el tipo de documento<br/>es Nota de remisión (C002=7)<br/>es obligatorio informar el<br/>mensaje según el Art. 3 Inc. 7<br/>de la Resolución general Nro.<br/>41/2014<br/><br/>
+            <mark agregado>En caso de realizar Factura<br/>Exportación, en este campo en<br/>la FE se debe completar con los<br/>siguientes datos y en este orden<br/>de conformidad al Art 20<br/>numeral 15 del Decreto N°<br/>10797/2013:<br/>a) Tipo de Operación,<br/>b) Condición de Negociación,<br/>(CIF, FOB, otros.)<br/>c) País de Destino,<br/>d) Empresa Fletera o Exportador<br/>Nacional,<br/>e) Agente de Transporte,<br/>f) Instrucciones de Pago para el<br/>cliente (Beneficiario, Banco, N°<br/>de cuenta, Código SWIFT,<br/>Cartas de Crédito, otro).<br/>g) Número/s de Conocimiento/s<br/>de Embarque.<br/>h) Número/s de Manifiesto/s<br/>Internacional/es de Carga.<br/>i) Número de barcaza o<br/>remolcador, descripción y<br/>cantidad del bien transportado<br/>(en los casos de Flete<br/>Internacional),<br/>j) Las demás informaciones que<br/>sean fijadas por la<br/>Administración Tributaria, en<br/>normas de carácter general ".</mark></td>
     </tr>
   </tbody>
 </table>

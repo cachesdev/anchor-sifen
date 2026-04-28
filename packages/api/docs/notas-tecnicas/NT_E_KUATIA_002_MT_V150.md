@@ -37,7 +37,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1</td>
         <td>0-1</td>
-        <td>Obligatorio si D201 = 2 y D202 ≠ 4<br/><mark>No informar si D201 = 1 o D202=4</mark><br/>1= Cédula paraguaya<br/>2= Pasaporte<br/>3= Cédula extranjera<br/>4= Carnet de residencia<br/>5= Innominado<br/>6=Tarjeta Diplomática de exoneración fiscal<br/>9= Otro</td>
+        <td>Obligatorio si D201 = 2 y D202 ≠ 4<br/><mark eliminado>No informar si D201 = 1 o D202=4</mark><br/>1= Cédula paraguaya<br/>2= Pasaporte<br/>3= Cédula extranjera<br/>4= Carnet de residencia<br/>5= Innominado<br/>6=Tarjeta Diplomática de exoneración fiscal<br/>9= Otro</td>
     </tr>
     <tr>
         <td>D3</td>
@@ -48,7 +48,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>A</td>
         <td>1-20</td>
         <td>0-1</td>
-        <td>Obligatorio si D201 = 2 y D202 ≠ 4<br/><mark>No informar si D201 = 1 o D202=4</mark><br/>En caso de DE innominado, completar con 0 (cero)</td>
+        <td>Obligatorio si D201 = 2 y D202 ≠ 4<br/><mark eliminado>No informar si D201 = 1 o D202=4</mark><br/>En caso de DE innominado, completar con 0 (cero)</td>
     </tr>
   </tbody>
 </table>
