@@ -69,7 +69,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1-15p(0-8)</td>
         <td>0-1</td>
-        <td>Si D015 ≠ PYG y D017 = 1, corresponde al cálculo aritmético:<br/>F014 * D018<br/>Si D015 ≠ PYG y D017 = 2, corresponde a la suma de todas las ocurrencias de EA009<br/>Este campo no debe existir si D015=PYG<br/>No informar si D015 = PYG<br/><mark>Cuando C002=4 corresponde a F014</mark></td>
+        <td>Si D015 ≠ PYG y D017 = 1, corresponde al cálculo aritmético:<br/>F014 * D018<br/>Si D015 ≠ PYG y D017 = 2, corresponde a la suma de todas las ocurrencias de EA009<br/>Este campo no debe existir si D015=PYG<br/>No informar si D015 = PYG<br/><mark eliminado>Cuando C002=4 corresponde a F014</mark></td>
     </tr>
   </tbody>
 </table>

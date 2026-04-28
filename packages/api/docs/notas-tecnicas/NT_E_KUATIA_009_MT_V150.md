@@ -35,7 +35,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Código interno</td>
         <td>E700</td>
         <td>A</td>
-        <td><mark>1-50</mark></td>
+        <td>1-<mark modificado>50</mark></td>
         <td>1-1</td>
         <td>Código interno de identificación de la mercadería o servicio de responsabilidad del emisor. No se pueden tener ítems distintos de mercadería o servicio con el mismo código interno en su catastro de productos o servicios. Este código se puede repetir en el DE siempre que el producto o servicio sea el mismo.</td>
     </tr>
@@ -46,7 +46,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>Descripción del producto y/o servicio</td>
         <td>E700</td>
         <td>A</td>
-        <td><mark>1-2000</mark></td>
+        <td>1-<mark modificado>2000</mark></td>
         <td>1-1</td>
         <td>Equivalente a nombre del producto establecido en la RG 24/2019</td>
     </tr>

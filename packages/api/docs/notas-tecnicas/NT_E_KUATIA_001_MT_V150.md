@@ -38,7 +38,7 @@
         <td>N</td>
         <td>1-15p (0-8)</td>
         <td>0-1</td>
-        <td>Si se cuenta con un descuento global, debe ser aplicado (no es prorrateo) a cada uno de los ítems, independientemente de que un ítem cuente con un descuento particular.<br/><mark>[F010 * E721 / 100]</mark></td>
+        <td>Si se cuenta con un descuento global, debe ser aplicado (no es prorrateo) a cada uno de los ítems, independientemente de que un ítem cuente con un descuento particular.<br/><mark agregado>[F010 * E721 / 100]</mark></td>
     </tr>
   </tbody>
 </table>
@@ -69,7 +69,7 @@
         <td>N</td>
         <td>1-15p (0-8)</td>
         <td>1-1</td>
-        <td><mark>Suma de la multiplicación de cada descuento particular por ítem por la cantidad de ese ítem (sumatoria de EA002*E711)</mark></td>
+        <td><mark modificado>Suma de la multiplicación de cada descuento particular por ítem por la cantidad de ese ítem (sumatoria de EA002*E711)</mark></td>
     </tr>
     <tr>
         <td>F</td>
@@ -80,7 +80,7 @@
         <td>N</td>
         <td>1-15p (0-8)</td>
         <td>1-1</td>
-        <td><mark>Sumatoria de la multiplicación de cada descuento global por ítem por la cantidad de ese ítem (sumatoria de EA004*E711)</mark></td>
+        <td><mark modificado>Sumatoria de la multiplicación de cada descuento global por ítem por la cantidad de ese ítem (sumatoria de EA004*E711)</mark></td>
     </tr>
   </tbody>
 </table>
@@ -99,7 +99,7 @@
         <td>N</td>
         <td>1-15p<br/>(0-8)</td>
         <td>1-1</td>
-        <td><mark>Sumatoria de todas las ocurrencias de anticipos por ítem por la cantidad del ítem (EA006*E711)</mark></td>
+        <td><mark modificado>Sumatoria de todas las ocurrencias de anticipos por ítem por la cantidad del ítem (EA006*E711)</mark></td>
     </tr>
     <tr>
         <td>F</td>
@@ -110,7 +110,7 @@
         <td>N</td>
         <td>1-15p<br/>(0-8)</td>
         <td>1-1</td>
-        <td><mark>Sumatoria de todas las ocurrencias de anticipos globales por ítem por la cantidad del ítem (EA007*E711)</mark></td>
+        <td><mark modificado>Sumatoria de todas las ocurrencias de anticipos globales por ítem por la cantidad del ítem (EA007*E711)</mark></td>
     </tr>
     <tr>
         <td>F</td>
@@ -121,7 +121,7 @@
         <td>N</td>
         <td>1-15p<br/>(0-8)</td>
         <td>1-1</td>
-        <td><mark>Sumatoria de todos los descuentos (Global por Ítem y particular por ítem) de cada ítem (F009+F033)</mark></td>
+        <td><mark modificado>Sumatoria de todos los descuentos (Global por Ítem y particular por ítem) de cada ítem (F009+F033)</mark></td>
     </tr>
     <tr>
         <td>F</td>
@@ -132,7 +132,7 @@
         <td>N</td>
         <td>1-15p<br/>(0-8)</td>
         <td>1-1</td>
-        <td><mark>Sumatoria de todos los Anticipos (Global por Ítem y particular por ítem)<br/>F034 + F035</mark></td>
+        <td><mark modificado>Sumatoria de todos los Anticipos (Global por Ítem y particular por ítem)<br/>F034 + F035</mark></td>
     </tr>
     <tr>
         <td>F</td>
@@ -143,7 +143,7 @@
         <td>N</td>
         <td>1-15p<br/>(0-8)</td>
         <td>1-1</td>
-        <td><mark>Corresponde al cálculo aritmético<br/>F008-F013+F025</mark></td>
+        <td><mark modificado>Corresponde al cálculo aritmético<br/>F008-F013+F025</mark></td>
     </tr>
   </tbody>
 </table>
@@ -167,28 +167,28 @@
         <td>C004b</td>
         <td>El número de timbrado no se encuentra vigente a la fecha de emisión del comprobante</td>
         <td>1103</td>
-        <td><mark>Número de timbrado no vigente<br/>(D002 no es posterior a la fecha de inicio de vigencia del timbrado (C008)</mark></td>
+        <td><mark modificado>Número de timbrado no vigente<br/>(D002 no es posterior a la fecha de inicio de vigencia del timbrado (C008)</mark></td>
         <td>R</td>
     </tr>
     <tr>
         <td>EA004</td>
         <td>El descuento global sobre el precio unitario por ítem no coincidente con lo informado</td>
         <td>1862</td>
-        <td><mark>El descuento global sobre el precio unitario por ítem no coincide con lo informado en el porcentaje de descuento global sobre total de la operación (F010)<br/>Según la siguiente fórmula: [F010 * E721 / 100]<br/>Puede haber una variación de 0.8</mark></td>
+        <td><mark modificado>El descuento global sobre el precio unitario por ítem no coincide con lo informado en el porcentaje de descuento global sobre total de la operación (F010)<br/>Según la siguiente fórmula: [F010 * E721 / 100]<br/>Puede haber una variación de 0.8</mark></td>
         <td>R</td>
     </tr>
     <tr>
         <td>F011</td>
         <td>Cálculo del descuento sobre el total de la operación incorrecto</td>
         <td>2364</td>
-        <td><mark>Error en el cálculo del descuento sobre el total de la operación<br/>Es la sumatoria de F009 y F033</mark></td>
+        <td><mark modificado>Error en el cálculo del descuento sobre el total de la operación<br/>Es la sumatoria de F009 y F033</mark></td>
         <td>R</td>
     </tr>
     <tr>
         <td>F014</td>
         <td>Cálculo del total general de la operación incorrecto</td>
         <td>2365</td>
-        <td><mark>Error en el cálculo del total general de la operación<br/>Cuando C002=1, 5 o 6 el cálculo debe ser igual a F008-F013+F025</mark></td>
+        <td><mark modificado>Error en el cálculo del total general de la operación<br/>Cuando C002=1, 5 o 6 el cálculo debe ser igual a F008-F013+F025</mark></td>
         <td>R</td>
     </tr>
   </tbody>

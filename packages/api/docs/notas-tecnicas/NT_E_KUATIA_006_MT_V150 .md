@@ -28,12 +28,12 @@
   </thead>
   <tbody>
     <tr>
-        <td><mark>25</mark></td>
-        <td><mark>D011a</mark></td>
-        <td><mark>Tipo de transacción no<br/>requerido para el tipo de<br/>documento electrónico<br/>seleccionado</mark></td>
-        <td><mark>1216</mark></td>
-        <td><mark>No informar el tipo de transacción<br/>cuando C002≠1 o 4</mark></td>
-        <td><mark>R</mark></td>
+        <td>25</td>
+        <td>D011a</td>
+        <td>Tipo de transacción no<br/>requerido para el tipo de<br/>documento electrónico<br/>seleccionado</td>
+        <td>1216</td>
+        <td>No informar el tipo de transacción<br/>cuando C002≠1 o 4</td>
+        <td>R</td>
     </tr>
   </tbody>
 </table>

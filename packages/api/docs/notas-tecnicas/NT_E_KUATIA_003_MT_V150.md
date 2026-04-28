@@ -36,7 +36,7 @@
         <td>N</td>
         <td>1-2</td>
         <td>0-1</td>
-        <td><mark>Campo obligatorio si se informa el campo D213 y D202≠4. No se debe informar cuando D202 = 4.<br/>Según XSD de Departamentos</mark></td>
+        <td><mark eliminado>Campo obligatorio si se informa el campo D213 y D202≠4. No se debe informar cuando D202 = 4.<br/>Según XSD de Departamentos</mark></td>
     </tr>
     <tr>
         <td>D3</td>
@@ -47,7 +47,7 @@
         <td>N</td>
         <td>1-5</td>
         <td>0-1</td>
-        <td><mark>Campo obligatorio si se informa el campo D213 y D202≠4. No se debe informar cuando D202 = 4.<br/>Según Tabla 2.2 – Ciudades</mark></td>
+        <td><mark eliminado>Campo obligatorio si se informa el campo D213 y D202≠4. No se debe informar cuando D202 = 4.<br/>Según Tabla 2.2 – Ciudades</mark></td>
     </tr>
   </tbody>
 </table>
@@ -71,20 +71,20 @@ Páginas: 72, 73.
   </thead>
   <tbody>
     <tr>
-        <td><mark>69</mark></td>
-        <td><mark>D219</mark></td>
-        <td><mark>Es obligatorio informar el departamento del receptor</mark></td>
-        <td><mark>1324</mark></td>
-        <td><mark>Cuando se informa la dirección del receptor (D213) y el tipo de operación es distinto a B2F (D202≠4), es obligatorio informar el departamento (D219)</mark></td>
-        <td><mark>R</mark></td>
+        <td>69</td>
+        <td>D219</td>
+        <td>Es obligatorio informar el departamento del receptor</td>
+        <td>1324</td>
+        <td>Cuando se informa la dirección del receptor (D213) y el tipo de operación es distinto a B2F (D202≠4), es obligatorio informar el departamento (D219)</td>
+        <td>R</td>
     </tr>
     <tr>
-        <td><mark>72</mark></td>
-        <td><mark>D223</mark></td>
-        <td><mark>Es obligatorio informar la ciudad del receptor</mark></td>
-        <td><mark>1327</mark></td>
-        <td><mark>Cuando se informa la dirección del receptor (D213) y el tipo de operación es distinto a B2F (D202≠4), es obligatorio informar la ciudad (D223)</mark></td>
-        <td><mark>R</mark></td>
+        <td>72</td>
+        <td>D223</td>
+        <td>Es obligatorio informar la ciudad del receptor</td>
+        <td>1327</td>
+        <td>Cuando se informa la dirección del receptor (D213) y el tipo de operación es distinto a B2F (D202≠4), es obligatorio informar la ciudad (D223)</td>
+        <td>R</td>
     </tr>
   </tbody>
 </table>

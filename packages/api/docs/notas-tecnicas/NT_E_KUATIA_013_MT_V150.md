@@ -48,7 +48,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1-15p(0-8)</td>
         <td>1-1</td>
-        <td>Si E731 = 1 o 4 este<br/>campo es igual al<br/>resultado del cálculo:<br/><br/>[100 * EA008 * E733] /<br/>[10000 + (E734 * E733)]<br/><br/>Si E731 = 2 o 3 este<br/>campo es igual 0</td>
+        <td><mark modificado>Si E731 = 1 o 4 este<br/>campo es igual al<br/>resultado del cálculo:<br/><br/>[100 * EA008 * E733] /<br/>[10000 + (E734 * E733)]<br/><br/>Si E731 = 2 o 3 este<br/>campo es igual 0</mark></td>
     </tr>
   </tbody>
 </table>
@@ -70,17 +70,19 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
-        <td><mark>E8.2</mark></td>
-        <td><mark>E737</mark></td>
-        <td><mark>dBasExe</mark></td>
-        <td><mark>Base Exenta por<br/>ítem</mark></td>
-        <td><mark>E730</mark></td>
-        <td><mark>N</mark></td>
-        <td><mark>1-15p(0-8)</mark></td>
-        <td><mark>1-1</mark></td>
-        <td><mark>Si E731 = 4 este campo es<br/>igual al resultado del<br/>cálculo:<br/><br/>[100 * EA008 * (100 –<br/>E733)] / [10000 + (E734 *<br/>E733)]<br/><br/>Si E731 = 1 , 2 o 3 este<br/>campo es igual 0</mark></td>
+        <td>E8.2</td>
+        <td>E737</td>
+        <td>dBasExe</td>
+        <td>Base Exenta por<br/>ítem</td>
+        <td>E730</td>
+        <td>N</td>
+        <td>1-15p(0-8)</td>
+        <td>1-1</td>
+        <td>Si E731 = 4 este campo es<br/>igual al resultado del<br/>cálculo:<br/><br/>[100 * EA008 * (100 –<br/>E733)] / [10000 + (E734 *<br/>E733)]<br/><br/>Si E731 = 1 , 2 o 3 este<br/>campo es igual 0</td>
     </tr>
+      </mark>
   </tbody>
 </table>
 
@@ -110,7 +112,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1-15p(0-8)</td>
         <td>0-1</td>
-        <td>Suma de todas las<br/>ocurrencias de EA008<br/>(Valor total de la<br/>operación por ítem)<br/>cuando la operación sea<br/>exenta (Si E731 = 3), más<br/>Todas las ocurrencias de<br/>la Base Exenta (E737)<br/>cuando la operación sea<br/>Gravado Parcial (Si E731 =<br/>4).</td>
+        <td><mark modificado>Suma de todas las<br/>ocurrencias de EA008<br/>(Valor total de la<br/>operación por ítem)<br/>cuando la operación sea<br/>exenta (Si E731 = 3), más<br/>Todas las ocurrencias de<br/>la Base Exenta (E737)<br/>cuando la operación sea<br/>Gravado Parcial (Si E731 =<br/>4).</mark></td>
     </tr>
   </tbody>
 </table>
@@ -130,7 +132,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1-15p(0-8)</td>
         <td>0-1</td>
-        <td>Suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</td>
+        <td><mark modificado>Suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</mark></td>
     </tr>
     <tr>
         <td>F</td>
@@ -141,7 +143,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>N</td>
         <td>1-15p(0-8)</td>
         <td>0-1</td>
-        <td>Suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</td>
+        <td><mark modificado>Suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</mark></td>
     </tr>
   </tbody>
 </table>
@@ -162,14 +164,16 @@ Sistema Integrado de Facturación Electrónica Nacional
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
-        <td><mark>283</mark></td>
-        <td><mark>E737</mark></td>
-        <td><mark>Error en el cálculo de la base exenta por ítem</mark></td>
-        <td><mark>1921</mark></td>
-        <td><mark>Cálculo de la base exenta por ítem incorrecto.<br/>Si E731 = 4 este campo es igual al resultado del cálculo:<br/>[100 * EA008 * (100 – E733)] / [10000 + (E734 * E733)]<br/>Si E731 = 1 , 2 o 3 este campo es igual 0</mark></td>
-        <td><mark>R</mark></td>
+        <td>283</td>
+        <td>E737</td>
+        <td>Error en el cálculo de la base exenta por ítem</td>
+        <td>1921</td>
+        <td>Cálculo de la base exenta por ítem incorrecto.<br/>Si E731 = 4 este campo es igual al resultado del cálculo:<br/>[100 * EA008 * (100 – E733)] / [10000 + (E734 * E733)]<br/>Si E731 = 1 , 2 o 3 este campo es igual 0</td>
+        <td>R</td>
     </tr>
+      </mark>
   </tbody>
 </table>
 
@@ -192,7 +196,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>E735a</td>
         <td>Error en el cálculo de la base gravada del IVA por ítem para tasa del 5%</td>
         <td>1910</td>
-        <td>Cálculo de la base gravada del IVA por ítem incorrecto.<br/>Si E734 = 5 este campo es igual al resultado del cálculo:<br/><mark>[100 * EA008 * E733] / [10000 + (E734 * E733)]</mark></td>
+        <td>Cálculo de la base gravada del IVA por ítem incorrecto.<br/>Si E734 = 5 este campo es igual al resultado del cálculo:<br/><mark modificado>[100 * EA008 * E733] / [10000 + (E734 * E733)]</mark></td>
         <td>R</td>
     </tr>
     <tr>
@@ -200,7 +204,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>E735b</td>
         <td>Error en el cálculo de la base gravada del IVA por ítem para tasa del 10%</td>
         <td>1911</td>
-        <td>Cálculo de la base gravada del IVA por ítem incorrecto.<br/>Si E734 = 10 este campo es igual al resultado del cálculo:<br/><mark>[100 * EA008 * E733] / [10000 + (E734 * E733)]</mark></td>
+        <td>Cálculo de la base gravada del IVA por ítem incorrecto.<br/>Si E734 = 10 este campo es igual al resultado del cálculo:<br/><mark modificado>[100 * EA008 * E733] / [10000 + (E734 * E733)]</mark></td>
         <td>R</td>
     </tr>
   </tbody>
@@ -216,7 +220,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>F002a</td>
         <td>Cálculo del subtotal de la operación exenta incorrecto</td>
         <td>2353</td>
-        <td><mark>Error en el cálculo del subtotal de la operación exenta</mark><br/>El cálculo debe corresponder a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea exenta (Si E731 = 3), más<br/><mark>Todas las ocurrencias de la Base Exenta (E737) cuando la operación sea Gravado Parcial (Si E731 = 4).</mark></td>
+        <td><mark modificado>Error en el cálculo del subtotal de la operación exenta<br/>El cálculo debe corresponder a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea exenta (Si E731 = 3), más<br/>Todas las ocurrencias de la Base Exenta (E737) cuando la operación sea Gravado Parcial (Si E731 = 4).</mark></td>
         <td>R</td>
     </tr>
     <tr>
@@ -224,7 +228,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>F004a</td>
         <td>Cálculo del subtotal de la operación gravada al 5% incorrecto</td>
         <td>2357</td>
-        <td><mark>Error en el cálculo del subtotal de la operación gravada al 5%</mark><br/>El cálculo debe corresponder a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</td>
+        <td><mark modificado>Error en el cálculo del subtotal de la operación gravada al 5%<br/>El cálculo debe corresponder a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 5% (E734=5) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</mark></td>
         <td>R</td>
     </tr>
     <tr>
@@ -232,7 +236,7 @@ Sistema Integrado de Facturación Electrónica Nacional
         <td>F005a</td>
         <td>Cálculo del subtotal de la operación gravada al 10% incorrecto</td>
         <td>2359</td>
-        <td><mark>Error en el cálculo del subtotal de la operación gravada al 10%</mark><br/>El cálculo debe corresponder a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</td>
+        <td><mark modificado>Error en el cálculo del subtotal de la operación gravada al 10%<br/>El cálculo debe corresponder a la suma de todas las ocurrencias de EA008 (Valor total de la operación por ítem) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 1), más todas las ocurrencias de (E735 + E736) cuando la operación sea a la tasa del 10% (E734=10) y (Si E731 = 4).<br/>No debe existir el campo si D013 ≠ 1 o D013 ≠ 5</mark></td>
         <td>R</td>
     </tr>
   </tbody>

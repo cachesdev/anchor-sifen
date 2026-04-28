@@ -27,12 +27,12 @@ Sistema Integrado de Facturación Electrónica Nacional
   </thead>
   <tbody>
     <tr>
-        <td><mark>34</mark></td>
-        <td><mark>D101a</mark></td>
-        <td><mark>RUC del Emisor inhabilitado<br/>para facturación electrónica</mark></td>
-        <td><mark>1251</mark></td>
-        <td><mark>RUC no se encuentra habilitado para<br/>facturación electrónica en Marangatu</mark></td>
-        <td><mark>R</mark></td>
+        <td>34</td>
+        <td>D101a</td>
+        <td>RUC del Emisor inhabilitado<br/>para facturación electrónica</td>
+        <td>1251</td>
+        <td>RUC no se encuentra habilitado para<br/>facturación electrónica en Marangatu</td>
+        <td>R</td>
     </tr>
   </tbody>
 </table>
