@@ -53,12 +53,12 @@
         <td>GER</td>
         <td>GEN003</td>
         <td>dFecEmi</td>
-        <td>Fecha de emisión del DE/<mark>DTE</mark></td>
+        <td>Fecha de emisión del DE/<mark eliminado>DTE</mark></td>
         <td>GEN001</td>
         <td>F</td>
         <td>19</td>
         <td>1-1</td>
-        <td>Requerido para conteo de plazo de registro del evento del receptor en <mark>Notificación – Recepción DE</mark> (hasta 45 días desde la fecha de emisión)<br/>Fecha y hora en el formato AAAA-MM-DDThh:mm:ss</td>
+        <td>Requerido para conteo de plazo de registro del evento del receptor en <mark agregado>Notificación – Recepción DE</mark> (hasta 45 días desde la fecha de emisión)<br/>Fecha y hora en el formato AAAA-MM-DDThh:mm:ss</td>
     </tr>
   </tbody>
 </table>
@@ -95,12 +95,12 @@
         <td>GER</td>
         <td>GED003</td>
         <td>dFecEmi</td>
-        <td>Fecha de emisión del DE/<mark>DTE</mark></td>
+        <td>Fecha de emisión del DE/<mark eliminado>DTE</mark></td>
         <td>GED001</td>
         <td>F</td>
         <td>19</td>
         <td>1-1</td>
-        <td>Requerido para conteo de plazo de registro del evento del receptor en <mark>Desconocimiento DE</mark> (hasta 45 días desde la fecha de emisión).<br/>Fecha y hora en el formato AAAA-MM-DDThh:mm:ss.</td>
+        <td>Requerido para conteo de plazo de registro del evento del receptor en <mark agregado>Desconocimiento DE</mark> (hasta 45 días desde la fecha de emisión).<br/>Fecha y hora en el formato AAAA-MM-DDThh:mm:ss.</td>
     </tr>
   </tbody>
 </table>
@@ -122,25 +122,27 @@
   <tbody>
     <tr>
         <td>GEN002b</td>
-        <td>CDC del DTE ya cuenta con un evento <mark>previo</mark> de esta naturaleza</td>
+        <td>CDC del DTE ya cuenta con un evento <mark agregado>previo</mark> de esta naturaleza</td>
         <td>4101</td>
         <td>Sobre el CDC de un DE/DTE se puede realizar hasta un evento de notificación - recepción</td>
         <td>R</td>
     </tr>
     <tr>
         <td>GEN003</td>
-        <td>Fecha de emisión del DE/<mark>DTE</mark> ha superado el plazo para registro del evento</td>
+        <td>Fecha de emisión del DE/<mark eliminado>DTE</mark> ha superado el plazo para registro del evento</td>
         <td>4103</td>
-        <td>El plazo del registro del evento <mark>Notificación – Recepción DE</mark> ha superado los 45 días contados a partir de la fecha de emisión</td>
+        <td>El plazo del registro del evento <mark agregado>Notificación – Recepción DE</mark> ha superado los 45 días contados a partir de la fecha de emisión</td>
         <td>AO</td>
     </tr>
+    <mark agregado>
     <tr>
-        <td><mark>GEN012</mark></td>
-        <td><mark>Fecha de aprobación del DTE ha superado el plazo para registro del evento</mark></td>
-        <td><mark>4114</mark></td>
-        <td><mark>El plazo del registro del evento Notificación – Recepción DTE ha superado los 45 días contados a partir de la fecha de aprobación del DTE</mark></td>
-        <td><mark>AO</mark></td>
+        <td>GEN012</td>
+        <td>Fecha de aprobación del DTE ha superado el plazo para registro del evento</td>
+        <td>>4114</td>
+        <td>>El plazo del registro del evento Notificación – Recepción DTE ha superado los 45 días contados a partir de la fecha de aprobación del DTE</td>
+        <td>AO</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -150,20 +152,24 @@
 
 <table>
   <tbody>
+      <mark agregado>
     <tr>
-        <td><mark>GEN013</mark></td>
-        <td><mark>El CDC del DTE se encuentra cancelado</mark></td>
-        <td><mark>4115</mark></td>
-        <td><mark>No se puede registrar la Notificación – Recepción por CDC de un DTE cancelado</mark></td>
-        <td><mark>R</mark></td>
+        <td>GEN013</td>
+        <td>El CDC del DTE se encuentra cancelado</td>
+        <td>4115</td>
+        <td>No se puede registrar la Notificación – Recepción por CDC de un DTE cancelado</td>
+        <td>R</td>
     </tr>
+    </mark>
+    <mark agregado>
     <tr>
-        <td><mark>GEN013a</mark></td>
-        <td><mark>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</mark></td>
-        <td><mark>4116</mark></td>
-        <td><mark>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Notificación – Recepción DTE</mark></td>
-        <td><mark>R</mark></td>
+        <td>GEN013a</td>
+        <td>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</td>
+        <td>4116</td>
+        <td>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Notificación – Recepción DTE</td>
+        <td>R</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -180,48 +186,54 @@
     </tr>
   </thead>
   <tbody>
+      <mark eliminado>
     <tr>
-        <td><mark>GCO001</mark></td>
-        <td><mark>Incongruencia en el registro de eventos del receptor (hay un evento previo de desconocimiento)</mark></td>
-        <td><mark>4156</mark></td>
-        <td><mark>No se puede realizar una conformidad de DE/DTE luego de un evento de desconocimiento</mark></td>
-        <td><mark>R</mark></td>
+        <td>GCO001</td>
+        <td>Incongruencia en el registro de eventos del receptor (hay un evento previo de desconocimiento)</td>
+        <td>4156</td>
+        <td>No se puede realizar una conformidad de DE/DTE luego de un evento de desconocimiento</td>
+        <td>R</td>
     </tr>
+    <mark>
     <tr>
         <td>GCO002</td>
-        <td>CDC del DTE ya cuenta con <mark>un</mark> evento <mark>previo</mark> de esta naturaleza</td>
+        <td>CDC del DTE ya cuenta con <mark modificado>un</mark> evento <mark modificado>previo</mark> de esta naturaleza</td>
         <td>4150</td>
-        <td>Sobre el CDC de un DE/DTE se puede realizar hasta <mark>un</mark> eventos de conformidad <mark>(conformidad parcial luego una conformidad total, en ese orden)</mark></td>
+        <td>Sobre el CDC de un <mark eliminado>DE/</mark>DTE se puede realizar hasta <mark modificado>un</mark> evento<mark eliminado>s</mark> de conformidad <mark eliminado>(conformidad parcial luego una conformidad total, en ese orden)</mark></td>
         <td>R</td>
     </tr>
     <tr>
         <td>GCO002c</td>
-        <td>CDC del DTE es inexistente <mark>o ha superado el plazo para registro del evento</mark></td>
+        <td>CDC del DTE es inexistente <mark eliminado>o ha superado el plazo para registro del evento</mark></td>
         <td>4152</td>
-        <td>Cuando el CDC no se encuentra en la base de datos del SIFEN <mark>o el plazo del registro del evento es inválido</mark>:<br/><br/><mark>Regla para plazo inválido:</mark><br/><mark>*Si el primer evento del receptor que se pretende registrar es conformidad, este no se puede realizar después de 45 días contados a partir de la fecha de aprobación del DTE</mark><br/><mark>*Si no es el primer evento del receptor y el último evento realizado por el receptor no es una disconformidad, la conformidad no puede superar los 45 días contados a partir de la fecha de aprobación del DTE.</mark><br/><mark>*Si no es el primer evento del receptor y el último evento realizado por el receptor es una disconformidad, entonces la conformidad (evento correctivo) no puede superar los 15 días contados a partir de la fecha de realización del evento de disconformidad</mark></td>
+        <td>Cuando el CDC no se encuentra en la base de datos del SIFEN <mark eliminado>o el plazo del registro del evento es inválido</mark>:<br/><br/><mark eliminado>Regla para plazo inválido:<br/>*Si el primer evento del receptor que se pretende registrar es conformidad, este no se puede realizar después de 45 días contados a partir de la fecha de aprobación del DTE<br/>*Si no es el primer evento del receptor y el último evento realizado por el receptor no es una disconformidad, la conformidad no puede superar los 45 días contados a partir de la fecha de aprobación del DTE.<br/>*Si no es el primer evento del receptor y el último evento realizado por el receptor es una disconformidad, entonces la conformidad (evento correctivo) no puede superar los 15 días contados a partir de la fecha de realización del evento de disconformidad</mark></td>
         <td>R</td>
     </tr>
     <tr>
         <td>GCO002e</td>
-        <td><mark>El CDC del DTE se encuentra cancelado</mark></td>
+        <td><mark modificado>El CDC del DTE se encuentra cancelado</mark></td>
         <td>4155</td>
-        <td><mark>No se puede registrar la conformidad por CDC de un DTE cancelado</mark></td>
+        <td><mark modificado>No se puede registrar la conformidad por CDC de un DTE cancelado</mark></td>
         <td>R</td>
     </tr>
+    <mark agregado>
     <tr>
-        <td><mark>GCO005</mark></td>
-        <td><mark>Fecha de aprobación del DTE ha superado el plazo para registro del evento</mark></td>
-        <td><mark>4157</mark></td>
-        <td><mark>Sea o no el primer evento del receptor que se pretende registrar, este no se puede realizar después de 45 días corridos contados a partir de la fecha de aprobación del DTE</mark></td>
-        <td><mark>R</mark></td>
+        <td>GCO005</td>
+        <td>Fecha de aprobación del DTE ha superado el plazo para registro del evento</td>
+        <td>4157</td>
+        <td>Sea o no el primer evento del receptor que se pretende registrar, este no se puede realizar después de 45 días corridos contados a partir de la fecha de aprobación del DTE</td>
+        <td>R</td>
     </tr>
+    </mark>
+    <mark agregado>
     <tr>
-        <td><mark>GCO002f</mark></td>
-        <td><mark>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</mark></td>
-        <td><mark>4158</mark></td>
-        <td><mark>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Conformidad Parcial/Total</mark></td>
-        <td><mark>R</mark></td>
+        <td>GCO002f</td>
+        <td>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</td>
+        <td>4158</td>
+        <td>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Conformidad Parcial/Total</td>
+        <td>R</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -240,25 +252,27 @@
     </tr>
   </thead>
   <tbody>
+      <mark eliminado>
     <tr>
-        <td><mark>GDI001</mark></td>
-        <td><mark>incongruencia en el registro de eventos del receptor (hay un evento previo de desconocimiento)</mark></td>
-        <td><mark>4205</mark></td>
-        <td><mark>No se puede realizar una conformidad de DE/DTE luego de un evento de desconocimiento</mark></td>
-        <td><mark>R</mark></td>
+        <td>GDI001</td>
+        <td>incongruencia en el registro de eventos del receptor (hay un evento previo de desconocimiento)</td>
+        <td>4205</td>
+        <td>No se puede realizar una conformidad de DE/DTE luego de un evento de desconocimiento</td>
+        <td>R</td>
     </tr>
+      </mark>
     <tr>
         <td>GDI002</td>
-        <td>CDC del DTE ya cuenta con un evento <mark>previo</mark> de esta naturaleza</td>
+        <td>CDC del DTE ya cuenta con un evento <mark agregado>previo</mark> de esta naturaleza</td>
         <td>4200</td>
         <td>Sobre el CDC de un DTE se puede realizar hasta un evento de disconformidad</td>
         <td>R</td>
     </tr>
     <tr>
         <td>GDI002c</td>
-        <td>CDC <mark>del DTE</mark> es inexistente <mark>o ha superado el plazo para registro del evento</mark></td>
+        <td>CDC <mark agregado>del DTE</mark> es inexistente <mark eliminado>o ha superado el plazo para registro del evento</mark></td>
         <td>4202</td>
-        <td>Cuando el CDC no se encuentra en la base de datos del SIFEN <mark>o el plazo del registro del evento es inválido</mark>:<br/><mark>Regla para plazo inválido:</mark><br/><mark>*Si el primer evento del receptor que se pretende registrar es disconformidad, este no se puede realizar después de 45 días contados a partir de la fecha de aprobación del DTE</mark><br/><mark>*Si no es el primer evento del receptor y el último evento realizado por el receptor no es una conformidad, la disconformidad no puede superar los 45 días contados a partir de la fecha de aprobación del DTE.</mark><br/>*Si no es el primer evento del receptor y el último evento realizado por el receptor es una conformidad, entonces</td>
+        <td>Cuando el CDC no se encuentra en la base de datos del SIFEN <mark eliminado>o el plazo del registro del evento es inválido:<br/>Regla para plazo inválido:<br/>*Si el primer evento del receptor que se pretende registrar es disconformidad, este no se puede realizar después de 45 días contados a partir de la fecha de aprobación del DTE<br/>*Si no es el primer evento del receptor y el último evento realizado por el receptor no es una conformidad, la disconformidad no puede superar los 45 días contados a partir de la fecha de aprobación del DTE.<br/>*Si no es el primer evento del receptor y el último evento realizado por el receptor es una conformidad, entonces la disconformidad (evento correctivo) no puede superar los 15 días contados a partir de la fecha de realización del evento de conformidad</mark></td>
         <td>R</td>
     </tr>
   </tbody>
@@ -279,27 +293,24 @@
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td><mark>la disconformidad (evento correctivo) no puede superar los 15 días contados a partir de la fecha de realización del evento de conformidad</mark></td>
-        <td> </td>
+        <td>GDI003</td>
+        <td>Fecha de aprobación del DTE ha superado el plazo para registro del evento</td>
+        <td>4206</td>
+        <td>Sea o no el primer evento del receptor que se pretende registrar, este no se puede realizar después de 45 días corridos contados a partir de la fecha de aprobación del DTE.</td>
+        <td>R</td>
     </tr>
+    </mark>
+    <mark agregado>
     <tr>
-        <td><mark>GDI003</mark></td>
-        <td><mark>Fecha de aprobación del DTE ha superado el plazo para registro del evento</mark></td>
-        <td><mark>4206</mark></td>
-        <td><mark>Sea o no el primer evento del receptor que se pretende registrar, este no se puede realizar después de 45 días corridos contados a partir de la fecha de aprobación del DTE.</mark></td>
-        <td><mark>R</mark></td>
+        <td>GDI003a</td>
+        <td>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</td>
+        <td>4207</td>
+        <td>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Disconformidad</td>
+        <td>R</td>
     </tr>
-    <tr>
-        <td><mark>GDI003a</mark></td>
-        <td><mark>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</mark></td>
-        <td><mark>4207</mark></td>
-        <td><mark>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Disconformidad</mark></td>
-        <td><mark>R</mark></td>
-    </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -318,39 +329,45 @@
   <tbody>
     <tr>
         <td>GED002b</td>
-        <td>CDC del DTE ya cuenta con un evento <mark>previo</mark> de esta naturaleza</td>
+        <td>CDC del DTE ya cuenta con un evento <mark agregado>previo</mark> de esta naturaleza</td>
         <td>4251</td>
         <td>Sobre el CDC de un DTE se puede realizar hasta un evento de desconocimiento</td>
         <td>R</td>
     </tr>
     <tr>
         <td>GED003</td>
-        <td>Fecha de emisión del DE/<mark>DTE</mark> ha superado el plazo para registro del evento</td>
+        <td>Fecha de emisión del DE/<mark eliminado>DTE</mark> ha superado el plazo para registro del evento</td>
         <td>4253</td>
-        <td>El plazo del registro del evento <mark>Desconocimiento DE</mark> ha superado los 45 días contados a partir de la fecha de emisión</td>
-        <td><mark>R</mark></td>
+        <td>El plazo del registro del evento <mark agregado>Desconocimiento DE</mark> ha superado los 45 días contados a partir de la fecha de emisión</td>
+        <td><mark modificado>R</mark></td>
     </tr>
+    <mark agregado>
     <tr>
-        <td><mark>GED012</mark></td>
-        <td><mark>Fecha de aprobación del DTE ha superado el plazo para registro del evento</mark></td>
-        <td><mark>4263</mark></td>
-        <td><mark>El plazo del registro del evento Desconocimiento DTE ha superado los 45 días contados a partir de la fecha de aprobación del DTE</mark></td>
-        <td><mark>R</mark></td>
+        <td>GED012</td>
+        <td>Fecha de aprobación del DTE ha superado el plazo para registro del evento</td>
+        <td>4263</td>
+        <td>El plazo del registro del evento Desconocimiento DTE ha superado los 45 días contados a partir de la fecha de aprobación del DTE</td>
+        <td>R</td>
     </tr>
+    </mark>
+    <mark agregado>
     <tr>
-        <td><mark>GED013</mark></td>
-        <td><mark>El CDC del DTE se encuentra cancelado</mark></td>
-        <td><mark>4264</mark></td>
-        <td><mark>No se puede registrar el desconocimiento por CDC de un DTE cancelado</mark></td>
-        <td><mark>R</mark></td>
+        <td>GED013</td>
+        <td>El CDC del DTE se encuentra cancelado</td>
+        <td>4264</td>
+        <td>No se puede registrar el desconocimiento por CDC de un DTE cancelado</td>
+        <td>R</td>
     </tr>
+    <mark>
+        <mark agregado>
     <tr>
-        <td><mark>GED013a</mark></td>
-        <td><mark>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</mark></td>
-        <td><mark>4265</mark></td>
-        <td><mark>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Desconocimiento DTE</mark></td>
-        <td><mark>R</mark></td>
+        <td>GED013a</td>
+        <td>CDC del DTE ya cuenta con el máximo de eventos permitidos de la misma naturaleza</td>
+        <td>4265</td>
+        <td>CDC del DTE ya ha superado la cantidad de eventos establecidos sobre el Tipo de Evento de Desconocimiento DTE</td>
+        <td>R</td>
     </tr>
+        </mark>
   </tbody>
 </table>
 
@@ -368,13 +385,15 @@
     </tr>
   </thead>
   <tbody>
+      <mark agregado>
     <tr>
-        <td><mark>AD04</mark></td>
-        <td><mark>La firma del Evento del receptor del DE/DTE no corresponde</mark></td>
-        <td><mark>0143</mark></td>
-        <td><mark>La firma digital del evento debe corresponder al receptor del DE/DTE</mark></td>
-        <td><mark>R</mark></td>
+        <td>AD04</td>
+        <td>La firma del Evento del receptor del DE/DTE no corresponde</td>
+        <td>0143</td>
+        <td>La firma digital del evento debe corresponder al receptor del DE/DTE</td>
+        <td>R</td>
     </tr>
+    </mark>
   </tbody>
 </table>
 
@@ -387,13 +406,14 @@
 
 # 4. <u>Se elimina la referencia y el cuadro que representa las relaciones que pueden darse entre eventos del receptor</u>
 
+<mark eliminado>
 Referencia:
 
-<mark>~~Gris = encabezado~~</mark>
+<mark eliminado>~~Gris = encabezado~~</mark>
 
-<mark>~~Verde = puede realizarse luego del evento que se encuentra en el encabezado~~</mark>
+<mark eliminado>~~Verde = puede realizarse luego del evento que se encuentra en el encabezado~~</mark>
 
-<mark>~~Rojo = no puede realizarse luego del evento que se encuentra en el encabezado~~</mark>
+<mark eliminado>~~Rojo = no puede realizarse luego del evento que se encuentra en el encabezado~~</mark>
 
 <table>
   <thead>
@@ -491,12 +511,14 @@ Referencia:
   </tbody>
 </table>
 
+</mark>
+
 # 5. <u>Se incluye la siguiente descripción respecto al registro de eventos del receptor</u>
 
-<mark>En el Sistema Integrado de Facturación Electrónica Nacional se podrá realizar el registro de cualquier evento del receptor siempre y cuando se encuentre dentro del plazo establecido para cada evento, quedando como válido e inalterable el último evento registrado.</mark>
+<mark agregado>En el Sistema Integrado de Facturación Electrónica Nacional se podrá realizar el registro de cualquier evento del receptor siempre y cuando se encuentre dentro del plazo establecido para cada evento, quedando como válido e inalterable el último evento registrado.</mark>
 
-- <mark>✓ **Para los Documentos Electrónicos:** _El conteo del plazo de registro del evento comienza a partir de la fecha de emisión._</mark>
-- <mark>✓ **Para los Documentos Tributarios Electrónicos:** _El conteo del plazo de registro del evento comienza a partir de la fecha de aprobación._</mark>
+- <mark agregado>✓ **Para los Documentos Electrónicos:** _El conteo del plazo de registro del evento comienza a partir de la fecha de emisión._</mark>
+- <mark agregado>✓ **Para los Documentos Tributarios Electrónicos:** _El conteo del plazo de registro del evento comienza a partir de la fecha de aprobación._</mark>
 
 ## Histórico del Documento
 
