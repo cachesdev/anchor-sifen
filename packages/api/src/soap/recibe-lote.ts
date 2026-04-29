@@ -3,7 +3,10 @@ import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
 import { normalizeControlId } from './validation.js';
-import { createClientAsync, type RecibeLoteClient } from '../gen/soap/recibeLote/recibelote/client.js';
+import {
+  createClientAsync,
+  type RecibeLoteClient
+} from '../gen/soap/recibeLote/recibelote/client.js';
 import type { SIFENRecepLoteDEResponse } from '../sifen/types/api.js';
 import { strToU8, zipSync } from 'fflate';
 import { Err, type Result } from '../result';
@@ -38,7 +41,12 @@ export class SifenRecibeLoteClient {
   private readonly cert: { pem: string; pemKey: string };
   private readonly agent: Agent;
 
-  constructor({ environment, certificatePem, certificatePemKey, agent }: SifenRecibeLoteClientOptions) {
+  constructor({
+    environment,
+    certificatePem,
+    certificatePemKey,
+    agent
+  }: SifenRecibeLoteClientOptions) {
     this.environment = environment;
     this.agent = agent;
     this.cert = { pem: certificatePem, pemKey: certificatePemKey };
@@ -87,10 +95,12 @@ export class SifenRecibeLoteClient {
       );
       return parseRecibeLote(parsed);
     } catch (error) {
-      return Err(new SifenError({
-        details: 'Error en recibeLote',
-        cause: error
-      }));
+      return Err(
+        new SifenError({
+          details: 'Error en recibeLote',
+          cause: error
+        })
+      );
     }
   }
 }

@@ -22,7 +22,12 @@ export class SifenConsultaClient {
   private readonly cert: { pem: string; pemKey: string };
   private readonly agent: Agent;
 
-  constructor({ environment, certificatePem, certificatePemKey, agent }: SifenConsultaClientOptions) {
+  constructor({
+    environment,
+    certificatePem,
+    certificatePemKey,
+    agent
+  }: SifenConsultaClientOptions) {
     this.environment = environment;
     this.agent = agent;
     this.cert = { pem: certificatePem, pemKey: certificatePemKey };
@@ -69,10 +74,12 @@ export class SifenConsultaClient {
       );
       return parseConsultaDE(result);
     } catch (error) {
-      return Err(new SifenError({
-        details: 'Error en consulta DE',
-        cause: error
-      }));
+      return Err(
+        new SifenError({
+          details: 'Error en consulta DE',
+          cause: error
+        })
+      );
     }
   }
 }

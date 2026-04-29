@@ -1,5 +1,8 @@
 import * as soap from 'soap';
-import { createClientAsync, type ConsultaLoteClient } from '../gen/soap/consultaLote/consultalote/client.js';
+import {
+  createClientAsync,
+  type ConsultaLoteClient
+} from '../gen/soap/consultaLote/consultalote/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
 import { normalizeControlId } from './validation.js';
 import type { SifenEnvironment } from './client.js';
@@ -22,7 +25,12 @@ export class SifenConsultaLoteClient {
   private readonly cert: { pem: string; pemKey: string };
   private readonly agent: Agent;
 
-  constructor({ environment, certificatePem, certificatePemKey, agent }: SifenConsultaLoteClientOptions) {
+  constructor({
+    environment,
+    certificatePem,
+    certificatePemKey,
+    agent
+  }: SifenConsultaLoteClientOptions) {
     this.environment = environment;
     this.agent = agent;
     this.cert = { pem: certificatePem, pemKey: certificatePemKey };
@@ -69,10 +77,12 @@ export class SifenConsultaLoteClient {
       );
       return parseConsultaLote(result);
     } catch (error) {
-      return Err(new SifenError({
-        details: 'Error en consultaLote',
-        cause: error
-      }));
+      return Err(
+        new SifenError({
+          details: 'Error en consultaLote',
+          cause: error
+        })
+      );
     }
   }
 }

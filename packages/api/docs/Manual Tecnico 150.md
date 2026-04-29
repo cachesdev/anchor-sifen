@@ -20472,13 +20472,11 @@ TABLA 8 – TASAS DEL ISC
   </tbody>
 </table>
 
-
 septiembre de 2019
 212
 
 e-kuatia
 Sistema Integrado de Facturación Electrónica Nacional
-
 
 #### TABLA 10 – CONDICIONES DE NEGOCIACION - INCOTERMS
 

@@ -1,5 +1,8 @@
 import * as soap from 'soap';
-import { createClientAsync, type ConsultaRucClient } from '../gen/soap/consultaRuc/consultaruc/client.js';
+import {
+  createClientAsync,
+  type ConsultaRucClient
+} from '../gen/soap/consultaRuc/consultaruc/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
@@ -70,10 +73,12 @@ export class SifenRucClient {
       );
       return parseConsultaRuc(data[0]);
     } catch (error) {
-      return Err(new SifenError({
-        details: 'Error en consulta RUC',
-        cause: error
-      }));
+      return Err(
+        new SifenError({
+          details: 'Error en consulta RUC',
+          cause: error
+        })
+      );
     }
   }
 }
