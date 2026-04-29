@@ -142,9 +142,7 @@ function extractCI(cert: forge.pki.Certificate): string {
 
   if (sanExt) {
     const altNames: Array<{ value?: unknown }> = sanExt.altNames ?? [];
-    const match = altNames.find(
-      (an) => typeof an.value === 'string' && an.value.startsWith('CI')
-    );
+    const match = altNames.find((an) => typeof an.value === 'string' && an.value.startsWith('CI'));
     if (match) return match.value as string;
   }
 

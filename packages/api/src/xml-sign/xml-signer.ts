@@ -78,10 +78,12 @@ export class XMLSigner {
 
       return Ok({ signedXml, digestValue, cdc });
     } catch (error) {
-      return Err(new XMLSignError({
-        details: error instanceof Error ? error.message : 'Error desconocido al firmar.',
-        cause: error
-      }));
+      return Err(
+        new XMLSignError({
+          details: error instanceof Error ? error.message : 'Error desconocido al firmar.',
+          cause: error
+        })
+      );
     }
   }
 
@@ -145,7 +147,9 @@ function extractCDC(doc: Document): string {
   }
 
   if (cdc.length !== 44) {
-    throw new Error(`Longitud de CDC invalida: se esperaban 44 caracteres, se recibieron ${cdc.length}.`);
+    throw new Error(
+      `Longitud de CDC invalida: se esperaban 44 caracteres, se recibieron ${cdc.length}.`
+    );
   }
 
   return cdc;
@@ -159,10 +163,7 @@ function extractCDC(doc: Document): string {
 function extractDigestValue(signedXml: string): string {
   const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
 
-  let elements = doc.getElementsByTagNameNS(
-    'http://www.w3.org/2000/09/xmldsig#',
-    'DigestValue'
-  );
+  let elements = doc.getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#', 'DigestValue');
   if (!elements || elements.length === 0) {
     elements = doc.getElementsByTagName('DigestValue');
   }

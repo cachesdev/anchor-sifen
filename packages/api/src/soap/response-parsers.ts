@@ -197,11 +197,7 @@ export function parseRecibe(raw: unknown): Result<SIFENRecibeResponse, SifenErro
   const r = parsed.output;
   if (r.dEstRes !== SUCCESS_RECIBE && r.dEstRes !== 'Aprobado con observación') {
     const firstError = r.gResProc?.[0];
-    return Err(failSifen(
-      firstError?.dCodRes ?? '0000',
-      firstError?.dMsgRes ?? r.dEstRes,
-      raw
-    ));
+    return Err(failSifen(firstError?.dCodRes ?? '0000', firstError?.dMsgRes ?? r.dEstRes, raw));
   }
 
   return Ok({
@@ -246,11 +242,13 @@ export function parseEvento(raw: unknown): Result<SIFENEventoResponse, SifenErro
   const allOk = resultados.every((r) => r.estado.startsWith('Aprobado'));
   if (!allOk) {
     const firstFail = resultados.find((r) => !r.estado.startsWith('Aprobado'));
-    return Err(failSifen(
-      firstFail?.validaciones?.[0]?.codigo ?? '0000',
-      firstFail?.validaciones?.[0]?.mensaje ?? firstFail?.estado ?? 'Error desconocido',
-      raw
-    ));
+    return Err(
+      failSifen(
+        firstFail?.validaciones?.[0]?.codigo ?? '0000',
+        firstFail?.validaciones?.[0]?.mensaje ?? firstFail?.estado ?? 'Error desconocido',
+        raw
+      )
+    );
   }
 
   return Ok({
