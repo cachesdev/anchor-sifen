@@ -2,10 +2,10 @@ import type {
   ActividadEconomica,
   Emisor,
   ObligacionesAfectadas,
+  OperacionComercial,
   Receptor,
   ResponsableDE
 } from '../../sifen/types/clean/d';
-import type { OperacionComercial_FE } from '../../sifen/types/factura-electronica';
 import {
   descripcionCondicionAnticipo,
   descripcionTipoDocumentoReceptor,
@@ -49,7 +49,7 @@ export function mapObligacionAfectadaToRaw(data: ObligacionesAfectadas): GOblAfe
   } as GOblAfe;
 }
 
-export function mapOperacionComercialToRaw(data: OperacionComercial_FE): GOpeCom {
+export function mapOperacionComercialToRaw(data: OperacionComercial): GOpeCom {
   return {
     iTipTra: data.tipoTransaccion,
     dDesTipTra: resolveOptionalDescription(

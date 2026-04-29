@@ -1,6 +1,5 @@
 import * as v from 'valibot';
-import type { FacturaElectronica } from '../sifen/types';
-import type { Timbrado } from '../sifen/types/clean/de';
+import type { DEC, FacturaElectronica } from '../sifen/types';
 import type { DE } from '../sifen/types/raw/de';
 import { tipoDocumentoElectronico, type TipoDocumentoElectronicoLabel } from '../sifen/types/enums';
 import { Err, Ok, type Result } from '../result';
@@ -33,16 +32,20 @@ export interface PreparedDEBase<TType extends TipoDocumentoElectronicoLabel, TCl
 
 export type PreparedDE = Simplify<PreparedDEBase<'FacturaElectronica', FacturaElectronica>>;
 
-export function prepareDE<TInput>(
+export function prepareDE<TInput, TClean extends DEC, TType extends TipoDocumentoElectronicoLabel>(
   input: TInput,
-  schema: v.GenericSchema<unknown, FacturaElectronica>,
-  deType: TipoDocumentoElectronicoLabel
-): Result<PreparedDE, XMLGenBuildError> {
-  const tipoDocumento = tipoDocumentoElectronico[deType];
+  schema: v.GenericSchema<unknown, TClean>,
+  deType: TType
+): Result<PreparedDEBase<TType, TClean>, XMLGenBuildError> {
+  const tipoDocumento = tipoDocumentoElectronico[deType] as number;
 
   const validated = v.safeParse(schema, input);
   if (!validated.success) {
-    return Err(new XMLGenInputValidationError({ details: v.summarize(validated.issues) }));
+    return Err(
+      new XMLGenInputValidationError({
+        details: v.summarize(validated.issues)
+      })
+    );
   }
 
   const calculated = calculateFieldsResult(validated.output);
@@ -56,7 +59,6 @@ export function prepareDE<TInput>(
   }
 
   const de = calculated.value;
-  const timbrado: Timbrado = { ...de.timbrado, tipoDocumento };
 
   try {
     return Ok({
@@ -68,16 +70,19 @@ export function prepareDE<TInput>(
         dFecFirma: formatDateTime(de.fechaFirma)!,
         dSisFact: 1,
         gOpeDE: mapOperacionDEToRaw(de.operacionDE),
-        gTimb: mapTimbradoToRaw(timbrado),
+        gTimb: mapTimbradoToRaw({
+          ...de.timbrado,
+          tipoDocumento
+        }),
         gDatGralOpe: mapDatosGeneralesOperacionToRaw(de.datosGeneralesOperacion),
         gDtipDE: mapDatosEspecificosPorTipoDEToRaw(de.datosEspecificosPorTipoDE),
-        gTotSub: mapSubtotalesTotalesToRaw(de.subtotalesTotales),
+        gTotSub: de.subtotalesTotales ? mapSubtotalesTotalesToRaw(de.subtotalesTotales) : undefined,
         gCamGen: de.camposUsoGeneral ? mapUsoGeneralToRaw(de.camposUsoGeneral) : undefined,
         gCamDEAsoc: de.camposDocumentoElectronicoAsociado
           ? mapDocumentoElectronicoAsociadoToRaw(de.camposDocumentoElectronicoAsociado)
           : undefined
       }
-    } as PreparedDE);
+    });
   } catch (error) {
     return Err(
       new XMLGenMappingError({

@@ -10,7 +10,11 @@ import type {
   NotaRemisionElectronica,
   Transporte
 } from './e';
-import type { TipoDocumentoElectronico, TipoEmision } from '../enums';
+import type {
+  TipoDocumentoElectronico,
+  TipoDocumentoElectronicoLabel,
+  TipoEmision
+} from '../enums';
 import type { SubtotalesTotales } from './f';
 import type { UsoGeneral } from './g';
 import type { DocumentoElectronicoAsociado } from './h';
@@ -54,6 +58,10 @@ export interface DEC {
    * Atributo del elemento DE, expuesto aqui por conveniencia interna.
    */
   id_cdc: string;
+  /**
+   * Discriminador interno de tipo de DE. No es un campo del XML original de SIFEN.
+   */
+  tipoDE: TipoDocumentoElectronicoLabel;
   /**
    * A - A003 | dDVId | Dígito verificador del identificador del DE | Pagina 61
    * Observaciones: Según algoritmo módulo 11

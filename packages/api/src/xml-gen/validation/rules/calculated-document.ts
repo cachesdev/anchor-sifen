@@ -1,7 +1,7 @@
-import type { FacturaElectronica } from '../../../sifen/types';
+import type { DEC } from '../../../sifen/types';
 import type { ValidationRule } from '../types';
 
-export const calculatedDocumentRules: ValidationRule<FacturaElectronica>[] = [
+export const calculatedDocumentRules: ValidationRule<DEC>[] = [
   {
     id: 'EXAMPLE_DOCUMENT_RULE',
     description: 'Example placeholder document rule (disabled by default).',

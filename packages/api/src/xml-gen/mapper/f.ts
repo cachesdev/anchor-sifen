@@ -1,8 +1,8 @@
-import type { SubtotalesTotales_FE } from '../../sifen/types/factura-electronica';
+import type { SubtotalesTotales } from '../../sifen/types/clean/f';
 import type { GTotSub } from '../../sifen/types/raw/f';
 import { bigToFixed, optionalBigToFixed } from './helpers';
 
-export function mapSubtotalesTotalesToRaw(data: SubtotalesTotales_FE): GTotSub {
+export function mapSubtotalesTotalesToRaw(data: SubtotalesTotales): GTotSub {
   return {
     dSubExe: optionalBigToFixed(data.subtotalExenta, 8),
     dSubExo: optionalBigToFixed(data.subtotalExonerada, 8),

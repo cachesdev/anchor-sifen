@@ -1,14 +1,15 @@
-import type { FacturaElectronica } from '../../sifen/types';
+import type { DEC } from '../../sifen/types';
 import {
   getEmisor,
   getPagoContadoEntregaInicial,
   getReceptor,
   getTransportista
-} from '../fe-accessors';
+} from './accessors';
 import { calcularDv, extraerRuc } from '../ruc';
+import type { DerivationConfig } from './config';
 
 /**
- * Deriva DV manejando campos opcionales. en caso de que el ruc sea indefinido,
+ * Deriva DV manejando campos opcionales. En caso de que el RUC sea indefinido,
  * retornamos undefined.
  */
 function deriveDv(rawRuc: string): number;
@@ -26,8 +27,18 @@ function deriveDvString(rawRuc?: string): string | undefined {
   return dv !== undefined ? String(dv) : undefined;
 }
 
-/** Deriva todos los digitos verificadores */
-export function applyDvDerivedFields(out: FacturaElectronica): void {
+/**
+ * Deriva todos los digitos verificadores de RUC.
+ *
+ * - Emisor: aplica a todos los DE. MT v150, p. 67.
+ * - Receptor: aplica a todos los DE. MT v150, p. 70.
+ * - Procesadora de tarjeta: solo si E600 (condicion operacion) aplica
+ *   (C002 = 1 o 4). MT v150, p. 83, campo E625.
+ * - Transportista y agente: solo si E900 (transporte) aplica
+ *   (C002 = 1 opcional, C002 = 7 obligatorio). MT v150, p. 100-102,
+ *   campos E984 y E996.
+ */
+export function applyDvDerivedFields(out: DEC, config: DerivationConfig): void {
   const emisor = getEmisor(out);
   emisor.digitoVerificadorEmisor = deriveDv(emisor.rucEmisor);
 
@@ -36,13 +47,19 @@ export function applyDvDerivedFields(out: FacturaElectronica): void {
     receptor.digitoVerificadorReceptor = deriveDv(receptor.rucReceptor);
   }
 
-  for (const pago of getPagoContadoEntregaInicial(out) ?? []) {
-    const tarjeta = pago.pagoTarjetaCreditoDebito;
-    if (!tarjeta?.rucProcesadoraTarjeta) {
-      continue;
-    }
+  if (config.aplicaCondicionOperacion) {
+    for (const pago of getPagoContadoEntregaInicial(out) ?? []) {
+      const tarjeta = pago.pagoTarjetaCreditoDebito;
+      if (!tarjeta?.rucProcesadoraTarjeta) {
+        continue;
+      }
 
-    tarjeta.digitoVerificadorProcesadoraTarjeta = deriveDv(tarjeta.rucProcesadoraTarjeta);
+      tarjeta.digitoVerificadorProcesadoraTarjeta = deriveDv(tarjeta.rucProcesadoraTarjeta);
+    }
+  }
+
+  if (!config.aplicaTransporte) {
+    return;
   }
 
   const transportista = getTransportista(out);

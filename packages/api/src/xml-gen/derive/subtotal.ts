@@ -1,13 +1,11 @@
-import {
-  condicionTipoCambio,
-  formaAfectacionTributariaIVA,
-  type FacturaElectronica
-} from '../../sifen/types';
+import { condicionTipoCambio, formaAfectacionTributariaIVA } from '../../sifen/types';
+import type { DEC } from '../../sifen/types';
+import type { ItemOperacion } from '../../sifen/types/clean/e';
+import type { OperacionComercial } from '../../sifen/types/clean/d';
 import { Big, bigOrZero, HUNDRED, ZERO } from '../big';
-import { getItemsOperacion, getOperacionComercial } from '../fe-accessors';
+import { getItemsOperacion, getOperacionComercial } from './accessors';
+import type { DerivationConfig } from './config';
 
-type OperacionComercial = FacturaElectronica['datosGeneralesOperacion']['operacionComercial'];
-type ItemOperacion = FacturaElectronica['datosEspecificosPorTipoDE']['itemsOperacion'][number];
 type IvaItem = NonNullable<ItemOperacion['ivaItem']>;
 
 interface ItemAccumulation {
@@ -59,19 +57,32 @@ interface DerivedSubtotales {
   totalOperacionGs?: Big;
 }
 
-export function applySubtotalesDerivedFields(out: FacturaElectronica): void {
+export function applySubtotalesDerivedFields(out: DEC, config: DerivationConfig): void {
+  if (!config.aplicaSubtotales) {
+    return;
+  }
+
   const accumulation = accumulateItems(out);
-  const derived = deriveSubtotales(accumulation, out);
+  const derived = deriveSubtotales(accumulation, out, config);
   applySubtotales(out, derived);
 }
 
-function accumulateItems(doc: FacturaElectronica): ItemAccumulation {
+function accumulateItems(doc: DEC): ItemAccumulation {
   const acc = createEmptyItemAccumulation();
 
-  for (const item of getItemsOperacion(doc)) {
+  const items = getItemsOperacion(doc);
+  if (!items) {
+    return acc;
+  }
+
+  for (const item of items) {
     const valorItem = item.valorItem;
+    if (!valorItem) {
+      continue;
+    }
+
     const valorRestaItem = valorItem.valorRestaItem;
-    // EA008
+    // MT v150, p. 89, campo EA008: valor total de la operacion por item
     const valorTotalItem = valorRestaItem.valorTotalOperacionItem;
     const cantidad = item.cantidadProductoServicio;
 
@@ -105,32 +116,53 @@ function accumulateItems(doc: FacturaElectronica): ItemAccumulation {
   return acc;
 }
 
-function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): DerivedSubtotales {
+function deriveSubtotales(
+  acc: ItemAccumulation,
+  doc: DEC,
+  config: DerivationConfig
+): DerivedSubtotales {
   const operacionComercial = getOperacionComercial(doc);
-  const comisionOperacion = bigOrZero(doc.subtotalesTotales.comisionOperacion);
+  const subtotalesExistentes = doc.subtotalesTotales;
+  const comisionOperacion = bigOrZero(subtotalesExistentes?.comisionOperacion);
 
+  // MT v150, p. 102-103, campo F013 (dRedon):
+  // Se realiza sobre el campo F008. Redondeo a multiplos de 50 guaranies
+  // para PYG, o 50 centimos para monedas extranjeras.
   const redondeoOperacion = calculateRedondeo(
     acc.totalBrutoOperacion,
-    operacionComercial.monedaOperacion
+    operacionComercial?.monedaOperacion
   );
 
   const totalDescuentosOperacion = acc.totalDescuentoParticular.plus(acc.totalDescuentoGlobal);
   const totalAnticiposOperacion = acc.totalAnticipoItem.plus(acc.totalAnticipoGlobal);
+
+  // MT v150, p. 104, campo F014 (dTotGralOpe):
+  // Total Neto de la operacion: F008 - F013 + F025
   const totalNetoOperacion = acc.totalBrutoOperacion
     .minus(redondeoOperacion)
     .plus(comisionOperacion);
+
   const liquidacionIva5 = acc.hasIva5 ? acc.liquidacionIva5 : undefined;
   const liquidacionIva10 = acc.hasIva10 ? acc.liquidacionIva10 : undefined;
   const hasIva5Only = acc.hasIva5 && !acc.hasIva10;
   const hasIva10Only = acc.hasIva10 && !acc.hasIva5;
+
+  // MT v150, p. 104, campos F036 y F037 (dLiqTotIVA5, dLiqTotIVA10):
+  // Liquidacion total del IVA por redondeo.
+  // Solo cuando la operacion tiene exclusivamente IVA 5% o 10%.
   const liquidacionIvaRedondeo5 =
     hasIva5Only && redondeoOperacion.gt(0) ? redondeoOperacion.times(5).div(105) : undefined;
   const liquidacionIvaRedondeo10 =
     hasIva10Only && redondeoOperacion.gt(0) ? redondeoOperacion.times(10).div(110) : undefined;
+
+  // MT v150, p. 104, campo F026 (dIVAComi):
+  // Liquidacion total del IVA de la comision. Se aplica la tasa del 10%.
   const liquidacionIvaComision = comisionOperacion.gt(0)
     ? comisionOperacion.times(10).div(110)
     : undefined;
 
+  // MT v150, p. 104, campo F017 (dTotIVA):
+  // Liquidacion total del IVA: F015 + F016 - F036 - F037 + F026
   const hasAnyIva = acc.hasIva5 || acc.hasIva10;
   const hasAnyLiquidacionIva =
     hasAnyIva ||
@@ -147,16 +179,27 @@ function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): Deriv
 
   const totalBaseGravada5 = acc.hasIva5 ? acc.totalBaseGravada5 : undefined;
   const totalBaseGravada10 = acc.hasIva10 ? acc.totalBaseGravada10 : undefined;
+
+  // MT v150, p. 105, campo F020 (dTBasGraIVA):
+  // Total de la base gravada de IVA: F018 + F019
   const totalBaseGravadaIva = hasAnyIva
     ? bigOrZero(totalBaseGravada5).plus(bigOrZero(totalBaseGravada10))
     : undefined;
 
   return {
-    subtotalExenta: acc.hasExenta ? acc.subtotalExenta : undefined,
-    subtotalExonerada: acc.hasExonerada ? acc.subtotalExonerada : undefined,
-    subtotalIva5: acc.hasIva5 ? acc.subtotalIva5 : undefined,
-    subtotalIva10: acc.hasIva10 ? acc.subtotalIva10 : undefined,
-    totalBrutoOperacion: acc.totalBrutoOperacion,
+    subtotalExenta: config.subtotalesIncluyeIva && acc.hasExenta ? acc.subtotalExenta : undefined,
+    subtotalExonerada:
+      config.subtotalesIncluyeIva && acc.hasExonerada ? acc.subtotalExonerada : undefined,
+    subtotalIva5: config.subtotalesIncluyeIva && acc.hasIva5 ? acc.subtotalIva5 : undefined,
+    subtotalIva10: config.subtotalesIncluyeIva && acc.hasIva10 ? acc.subtotalIva10 : undefined,
+    totalBrutoOperacion:
+      config.totalBrutoFormula === 'sumaItems'
+        ? acc.totalBrutoOperacion
+        : // MT v150, p. 103, F008 = F002 + F003 + F004 + F005
+          bigOrZero(acc.hasExenta ? acc.subtotalExenta : undefined)
+            .plus(bigOrZero(acc.hasExonerada ? acc.subtotalExonerada : undefined))
+            .plus(bigOrZero(acc.hasIva5 ? acc.subtotalIva5 : undefined))
+            .plus(bigOrZero(acc.hasIva10 ? acc.subtotalIva10 : undefined)),
     totalDescuentoParticular: acc.totalDescuentoParticular,
     totalDescuentoGlobal: acc.totalDescuentoGlobal,
     totalAnticipoItem: acc.totalAnticipoItem,
@@ -171,19 +214,22 @@ function deriveSubtotales(acc: ItemAccumulation, doc: FacturaElectronica): Deriv
     totalNetoOperacion,
     liquidacionIva5,
     liquidacionIva10,
-    liquidacionIvaRedondeo5,
-    liquidacionIvaRedondeo10,
-    liquidacionIvaComision,
-    liquidacionTotalIva,
-    totalBaseGravada5,
-    totalBaseGravada10,
-    totalBaseGravadaIva,
-    totalOperacionGs: deriveTotalOperacionGs(acc, operacionComercial, totalNetoOperacion)
+    liquidacionIvaRedondeo5: config.subtotalesIncluyeIva ? liquidacionIvaRedondeo5 : undefined,
+    liquidacionIvaRedondeo10: config.subtotalesIncluyeIva ? liquidacionIvaRedondeo10 : undefined,
+    liquidacionIvaComision: config.subtotalesIncluyeIva ? liquidacionIvaComision : undefined,
+    liquidacionTotalIva: config.subtotalesIncluyeIva ? liquidacionTotalIva : undefined,
+    totalBaseGravada5: config.subtotalesIncluyeIva ? totalBaseGravada5 : undefined,
+    totalBaseGravada10: config.subtotalesIncluyeIva ? totalBaseGravada10 : undefined,
+    totalBaseGravadaIva: config.subtotalesIncluyeIva ? totalBaseGravadaIva : undefined,
+    totalOperacionGs: deriveTotalOperacionGs(acc, operacionComercial, totalNetoOperacion, config)
   };
 }
 
-function applySubtotales(out: FacturaElectronica, derived: DerivedSubtotales): void {
+function applySubtotales(out: DEC, derived: DerivedSubtotales): void {
   const subtotales = out.subtotalesTotales;
+  if (!subtotales) {
+    return;
+  }
 
   subtotales.subtotalExenta = derived.subtotalExenta;
   subtotales.subtotalExonerada = derived.subtotalExonerada;
@@ -256,8 +302,17 @@ function accumulateIva(
       return;
 
     case formaAfectacionTributariaIVA.Gravado:
+      accumulateGravado(acc, ivaItem, totalItem, false);
+      return;
+
     case formaAfectacionTributariaIVA.GravadoParcial:
-      accumulateGravado(acc, ivaItem, totalItem);
+      // NT-13, p. 2, campo F002: la base exenta (E737) del item
+      // gravado parcial se suma al subtotal exenta.
+      if (ivaItem.baseExenta.gt(0)) {
+        acc.hasExenta = true;
+        acc.subtotalExenta = acc.subtotalExenta.plus(ivaItem.baseExenta);
+      }
+      accumulateGravado(acc, ivaItem, totalItem, true);
       return;
 
     default:
@@ -265,30 +320,39 @@ function accumulateIva(
   }
 }
 
-function calculateRedondeo(totalBrutoOperacion: Big, monedaOperacion: string): Big {
+function calculateRedondeo(totalBrutoOperacion: Big, monedaOperacion?: string): Big {
   if (totalBrutoOperacion.lte(0)) {
     return ZERO;
   }
 
   if (monedaOperacion === 'PYG') {
+    // MT v150, p. 102: Redondeo a multiplos de 50 guaranies.
     const rounded = totalBrutoOperacion.div(50).round(0, Big.roundDown).times(50);
     return totalBrutoOperacion.minus(rounded);
   }
 
-  // FIXME: Segun manual tecnico se redondea a 50 centimos mas cercano, pero aparentemente esto tiene que funcionar con todas las monedas del XSD.
+  // MT v150, p. 102: Para monedas extranjeras, redondeo a 50 centimos.
   const rounded = totalBrutoOperacion.times(2).round(0, Big.roundDown).div(2);
   return totalBrutoOperacion.minus(rounded);
 }
 
 function deriveTotalOperacionGs(
   acc: ItemAccumulation,
-  operacionComercial: OperacionComercial,
-  totalNetoOperacion: Big
+  operacionComercial: OperacionComercial | undefined,
+  totalNetoOperacion: Big,
+  config: DerivationConfig
 ): Big | undefined {
-  if (operacionComercial.monedaOperacion === 'PYG') {
+  // MT v150, p. 105, campo F023 (dTotalGs):
+  // Si C002 = 4 (AFE): F023 = F014
+  if (config.totalGsFormula === 'igualF014') {
+    return totalNetoOperacion;
+  }
+
+  if (!operacionComercial || operacionComercial.monedaOperacion === 'PYG') {
     return undefined;
   }
 
+  // MT v150, p. 105: Si D017 = 1 (global): F014 * D018
   if (
     operacionComercial.condicionTipoCambio === condicionTipoCambio.Global &&
     operacionComercial.tipoCambioOperacion !== undefined
@@ -296,6 +360,7 @@ function deriveTotalOperacionGs(
     return totalNetoOperacion.times(operacionComercial.tipoCambioOperacion);
   }
 
+  // MT v150, p. 105: Si D017 = 2 (por item): suma de todas las ocurrencias de EA009
   if (operacionComercial.condicionTipoCambio === condicionTipoCambio.PorItem) {
     return acc.totalOperacionGsPorItem;
   }
@@ -305,10 +370,27 @@ function deriveTotalOperacionGs(
     : undefined;
 }
 
-function accumulateGravado(acc: ItemAccumulation, ivaItem: IvaItem, totalItem: Big): void {
+/**
+ * Acumula valores de IVA para un item.
+ *
+ * Para Gravado (E731=1): el subtotal es EA008.
+ * Para GravadoParcial (E731=4): el subtotal es (E735 + E736),
+ * segun NT-13, p. 2, campos F004 y F005.
+ */
+function accumulateGravado(
+  acc: ItemAccumulation,
+  ivaItem: IvaItem,
+  totalItem: Big,
+  esParcial: boolean
+): void {
+  // NT-13, p. 2: para GravadoParcial, F004/F005 = E735 + E736
+  const montoSubtotal = esParcial
+    ? ivaItem.baseGravadaIvaItem.plus(ivaItem.liquidacionIvaItem)
+    : totalItem;
+
   if (ivaItem.tasaIva === 5) {
     acc.hasIva5 = true;
-    acc.subtotalIva5 = acc.subtotalIva5.plus(totalItem);
+    acc.subtotalIva5 = acc.subtotalIva5.plus(montoSubtotal);
     acc.liquidacionIva5 = acc.liquidacionIva5.plus(ivaItem.liquidacionIvaItem);
     acc.totalBaseGravada5 = acc.totalBaseGravada5.plus(ivaItem.baseGravadaIvaItem);
     return;
@@ -316,7 +398,7 @@ function accumulateGravado(acc: ItemAccumulation, ivaItem: IvaItem, totalItem: B
 
   if (ivaItem.tasaIva === 10) {
     acc.hasIva10 = true;
-    acc.subtotalIva10 = acc.subtotalIva10.plus(totalItem);
+    acc.subtotalIva10 = acc.subtotalIva10.plus(montoSubtotal);
     acc.liquidacionIva10 = acc.liquidacionIva10.plus(ivaItem.liquidacionIvaItem);
     acc.totalBaseGravada10 = acc.totalBaseGravada10.plus(ivaItem.baseGravadaIvaItem);
   }
