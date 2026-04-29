@@ -6,9 +6,10 @@ import type {
   Timbrado
 } from './clean/de';
 import type { SubtotalesTotales } from './clean/f';
+import type { TipoDocumentoElectronicoLabel } from './enums';
 import type { OmitDeep, SetRequired, SetRequiredDeep, Simplify, SimplifyDeep } from 'type-fest';
 
-export type Timbrado_FE = OmitDeep<Timbrado, 'tipoDocumento'>;
+export type Timbrado_FE = Timbrado;
 export type OperacionDE_FE = Simplify<SetRequired<OperacionDE, 'codigoSeguridad'>>;
 
 export type DatosGeneralesOperacion_FE = SimplifyDeep<
@@ -45,6 +46,7 @@ export interface FacturaElectronica extends Omit<
   | 'datosEspecificosPorTipoDE'
   | 'subtotalesTotales'
 > {
+  tipoDE: Extract<TipoDocumentoElectronicoLabel, 'FacturaElectronica'>;
   operacionDE: OperacionDE_FE;
   timbrado: Timbrado_FE;
   datosGeneralesOperacion: DatosGeneralesOperacion_FE;

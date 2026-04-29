@@ -1,52 +1,101 @@
-import { formaAfectacionTributariaIVA, type FacturaElectronica } from '../../sifen/types';
-import { getItemsOperacion } from '../fe-accessors';
-import { bigOrZero, HUNDRED, ONE, toBig, ZERO } from '../big';
+import { formaAfectacionTributariaIVA } from '../../sifen/types';
+import type { DEC } from '../../sifen/types';
+import { getItemsOperacion } from './accessors';
+import { Big, bigOrZero, HUNDRED, toBig, ZERO } from '../big';
+import type { DerivationConfig } from './config';
 
-export function applyItemDerivedFields(out: FacturaElectronica): void {
-  for (const item of getItemsOperacion(out)) {
+/**
+ * Deriva los campos calculables a nivel de item:
+ *
+ * - EA008 (dTotOpeItem): valor total de la operacion por item.
+ *   MT v150, p. 89.
+ *   Formula estandar (C002 = 1, 5, 6):
+ *     (E721 - EA002 - EA004 - EA006 - EA007) * E711
+ *   Formula autofactura (C002 = 4):
+ *     E721 * E711
+ *
+ * - EA009 (dTotOpeGs): valor total de la operacion por item en guaranies.
+ *   MT v150, p. 89. EA008 * E725.
+ *
+ * - EA003 (dPorcDesIt): porcentaje de descuento particular.
+ *   MT v150, p. 88. (EA002 * 100) / E721.
+ *
+ * - E735 (dBasGravIVA): base gravada del IVA por item.
+ *   NT-13, p. 1 — formula unificada:
+ *     [100 * EA008 * E733] / [10000 + (E734 * E733)]
+ *
+ * - E736 (dLiqIVAItem): liquidacion del IVA por item.
+ *   MT v150, p. 90. E735 * (E734 / 100).
+ *
+ * - E737 (dBasExe): base exenta por item.
+ *   NT-13, p. 1. Solo aplica para gravado parcial (E731 = 4).
+ */
+export function applyItemDerivedFields(out: DEC, config: DerivationConfig): void {
+  if (!config.aplicaValorItem) {
+    return;
+  }
+
+  const items = getItemsOperacion(out);
+  if (!items) {
+    return;
+  }
+
+  for (const item of items) {
     const valorItem = item.valorItem;
-    const valorRestaItem = valorItem.valorRestaItem;
+    if (!valorItem) {
+      continue;
+    }
 
+    const valorRestaItem = valorItem.valorRestaItem;
     const cantidad = item.cantidadProductoServicio;
     const precioUnitario = valorItem.precioUnitario;
 
-    // dTotBrutOpeItem
+    // MT v150, p. 87, campo E727 (dTotBruOpeItem):
+    // Corresponde a la multiplicacion del precio por item (E721) y la cantidad por item (E711).
     const totalBrutoOperacionItem = precioUnitario.times(cantidad);
     valorItem.totalBrutoOperacionItem = totalBrutoOperacionItem;
 
-    // FIXME: No revisado segun MT
     const descuentoParticular = bigOrZero(valorRestaItem.descuentoParticularItem);
     const descuentoGlobal = bigOrZero(valorRestaItem.descuentoGlobalItem);
     const anticipoParticular = bigOrZero(valorRestaItem.anticipoParticularItem);
     const anticipoGlobal = bigOrZero(valorRestaItem.anticipoGlobalItem);
 
-    // FIXME: No revisado segun MT
+    // MT v150, p. 88, campo EA003 (dPorcDesIt):
+    // Porcentaje de descuento particular por item: [EA002 * 100 / E721]
     valorRestaItem.porcentajeDescuentoItem = precioUnitario.gt(0)
       ? descuentoParticular.times(HUNDRED).div(precioUnitario)
       : ZERO;
 
-    const totalOperacionItem = precioUnitario
-      .minus(anticipoGlobal)
-      .minus(descuentoParticular)
-      .minus(descuentoGlobal)
-      .minus(anticipoParticular)
-      .times(cantidad);
+    // MT v150, p. 89, campo EA008 (dTotOpeItem):
+    // Formula estandar: (E721 - EA002 - EA004 - EA006 - EA007) * E711
+    // Formula autofactura (C002=4): E721 * E711
+    const totalOperacionItem =
+      config.ea008Formula === 'autofactura'
+        ? precioUnitario.times(cantidad)
+        : precioUnitario
+            .minus(descuentoParticular)
+            .minus(descuentoGlobal)
+            .minus(anticipoParticular)
+            .minus(anticipoGlobal)
+            .times(cantidad);
 
     valorRestaItem.valorTotalOperacionItem = totalOperacionItem;
+
+    // MT v150, p. 89, campo EA009 (dTotOpeGs):
+    // Corresponde al calculo aritmetico EA008 * E725.
+    // Obligatorio si existe el campo E725.
     valorRestaItem.valorTotalOperacionItemGs =
       valorItem.tipoCambioItem !== undefined
         ? totalOperacionItem.times(valorItem.tipoCambioItem)
         : undefined;
 
     const ivaItem = item.ivaItem;
-    if (!ivaItem) {
+    if (!ivaItem || !config.aplicaIvaItem) {
       continue;
     }
 
     const forma = ivaItem.formaAfectacionTributariaIVA;
-    // INFO: La proporcion gravada es generalmente 100% en todos los casos, con excepcion a exenta y exonerada donde es 0% y parcial, donde es variable entre 0 a 100.
     const proporcionGravada = ivaItem.proporcionGravadaIva;
-    // Tasa es una enumeracion tratada como numero por sifen (0, 5, 10).
     const tasa = ivaItem.tasaIva;
 
     let baseGravada = ZERO;
@@ -58,22 +107,23 @@ export function applyItemDerivedFields(out: FacturaElectronica): void {
       tasa > 0 &&
       proporcionGravada.gt(0)
     ) {
-      const baseCalculo = totalOperacionItem.times(proporcionGravada).div(HUNDRED);
+      // NT-13, p. 1, campo E735 (dBasGravIVA) — formula unificada:
+      // [100 * EA008 * E733] / [10000 + (E734 * E733)]
+      const numerador = HUNDRED.times(totalOperacionItem).times(proporcionGravada);
+      const denominador = new Big(10000).plus(toBig(tasa).times(proporcionGravada));
 
-      if (tasa === 10) {
-        baseGravada = baseCalculo.div(1.1);
-      } else if (tasa === 5) {
-        baseGravada = baseCalculo.div(1.05);
-      } else {
-        // Fallback
-        baseGravada = baseCalculo.div(ONE.plus(toBig(tasa).div(HUNDRED)));
-      }
+      baseGravada = denominador.gt(0) ? numerador.div(denominador) : ZERO;
 
+      // NT-13, p. 1, campo E736 (dLiqIVAItem):
+      // E735 * (E734 / 100)
       liquidacion = baseGravada.times(tasa).div(HUNDRED);
     }
 
     ivaItem.baseGravadaIvaItem = baseGravada;
     ivaItem.liquidacionIvaItem = liquidacion;
+
+    // NT-13, p. 1, campo E737 (dBasExe):
+    // Base exenta por item. Solo aplica cuando E731 = 4 (Gravado parcial).
     let baseExenta = ZERO;
     if (forma === formaAfectacionTributariaIVA.GravadoParcial) {
       const numerador = HUNDRED.times(totalOperacionItem).times(HUNDRED.minus(proporcionGravada));

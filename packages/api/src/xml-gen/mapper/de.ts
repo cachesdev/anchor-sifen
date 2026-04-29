@@ -1,9 +1,9 @@
-import type { Timbrado } from '../../sifen/types/clean/de';
 import type {
-  DatosEspecificosPorTipoDE_FE,
-  DatosGeneralesOperacion_FE,
-  OperacionDE_FE
-} from '../../sifen/types/factura-electronica';
+  DatosEspecificosPorTipoDE,
+  DatosGeneralesOperacion,
+  OperacionDE,
+  Timbrado
+} from '../../sifen/types/clean/de';
 import {
   descripcionTipoDocumentoElectronico,
   descripcionTipoEmision
@@ -24,7 +24,7 @@ import {
   resolveRequiredDescription
 } from './helpers';
 
-export function mapOperacionDEToRaw(data: OperacionDE_FE): GOpeDE {
+export function mapOperacionDEToRaw(data: OperacionDE): GOpeDE {
   return {
     iTipEmi: data.tipoEmision,
     dDesTipEmi: resolveRequiredDescription(
@@ -55,7 +55,7 @@ export function mapTimbradoToRaw(data: Timbrado): GTimb {
   } as GTimb;
 }
 
-export function mapDatosGeneralesOperacionToRaw(data: DatosGeneralesOperacion_FE): GDatGralOpe {
+export function mapDatosGeneralesOperacionToRaw(data: DatosGeneralesOperacion): GDatGralOpe {
   return {
     dFeEmiDE: requireDefined(formatDateTime(data.fechaEmisionDE), 'fechaEmisionDE'),
     gOpeCom: data.operacionComercial
@@ -66,7 +66,7 @@ export function mapDatosGeneralesOperacionToRaw(data: DatosGeneralesOperacion_FE
   } as GDatGralOpe;
 }
 
-export function mapDatosEspecificosPorTipoDEToRaw(data: DatosEspecificosPorTipoDE_FE): GDtipDE {
+export function mapDatosEspecificosPorTipoDEToRaw(data: DatosEspecificosPorTipoDE): GDtipDE {
   return {
     gCamFE: data.facturaElectronica
       ? mapCamposFacturaElectronicaToRaw(data.facturaElectronica)

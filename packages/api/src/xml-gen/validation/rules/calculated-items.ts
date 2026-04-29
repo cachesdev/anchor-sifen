@@ -1,7 +1,7 @@
-import type { FacturaElectronica, ItemOperacion_FE } from '../../../sifen/types';
+import type { DEC, ItemOperacion } from '../../../sifen/types';
 import type { ItemValidationRule } from '../types';
 
-export const calculatedItemRules: ItemValidationRule<FacturaElectronica, ItemOperacion_FE>[] = [
+export const calculatedItemRules: ItemValidationRule<DEC, ItemOperacion>[] = [
   {
     id: 'EXAMPLE_ITEM_RULE',
     description: 'Example placeholder item rule (disabled by default).',

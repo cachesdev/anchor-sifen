@@ -6,6 +6,8 @@ import type {
   Cuota,
   DatosAdicionalesUsoComercial,
   DetalleVehiculoNuevo,
+  IvaItem,
+  ItemOperacion,
   LocalEntregaMercaderias,
   LocalSalidaMercaderias,
   NotaCreditoDebitoElectronica,
@@ -22,14 +24,10 @@ import type {
   Transporte,
   Transportista,
   UsoComercial,
+  ValorItem,
+  ValorRestaItem,
   VehiculoTrasladoMercaderias
 } from '../../sifen/types/clean/e';
-import type {
-  IvaItem_FE,
-  ItemOperacion_FE,
-  ValorItem_FE,
-  ValorRestaItem_FE
-} from '../../sifen/types/factura-electronica';
 import {
   descripcionCodigoDatosRelevanciaMercaderias,
   descripcionCondicionOperacion,
@@ -281,7 +279,7 @@ export function mapCuotaToRaw(data: Cuota): GCuotas {
   } as GCuotas;
 }
 
-export function mapItemOperacionToRaw(data: ItemOperacion_FE): GCamItem {
+export function mapItemOperacionToRaw(data: ItemOperacion): GCamItem {
   return {
     dCodInt: data.codigoInterno,
     dParAranc: data.partidaArancelaria,
@@ -319,7 +317,7 @@ export function mapItemOperacionToRaw(data: ItemOperacion_FE): GCamItem {
   } as GCamItem;
 }
 
-export function mapValorItemToRaw(data: ValorItem_FE): GValorItem {
+export function mapValorItemToRaw(data: ValorItem): GValorItem {
   return {
     dPUniProSer: bigToFixed(data.precioUnitario, 8),
     dTiCamIt: optionalBigToFixed(data.tipoCambioItem, 4),
@@ -328,10 +326,10 @@ export function mapValorItemToRaw(data: ValorItem_FE): GValorItem {
   } as GValorItem;
 }
 
-export function mapValorRestaItemToRaw(data: ValorRestaItem_FE): GValorRestaItem {
+export function mapValorRestaItemToRaw(data: ValorRestaItem): GValorRestaItem {
   return {
     dDescItem: optionalBigToFixed(data.descuentoParticularItem, 8),
-    dPorcDesIt: bigToFixed(data.porcentajeDescuentoItem, 8),
+    dPorcDesIt: bigToFixed(data.porcentajeDescuentoItem!, 8),
     dDescGloItem: optionalBigToFixed(data.descuentoGlobalItem, 8),
     dAntPreUniIt: optionalBigToFixed(data.anticipoParticularItem, 8),
     dAntGloPreUniIt: optionalBigToFixed(data.anticipoGlobalItem, 8),
@@ -340,7 +338,7 @@ export function mapValorRestaItemToRaw(data: ValorRestaItem_FE): GValorRestaItem
   } as GValorRestaItem;
 }
 
-export function mapIvaItemToRaw(data: IvaItem_FE): GCamIVA {
+export function mapIvaItemToRaw(data: IvaItem): GCamIVA {
   return {
     iAfecIVA: data.formaAfectacionTributariaIVA,
     dDesAfecIVA: resolveRequiredDescription(

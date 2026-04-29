@@ -24,7 +24,7 @@ type DeepNumBig<T> = T extends Big
 
 export type OperacionDE_FE_Input = DeepNumBig<Omit<OperacionDE_FE, 'codigoSeguridad'>>;
 
-export type Timbrado_FE_Input = Timbrado_FE;
+export type Timbrado_FE_Input = Omit<Timbrado_FE, 'tipoDocumento'>;
 
 type Emisor_FE_Input = DeepNumBig<
   Omit<DatosGeneralesOperacion_FE['emisor'], 'digitoVerificadorEmisor'>

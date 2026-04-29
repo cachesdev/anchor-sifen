@@ -5,7 +5,7 @@ const SIFEN_XSD_NAMESPACE = 'http://ekuatia.set.gov.py/sifen/xsd';
 const XSI_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
 const SCHEMA_LOCATION = `${SIFEN_XSD_NAMESPACE} siRecepDE_v150.xsd`;
 
-export function generateFacturaElectronicaXML({ raw: de, cdc }: PreparedDE): string {
+export function generateDEXML({ raw: de, cdc }: PreparedDE): string {
   const xmlPayload = {
     'rDE@http://ekuatia.set.gov.py/sifen/xsd': {
       '@xmlns:xsi': XSI_NAMESPACE,
