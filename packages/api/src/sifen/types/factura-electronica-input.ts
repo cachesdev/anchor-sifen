@@ -1,4 +1,3 @@
-import type { Big } from 'big.js';
 import type { OmitDeep } from 'type-fest';
 import type { UsoGeneral } from './clean/g';
 import type { DocumentoElectronicoAsociado } from './clean/h';
@@ -9,18 +8,7 @@ import type {
   DatosEspecificosPorTipoDE_FE,
   ItemOperacion_FE
 } from './factura-electronica';
-
-type NumBig = number | Big;
-
-type DeepNumBig<T> = T extends Big
-  ? NumBig
-  : T extends Date
-    ? T
-    : T extends readonly (infer U)[]
-      ? DeepNumBig<U>[]
-      : T extends object
-        ? { [K in keyof T]: DeepNumBig<T[K]> }
-        : T;
+import type { DeepNumBig, NumBig } from './big';
 
 export type OperacionDE_FE_Input = DeepNumBig<Omit<OperacionDE_FE, 'codigoSeguridad'>>;
 

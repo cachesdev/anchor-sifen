@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import type { DEC, FacturaElectronica } from '../sifen/types';
+import type { AutofacturaElectronicaDE, DEC, FacturaElectronica } from '../sifen/types';
 import type { DE } from '../sifen/types/raw/de';
 import { tipoDocumentoElectronico, type TipoDocumentoElectronicoLabel } from '../sifen/types/enums';
 import { Err, Ok, type Result } from '../result';
@@ -30,7 +30,9 @@ export interface PreparedDEBase<TType extends TipoDocumentoElectronicoLabel, TCl
   cdc: string;
 }
 
-export type PreparedDE = Simplify<PreparedDEBase<'FacturaElectronica', FacturaElectronica>>;
+export type PreparedDE =
+  | Simplify<PreparedDEBase<'FacturaElectronica', FacturaElectronica>>
+  | Simplify<PreparedDEBase<'AutofacturaElectronica', AutofacturaElectronicaDE>>;
 
 export function prepareDE<TInput, TClean extends DEC, TType extends TipoDocumentoElectronicoLabel>(
   input: TInput,

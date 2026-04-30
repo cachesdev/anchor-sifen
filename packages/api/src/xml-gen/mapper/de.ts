@@ -10,6 +10,7 @@ import {
 } from '../../sifen/types/enums';
 import type { GDatGralOpe, GDtipDE, GOpeDE, GTimb } from '../../sifen/types/raw/de';
 import {
+  mapAutofacturaElectronicaToRaw,
   mapCamposFacturaElectronicaToRaw,
   mapCondicionOperacionToRaw,
   mapItemOperacionToRaw,
@@ -70,6 +71,9 @@ export function mapDatosEspecificosPorTipoDEToRaw(data: DatosEspecificosPorTipoD
   return {
     gCamFE: data.facturaElectronica
       ? mapCamposFacturaElectronicaToRaw(data.facturaElectronica)
+      : undefined,
+    gCamAE: data.autofacturaElectronica
+      ? mapAutofacturaElectronicaToRaw(data.autofacturaElectronica)
       : undefined,
     gCamCond: data.condicionOperacion
       ? mapCondicionOperacionToRaw(data.condicionOperacion)
