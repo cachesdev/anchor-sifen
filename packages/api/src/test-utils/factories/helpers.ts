@@ -29,12 +29,8 @@ export function money(v: number): Big {
 
 /**
  * Retorna una copia superficial del objeto sin las claves especificadas.
- * Usado en factories de input para omitir campos autocalculados.
  */
-export function omit<T, K extends string>(
-  obj: T,
-  ...keys: K[]
-): Omit<T, K> {
+export function omit<T, K extends string>(obj: T, ...keys: K[]): Omit<T, K> {
   const cloned = { ...obj } as Record<string, unknown>;
   for (const k of keys) {
     delete cloned[k];

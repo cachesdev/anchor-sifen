@@ -46,9 +46,7 @@ import type {
 } from '../../../sifen/types/clean';
 import { pickEnum, pickFrom, many, money } from '../helpers';
 
-export function createComprasPublicas(
-  overrides?: Partial<ComprasPublicas>
-): ComprasPublicas {
+export function createComprasPublicas(overrides?: Partial<ComprasPublicas>): ComprasPublicas {
   return {
     modalidadContratacion: faker.string.alphanumeric(6).toUpperCase(),
     entidadContratacion: faker.number.int({ min: 1, max: 99 }),
@@ -100,9 +98,7 @@ export function createPagoContadoEntregaInicial(
   const tipo = overrides?.tipoPago ?? pickEnum(tipoPago);
   return {
     tipoPago: tipo,
-    montoTipoPago: money(
-      faker.number.float({ min: 10000, max: 10000000, multipleOf: 0.01 })
-    ),
+    montoTipoPago: money(faker.number.float({ min: 10000, max: 10000000, multipleOf: 0.01 })),
     monedaTipoPago: pickFrom(codigoMoneda),
     tipoCambioTipoPago: undefined,
     pagoTarjetaCreditoDebito:
@@ -115,9 +111,7 @@ export function createPagoContadoEntregaInicial(
 export function createCuota(overrides?: Partial<Cuota>): Cuota {
   return {
     monedaCuota: pickFrom(codigoMoneda),
-    montoCuota: money(
-      faker.number.float({ min: 50000, max: 5000000, multipleOf: 0.01 })
-    ),
+    montoCuota: money(faker.number.float({ min: 50000, max: 5000000, multipleOf: 0.01 })),
     vencimientoCuota: undefined,
     ...overrides
   };
@@ -130,9 +124,7 @@ export function createPagoCredito(overrides?: Partial<PagoCredito>): PagoCredito
     plazoCredito:
       tipo === 1 ? faker.helpers.arrayElement(['30 días', '60 días', '90 días']) : undefined,
     cantidadCuotas: tipo === 2 ? faker.number.int({ min: 3, max: 24 }) : undefined,
-    montoEntregaInicial: money(
-      faker.number.float({ min: 0, max: 5000000, multipleOf: 0.01 })
-    ),
+    montoEntregaInicial: money(faker.number.float({ min: 0, max: 5000000, multipleOf: 0.01 })),
     cuotas:
       tipo === 2 ? many(() => createCuota(), faker.number.int({ min: 2, max: 6 })) : undefined,
     ...overrides
@@ -149,15 +141,12 @@ export function createCondicionOperacion(
       cond === condicionOperacionEnum.Contado
         ? many(() => createPagoContadoEntregaInicial(), 1)
         : undefined,
-    pagoCredito:
-      cond === condicionOperacionEnum.Credito ? createPagoCredito() : undefined,
+    pagoCredito: cond === condicionOperacionEnum.Credito ? createPagoCredito() : undefined,
     ...overrides
   };
 }
 
-export function createRastreoMercaderia(
-  overrides?: Partial<RastreoMercaderia>
-): RastreoMercaderia {
+export function createRastreoMercaderia(overrides?: Partial<RastreoMercaderia>): RastreoMercaderia {
   return {
     numeroLote: undefined,
     fechaVencimientoMercaderia: undefined,
@@ -184,9 +173,7 @@ export function createDetalleVehiculoNuevo(
     pesoBruto: money(faker.number.float({ min: 1.0, max: 5.0, multipleOf: 0.01 })),
     tipoCombustible: undefined,
     numeroMotor: undefined,
-    capacidadMaximaTraccion: money(
-      faker.number.float({ min: 0.5, max: 10, multipleOf: 0.1 })
-    ),
+    capacidadMaximaTraccion: money(faker.number.float({ min: 0.5, max: 10, multipleOf: 0.1 })),
     anoFabricacion: undefined,
     tipoVehiculo: undefined,
     capacidadMaximaPasajeros: undefined,
@@ -195,9 +182,7 @@ export function createDetalleVehiculoNuevo(
   };
 }
 
-export function createValorRestaItem(
-  overrides?: Partial<ValorRestaItem>
-): ValorRestaItem {
+export function createValorRestaItem(overrides?: Partial<ValorRestaItem>): ValorRestaItem {
   return {
     descuentoParticularItem: money(0),
     porcentajeDescuentoItem: money(0),
@@ -216,9 +201,7 @@ export function createValorRestaItem(
 
 export function createValorItem(overrides?: Partial<ValorItem>): ValorItem {
   return {
-    precioUnitario: money(
-      faker.number.float({ min: 1000, max: 5000000, multipleOf: 0.01 })
-    ),
+    precioUnitario: money(faker.number.float({ min: 1000, max: 5000000, multipleOf: 0.01 })),
     tipoCambioItem: undefined,
     totalBrutoOperacionItem: money(
       faker.number.float({ min: 1000, max: 50000000, multipleOf: 0.01 })
@@ -236,12 +219,8 @@ export function createIvaItem(overrides?: Partial<IvaItem>): IvaItem {
     ]),
     proporcionGravadaIva: money(100),
     tasaIva: 10,
-    baseGravadaIvaItem: money(
-      faker.number.float({ min: 1000, max: 5000000, multipleOf: 0.01 })
-    ),
-    liquidacionIvaItem: money(
-      faker.number.float({ min: 50, max: 500000, multipleOf: 0.01 })
-    ),
+    baseGravadaIvaItem: money(faker.number.float({ min: 1000, max: 5000000, multipleOf: 0.01 })),
+    liquidacionIvaItem: money(faker.number.float({ min: 50, max: 500000, multipleOf: 0.01 })),
     baseExenta: money(0),
     ...overrides
   };
@@ -258,9 +237,7 @@ export function createItemOperacion(overrides?: Partial<ItemOperacion>): ItemOpe
     codigoGtinPaquete: undefined,
     descripcionProductoServicio: faker.commerce.productName(),
     unidadMedida: pickEnum(unidadMedida),
-    cantidadProductoServicio: money(
-      faker.number.float({ min: 1, max: 100, multipleOf: 0.0001 })
-    ),
+    cantidadProductoServicio: money(faker.number.float({ min: 1, max: 100, multipleOf: 0.0001 })),
     paisOrigen: codigoPais.Paraguay,
     informacionItem: undefined,
     codigoDatosRelevanciaMercaderias: undefined,

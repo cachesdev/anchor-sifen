@@ -1,6 +1,4 @@
-import {
-  tipoDocumentoAsociado
-} from '../../../sifen/types/enums';
+import { tipoDocumentoAsociado } from '../../../sifen/types/enums';
 import type { DocumentoElectronicoAsociado } from '../../../sifen/types/clean';
 import { pickEnum } from '../helpers';
 
