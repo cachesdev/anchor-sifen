@@ -19,7 +19,7 @@ import type {
   Emisor,
   Receptor
 } from '../../../sifen/types/clean';
-import { pickEnum, pickFrom, many, fakeRUC, money } from '../helpers';
+import { pickEnum, pickFromValue, pickFromKey, many, fakeRUC, money } from '../helpers';
 
 export function createObligacionesAfectadas(
   overrides?: Partial<ObligacionesAfectadas>
@@ -36,7 +36,7 @@ export function createOperacionComercial(
   return {
     tipoTransaccion: undefined,
     tipoImpuestoAfectado: pickEnum(tipoImpuestoAfectado),
-    monedaOperacion: pickFrom(codigoMoneda),
+    monedaOperacion: pickFromKey(codigoMoneda),
     condicionTipoCambio: undefined,
     tipoCambioOperacion: money(faker.number.float({ min: 1000, max: 8000, multipleOf: 0.0001 })),
     condicionAnticipo: undefined,
@@ -82,9 +82,9 @@ export function createEmisor(overrides?: Partial<Emisor>): Emisor {
     numeroCasa: faker.number.int({ min: 1, max: 5000 }),
     complementoDireccion1: undefined,
     complementoDireccion2: undefined,
-    departamentoEmision: pickFrom(codigoDepartamento),
+    departamentoEmision: pickFromValue(codigoDepartamento),
     distritoEmision: undefined,
-    ciudadEmision: pickFrom(codigoCiudad),
+    ciudadEmision: pickFromValue(codigoCiudad),
     telefonoEmision: faker.phone.number(),
     correoElectronicoEmisor: faker.internet.email(),
     denominacionSucursal: undefined,

@@ -44,7 +44,7 @@ import type {
   SectorSupermercados,
   DatosAdicionalesUsoComercial
 } from '../../../sifen/types/clean';
-import { pickEnum, pickFrom, many, money } from '../helpers';
+import { pickEnum, pickFromValue, pickFromKey, many, money } from '../helpers';
 
 export function createComprasPublicas(overrides?: Partial<ComprasPublicas>): ComprasPublicas {
   return {
@@ -99,7 +99,7 @@ export function createPagoContadoEntregaInicial(
   return {
     tipoPago: tipo,
     montoTipoPago: money(faker.number.float({ min: 10000, max: 10000000, multipleOf: 0.01 })),
-    monedaTipoPago: pickFrom(codigoMoneda),
+    monedaTipoPago: pickFromKey(codigoMoneda),
     tipoCambioTipoPago: undefined,
     pagoTarjetaCreditoDebito:
       tipo === 3 || tipo === 4 ? createPagoTarjetaCreditoDebito() : undefined,
@@ -110,7 +110,7 @@ export function createPagoContadoEntregaInicial(
 
 export function createCuota(overrides?: Partial<Cuota>): Cuota {
   return {
-    monedaCuota: pickFrom(codigoMoneda),
+    monedaCuota: pickFromKey(codigoMoneda),
     montoCuota: money(faker.number.float({ min: 50000, max: 5000000, multipleOf: 0.01 })),
     vencimientoCuota: undefined,
     ...overrides
@@ -276,9 +276,9 @@ export function createLocalEntregaMercaderias(
     numeroCasaEntrega: faker.number.int({ min: 1, max: 5000 }),
     complementoDireccion1Entrega: undefined,
     complementoDireccion2Entrega: undefined,
-    departamentoEntrega: pickFrom(codigoDepartamento),
+    departamentoEntrega: pickFromValue(codigoDepartamento),
     distritoEntrega: undefined,
-    ciudadEntrega: pickFrom(codigoCiudad),
+    ciudadEntrega: pickFromValue(codigoCiudad),
     telefonoLocalEntrega: undefined,
     ...overrides
   };

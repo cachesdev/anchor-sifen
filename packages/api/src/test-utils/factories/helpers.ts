@@ -6,8 +6,13 @@ export function pickEnum<T extends Record<string, number | string>>(obj: T): T[k
   return faker.helpers.arrayElement(Object.values(obj)) as T[keyof T];
 }
 
+/** Toma una clave aleatoria de un objeto donde las claves son los codigos validos. */
+export function pickFromKey<T extends Record<string, unknown>>(obj: T): keyof T {
+  return faker.helpers.arrayElement(Object.keys(obj) as (keyof T)[]) as keyof T;
+}
+
 /** Toma un valor aleatorio de un objeto const (devuelve el valor completo). */
-export function pickFrom<T extends Record<string, unknown>>(obj: T): T[keyof T] {
+export function pickFromValue<T extends Record<string, unknown>>(obj: T): T[keyof T] {
   return faker.helpers.arrayElement(Object.values(obj)) as T[keyof T];
 }
 

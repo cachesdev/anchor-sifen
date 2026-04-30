@@ -45,6 +45,7 @@ import {
   createDatosAdicionalesUsoComercial,
   createCarga
 } from './factories';
+import { codigoMoneda } from '../gen/monedas';
 
 describe('base factories', () => {
   it('createOperacionDE produce tipo base completo', () => {
@@ -128,7 +129,7 @@ describe('input factories', () => {
     expect('liquidacionIvaItem' in item.ivaItem!).toBe(false);
   });
 
-  it('createFacturaElectronicaInput produce el mínimo válido para C002=1', () => {
+  it('createFacturaElectronicaInput produce el minimo valido para C002=1', () => {
     const fe = createFacturaElectronicaInput();
     expect(fe.id_cdc.length).toBe(44);
     expect(fe.operacionDE).toBeDefined();
@@ -171,7 +172,7 @@ describe('input factories', () => {
     expect(fe.datosGeneralesOperacion.emisor.rucEmisor).toBe('80001234-5');
   });
 
-  it('crea objetos únicos en cada llamada', () => {
+  it('crea objetos unicos en cada llamada', () => {
     const a = createFacturaElectronicaInput();
     const b = createFacturaElectronicaInput();
     expect(a.id_cdc).not.toBe(b.id_cdc);
@@ -223,5 +224,25 @@ describe('input factories', () => {
       expect(result).toBeDefined();
       expect(typeof result).toBe('object');
     }
+  });
+});
+
+describe('factories: campos de moneda usan codigos, no descripciones', () => {
+  it('monedaOperacion es un codigo de moneda valido (clave del lookup)', () => {
+    const oc = createOperacionComercial();
+    const key = oc.monedaOperacion;
+    expect(codigoMoneda).toHaveProperty(key);
+  });
+
+  it('monedaTipoPago es un codigo de moneda valido', () => {
+    const pago = createPagoContadoEntregaInicial();
+    const key = pago.monedaTipoPago;
+    expect(codigoMoneda).toHaveProperty(key);
+  });
+
+  it('monedaCuota es un codigo de moneda valido', () => {
+    const cuota = createCuota();
+    const key = cuota.monedaCuota;
+    expect(codigoMoneda).toHaveProperty(key);
   });
 });
