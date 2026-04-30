@@ -1,5 +1,6 @@
 export { generateDEXML } from './generator';
 export { buildFacturaElectronica } from './factura-electronica';
+export { buildAutofacturaElectronica } from './autofactura-electronica';
 export { prepareDE, type PreparedDE } from './de-pipeline';
 export * from './derive';
 export * from './mapper';
