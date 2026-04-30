@@ -18,7 +18,8 @@ export function extraerRuc(ruc: string): string {
  * Calcula el dígito verificador numérico para un RUC/CI alfanumérico
  * usando el algoritmo módulo 11.
  */
-export function calcularDv(rucCi: string, baseMax = 11): number {
+export function calcularDv(rucCi: string): number {
+  const baseMax = 11;
   let numeroExpandido = '';
   for (const char of rucCi) {
     const upper = char.toUpperCase();
