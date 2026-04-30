@@ -1,4 +1,4 @@
-import Big from 'big.js';
+import { Big } from 'big.js';
 import { faker } from '@faker-js/faker';
 
 /** Toma un valor aleatorio de un objeto const estilo enum. */
