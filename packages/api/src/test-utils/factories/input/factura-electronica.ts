@@ -40,21 +40,15 @@ export function createOperacionDE_Input(
   return { ...omit(createOperacionDE(), 'codigoSeguridad'), ...overrides };
 }
 
-export function createTimbrado_Input(
-  overrides?: Partial<Timbrado_FE_Input>
-): Timbrado_FE_Input {
+export function createTimbrado_Input(overrides?: Partial<Timbrado_FE_Input>): Timbrado_FE_Input {
   return { ...omit(createTimbrado(), 'tipoDocumento'), ...overrides };
 }
 
-export function createEmisor_Input(
-  overrides?: Partial<EmisorInput>
-): EmisorInput {
+export function createEmisor_Input(overrides?: Partial<EmisorInput>): EmisorInput {
   return { ...omit(createEmisor(), 'digitoVerificadorEmisor'), ...overrides };
 }
 
-export function createReceptor_Input(
-  overrides?: Partial<ReceptorInput>
-): ReceptorInput {
+export function createReceptor_Input(overrides?: Partial<ReceptorInput>): ReceptorInput {
   return { ...omit(createReceptor(), 'digitoVerificadorReceptor'), ...overrides };
 }
 
@@ -70,24 +64,18 @@ export function createDatosGeneralesOperacion_Input(
   };
 }
 
-function createPagoTarjeta_Input(
-  overrides?: Partial<PagoTarjetaInput>
-): PagoTarjetaInput {
+function createPagoTarjeta_Input(overrides?: Partial<PagoTarjetaInput>): PagoTarjetaInput {
   return {
     ...omit(createBasePagoTarjeta(), 'digitoVerificadorProcesadoraTarjeta'),
     ...overrides
   };
 }
 
-function createPagoContado_Input(
-  overrides?: Partial<PagoContadoInput>
-): PagoContadoInput {
+function createPagoContado_Input(overrides?: Partial<PagoContadoInput>): PagoContadoInput {
   const base = createBasePagoContado();
   return {
     ...base,
-    pagoTarjetaCreditoDebito: base.pagoTarjetaCreditoDebito
-      ? createPagoTarjeta_Input()
-      : undefined,
+    pagoTarjetaCreditoDebito: base.pagoTarjetaCreditoDebito ? createPagoTarjeta_Input() : undefined,
     ...overrides
   };
 }
@@ -98,16 +86,12 @@ export function createCondicionOperacion_Input(
   const base = createBaseCondicionOperacion();
   return {
     ...base,
-    pagoContadoEntregaInicial: base.pagoContadoEntregaInicial?.map(() =>
-      createPagoContado_Input()
-    ),
+    pagoContadoEntregaInicial: base.pagoContadoEntregaInicial?.map(() => createPagoContado_Input()),
     ...overrides
   };
 }
 
-function createValorRestaItem_Input(
-  overrides?: Partial<ValorRestaItemInput>
-): ValorRestaItemInput {
+function createValorRestaItem_Input(overrides?: Partial<ValorRestaItemInput>): ValorRestaItemInput {
   return {
     ...omit(
       createBaseValorRestaItem(),
@@ -119,9 +103,7 @@ function createValorRestaItem_Input(
   };
 }
 
-function createValorItem_Input(
-  overrides?: Partial<ValorItemInput>
-): ValorItemInput {
+function createValorItem_Input(overrides?: Partial<ValorItemInput>): ValorItemInput {
   return {
     ...omit(createBaseValorItem(), 'totalBrutoOperacionItem'),
     valorRestaItem: createValorRestaItem_Input(),
@@ -129,9 +111,7 @@ function createValorItem_Input(
   };
 }
 
-function createIvaItem_Input(
-  overrides?: Partial<IvaItemInput>
-): IvaItemInput {
+function createIvaItem_Input(overrides?: Partial<IvaItemInput>): IvaItemInput {
   return {
     ...omit(createBaseIvaItem(), 'baseGravadaIvaItem', 'liquidacionIvaItem', 'baseExenta'),
     ...overrides

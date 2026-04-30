@@ -122,10 +122,10 @@ describe('input factories', () => {
   it('createItemOperacion_Input omite campos autocalculados del item', () => {
     const item = createItemOperacion_Input();
     expect(item.valorItem).toBeDefined();
-    expect('totalBrutoOperacionItem' in (item.valorItem!)).toBe(false);
-    expect('valorTotalOperacionItem' in (item.valorItem!.valorRestaItem)).toBe(false);
-    expect('baseGravadaIvaItem' in (item.ivaItem!)).toBe(false);
-    expect('liquidacionIvaItem' in (item.ivaItem!)).toBe(false);
+    expect('totalBrutoOperacionItem' in item.valorItem!).toBe(false);
+    expect('valorTotalOperacionItem' in item.valorItem!.valorRestaItem).toBe(false);
+    expect('baseGravadaIvaItem' in item.ivaItem!).toBe(false);
+    expect('liquidacionIvaItem' in item.ivaItem!).toBe(false);
   });
 
   it('createFacturaElectronicaInput produce el mínimo válido para C002=1', () => {
