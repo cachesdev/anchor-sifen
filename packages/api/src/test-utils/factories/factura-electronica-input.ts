@@ -6,7 +6,7 @@ import type {
   DatosGeneralesOperacion_FE_Input,
   DatosEspecificosPorTipoDE_FE_Input,
   ItemOperacion_FE_Input
-} from '../../../sifen/types/factura-electronica-input';
+} from '../../sifen/types/factura-electronica-input';
 import type {
   EmisorInput,
   ReceptorInput,
@@ -16,8 +16,8 @@ import type {
   ValorItemInput,
   ValorRestaItemInput,
   IvaItemInput
-} from '../types';
-import { omit } from '../helpers';
+} from './types';
+import { omit } from './helpers';
 import {
   createOperacionDE,
   createTimbrado,
@@ -32,7 +32,7 @@ import {
   createValorItem as createBaseValorItem,
   createValorRestaItem as createBaseValorRestaItem,
   createIvaItem as createBaseIvaItem
-} from '../base';
+} from './base';
 
 export function createOperacionDE_Input(
   overrides?: Partial<OperacionDE_FE_Input>

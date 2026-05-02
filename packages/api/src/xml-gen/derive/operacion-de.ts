@@ -4,7 +4,7 @@ import type { DEC } from '../../sifen/types';
  * Genera un numero de 9 digitos enteros criptograficamente aleatorio.
  * Segun MT v150, p. 62, campo B004 (dCodSeg).
  */
-function generateCodigoSeguridad(): number {
+export function generateCodigoSeguridad(): number {
   const buffer = new Uint32Array(1);
   crypto.getRandomValues(buffer);
   return (buffer[0]! % 900_000_000) + 100_000_000;

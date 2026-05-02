@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 import type { FacturaElectronica, FacturaElectronicaInput } from '../../sifen/types';
 import { toBig, toOptionalBig } from '../big';
+import { clone } from '../clone';
 import { enumsSchema } from './schema';
 
 function normalizeOperacionComercial(out: FacturaElectronica): void {
@@ -84,7 +85,7 @@ function normalizeTransportista(out: FacturaElectronica): void {
 }
 
 export function normalizeFacturaElectronica(input: FacturaElectronicaInput): FacturaElectronica {
-  const out = structuredClone(input) as unknown as FacturaElectronica;
+  const out = clone(input, 'input') as unknown as FacturaElectronica;
   out.tipoDE = 'FacturaElectronica';
   out.timbrado.tipoDocumento = 1;
   out.digitoVerificadorId = 0;
