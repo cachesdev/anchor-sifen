@@ -1,7 +1,6 @@
 import { Err, Ok, type Result } from '../../result';
 import type { DEC } from '../../sifen/types';
 import { XMLGenCalculationError } from '../errors';
-import { Big } from '../big';
 import { applyBaseDerivedFields } from './base';
 import { applyItemDerivedFields } from './item';
 import { applyOperacionDerivedFields } from './operacion-de';
@@ -19,52 +18,19 @@ import { getTipoDE } from './accessors';
  * 5) Subtotales y totales (acumula -> deriva -> aplica)
  */
 
-function cloneForCalculation<T>(value: T, path: string): T {
-  if (value instanceof Date) {
-    return new Date(value.getTime()) as unknown as T;
-  }
-
-  if (value instanceof Big) {
-    return new Big(value) as unknown as T;
-  }
-
-  if (Array.isArray(value)) {
-    return value.map((item, index) =>
-      cloneForCalculation(item, `${path}[${index}]`)
-    ) as unknown as T;
-  }
-
-  if (typeof value === 'function') {
-    throw new Error(`No se pudo clonar el valor en ${path}: se encontro una funcion.`);
-  }
-
-  if (value && typeof value === 'object') {
-    const clonedObject: Record<string, unknown> = {};
-
-    for (const [key, nestedValue] of Object.entries(value as Record<string, unknown>)) {
-      clonedObject[key] = cloneForCalculation(nestedValue, `${path}.${key}`);
-    }
-
-    return clonedObject as unknown as T;
-  }
-
-  return value;
-}
-
 /**
  * Deriva todos los campos calculables de un DE.
  */
 export function calculateFields<D extends DEC>(de: D): D {
-  const out = cloneForCalculation(de, 'de');
-  const config = obtenerConfig(getTipoDE(out));
+  const config = obtenerConfig(getTipoDE(de));
 
-  applyBaseDerivedFields(out);
-  applyOperacionDerivedFields(out);
-  applyDvDerivedFields(out, config);
-  applyItemDerivedFields(out, config);
-  applySubtotalesDerivedFields(out, config);
+  applyBaseDerivedFields(de);
+  applyOperacionDerivedFields(de);
+  applyDvDerivedFields(de, config);
+  applyItemDerivedFields(de, config);
+  applySubtotalesDerivedFields(de, config);
 
-  return out;
+  return de;
 }
 
 export function calculateFieldsResult<D extends DEC>(de: D): Result<D, XMLGenCalculationError> {

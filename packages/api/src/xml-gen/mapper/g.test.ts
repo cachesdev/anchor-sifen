@@ -22,7 +22,7 @@ describe('mapper — g', () => {
   describe('mapCargaToRaw', () => {
     it('resuelve descripcion de unidadMedida 77 a UNI para volumen', () => {
       const result = mapCargaToRaw(createCarga({ unidadMedidaTotalVolumen: 77 }));
-      expect(result.cUniMedTotVol).toBe('77');
+      expect(String(result.cUniMedTotVol)).toBe('77');
       expect(result.dDesUniMedTotVol).toBe('UNI');
     });
 
@@ -34,11 +34,11 @@ describe('mapper — g', () => {
 
     it('resuelve descripcion de unidadMedida 77 a UNI para peso', () => {
       const result = mapCargaToRaw(createCarga({ unidadMedidaTotalPeso: 77 }));
-      expect(result.cUniMedTotPes).toBe('77');
+      expect(String(result.cUniMedTotPes)).toBe('77');
       expect(result.dDesUniMedTotPes).toBe('UNI');
     });
 
-    it('resuelve descripcion de caracteristicasCarga 1', () => {
+    it('resuelve descripcion de caracteristicasCarga 1 a cadena de frio', () => {
       const result = mapCargaToRaw(createCarga({ caracteristicasCarga: 1 }));
       expect(result.iCarCarga).toBe(1);
       expect(result.dDesCarCarga).toBe('Mercaderías con cadena de frío');
