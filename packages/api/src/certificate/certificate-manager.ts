@@ -113,7 +113,7 @@ function extractPrivateKey(p12: forge.pkcs12.Pkcs12Pfx): forge.pki.PrivateKey {
 }
 
 /** Elimina el header/footer y whitespace del certificado PEM. */
-function pemToBase64(pem: string): string {
+export function pemToBase64(pem: string): string {
   return pem
     .split(/\r?\n/)
     .filter((line) => line.length > 0 && !line.startsWith('-----'))
@@ -128,7 +128,7 @@ function pemToBase64(pem: string): string {
  * sujeto, con prefijo CI. Verifica Subject y la extension SubjectAlternativeName
  * como alternativa.
  */
-function extractCI(cert: forge.pki.Certificate): string {
+export function extractCI(cert: forge.pki.Certificate): string {
   const serialNumberAttr = cert.subject.attributes.find(
     (attr) => attr.shortName === 'serialNumber' || attr.type === '2.5.4.5'
   );
