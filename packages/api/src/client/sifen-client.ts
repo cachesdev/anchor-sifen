@@ -84,7 +84,7 @@ export class SifenAPI {
   }
 }
 
-function buildLote(deXmls: string[]): string {
+export function buildLote(deXmls: string[]): string {
   const root = create({ version: '1.0', encoding: 'UTF-8' })
     .ele('http://ekuatia.set.gov.py/sifen/xsd', 'rLoteDE')
     .att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')

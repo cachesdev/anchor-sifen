@@ -154,7 +154,7 @@ export function createFacturaElectronicaInput(
   overrides?: Partial<FacturaElectronicaInput>
 ): FacturaElectronicaInput {
   return {
-    id_cdc: faker.string.alphanumeric(44),
+    id_cdc: faker.string.numeric({ length: 44 }),
     operacionDE: createOperacionDE_Input(),
     timbrado: createTimbrado_Input(),
     datosGeneralesOperacion: createDatosGeneralesOperacion_Input(),
