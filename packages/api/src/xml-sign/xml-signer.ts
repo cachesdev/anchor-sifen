@@ -130,7 +130,7 @@ export class XMLSigner {
  * - El atributo Id este presente.
  * - El CDC tenga exactamente 44 caracteres.
  */
-function extractCDC(doc: Document): string {
+export function extractCDC(doc: Document): string {
   const deElements = doc.getElementsByTagName('DE');
   if (!deElements || deElements.length === 0) {
     throw new Error('Elemento DE no encontrado en el documento XML.');
@@ -160,7 +160,7 @@ function extractCDC(doc: Document): string {
  *
  * Busca primero con namespace, luego por nombre de etiqueta como fallback.
  */
-function extractDigestValue(signedXml: string): string {
+export function extractDigestValue(signedXml: string): string {
   const doc = new DOMParser().parseFromString(signedXml, 'text/xml');
 
   let elements = doc.getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#', 'DigestValue');
