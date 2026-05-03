@@ -23,17 +23,108 @@ export interface CertificateData {
   ci: string;
 }
 
+/**
+ * Fuente de datos PKCS#12.
+ *
+ * Cada adaptador provee el contenido DER binario del archivo PKCS#12 y su
+ * contrasena. Esto permite cargar desde archivo, buffer en memoria, variables
+ * de entorno, red, etc.
+ */
+export interface PKCS12Source {
+  /** Retorna los bytes DER y la contrasena del PKCS#12. */
+  read(): { der: Buffer; password: string };
+}
+
+/**
+ * Crea un PKCS12Source que lee desde un archivo en disco.
+ *
+ * @param filePath - Ruta al archivo .p12/.pfx
+ * @param password - Contrasena del archivo PKCS#12
+ */
+export function createFilePKCS12Source(filePath: string, password: string): PKCS12Source {
+  return {
+    read: () => {
+      try {
+        return { der: readFileSync(filePath), password };
+      } catch (error) {
+        throw new CertError({
+          details: `No se pudo leer el archivo PKCS#12: ${filePath}`,
+          cause: error
+        });
+      }
+    }
+  };
+}
+
+/**
+ * Crea un PKCS12Source que lee desde un Buffer en memoria.
+ *
+ * @param buffer - Contenido binario del archivo PKCS#12
+ * @param password - Contrasena del archivo PKCS#12
+ */
+export function createBufferPKCS12Source(buffer: Buffer, password: string): PKCS12Source {
+  return {
+    read: () => ({ der: buffer, password })
+  };
+}
+
+/**
+ * Crea un PKCS12Source dummy con un certificado autofirmado generado en memoria.
+ *
+ * Util para desarrollo, testing o prototipado donde no se necesita un certificado
+ * real emitido por una CA.
+ *
+ * El certificado generado tiene:
+ * - CI: CI0000000
+ * - Validez: 1 ano desde la fecha actual
+ * - RSA 2048 bits
+ *
+ * @param password - Contrasena del PKCS#12 generado (default: 'dummy')
+ */
+export function createDummyPKCS12Source(password = 'dummy'): PKCS12Source {
+  return {
+    read: () => {
+      const keys = forge.pki.rsa.generateKeyPair(2048);
+      const cert = forge.pki.createCertificate();
+      cert.publicKey = keys.publicKey;
+      cert.serialNumber = '01';
+
+      const now = new Date();
+      cert.validity.notBefore = now;
+      cert.validity.notAfter = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+
+      const attrs: forge.pki.CertificateField[] = [
+        { name: 'commonName', value: 'Dummy SIFEN Cert' },
+        { name: 'serialNumber', type: '2.5.4.5', value: 'CI0000000' }
+      ];
+      cert.setSubject(attrs);
+      cert.setIssuer(attrs);
+      cert.sign(keys.privateKey);
+
+      const p12Asn1 = forge.pkcs12.toPkcs12Asn1(keys.privateKey, [cert], password, {
+        algorithm: '3des'
+      });
+      const der = forge.asn1.toDer(p12Asn1).getBytes();
+
+      return { der: Buffer.from(der, 'binary'), password };
+    }
+  };
+}
+
 export class CertificateManager {
   /**
-   * Carga un archivo de certificado PKCS#12 y extrae el certificado y llave privada.
+   * Carga un certificado PKCS#12 desde un PKCS12Source.
    *
-   * @param filePath - Ruta al archivo .p12/.pfx
-   * @param password - Contrasena del archivo PKCS#12
-   * @throws {CertError} Si el archivo no existe, la contrasena es invalida o el formato es incorrecto.
+   * @param source - Fuente de datos PKCS#12
+   * @throws {CertError} Si la contrasena es invalida, el formato es incorrecto,
+   *         o faltan el certificado/llave privada.
    */
-  loadPKCS12(filePath: string, password: string): CertificateData {
+  loadPKCS12(source: PKCS12Source): CertificateData {
     try {
-      const p12 = parsePKCS12File(filePath, password);
+      const { der, password } = source.read();
+      const asn1 = forge.asn1.fromDer(der.toString('binary'));
+      const p12 = forge.pkcs12.pkcs12FromAsn1(asn1, password);
+
       const certificate = extractCertificate(p12);
       const privateKey = extractPrivateKey(p12);
 
@@ -78,12 +169,6 @@ export class CertificateManager {
       });
     }
   }
-}
-
-function parsePKCS12File(filePath: string, password: string): forge.pkcs12.Pkcs12Pfx {
-  const p12Der = readFileSync(filePath).toString('binary');
-  const asn1 = forge.asn1.fromDer(p12Der);
-  return forge.pkcs12.pkcs12FromAsn1(asn1, password);
 }
 
 /** Extrae el primer certificado encontrado dentro del archivo PKCS#12. */
