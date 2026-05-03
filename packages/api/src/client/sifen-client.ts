@@ -1,5 +1,5 @@
 import { create, fragment } from 'xmlbuilder2';
-import { CertificateManager, type CertificateData } from '../certificate';
+import { CertificateManager, type PKCS12Source } from '../certificate';
 import { attachQRToSignedXML, getQRUrl } from '../qr';
 import { SifenSoapClient } from '../soap';
 import { XMLSigner, type XMLSignError } from '../xml-sign';
@@ -7,9 +7,7 @@ import type { Result } from '../result';
 
 export interface SIFENConfig {
   environment: 'test' | 'prod';
-  certificatePath?: string;
-  certificatePassword?: string;
-  certificateData?: CertificateData;
+  certificateSource: PKCS12Source;
   idCSC: string;
   csc: string;
 }
@@ -17,18 +15,12 @@ export interface SIFENConfig {
 export class SifenAPI {
   private readonly config: SIFENConfig;
   private readonly xmlSigner = new XMLSigner();
-  private readonly certData: CertificateData;
+  private readonly certData;
   private readonly soap: SifenSoapClient;
 
-  /**
-   * @throws Si el certificado no puede ser cargado.
-   */
   constructor(config: SIFENConfig) {
     this.config = config;
-    this.certData =
-      config.certificateData ??
-      new CertificateManager().loadPKCS12(config.certificatePath!, config.certificatePassword!);
-
+    this.certData = new CertificateManager().loadPKCS12(config.certificateSource);
     this.soap = new SifenSoapClient({
       certificatePem: this.certData.certificatePem,
       certificatePemKey: this.certData.privateKeyPem,
