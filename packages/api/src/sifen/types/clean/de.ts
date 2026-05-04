@@ -133,10 +133,9 @@ export interface OperacionDE {
   /**
    * B - B004 | dCodSeg | Código de seguridad | Pagina 62
    *
-   * Si no es proveido, entonces es autogenerado.
    * Observaciones: Código generado por el emisor de manera aleatoria para asegurar la confidencialidad de la consulta pública del DE
    */
-  codigoSeguridad?: number;
+  codigoSeguridad: number;
   /**
    * B - B005 | dInfoEmi | Información de interés del emisor respecto al DE | Pagina 62
    */

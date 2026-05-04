@@ -78,43 +78,28 @@ import type {
   GVehNuevo,
   GVehTras
 } from '../../sifen/types/raw/e';
+import { asLiteral } from '../../sifen/types/union';
+import { descripcionCodigoCiudad } from '../../gen/ciudades';
+import { descripcionCodigoDepartamento } from '../../gen/departamentos';
+import { descripcionCodigoDistrito } from '../../gen/distritos';
+import { codigoMoneda } from '../../gen/monedas';
+import { descripcionCodigoPais } from '../../gen/paises';
 import {
-  formatDateOnly,
-  formatDateTime,
-  parseRuc,
-  bigToFixed,
+  formatDate,
   optionalBigToFixed,
-  requireDefined,
-  resolveCityDescription,
-  resolveCountryDescription,
-  resolveCurrencyDescription,
-  resolveDepartmentDescription,
-  resolveDistrictDescription,
-  resolveOptionalDescription,
-  resolveOptionalNumericDv,
-  resolveOptionalStringDv,
-  resolveRequiredDescription
+  optionalMapper
 } from './helpers';
-
-function normalizeOptionalRuc(rawRuc?: string): string | undefined {
-  if (!rawRuc) {
-    return undefined;
-  }
-
-  return parseRuc(rawRuc).ruc;
-}
+import { extraerRuc } from '../ruc';
 
 export function mapCamposFacturaElectronicaToRaw(data: CamposFacturaElectronica): GCamFE {
+  const indicadorPresencia = asLiteral(data.indicadorPresencia);
+
   return {
-    iIndPres: data.indicadorPresencia,
-    dDesIndPres: resolveRequiredDescription(
-      'indicadorPresencia',
-      data.indicadorPresencia,
-      descripcionIndicadorPresencia as Record<string, string>
-    ),
-    dFecEmNR: formatDateOnly(data.fechaFuturaTrasladoMercaderia),
-    gCompPub: data.comprasPublicas ? mapComprasPublicasToRaw(data.comprasPublicas) : undefined
-  } as GCamFE;
+    iIndPres: indicadorPresencia,
+    dDesIndPres: descripcionIndicadorPresencia[indicadorPresencia],
+    dFecEmNR: formatDate(data.fechaFuturaTrasladoMercaderia, 'date'),
+    gCompPub: optionalMapper(mapComprasPublicasToRaw, data.comprasPublicas)
+  };
 }
 
 export function mapComprasPublicasToRaw(data: ComprasPublicas): GCompPub {
@@ -123,163 +108,155 @@ export function mapComprasPublicasToRaw(data: ComprasPublicas): GCompPub {
     dEntCont: data.entidadContratacion,
     dAnoCont: data.anoContratacion,
     dSecCont: data.secuenciaContratacion,
-    dFeCodCont: requireDefined(
-      formatDateOnly(data.fechaEmisionCodigoContratacion),
-      'fechaEmisionCodigoContratacion'
-    )
-  } as GCompPub;
+    dFeCodCont: formatDate(data.fechaEmisionCodigoContratacion, 'date')
+  };
 }
 
 export function mapAutofacturaElectronicaToRaw(data: AutofacturaElectronica): GCamAE {
+  const naturalezaVendedor = asLiteral(data.naturalezaVendedor);
+  const tipoDocumentoIdentidadVendedor = asLiteral(data.tipoDocumentoIdentidadVendedor);
+  const departamentoVendedor = asLiteral(data.departamentoVendedor);
+  const ciudadVendedor = asLiteral(data.ciudadVendedor);
+  const departamentoTransaccion = asLiteral(data.departamentoTransaccion);
+  const ciudadTransaccion = asLiteral(data.ciudadTransaccion);
+  const distritoVendedor = asLiteral(data.distritoVendedor);
+  const distritoTransaccion = asLiteral(data.distritoTransaccion);
+
   return {
-    iNatVen: data.naturalezaVendedor,
-    dDesNatVen: resolveRequiredDescription(
-      'naturalezaVendedor',
-      data.naturalezaVendedor,
-      descripcionNaturalezaVendedor as Record<string, string>
-    ),
-    iTipIDVen: data.tipoDocumentoIdentidadVendedor,
-    dDTipIDVen: resolveRequiredDescription(
-      'tipoDocumentoIdentidadVendedor',
-      data.tipoDocumentoIdentidadVendedor,
-      descripcionTipoDocumentoVendedor as Record<string, string>
-    ),
+    iNatVen: naturalezaVendedor,
+    dDesNatVen: descripcionNaturalezaVendedor[naturalezaVendedor],
+    iTipIDVen: tipoDocumentoIdentidadVendedor,
+    dDTipIDVen: descripcionTipoDocumentoVendedor[tipoDocumentoIdentidadVendedor],
     dNumIDVen: data.numeroDocumentoIdentidadVendedor,
     dNomVen: data.nombreVendedor,
     dDirVen: data.direccionVendedor,
     dNumCasVen: data.numeroCasaVendedor,
-    cDepVen: data.departamentoVendedor,
-    dDesDepVen: resolveDepartmentDescription(data.departamentoVendedor),
-    cDisVen: data.distritoVendedor,
-    dDesDisVen: resolveDistrictDescription(data.distritoVendedor),
-    cCiuVen: data.ciudadVendedor,
-    dDesCiuVen: requireDefined(resolveCityDescription(data.ciudadVendedor), 'ciudadVendedor'),
+    cDepVen: departamentoVendedor,
+    dDesDepVen: descripcionCodigoDepartamento[departamentoVendedor],
+    cDisVen: distritoVendedor,
+    dDesDisVen:
+      distritoVendedor !== undefined ? descripcionCodigoDistrito[distritoVendedor] : undefined,
+    cCiuVen: ciudadVendedor,
+    dDesCiuVen: descripcionCodigoCiudad[ciudadVendedor],
     dDirProv: data.lugarTransaccion,
-    cDepProv: data.departamentoTransaccion,
-    dDesDepProv: resolveDepartmentDescription(data.departamentoTransaccion),
-    cDisProv: data.distritoTransaccion,
-    dDesDisProv: resolveDistrictDescription(data.distritoTransaccion),
-    cCiuProv: data.ciudadTransaccion,
-    dDesCiuProv: requireDefined(resolveCityDescription(data.ciudadTransaccion), 'ciudadTransaccion')
-  } as GCamAE;
+    cDepProv: departamentoTransaccion,
+    dDesDepProv: descripcionCodigoDepartamento[departamentoTransaccion],
+    cDisProv: distritoTransaccion,
+    dDesDisProv:
+      distritoTransaccion !== undefined
+        ? descripcionCodigoDistrito[distritoTransaccion]
+        : undefined,
+    cCiuProv: ciudadTransaccion,
+    dDesCiuProv: descripcionCodigoCiudad[ciudadTransaccion]
+  };
 }
 
 export function mapNotaCreditoDebitoElectronicaToRaw(data: NotaCreditoDebitoElectronica): GCamNCDE {
+  const motivoEmision = asLiteral(data.motivoEmision);
+
   return {
-    iMotEmi: data.motivoEmision,
-    dDesMotEmi: resolveRequiredDescription(
-      'motivoEmision',
-      data.motivoEmision,
-      descripcionMotivoEmision as Record<string, string>
-    )
-  } as GCamNCDE;
+    iMotEmi: motivoEmision,
+    dDesMotEmi: descripcionMotivoEmision[motivoEmision]
+  };
 }
 
 export function mapNotaRemisionElectronicaToRaw(data: NotaRemisionElectronica): GCamNRE {
+  const motivoEmisionNotaRemision = asLiteral(data.motivoEmisionNotaRemision);
+  const responsableEmisionNotaRemision = asLiteral(data.responsableEmisionNotaRemision);
+
   return {
-    iMotEmiNR: data.motivoEmisionNotaRemision,
-    dDesMotEmiNR: resolveRequiredDescription(
-      'motivoEmisionNotaRemision',
-      data.motivoEmisionNotaRemision,
-      descripcionMotivoEmisionNotaRemision as Record<string, string>
-    ),
-    iRespEmiNR: data.responsableEmisionNotaRemision,
-    dDesRespEmiNR: resolveRequiredDescription(
-      'responsableEmisionNotaRemision',
-      data.responsableEmisionNotaRemision,
-      descripcionResponsableEmisionNotaRemision as Record<string, string>
-    ),
+    iMotEmiNR: motivoEmisionNotaRemision,
+    dDesMotEmiNR: descripcionMotivoEmisionNotaRemision[motivoEmisionNotaRemision],
+    iRespEmiNR: responsableEmisionNotaRemision,
+    dDesRespEmiNR: descripcionResponsableEmisionNotaRemision[responsableEmisionNotaRemision],
     dKmR: data.kilometrosEstimadosRecorrido,
-    dFecEm: formatDateOnly(data.fechaFuturaEmision),
+    dFecEm: formatDate(data.fechaFuturaEmision, 'date'),
     cPreFle: data.precioFlete
-  } as GCamNRE;
+  };
 }
 
 export function mapCondicionOperacionToRaw(data: CondicionOperacion): GCamCond {
+  const condicionOperacion = asLiteral(data.condicionOperacion);
+
   return {
-    iCondOpe: data.condicionOperacion,
-    dDCondOpe: resolveRequiredDescription(
-      'condicionOperacion',
-      data.condicionOperacion,
-      descripcionCondicionOperacion as Record<string, string>
-    ),
+    iCondOpe: condicionOperacion,
+    dDCondOpe: descripcionCondicionOperacion[condicionOperacion],
     gPaConEIni: data.pagoContadoEntregaInicial?.map(mapPagoContadoEntregaInicialToRaw),
-    gPagCred: data.pagoCredito ? mapPagoCreditoToRaw(data.pagoCredito) : undefined
-  } as GCamCond;
+    gPagCred: optionalMapper(mapPagoCreditoToRaw, data.pagoCredito)
+  };
 }
 
 export function mapPagoContadoEntregaInicialToRaw(data: PagoContadoEntregaInicial): GPaConEIni {
+  const tipoPago = asLiteral(data.tipoPago);
+  const monedaTipoPago = asLiteral(data.monedaTipoPago);
+
   return {
-    iTiPago: data.tipoPago,
-    dDesTiPag: resolveRequiredDescription(
-      'tipoPago',
-      data.tipoPago,
-      descripcionTipoPago as Record<string, string>
-    ),
-    dMonTiPag: bigToFixed(data.montoTipoPago, 4),
-    cMoneTiPag: data.monedaTipoPago,
-    dDMoneTiPag: resolveCurrencyDescription(data.monedaTipoPago),
+    iTiPago: tipoPago,
+    dDesTiPag: descripcionTipoPago[tipoPago],
+    dMonTiPag: data.montoTipoPago.toFixed(4),
+    cMoneTiPag: monedaTipoPago,
+    dDMoneTiPag: codigoMoneda[monedaTipoPago],
     dTiCamTiPag: optionalBigToFixed(data.tipoCambioTipoPago, 4),
-    gPagTarCD: data.pagoTarjetaCreditoDebito
-      ? mapPagoTarjetaCreditoDebitoToRaw(data.pagoTarjetaCreditoDebito)
-      : undefined,
-    gPagCheq: data.pagoCheque ? mapPagoChequeToRaw(data.pagoCheque) : undefined
-  } as GPaConEIni;
+    gPagTarCD: optionalMapper(mapPagoTarjetaCreditoDebitoToRaw, data.pagoTarjetaCreditoDebito),
+    gPagCheq: optionalMapper(mapPagoChequeToRaw, data.pagoCheque)
+  };
 }
 
 export function mapPagoTarjetaCreditoDebitoToRaw(data: PagoTarjetaCreditoDebito): GPagTarCD {
+  const denominacionTarjeta = asLiteral(data.denominacionTarjeta);
+
   return {
-    iDenTarj: data.denominacionTarjeta,
-    dDesDenTarj: resolveRequiredDescription(
-      'denominacionTarjeta',
-      data.denominacionTarjeta,
-      descripcionDenominacionTarjeta as Record<string, string>
-    ),
+    iDenTarj: denominacionTarjeta,
+    dDesDenTarj: descripcionDenominacionTarjeta[denominacionTarjeta],
     dRSProTar: data.razonSocialProcesadoraTarjeta,
-    dRUCProTar: normalizeOptionalRuc(data.rucProcesadoraTarjeta),
-    dDVProTar: resolveOptionalNumericDv(
-      data.digitoVerificadorProcesadoraTarjeta,
-      data.rucProcesadoraTarjeta
-    ),
-    iForProPa: data.formaProcesamientoPago,
+    dRUCProTar:
+      data.rucProcesadoraTarjeta !== undefined
+        ? extraerRuc(data.rucProcesadoraTarjeta)
+        : undefined,
+    dDVProTar: data.digitoVerificadorProcesadoraTarjeta,
+    iForProPa: asLiteral(data.formaProcesamientoPago),
     dCodAuOpe: data.codigoAutorizacionOperacion,
     dNomTit: data.nombreTitularTarjeta,
     dNumTarj: data.numeroTarjeta
-  } as GPagTarCD;
+  };
 }
 
 export function mapPagoChequeToRaw(data: PagoCheque): GPagCheq {
   return {
     dNumCheq: data.numeroCheque,
     dBcoEmi: data.bancoEmisor
-  } as GPagCheq;
+  };
 }
 
 export function mapPagoCreditoToRaw(data: PagoCredito): GPagCred {
+  const condicionOperacionCredito = asLiteral(data.condicionOperacionCredito);
+
   return {
-    iCondCred: data.condicionOperacionCredito,
-    dDCondCred: resolveRequiredDescription(
-      'condicionOperacionCredito',
-      data.condicionOperacionCredito,
-      descripcionCondicionOperacionCredito as Record<string, string>
-    ),
+    iCondCred: condicionOperacionCredito,
+    dDCondCred: descripcionCondicionOperacionCredito[condicionOperacionCredito],
     dPlazoCre: data.plazoCredito,
     dCuotas: data.cantidadCuotas,
     dMonEnt: optionalBigToFixed(data.montoEntregaInicial, 4),
     gCuotas: data.cuotas?.map(mapCuotaToRaw)
-  } as GPagCred;
+  };
 }
 
 export function mapCuotaToRaw(data: Cuota): GCuotas {
+  const monedaCuota = asLiteral(data.monedaCuota);
+
   return {
-    cMoneCuo: data.monedaCuota,
-    dDMoneCuo: resolveCurrencyDescription(data.monedaCuota),
-    dMonCuota: bigToFixed(data.montoCuota, 4),
-    dVencCuo: formatDateOnly(data.vencimientoCuota)
-  } as GCuotas;
+    cMoneCuo: monedaCuota,
+    dDMoneCuo: codigoMoneda[monedaCuota],
+    dMonCuota: data.montoCuota.toFixed(4),
+    dVencCuo: formatDate(data.vencimientoCuota, 'date')
+  };
 }
 
 export function mapItemOperacionToRaw(data: ItemOperacion): GCamItem {
+  const unidadMedida = asLiteral(data.unidadMedida);
+  const paisOrigen = asLiteral(data.paisOrigen);
+  const codigoDatosRelevanciaMercaderias = asLiteral(data.codigoDatosRelevanciaMercaderias);
+
   return {
     dCodInt: data.codigoInterno,
     dParAranc: data.partidaArancelaria,
@@ -289,124 +266,113 @@ export function mapItemOperacionToRaw(data: ItemOperacion): GCamItem {
     dGtin: data.codigoGtinProducto,
     dGtinPq: data.codigoGtinPaquete,
     dDesProSer: data.descripcionProductoServicio,
-    cUniMed: data.unidadMedida,
-    dDesUniMed: resolveRequiredDescription(
-      'unidadMedida',
-      data.unidadMedida,
-      descripcionUnidadMedida
-    ),
-    dCantProSer: bigToFixed(data.cantidadProductoServicio, 4),
-    cPaisOrig: data.paisOrigen,
-    dDesPaisOrig:
-      data.paisOrigen !== undefined ? resolveCountryDescription(data.paisOrigen) : undefined,
+    cUniMed: unidadMedida,
+    dDesUniMed: descripcionUnidadMedida[unidadMedida],
+    dCantProSer: data.cantidadProductoServicio.toFixed(4),
+    cPaisOrig: paisOrigen,
+    dDesPaisOrig: paisOrigen !== undefined ? descripcionCodigoPais[paisOrigen] : undefined,
     dInfItem: data.informacionItem,
-    cRelMerc: data.codigoDatosRelevanciaMercaderias,
-    dDesRelMerc: resolveOptionalDescription(
-      data.codigoDatosRelevanciaMercaderias,
-      descripcionCodigoDatosRelevanciaMercaderias as Record<string, string>
-    ),
+    cRelMerc: codigoDatosRelevanciaMercaderias,
+    dDesRelMerc:
+      codigoDatosRelevanciaMercaderias !== undefined
+        ? descripcionCodigoDatosRelevanciaMercaderias[codigoDatosRelevanciaMercaderias]
+        : undefined,
     dCanQuiMer: optionalBigToFixed(data.cantidadQuiebraMerma, 4),
     dPorQuiMer: optionalBigToFixed(data.porcentajeQuiebraMerma, 8),
     dCDCAnticipo: data.cdcAnticipo,
-    gValorItem: data.valorItem ? mapValorItemToRaw(data.valorItem) : undefined,
-    gCamIVA: data.ivaItem ? mapIvaItemToRaw(data.ivaItem) : undefined,
-    gRasMerc: data.rastreoMercaderia
-      ? mapRastreoMercaderiaToRaw(data.rastreoMercaderia)
-      : undefined,
-    gVehNuevo: data.vehiculoNuevo ? mapDetalleVehiculoNuevoToRaw(data.vehiculoNuevo) : undefined
-  } as GCamItem;
+    gValorItem: optionalMapper(mapValorItemToRaw, data.valorItem),
+    gCamIVA: optionalMapper(mapIvaItemToRaw, data.ivaItem),
+    gRasMerc: optionalMapper(mapRastreoMercaderiaToRaw, data.rastreoMercaderia),
+    gVehNuevo: optionalMapper(mapDetalleVehiculoNuevoToRaw, data.vehiculoNuevo)
+  };
 }
 
 export function mapValorItemToRaw(data: ValorItem): GValorItem {
   return {
-    dPUniProSer: bigToFixed(data.precioUnitario, 8),
+    dPUniProSer: data.precioUnitario.toFixed(8),
     dTiCamIt: optionalBigToFixed(data.tipoCambioItem, 4),
-    dTotBruOpeItem: bigToFixed(data.totalBrutoOperacionItem, 8),
+    dTotBruOpeItem: data.totalBrutoOperacionItem.toFixed(8),
     gValorRestaItem: mapValorRestaItemToRaw(data.valorRestaItem)
-  } as GValorItem;
+  };
 }
 
 export function mapValorRestaItemToRaw(data: ValorRestaItem): GValorRestaItem {
   return {
     dDescItem: optionalBigToFixed(data.descuentoParticularItem, 8),
-    dPorcDesIt: bigToFixed(data.porcentajeDescuentoItem!, 8),
+    dPorcDesIt: optionalBigToFixed(data.porcentajeDescuentoItem, 8),
     dDescGloItem: optionalBigToFixed(data.descuentoGlobalItem, 8),
     dAntPreUniIt: optionalBigToFixed(data.anticipoParticularItem, 8),
     dAntGloPreUniIt: optionalBigToFixed(data.anticipoGlobalItem, 8),
-    dTotOpeItem: bigToFixed(data.valorTotalOperacionItem, 8),
+    dTotOpeItem: data.valorTotalOperacionItem.toFixed(8),
     dTotOpeGs: optionalBigToFixed(data.valorTotalOperacionItemGs, 8)
-  } as GValorRestaItem;
+  };
 }
 
 export function mapIvaItemToRaw(data: IvaItem): GCamIVA {
+  const formaAfectacionTributariaIVA = asLiteral(data.formaAfectacionTributariaIVA);
+
   return {
-    iAfecIVA: data.formaAfectacionTributariaIVA,
-    dDesAfecIVA: resolveRequiredDescription(
-      'formaAfectacionTributariaIVA',
-      data.formaAfectacionTributariaIVA,
-      descripcionFormaAfectacionTributariaIVA as Record<string, string>
-    ),
-    dPropIVA: bigToFixed(data.proporcionGravadaIva, 8),
+    iAfecIVA: formaAfectacionTributariaIVA,
+    dDesAfecIVA: descripcionFormaAfectacionTributariaIVA[formaAfectacionTributariaIVA],
+    dPropIVA: data.proporcionGravadaIva.toFixed(8),
     dTasaIVA: data.tasaIva,
-    dBasGravIVA: bigToFixed(data.baseGravadaIvaItem, 8),
-    dLiqIVAItem: bigToFixed(data.liquidacionIvaItem, 8),
-    dBasExe: bigToFixed(data.baseExenta, 8)
-  } as GCamIVA;
+    dBasGravIVA: data.baseGravadaIvaItem.toFixed(8),
+    dLiqIVAItem: data.liquidacionIvaItem.toFixed(8),
+    dBasExe: data.baseExenta.toFixed(8)
+  };
 }
 
 export function mapRastreoMercaderiaToRaw(data: RastreoMercaderia): GRasMerc {
   return {
     dNumLote: data.numeroLote,
-    dVencMerc: formatDateOnly(data.fechaVencimientoMercaderia),
+    dVencMerc: formatDate(data.fechaVencimientoMercaderia, 'date'),
     dNSerie: data.numeroSerie,
     dNumPedi: data.numeroPedido,
     dNumSegui: data.numeroSeguimientoEnvio,
     dNumReg: data.numeroRegistroProductoSenave,
     dNumRegEntCom: data.numeroRegistroEntidadComercialSenave,
     dNomPro: data.nombreProducto
-  } as GRasMerc;
+  };
 }
 
 export function mapDetalleVehiculoNuevoToRaw(data: DetalleVehiculoNuevo): GVehNuevo {
+  const tipoOperacionVentaVehiculos = asLiteral(data.tipoOperacionVentaVehiculos);
+  const tipoCombustible = asLiteral(data.tipoCombustible);
+
   return {
-    iTipOpVN: data.tipoOperacionVentaVehiculos,
-    dDesTipOpVN: resolveOptionalDescription(
-      data.tipoOperacionVentaVehiculos,
-      descripcionTipoOperacionVentaVehiculos as Record<string, string>
-    ),
+    iTipOpVN: tipoOperacionVentaVehiculos,
+    dDesTipOpVN:
+      tipoOperacionVentaVehiculos !== undefined
+        ? descripcionTipoOperacionVentaVehiculos[tipoOperacionVentaVehiculos]
+        : undefined,
     dChasis: data.chasisVehiculo,
     dColor: data.colorVehiculo,
     dPotencia: data.potenciaMotor,
     dCapMot: data.capacidadMotor,
     dPNet: optionalBigToFixed(data.pesoNeto, 4),
     dPBruto: optionalBigToFixed(data.pesoBruto, 4),
-    iTipCom: data.tipoCombustible,
-    dDesTipCom: resolveOptionalDescription(
-      data.tipoCombustible,
-      descripcionTipoCombustible as Record<string, string>
-    ),
+    iTipCom: tipoCombustible,
+    dDesTipCom:
+      tipoCombustible !== undefined ? descripcionTipoCombustible[tipoCombustible] : undefined,
     dNroMotor: data.numeroMotor,
     dCapTracc: optionalBigToFixed(data.capacidadMaximaTraccion, 4),
     dAnoFab: data.anoFabricacion,
     cTipVeh: data.tipoVehiculo,
     dCapac: data.capacidadMaximaPasajeros,
     dCilin: data.cilindradasMotor
-  } as GVehNuevo;
+  };
 }
 
 export function mapUsoComercialToRaw(data: UsoComercial): GCamEsp {
   return {
-    gGrupEner: data.sectorEnergiaElectrica
-      ? mapSectorEnergiaElectricaToRaw(data.sectorEnergiaElectrica)
-      : undefined,
-    gGrupSeg: data.sectorSeguros ? mapSectorSegurosToRaw(data.sectorSeguros) : undefined,
-    gGrupSup: data.sectorSupermercados
-      ? mapSectorSupermercadosToRaw(data.sectorSupermercados)
-      : undefined,
-    gGrupAdi: data.datosAdicionalesUsoComercial
-      ? mapDatosAdicionalesUsoComercialToRaw(data.datosAdicionalesUsoComercial)
-      : undefined
-  } as GCamEsp;
+    gGrupEner: optionalMapper(mapSectorEnergiaElectricaToRaw, data.sectorEnergiaElectrica),
+    gGrupSeg: optionalMapper(mapSectorSegurosToRaw, data.sectorSeguros),
+    gGrupSup: optionalMapper(mapSectorSupermercadosToRaw, data.sectorSupermercados),
+    gGrupAdi: optionalMapper(
+      mapDatosAdicionalesUsoComercialToRaw,
+      data.datosAdicionalesUsoComercial
+    )
+  };
 }
 
 export function mapSectorEnergiaElectricaToRaw(data: SectorEnergiaElectrica): GGrupEner {
@@ -417,26 +383,26 @@ export function mapSectorEnergiaElectricaToRaw(data: SectorEnergiaElectrica): GG
     dLecAnt: optionalBigToFixed(data.lecturaAnterior, 2),
     dLecAct: optionalBigToFixed(data.lecturaActual, 2),
     dConKwh: optionalBigToFixed(data.consumoKwh, 2)
-  } as GGrupEner;
+  };
 }
 
 export function mapSectorSegurosToRaw(data: SectorSeguros): GGrupSeg {
   return {
     dCodEmpSeg: data.codigoEmpresaSeguros,
     gGrupPolSeg: data.polizaSeguros?.map(mapPolizaSegurosToRaw)
-  } as GGrupSeg;
+  };
 }
 
 export function mapPolizaSegurosToRaw(data: PolizaSeguros): GGrupPolSeg {
   return {
     dPoliza: data.codigoPoliza,
     dUnidVig: data.unidadVigencia,
-    dVigencia: bigToFixed(data.vigenciaPoliza, 1),
+    dVigencia: data.vigenciaPoliza.toFixed(1),
     dNumPoliza: data.numeroPoliza,
-    dFecIniVig: formatDateTime(data.fechaInicioVigencia),
-    dFecFinVig: formatDateTime(data.fechaFinVigencia),
+    dFecIniVig: formatDate(data.fechaInicioVigencia, 'date-time'),
+    dFecFinVig: formatDate(data.fechaFinVigencia, 'date-time'),
     dCodInt: data.codigoInternoItem
-  } as GGrupPolSeg;
+  };
 }
 
 export function mapSectorSupermercadosToRaw(data: SectorSupermercados): GGrupSup {
@@ -446,128 +412,134 @@ export function mapSectorSupermercadosToRaw(data: SectorSupermercados): GGrupSup
     dVuelto: optionalBigToFixed(data.vuelto, 4),
     dDonac: optionalBigToFixed(data.montoDonacion, 4),
     dDesDonac: data.descripcionDonacion
-  } as GGrupSup;
+  };
 }
 
 export function mapDatosAdicionalesUsoComercialToRaw(data: DatosAdicionalesUsoComercial): GGrupAdi {
   return {
     dCiclo: data.ciclo,
-    dFecIniC: formatDateOnly(data.fechaInicioCiclo),
-    dFecFinC: formatDateOnly(data.fechaFinCiclo),
-    dVencPag: data.vencimientoPago?.map((date) => formatDateOnly(date)).filter(Boolean) as
-      | string[]
-      | undefined,
+    dFecIniC: formatDate(data.fechaInicioCiclo, 'date'),
+    dFecFinC: formatDate(data.fechaFinCiclo, 'date'),
+    dVencPag: data.vencimientoPago
+      ?.map((date) => formatDate(date, 'date'))
+      .filter((s): s is string => s !== undefined),
     dContrato: data.numeroContrato,
     dSalAnt: optionalBigToFixed(data.saldoAnterior, 4),
     dCodConDncp: data.codigoContratacionDNCP
-  } as GGrupAdi;
+  };
 }
 
 export function mapTransporteToRaw(data: Transporte): GTransp {
+  const modalidadTransporte = asLiteral(data.modalidadTransporte);
+  const tipoTransporte = asLiteral(data.tipoTransporte);
+  const paisDestino = asLiteral(data.paisDestino);
+
   return {
-    iTipTrans: data.tipoTransporte,
-    dDesTipTrans: resolveOptionalDescription(
-      data.tipoTransporte,
-      descripcionTipoTransporte as Record<string, string>
-    ),
-    iModTrans: data.modalidadTransporte,
-    dDesModTrans: resolveRequiredDescription(
-      'modalidadTransporte',
-      data.modalidadTransporte,
-      descripcionModalidadTransporte as Record<string, string>
-    ),
-    iRespFlete: data.responsableCostoFlete,
-    cCondNeg: data.condicionNegociacion,
+    iTipTrans: tipoTransporte,
+    dDesTipTrans:
+      tipoTransporte !== undefined ? descripcionTipoTransporte[tipoTransporte] : undefined,
+    iModTrans: modalidadTransporte,
+    dDesModTrans: descripcionModalidadTransporte[modalidadTransporte],
+    iRespFlete: asLiteral(data.responsableCostoFlete),
+    cCondNeg: asLiteral(data.condicionNegociacion),
     dNuManif: data.numeroManifiestoCarga,
     dNuDespImp: data.numeroDespachoImportacion,
-    dIniTras: formatDateOnly(data.inicioEstimadoTraslado),
-    dFinTras: formatDateOnly(data.finEstimadoTraslado),
-    cPaisDest: data.paisDestino,
-    dDesPaisDest:
-      data.paisDestino !== undefined ? resolveCountryDescription(data.paisDestino) : undefined,
-    gCamSal: data.localSalidaMercaderias
-      ? mapLocalSalidaMercaderiasToRaw(data.localSalidaMercaderias)
-      : undefined,
+    dIniTras: formatDate(data.inicioEstimadoTraslado, 'date'),
+    dFinTras: formatDate(data.finEstimadoTraslado, 'date'),
+    cPaisDest: paisDestino,
+    dDesPaisDest: paisDestino !== undefined ? descripcionCodigoPais[paisDestino] : undefined,
+    gCamSal: optionalMapper(mapLocalSalidaMercaderiasToRaw, data.localSalidaMercaderias),
     gCamEnt: data.localesEntregaMercaderias?.map(mapLocalEntregaMercaderiasToRaw),
     gVehTras: data.vehiculosTrasladoMercaderias?.map(mapVehiculoTrasladoMercaderiasToRaw),
-    gCamTrans: data.transportista ? mapTransportistaToRaw(data.transportista) : undefined
-  } as GTransp;
+    gCamTrans: optionalMapper(mapTransportistaToRaw, data.transportista)
+  };
 }
 
 export function mapLocalSalidaMercaderiasToRaw(data: LocalSalidaMercaderias): GCamSal {
+  const departamentoSalida = asLiteral(data.departamentoSalida);
+  const distritoSalida = asLiteral(data.distritoSalida);
+  const ciudadSalida = asLiteral(data.ciudadSalida);
+
   return {
     dDirLocSal: data.direccionLocalSalida,
     dNumCasSal: data.numeroCasaSalida,
     dComp1Sal: data.complementoDireccion1Salida,
     dComp2Sal: data.complementoDireccion2Salida,
-    cDepSal: data.departamentoSalida,
+    cDepSal: departamentoSalida,
     dDesDepSal:
-      data.departamentoSalida !== undefined
-        ? resolveDepartmentDescription(data.departamentoSalida)
+      departamentoSalida !== undefined
+        ? descripcionCodigoDepartamento[departamentoSalida]
         : undefined,
-    cDisSal: data.distritoSalida,
-    dDesDisSal: resolveDistrictDescription(data.distritoSalida),
-    cCiuSal: data.ciudadSalida,
-    dDesCiuSal: resolveCityDescription(data.ciudadSalida),
+    cDisSal: distritoSalida,
+    dDesDisSal:
+      distritoSalida !== undefined ? descripcionCodigoDistrito[distritoSalida] : undefined,
+    cCiuSal: ciudadSalida,
+    dDesCiuSal: ciudadSalida !== undefined ? descripcionCodigoCiudad[ciudadSalida] : undefined,
     dTelSal: data.telefonoLocalSalida
-  } as GCamSal;
+  };
 }
 
 export function mapLocalEntregaMercaderiasToRaw(data: LocalEntregaMercaderias): GCamEnt {
+  const departamentoEntrega = asLiteral(data.departamentoEntrega);
+  const ciudadEntrega = asLiteral(data.ciudadEntrega);
+  const distritoEntrega = asLiteral(data.distritoEntrega);
+
   return {
     dDirLocEnt: data.direccionLocalEntrega,
     dNumCasEnt: data.numeroCasaEntrega,
     dComp1Ent: data.complementoDireccion1Entrega,
     dComp2Ent: data.complementoDireccion2Entrega,
-    cDepEnt: data.departamentoEntrega,
-    dDesDepEnt: resolveDepartmentDescription(data.departamentoEntrega),
-    cDisEnt: data.distritoEntrega,
-    dDesDisEnt: resolveDistrictDescription(data.distritoEntrega),
-    cCiuEnt: data.ciudadEntrega,
-    dDesCiuEnt: requireDefined(resolveCityDescription(data.ciudadEntrega), 'ciudadEntrega'),
+    cDepEnt: departamentoEntrega,
+    dDesDepEnt: descripcionCodigoDepartamento[departamentoEntrega],
+    cDisEnt: distritoEntrega,
+    dDesDisEnt:
+      distritoEntrega !== undefined ? descripcionCodigoDistrito[distritoEntrega] : undefined,
+    cCiuEnt: ciudadEntrega,
+    dDesCiuEnt: descripcionCodigoCiudad[ciudadEntrega],
     dTelEnt: data.telefonoLocalEntrega
-  } as GCamEnt;
+  };
 }
 
 export function mapVehiculoTrasladoMercaderiasToRaw(data: VehiculoTrasladoMercaderias): GVehTras {
   return {
     dTiVehTras: data.tipoVehiculo,
     dMarVeh: data.marcaVehiculo,
-    dTipIdenVeh: data.tipoIdentificacionVehiculo,
+    dTipIdenVeh: asLiteral(data.tipoIdentificacionVehiculo),
     dNroIDVeh: data.numeroIdentificacionVehiculo,
     dAdicVeh: data.datosAdicionalesVehiculo,
     dNroMatVeh: data.numeroMatriculaVehiculo,
     dNroVuelo: data.numeroVuelo
-  } as GVehTras;
+  };
 }
 
 export function mapTransportistaToRaw(data: Transportista): GCamTrans {
+  const tipoDocumentoIdentidadTransportista = asLiteral(data.tipoDocumentoIdentidadTransportista);
+  const nacionalidadTransportista = asLiteral(data.nacionalidadTransportista);
+
   return {
-    iNatTrans: data.naturalezaTransportista,
+    iNatTrans: asLiteral(data.naturalezaTransportista),
     dNomTrans: data.nombreTransportista,
-    dRucTrans: normalizeOptionalRuc(data.rucTransportista),
-    dDVTrans: resolveOptionalNumericDv(
-      data.digitoVerificadorRucTransportista,
-      data.rucTransportista
-    ),
-    iTipIDTrans: data.tipoDocumentoIdentidadTransportista,
-    dDTipIDTrans: resolveOptionalDescription(
-      data.tipoDocumentoIdentidadTransportista,
-      descripcionTipoDocumentoTransportista as Record<string, string>
-    ),
+    dRucTrans:
+      data.rucTransportista !== undefined ? extraerRuc(data.rucTransportista) : undefined,
+    dDVTrans: data.digitoVerificadorRucTransportista,
+    iTipIDTrans: tipoDocumentoIdentidadTransportista,
+    dDTipIDTrans:
+      tipoDocumentoIdentidadTransportista !== undefined
+        ? descripcionTipoDocumentoTransportista[tipoDocumentoIdentidadTransportista]
+        : undefined,
     dNumIDTrans: data.numeroDocumentoIdentidadTransportista,
-    cNacTrans: data.nacionalidadTransportista,
+    cNacTrans: nacionalidadTransportista,
     dDesNacTrans:
-      data.nacionalidadTransportista !== undefined
-        ? resolveCountryDescription(data.nacionalidadTransportista)
+      nacionalidadTransportista !== undefined
+        ? descripcionCodigoPais[nacionalidadTransportista]
         : undefined,
     dNumIDChof: data.numeroDocumentoIdentidadChofer,
     dNomChof: data.nombreChofer,
     dDomFisc: data.domicilioFiscalTransportista,
     dDirChof: data.direccionChofer,
     dNombAg: data.nombreAgente,
-    dRucAg: normalizeOptionalRuc(data.rucAgente),
-    dDVAg: resolveOptionalStringDv(data.digitoVerificadorRucAgente, data.rucAgente),
+    dRucAg: data.rucAgente !== undefined ? extraerRuc(data.rucAgente) : undefined,
+    dDVAg: data.digitoVerificadorRucAgente,
     dDirAge: data.direccionAgente
-  } as GCamTrans;
+  };
 }

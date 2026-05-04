@@ -5,7 +5,7 @@ import { tipoDocumentoElectronico, type TipoDocumentoElectronicoLabel } from '..
 import { Err, Ok, type Result } from '../result';
 import { calculateFieldsResult } from './derive';
 import { validateCalculated } from './validation';
-import { formatDateTime } from './mapper/helpers';
+import { formatDate } from './mapper/helpers';
 import {
   mapOperacionDEToRaw,
   mapTimbradoToRaw,
@@ -39,7 +39,7 @@ export function prepareDE<TInput, TClean extends DEC, TType extends TipoDocument
   schema: v.GenericSchema<unknown, TClean>,
   deType: TType
 ): Result<PreparedDEBase<TType, TClean>, XMLGenBuildError> {
-  const tipoDocumento = tipoDocumentoElectronico[deType] as number;
+  const tipoDocumento = tipoDocumentoElectronico[deType];
 
   const validated = v.safeParse(schema, input);
   if (!validated.success) {
@@ -69,7 +69,8 @@ export function prepareDE<TInput, TClean extends DEC, TType extends TipoDocument
       clean: de,
       raw: {
         dDVId: de.digitoVerificadorId,
-        dFecFirma: formatDateTime(de.fechaFirma)!,
+        dFecFirma: formatDate(de.fechaFirma, 'date-time')!,
+        // B001 - Sistema de facturacion: 1 = SIFEN
         dSisFact: 1,
         gOpeDE: mapOperacionDEToRaw(de.operacionDE),
         gTimb: mapTimbradoToRaw({
