@@ -1,35 +1,40 @@
 import type { Carga, UsoGeneral } from '../../sifen/types/clean/g';
 import { descripcionCaracteristicasCarga, descripcionUnidadMedida } from '../../sifen/types/enums';
 import type { GCamCarg, GCamGen } from '../../sifen/types/raw/g';
-import { resolveOptionalDescription } from './helpers';
+import { asLiteral } from '../../sifen/types/union';
+import { optionalMapper } from './helpers';
 
 export function mapUsoGeneralToRaw(data: UsoGeneral): GCamGen {
   return {
     dOrdCompra: data.ordenCompra,
     dOrdVta: data.ordenVenta,
     dAsiento: data.asientoContable,
-    gCamCarg: data.carga ? mapCargaToRaw(data.carga) : undefined
-  } as GCamGen;
+    gCamCarg: optionalMapper(mapCargaToRaw, data.carga)
+  };
 }
 
 export function mapCargaToRaw(data: Carga): GCamCarg {
+  const unidadMedidaTotalVolumen = asLiteral(data.unidadMedidaTotalVolumen);
+  const unidadMedidaTotalPeso = asLiteral(data.unidadMedidaTotalPeso);
+  const caracteristicasCarga = asLiteral(data.caracteristicasCarga);
+
   return {
-    cUniMedTotVol: data.unidadMedidaTotalVolumen,
-    dDesUniMedTotVol: resolveOptionalDescription(
-      data.unidadMedidaTotalVolumen,
-      descripcionUnidadMedida as Record<string, string>
-    ),
+    cUniMedTotVol: unidadMedidaTotalVolumen,
+    dDesUniMedTotVol:
+      unidadMedidaTotalVolumen !== undefined
+        ? descripcionUnidadMedida[unidadMedidaTotalVolumen]
+        : undefined,
     dTotVolMerc: data.totalVolumenMercaderia,
-    cUniMedTotPes: data.unidadMedidaTotalPeso,
-    dDesUniMedTotPes: resolveOptionalDescription(
-      data.unidadMedidaTotalPeso,
-      descripcionUnidadMedida as Record<string, string>
-    ),
+    cUniMedTotPes: unidadMedidaTotalPeso,
+    dDesUniMedTotPes:
+      unidadMedidaTotalPeso !== undefined
+        ? descripcionUnidadMedida[unidadMedidaTotalPeso]
+        : undefined,
     dTotPesMerc: data.totalPesoMercaderia,
-    iCarCarga: data.caracteristicasCarga,
-    dDesCarCarga: resolveOptionalDescription(
-      data.caracteristicasCarga,
-      descripcionCaracteristicasCarga as Record<string, string>
-    )
-  } as GCamCarg;
+    iCarCarga: caracteristicasCarga,
+    dDesCarCarga:
+      caracteristicasCarga !== undefined
+        ? descripcionCaracteristicasCarga[caracteristicasCarga]
+        : undefined
+  };
 }

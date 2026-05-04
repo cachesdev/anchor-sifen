@@ -165,18 +165,18 @@ describe('mapper — e', () => {
       expect(mapTransportistaToRaw(input).dRucTrans).toBe('80001234');
     });
 
-    it('resuelve DV numerico del RUC del transportista', () => {
+    it('pasa el DV precalculado por el paso de derive', () => {
       const input = createTransportista({
         rucTransportista: '616159-6',
-        digitoVerificadorRucTransportista: undefined
+        digitoVerificadorRucTransportista: 6
       });
       expect(mapTransportistaToRaw(input).dDVTrans).toBe(6);
     });
 
-    it('extrae DV string del RUC del agente con guion', () => {
+    it('pasa el DV string del agente precalculado por el paso de derive', () => {
       const input = createTransportista({
         rucAgente: '870066-B',
-        digitoVerificadorRucAgente: undefined
+        digitoVerificadorRucAgente: 'B'
       });
       expect(mapTransportistaToRaw(input).dDVAg).toBe('B');
     });

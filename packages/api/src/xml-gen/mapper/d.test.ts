@@ -47,8 +47,8 @@ describe('mapper — d', () => {
       expect(mapEmisorToRaw(input).dDVEmi).toBe(5);
     });
 
-    it('extrae DV del string RUC si no hay DV explicito', () => {
-      const input = createEmisor({ rucEmisor: '616159-6', digitoVerificadorEmisor: undefined });
+    it('pasa el DV precalculado por el paso de derive', () => {
+      const input = createEmisor({ rucEmisor: '616159-6', digitoVerificadorEmisor: 6 });
       expect(mapEmisorToRaw(input).dDVEmi).toBe(6);
     });
 
@@ -57,10 +57,7 @@ describe('mapper — d', () => {
       expect(mapEmisorToRaw(input).dDesDepEmi).toBe('CAPITAL');
     });
 
-    it('lanza si el RUC no tiene guion ni DV explicito', () => {
-      const input = createEmisor({ rucEmisor: '80001234', digitoVerificadorEmisor: undefined });
-      expect(() => mapEmisorToRaw(input)).toThrow(/Missing required DV/);
-    });
+
   });
 
   describe('mapReceptorToRaw', () => {
@@ -79,10 +76,10 @@ describe('mapper — d', () => {
       expect(mapReceptorToRaw(input).dRucRec).toBeUndefined();
     });
 
-    it('resuelve DV del string RUC si no hay DV explicito', () => {
+    it('pasa el DV precalculado por el paso de derive', () => {
       const input = createReceptor({
         rucReceptor: '616159-6',
-        digitoVerificadorReceptor: undefined
+        digitoVerificadorReceptor: 6
       });
       expect(mapReceptorToRaw(input).dDVRec).toBe(6);
     });
