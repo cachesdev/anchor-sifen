@@ -9,8 +9,14 @@ export function optionalBigToFixed(
 }
 
 export function formatDate(value: Date, format: 'date' | 'date-time'): string;
-export function formatDate(value: Date | undefined, format: 'date' | 'date-time'): string | undefined;
-export function formatDate(value: Date | undefined, format: 'date' | 'date-time'): string | undefined {
+export function formatDate(
+  value: Date | undefined,
+  format: 'date' | 'date-time'
+): string | undefined;
+export function formatDate(
+  value: Date | undefined,
+  format: 'date' | 'date-time'
+): string | undefined {
   if (value === undefined) {
     return undefined;
   }
@@ -20,7 +26,7 @@ export function formatDate(value: Date | undefined, format: 'date' | 'date-time'
   if (format === 'date') {
     const iso = dt.toISODate();
     if (iso === null) {
-      throw new Error(`Invalid date: ${String(value)}`);
+      throw new Error(`Fecha invalida: ${String(value)}`);
     }
     return iso;
   }

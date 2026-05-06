@@ -16,7 +16,7 @@ export class XMLGenCalculationError extends ErrorFactory({
 export class XMLGenBusinessValidationError extends ErrorFactory({
   name: 'XMLGenBusinessValidationError',
   message: (f) =>
-    `Error durante validacion de reglas XML Gen: ${f.issues.length} issue(s) de negocio.`,
+    `Error durante validacion de reglas XML Gen: ${f.issues.length} error(es) de validacion.`,
   fields: ErrorFactory.fields<{ issues: RuleValidationError[] }>()
 }) {}
 

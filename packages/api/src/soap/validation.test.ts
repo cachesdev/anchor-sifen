@@ -78,15 +78,8 @@ describe('SOAP — validacion', () => {
       expect(normalizeControlId(id)).toBe(id);
     });
 
-    it('autogenera un ID si no se provee controlId', () => {
-      const id = normalizeControlId();
-      expect(id).toMatch(/^\d{1,15}$/);
-    });
-
-    it('autogenera IDs distintos en llamadas consecutivas', () => {
-      const id1 = normalizeControlId();
-      const id2 = normalizeControlId();
-      expect(id1).not.toBe(id2);
+    it('recorta espacios', () => {
+      expect(normalizeControlId('  42  ')).toBe('42');
     });
 
     it('lanza error si el string no es numerico', () => {
@@ -95,6 +88,10 @@ describe('SOAP — validacion', () => {
 
     it('lanza error si el string tiene mas de 15 digitos', () => {
       expect(() => normalizeControlId('1234567890123456')).toThrow();
+    });
+
+    it('lanza error si el string esta vacio', () => {
+      expect(() => normalizeControlId('')).toThrow();
     });
 
     it('convierte number a string automaticamente', () => {

@@ -15,7 +15,7 @@ describe('SOAP — response parsers', () => {
       const result = parseRecibeLote(raw);
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.value.codigoResultado).toBe(300);
+        expect(result.value.codigoResultado).toBe('0300');
         expect(result.value.mensajeResultado).toBe('OK');
         expect(result.value.fechaProcesamiento).toBeInstanceOf(Date);
       }

@@ -21,10 +21,7 @@ import { descripcionCodigoDepartamento } from '../../gen/departamentos';
 import { descripcionCodigoDistrito } from '../../gen/distritos';
 import { codigoMoneda } from '../../gen/monedas';
 import { descripcionCodigoPais } from '../../gen/paises';
-import {
-  optionalBigToFixed,
-  optionalMapper
-} from './helpers';
+import { optionalBigToFixed, optionalMapper } from './helpers';
 import { extraerRuc } from '../ruc';
 
 export function mapObligacionAfectadaToRaw(data: ObligacionesAfectadas): GOblAfe {
