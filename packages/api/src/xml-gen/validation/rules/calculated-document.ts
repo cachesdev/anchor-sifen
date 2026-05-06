@@ -4,10 +4,10 @@ import type { ValidationRule } from '../types';
 export const calculatedDocumentRules: ValidationRule<DEC>[] = [
   {
     id: 'EXAMPLE_DOCUMENT_RULE',
-    description: 'Example placeholder document rule (disabled by default).',
+    description: 'Regla de documento de ejemplo (deshabilitada por defecto).',
     tags: ['example', 'placeholder'],
     when: () => false,
     check: () => true,
-    message: () => 'Example document rule failed.'
+    message: () => 'Regla de documento de ejemplo fallo.'
   }
 ];

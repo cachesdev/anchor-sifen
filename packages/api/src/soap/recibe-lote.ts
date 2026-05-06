@@ -76,7 +76,7 @@ export class SifenRecibeLoteClient {
     digitoControl,
     DE
   }: {
-    digitoControl?: string | number;
+    digitoControl: string | number;
     DE: string;
   }): Promise<Result<SIFENRecepLoteDEResponse, SifenError>> {
     try {

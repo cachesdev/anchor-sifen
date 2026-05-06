@@ -56,8 +56,6 @@ describe('mapper — d', () => {
       const input = createEmisor({ departamentoEmision: 1 });
       expect(mapEmisorToRaw(input).dDesDepEmi).toBe('CAPITAL');
     });
-
-
   });
 
   describe('mapReceptorToRaw', () => {

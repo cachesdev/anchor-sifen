@@ -52,7 +52,7 @@ export class SifenEventoClient {
     digitoControl,
     eventoXml
   }: {
-    digitoControl?: string | number;
+    digitoControl: string | number;
     eventoXml: string;
   }): Promise<Result<SIFENEventoResponse, SifenError>> {
     try {

@@ -51,7 +51,7 @@ export function parseRecibeLote(raw: unknown): Result<SIFENRecepLoteDEResponse, 
 
   return Ok({
     fechaProcesamiento: new Date(r.dFecProc),
-    codigoResultado: Number(r.dCodRes),
+    codigoResultado: r.dCodRes,
     mensajeResultado: r.dMsgRes,
     numeroLote: r.dProtConsLote ? Number(r.dProtConsLote) : undefined,
     tiempoProcesamiento: r.dTpoProces ?? 0

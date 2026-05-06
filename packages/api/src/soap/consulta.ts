@@ -57,7 +57,7 @@ export class SifenConsultaClient {
     digitoControl,
     cdc
   }: {
-    digitoControl?: string | number;
+    digitoControl: string | number;
     cdc: string;
   }): Promise<Result<SIFENConsultaResponse, SifenError>> {
     try {

@@ -51,19 +51,19 @@ export class SifenAPI {
     return this.soap.rucClient.consultaRUC(params);
   }
 
-  consultaDE(params: { digitoControl?: string | number; cdc: string }) {
+  consultaDE(params: { digitoControl: string | number; cdc: string }) {
     return this.soap.consultaClient.consultaDE(params);
   }
 
-  consultaLote(params: { digitoControl?: string | number; numeroLote: string }) {
+  consultaLote(params: { digitoControl: string | number; numeroLote: string }) {
     return this.soap.consultaLoteClient.consultaLote(params);
   }
 
-  enviarEvento(params: { digitoControl?: string | number; eventoXml: string }) {
+  enviarEvento(params: { digitoControl: string | number; eventoXml: string }) {
     return this.soap.eventoClient.enviarEvento(params);
   }
 
-  recibeLote(params: { digitoControl?: string | number; DE: string | string[] }) {
+  recibeLote(params: { digitoControl: string | number; DE: string | string[] }) {
     const loteXml = Array.isArray(params.DE) ? buildLote(params.DE) : params.DE;
     return this.soap.recibeLoteClient.recibeLote({
       digitoControl: params.digitoControl,
@@ -71,7 +71,7 @@ export class SifenAPI {
     });
   }
 
-  recibe(params: { digitoControl?: string | number; xmlDE: string }) {
+  recibe(params: { digitoControl: string | number; xmlDE: string }) {
     return this.soap.recibeClient.recibe(params);
   }
 }

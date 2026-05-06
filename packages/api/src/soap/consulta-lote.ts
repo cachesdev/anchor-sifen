@@ -60,7 +60,7 @@ export class SifenConsultaLoteClient {
     digitoControl,
     numeroLote
   }: {
-    digitoControl?: string | number;
+    digitoControl: string | number;
     numeroLote: string;
   }): Promise<Result<SIFENConsultaLoteResponse, SifenError>> {
     try {

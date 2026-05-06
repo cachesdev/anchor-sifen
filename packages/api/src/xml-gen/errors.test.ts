@@ -36,7 +36,7 @@ describe('xml-gen — errors', () => {
           { id: 'R002', message: 'error 2' }
         ]
       });
-      expect(err.message).toContain('2 issue(s)');
+      expect(err.message).toContain('2 error(es) de validacion');
       expect(err.issues).toHaveLength(2);
     });
   });

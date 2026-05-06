@@ -3,7 +3,7 @@
  */
 export interface SIFENRecepLoteDEResponse {
   fechaProcesamiento: Date;
-  codigoResultado: number;
+  codigoResultado: string;
   mensajeResultado: string;
   numeroLote?: number;
   tiempoProcesamiento: number;

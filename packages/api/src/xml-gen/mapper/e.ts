@@ -84,11 +84,7 @@ import { descripcionCodigoDepartamento } from '../../gen/departamentos';
 import { descripcionCodigoDistrito } from '../../gen/distritos';
 import { codigoMoneda } from '../../gen/monedas';
 import { descripcionCodigoPais } from '../../gen/paises';
-import {
-  formatDate,
-  optionalBigToFixed,
-  optionalMapper
-} from './helpers';
+import { formatDate, optionalBigToFixed, optionalMapper } from './helpers';
 import { extraerRuc } from '../ruc';
 
 export function mapCamposFacturaElectronicaToRaw(data: CamposFacturaElectronica): GCamFE {
@@ -210,9 +206,7 @@ export function mapPagoTarjetaCreditoDebitoToRaw(data: PagoTarjetaCreditoDebito)
     dDesDenTarj: descripcionDenominacionTarjeta[denominacionTarjeta],
     dRSProTar: data.razonSocialProcesadoraTarjeta,
     dRUCProTar:
-      data.rucProcesadoraTarjeta !== undefined
-        ? extraerRuc(data.rucProcesadoraTarjeta)
-        : undefined,
+      data.rucProcesadoraTarjeta !== undefined ? extraerRuc(data.rucProcesadoraTarjeta) : undefined,
     dDVProTar: data.digitoVerificadorProcesadoraTarjeta,
     iForProPa: asLiteral(data.formaProcesamientoPago),
     dCodAuOpe: data.codigoAutorizacionOperacion,
@@ -519,8 +513,7 @@ export function mapTransportistaToRaw(data: Transportista): GCamTrans {
   return {
     iNatTrans: asLiteral(data.naturalezaTransportista),
     dNomTrans: data.nombreTransportista,
-    dRucTrans:
-      data.rucTransportista !== undefined ? extraerRuc(data.rucTransportista) : undefined,
+    dRucTrans: data.rucTransportista !== undefined ? extraerRuc(data.rucTransportista) : undefined,
     dDVTrans: data.digitoVerificadorRucTransportista,
     iTipIDTrans: tipoDocumentoIdentidadTransportista,
     dDTipIDTrans:
