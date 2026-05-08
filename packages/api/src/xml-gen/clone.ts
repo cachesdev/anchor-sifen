@@ -14,7 +14,7 @@ export function clone<T>(value: T, path: string): T {
   }
 
   if (typeof value === 'function') {
-    throw new Error(`No se pudo clonar el valor en ${path}: se encontro una funcion.`);
+    return value;
   }
 
   if (value && typeof value === 'object') {
