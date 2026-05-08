@@ -1,8 +1,53 @@
 import { Big } from 'big.js';
 import { describe, expect, it } from 'vitest';
-import { bigOrZero, HUNDRED, ONE, toBig, toOptionalBig, ZERO } from './big';
+import { bigOrZero, HUNDRED, isBig, ONE, toBig, toOptionalBig, ZERO } from './big';
+
+function makeForeignBig(value: string): object {
+  const b = new Big(value);
+  return {
+    c: b.c,
+    e: b.e,
+    s: b.s,
+    toString() {
+      return value;
+    },
+  };
+}
 
 describe('big', () => {
+  describe('isBig', () => {
+    it('retorna true para un Big local', () => {
+      expect(isBig(new Big(42))).toBe(true);
+      expect(isBig(new Big('0.01'))).toBe(true);
+      expect(isBig(new Big(-100))).toBe(true);
+    });
+
+    it('retorna true para un Big foraneo (chequeo estructural)', () => {
+      const fb = makeForeignBig('42');
+      expect(fb instanceof Big).toBe(false);
+      expect(isBig(fb)).toBe(true);
+    });
+
+    it('retorna false para number', () => {
+      expect(isBig(42)).toBe(false);
+      expect(isBig(0)).toBe(false);
+    });
+
+    it('retorna false para string', () => {
+      expect(isBig('42')).toBe(false);
+    });
+
+    it('retorna false para null y undefined', () => {
+      expect(isBig(null)).toBe(false);
+      expect(isBig(undefined)).toBe(false);
+    });
+
+    it('retorna false para objetos planos', () => {
+      expect(isBig({})).toBe(false);
+      expect(isBig({ c: [1], e: 1 })).toBe(false);
+    });
+  });
+
   describe('toBig', () => {
     it('convierte number a Big', () => {
       const result = toBig(42);
@@ -27,6 +72,25 @@ describe('big', () => {
     it('convierte decimales', () => {
       expect(toBig(3.14).eq(3.14)).toBe(true);
     });
+
+    it('convierte un Big foraneo extrayendo su valor via String()', () => {
+      const fb = makeForeignBig('3.14');
+      expect(fb instanceof Big).toBe(false);
+
+      const result = toBig(fb as unknown as Big);
+      expect(result).toBeInstanceOf(Big);
+      expect(result.eq(3.14)).toBe(true);
+    });
+
+    it('no crashea con un Big foraneo (regresion)', () => {
+      const fb = makeForeignBig('0.01');
+      expect(() => toBig(fb as unknown as Big)).not.toThrow();
+    });
+
+    it('no crashea con un objeto plano corrupto (regresion de clone corrupto)', () => {
+      const corrupted = { s: 1, e: 0, c: [0] };
+      expect(() => toBig(corrupted as unknown as Big)).toThrow('[big.js] Invalid number');
+    });
   });
 
   describe('toOptionalBig', () => {
@@ -44,6 +108,13 @@ describe('big', () => {
 
     it('retorna undefined si el valor es undefined', () => {
       expect(toOptionalBig(undefined)).toBeUndefined();
+    });
+
+    it('convierte un Big foraneo a Big local', () => {
+      const fb = makeForeignBig('99');
+      const result = toOptionalBig(fb as unknown as Big);
+      expect(result).toBeInstanceOf(Big);
+      expect(result!.eq(99)).toBe(true);
     });
   });
 
