@@ -49,7 +49,7 @@ describe('clone', () => {
       value: 42,
       handler() {
         return this.value;
-      },
+      }
     };
     const result = clone(input, 'input');
     expect(result.value).toBe(42);
@@ -60,7 +60,7 @@ describe('clone', () => {
   it('maneja objetos con propiedad constructor', () => {
     const input = {
       constructor: function miConstructor() {},
-      name: 'test',
+      name: 'test'
     };
     const result = clone(input, 'input');
     expect(result.name).toBe('test');
@@ -72,9 +72,44 @@ describe('clone', () => {
     const result = clone(input, 'input');
     expect(result[0]).toBe(1);
     expect(typeof result[1]).toBe('function');
-    expect(result[1]()).toBe(42);
-    expect(typeof result[2].fn).toBe('function');
-    expect(result[2].fn()).toBe('hello');
+    expect((result[1] as () => number)()).toBe(42);
+    expect(typeof (result[2] as { fn: () => string }).fn).toBe('function');
+    expect((result[2] as { fn: () => string }).fn()).toBe('hello');
+  });
+
+  it('clona un Big foraneo (chequeo estructural, no instanceof)', () => {
+    const b = new Big('42.5');
+    const foreignBig = {
+      c: b.c,
+      e: b.e,
+      s: b.s,
+      toString() {
+        return '42.5';
+      }
+    };
+    expect(foreignBig instanceof Big).toBe(false);
+
+    const cloned = clone(foreignBig, 'input') as unknown as Big;
+    expect(cloned instanceof Big).toBe(true);
+    expect(cloned.eq(42.5)).toBe(true);
+  });
+
+  it('clona un objeto con Big foraneo anidado (regresion)', () => {
+    const b = new Big('7.77');
+    const foreignBig = {
+      c: b.c,
+      e: b.e,
+      s: b.s,
+      toString() {
+        return '7.77';
+      }
+    };
+    const input = { valor: foreignBig };
+    expect(input.valor instanceof Big).toBe(false);
+
+    const result = clone(input, 'input');
+    expect(result.valor).toBeInstanceOf(Big);
+    expect((result.valor as unknown as Big).eq(7.77)).toBe(true);
   });
 
   it('no muta el original al clonar', () => {

@@ -1,12 +1,12 @@
-import { Big } from './big';
+import { Big, isBig } from './big';
 
 export function clone<T>(value: T, path: string): T {
   if (value instanceof Date) {
     return new Date(value.getTime()) as unknown as T;
   }
 
-  if (value instanceof Big) {
-    return new Big(value) as unknown as T;
+  if (isBig(value)) {
+    return new Big(String(value)) as unknown as T;
   }
 
   if (Array.isArray(value)) {
