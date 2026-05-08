@@ -37,7 +37,7 @@ const recibeLoteSchema = v.object({
   dCodRes: v.string(),
   dMsgRes: v.string(),
   dProtConsLote: v.optional(v.string()),
-  dTpoProces: v.optional(v.number())
+  dTpoProces: v.optional(v.pipe(v.string(), v.toNumber()))
 });
 
 export function parseRecibeLote(raw: unknown): Result<SIFENRecepLoteDEResponse, SifenError> {
