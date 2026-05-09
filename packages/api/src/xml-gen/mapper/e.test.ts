@@ -9,7 +9,8 @@ import {
   createPagoTarjetaCreditoDebito,
   createTransporte,
   createTransportista,
-  createValorItem
+  createValorItem,
+  createValorRestaItem
 } from '../../test-utils/factories/base';
 import {
   mapCondicionOperacionToRaw,
@@ -20,7 +21,8 @@ import {
   mapPagoTarjetaCreditoDebitoToRaw,
   mapTransporteToRaw,
   mapTransportistaToRaw,
-  mapValorItemToRaw
+  mapValorItemToRaw,
+  mapValorRestaItemToRaw
 } from './e';
 
 describe('mapper — e', () => {
@@ -179,6 +181,44 @@ describe('mapper — e', () => {
         digitoVerificadorRucAgente: 'B'
       });
       expect(mapTransportistaToRaw(input).dDVAg).toBe('B');
+    });
+  });
+
+  describe('mapValorRestaItemToRaw', () => {
+    it('omite campos de descuento cuando son cero', () => {
+      const input = createValorRestaItem({
+        descuentoParticularItem: new Big(0),
+        descuentoGlobalItem: new Big(0),
+        porcentajeDescuentoItem: new Big(0),
+        valorTotalOperacionItem: new Big(100000)
+      });
+      const result = mapValorRestaItemToRaw(input);
+      expect(result.dDescItem).toBeUndefined();
+      expect(result.dPorcDesIt).toBeUndefined();
+      expect(result.dDescGloItem).toBeUndefined();
+      expect(result.dTotOpeItem).toBe('100000.00000000');
+    });
+
+    it('conserva campos de anticipo cuando son cero', () => {
+      const input = createValorRestaItem({
+        anticipoParticularItem: new Big(0),
+        anticipoGlobalItem: new Big(0),
+        valorTotalOperacionItem: new Big(50000)
+      });
+      const result = mapValorRestaItemToRaw(input);
+      expect(result.dAntPreUniIt).toBe('0.00000000');
+      expect(result.dAntGloPreUniIt).toBe('0.00000000');
+    });
+
+    it('incluye campos de descuento cuando no son cero', () => {
+      const input = createValorRestaItem({
+        descuentoParticularItem: new Big(5000),
+        porcentajeDescuentoItem: new Big(10),
+        valorTotalOperacionItem: new Big(45000)
+      });
+      const result = mapValorRestaItemToRaw(input);
+      expect(result.dDescItem).toBe('5000.00000000');
+      expect(result.dPorcDesIt).toBe('10.00000000');
     });
   });
 });

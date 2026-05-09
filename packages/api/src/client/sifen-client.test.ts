@@ -7,10 +7,10 @@ describe('client — buildLote', () => {
   const deXml2 =
     '<?xml version="1.0" encoding="UTF-8"?><rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd"><dVerFor>150</dVerFor><DE Id="CDC2"><gOpeDE><iTipEmi>2</iTipEmi></gOpeDE></DE></rDE>';
 
-  it('construye un rLoteDE con version 150', () => {
+  it('construye un rLoteDE con los DE anidados', () => {
     const lote = buildLote([deXml1]);
     expect(lote).toContain('<rLoteDE');
-    expect(lote).toContain('<dVerFor>150</dVerFor>');
+    expect(lote).toContain('Id="CDC1"');
   });
 
   it('incluye el namespace y schemaLocation', () => {
@@ -25,16 +25,15 @@ describe('client — buildLote', () => {
     expect(lote).toContain('Id="CDC2"');
   });
 
-  it('elimina las declaraciones XML de los DE incluidos', () => {
+  it('elimina las declaraciones XML de los DE y no emite la propia', () => {
     const lote = buildLote([deXml1]);
-    // La declaracion <?xml?> del DE fue removida, pero la del lote si esta
     const occurrences = (lote.match(/<\?xml/g) || []).length;
-    expect(occurrences).toBe(1);
+    expect(occurrences).toBe(0);
   });
 
   it('produce XML bien formado con lote vacio', () => {
     const lote = buildLote([]);
     expect(lote).toContain('<rLoteDE');
-    expect(lote).toContain('<dVerFor>150</dVerFor>');
+    expect(lote).not.toContain('\n');
   });
 });

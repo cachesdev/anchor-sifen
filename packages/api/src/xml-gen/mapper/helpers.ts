@@ -3,9 +3,12 @@ import { DateTime } from 'luxon';
 
 export function optionalBigToFixed(
   value: Big | undefined,
-  decimalPlaces: number
+  decimalPlaces: number,
+  opts?: { keepZero?: boolean }
 ): string | undefined {
-  return value !== undefined ? value.toFixed(decimalPlaces) : undefined;
+  if (value === undefined) return undefined;
+  if (!opts?.keepZero && value.eq(0)) return undefined;
+  return value.toFixed(decimalPlaces);
 }
 
 export function formatDate(value: Date, format: 'date' | 'date-time'): string;

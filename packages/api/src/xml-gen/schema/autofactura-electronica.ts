@@ -2,6 +2,7 @@ import * as v from 'valibot';
 import type { AutofacturaElectronicaDE, AutofacturaElectronicaInput } from '../../sifen/types';
 import { toBig, toOptionalBig } from '../big';
 import { clone } from '../clone';
+import { trimStrings } from '../trim';
 import { enumsSchema } from './schema';
 
 function normalizeOperacionComercial(out: AutofacturaElectronicaDE): void {
@@ -72,6 +73,7 @@ export function normalizeAutofacturaElectronica(
   input: AutofacturaElectronicaInput
 ): AutofacturaElectronicaDE {
   const out = clone(input, 'input') as unknown as AutofacturaElectronicaDE;
+  trimStrings(out);
   out.tipoDE = 'AutofacturaElectronica';
   out.timbrado.tipoDocumento = 4;
   out.digitoVerificadorId = 0;
