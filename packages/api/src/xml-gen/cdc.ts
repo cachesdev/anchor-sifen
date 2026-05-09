@@ -1,5 +1,14 @@
 import { calcularDv } from './ruc';
-import { generateCodigoSeguridad } from './derive/operacion-de';
+
+/**
+ * Genera un numero de 9 digitos enteros criptograficamente aleatorio.
+ * Segun MT v150, p. 62, campo B004 (dCodSeg).
+ */
+export function generateCodigoSeguridad(): number {
+  const buffer = new Uint32Array(1);
+  crypto.getRandomValues(buffer);
+  return (buffer[0]! % 900_000_000) + 100_000_000;
+}
 
 export interface CDCFields {
   /** C002 — iTiDE */
@@ -50,7 +59,7 @@ export function generateCDC(input: CDCFields): string {
   return base + String(dv);
 }
 
-export function parseCDC(cdc: string): CDCFields {
+export function parseCDC(cdc: string): Required<CDCFields> {
   if (cdc.length !== 44) {
     throw new Error(`CDC invalido: se esperaban 44 caracteres, se recibieron ${cdc.length}.`);
   }

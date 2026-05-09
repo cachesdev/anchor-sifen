@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateCDC, parseCDC } from './cdc';
+import { generateCDC, generateCodigoSeguridad, parseCDC } from './cdc';
 
 describe('xml-gen — cdc', () => {
   const validCDC = {
@@ -74,6 +74,26 @@ describe('xml-gen — cdc', () => {
       });
       expect(cdc.length).toBe(44);
       expect(cdc.slice(-1)).toMatch(/^\d$/);
+    });
+  });
+
+  describe('generateCodigoSeguridad', () => {
+    it('genera un entero de 9 digitos en el rango 100_000_000 a 999_999_999', () => {
+      for (let i = 0; i < 100; i++) {
+        const codigo = generateCodigoSeguridad();
+        expect(Number.isInteger(codigo)).toBe(true);
+        expect(codigo).toBeGreaterThanOrEqual(100_000_000);
+        expect(codigo).toBeLessThanOrEqual(999_999_999);
+        expect(String(codigo).length).toBe(9);
+      }
+    });
+
+    it('genera valores distintos en llamadas consecutivas', () => {
+      const results = new Set<number>();
+      for (let i = 0; i < 100; i++) {
+        results.add(generateCodigoSeguridad());
+      }
+      expect(results.size).toBeGreaterThan(1);
     });
   });
 
