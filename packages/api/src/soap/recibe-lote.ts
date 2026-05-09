@@ -84,7 +84,7 @@ export class SifenRecibeLoteClient {
       const controlId = normalizeControlId(digitoControl);
       const loteZipBase64 = encodeLoteToBase64Zip(DE);
 
-      const [parsed, raw, _, out] = await client.rEnvioLoteAsync(
+      const [parsed, raw] = await client.rEnvioLoteAsync(
         {
           $xml: `<dId>${escapeXml(controlId)}</dId><xDE>${loteZipBase64}</xDE>`
         } as never,
@@ -95,7 +95,6 @@ export class SifenRecibeLoteClient {
           }
         }
       );
-      console.log(out);
       return parseSIFENResponse(parsed, raw, parseRecibeLote);
     } catch (error) {
       return Err(
