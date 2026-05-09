@@ -128,7 +128,7 @@ export interface GOpeDE {
    * B - B004 | Código de seguridad | Pagina 62
    * Observaciones: Código generado por el emisor de manera aleatoria para asegurar la confidencialidad de la consulta pública del DE
    */
-   dCodSeg: string;
+  dCodSeg: string;
   /**
    * B - B005 | Información de interés del emisor respecto al DE | Pagina 62
    */
