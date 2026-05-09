@@ -31,8 +31,9 @@ describe('xml-gen — de-pipeline', () => {
     // DV derivado del último dígito del CDC
     expect(raw.dDVId).toBe(Number.parseInt(cdc.slice(-1), 10));
 
-    // Codigo de seguridad generado con crypto real
-    expect(raw.gOpeDE.dCodSeg).toBeGreaterThanOrEqual(100_000_000);
+    // Codigo de seguridad extraido del CDC, 9 digitos con padding
+    expect(raw.gOpeDE.dCodSeg).toMatch(/^\d{9}$/);
+    expect(Number(raw.gOpeDE.dCodSeg)).toBeGreaterThanOrEqual(1);
 
     // Timbrado con padding a la izquierda
     expect(raw.gTimb.dEst).toMatch(/^\d{3}$/);

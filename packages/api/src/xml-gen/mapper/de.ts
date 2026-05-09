@@ -29,7 +29,7 @@ export function mapOperacionDEToRaw(data: OperacionDE): GOpeDE {
   return {
     iTipEmi: tipoEmision,
     dDesTipEmi: descripcionTipoEmision[tipoEmision],
-    dCodSeg: data.codigoSeguridad,
+    dCodSeg: String(data.codigoSeguridad).padStart(9, '0'),
     dInfoEmi: data.informacionEmisor,
     dInfoFisc: data.informacionFisco
   };
