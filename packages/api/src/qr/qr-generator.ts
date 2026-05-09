@@ -9,12 +9,17 @@ export class QRGenError extends ErrorFactory({
   fields: ErrorFactory.fields<{ details?: string }>()
 }) {}
 
+interface ReceptorQR {
+  paramName: 'dRucRec' | 'dNumIDRec';
+  value: string;
+}
+
 interface QRData {
   cdc: string;
   fechaEmision: string;
-  rucReceptor: string;
-  totalOperacion: number;
-  totalIVA: number;
+  receptor: ReceptorQR;
+  totalOperacion: string;
+  totalIVA: string;
   cantidadItems: number;
   digestValue: string;
 }
@@ -35,11 +40,6 @@ function text(doc: Document, tag: string, required = true): string {
   return value;
 }
 
-/** Lee el contenido de texto del primer elemento que coincida con `tag`, parseado como numero. */
-function num(doc: Document, tag: string): number {
-  return Number(text(doc, tag, false)) || 0;
-}
-
 function extractQRData(doc: Document): QRData {
   const deElement = doc.getElementsByTagName('DE')[0];
   if (!deElement) throw new Error('Elemento DE no encontrado.');
@@ -53,12 +53,18 @@ function extractQRData(doc: Document): QRData {
   const digestValue = dvElements[0]?.textContent?.trim();
   if (!digestValue) throw new Error('DigestValue no encontrado o vacio en XML firmado.');
 
+  const iNatRec = text(doc, 'iNatRec', false);
+  const receptor: ReceptorQR =
+    iNatRec === '1'
+      ? { paramName: 'dRucRec', value: text(doc, 'dRucRec', false) || '0' }
+      : { paramName: 'dNumIDRec', value: text(doc, 'dNumIDRec', false) || '0' };
+
   return {
     cdc,
     fechaEmision: text(doc, 'dFeEmiDE'),
-    rucReceptor: text(doc, 'dRucRec', false) || '0',
-    totalOperacion: num(doc, 'dTotGralOpe'),
-    totalIVA: num(doc, 'dTotIVA'),
+    receptor,
+    totalOperacion: text(doc, 'dTotGralOpe', false) || '0',
+    totalIVA: text(doc, 'dTotIVA', false) || '0',
     cantidadItems: doc.getElementsByTagName('gCamItem').length,
     digestValue
   };
@@ -69,9 +75,9 @@ function buildQRUrl(data: QRData, idCSC: string, csc: string, env: 'test' | 'pro
     'nVersion=150',
     `Id=${data.cdc}`,
     `dFeEmiDE=${toHex(data.fechaEmision)}`,
-    `dRucRec=${data.rucReceptor}`,
-    `dTotGralOpe=${Math.round(data.totalOperacion)}`,
-    `dTotIVA=${Math.round(data.totalIVA)}`,
+    `${data.receptor.paramName}=${data.receptor.value}`,
+    `dTotGralOpe=${data.totalOperacion}`,
+    `dTotIVA=${data.totalIVA}`,
     `cItems=${data.cantidadItems}`,
     `DigestValue=${toHex(data.digestValue)}`,
     `IdCSC=${idCSC}`

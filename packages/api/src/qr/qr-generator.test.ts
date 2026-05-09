@@ -50,6 +50,133 @@ describe('qr', () => {
       const result = getQRUrl(makeSignedXml(), '0001', 'testCSC', 'prod');
       if (result.success) {
         expect(result.value).toContain('consultas/qr');
+        expect(result.value).not.toContain('test');
+      }
+    });
+
+    it('preserva los valores decimales sin redondear', () => {
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd">
+  <dVerFor>150</dVerFor>
+  <DE Id="${cdc}">
+    <gDatGralOpe>
+      <dFeEmiDE>2026-04-30T08:00:00</dFeEmiDE>
+      <gDatRec><dRucRec>80001234</dRucRec></gDatRec>
+    </gDatGralOpe>
+    <gDtipDE>
+      <gCamItem><dDesProSer>Item 1</dDesProSer></gCamItem>
+    </gDtipDE>
+    <gTotSub>
+      <dTotGralOpe>93350.00000000</dTotGralOpe>
+      <dTotIVA>8487.27272727</dTotIVA>
+    </gTotSub>
+  </DE>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <Reference>
+        <DigestValue>testDigestABC123=</DigestValue>
+      </Reference>
+    </SignedInfo>
+  </Signature>
+</rDE>`;
+      const result = getQRUrl(xml, '0001', 'testCSC', 'test');
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.value).toContain('dTotGralOpe=93350.00000000');
+        expect(result.value).toContain('dTotIVA=8487.27272727');
+      }
+    });
+
+    it('usa "0" cuando los totales no estan presentes', () => {
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd">
+  <dVerFor>150</dVerFor>
+  <DE Id="${cdc}">
+    <gDatGralOpe>
+      <dFeEmiDE>2026-04-30T08:00:00</dFeEmiDE>
+    </gDatGralOpe>
+    <gDtipDE>
+      <gCamItem><dDesProSer>Item 1</dDesProSer></gCamItem>
+    </gDtipDE>
+  </DE>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <Reference>
+        <DigestValue>testDigestABC123=</DigestValue>
+      </Reference>
+    </SignedInfo>
+  </Signature>
+</rDE>`;
+      const result = getQRUrl(xml, '0001', 'testCSC', 'test');
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.value).toContain('dTotGralOpe=0');
+        expect(result.value).toContain('dTotIVA=0');
+      }
+    });
+
+    it('usa dNumIDRec cuando iNatRec no es 1', () => {
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd">
+  <dVerFor>150</dVerFor>
+  <DE Id="${cdc}">
+    <gDatGralOpe>
+      <dFeEmiDE>2026-04-30T08:00:00</dFeEmiDE>
+      <gDatRec><iNatRec>2</iNatRec><dNumIDRec>6133889</dNumIDRec></gDatRec>
+    </gDatGralOpe>
+    <gDtipDE>
+      <gCamItem><dDesProSer>Item 1</dDesProSer></gCamItem>
+    </gDtipDE>
+    <gTotSub>
+      <dTotGralOpe>100000</dTotGralOpe>
+      <dTotIVA>0</dTotIVA>
+    </gTotSub>
+  </DE>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <Reference>
+        <DigestValue>testDigestABC123=</DigestValue>
+      </Reference>
+    </SignedInfo>
+  </Signature>
+</rDE>`;
+      const result = getQRUrl(xml, '0001', 'testCSC', 'test');
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.value).toContain('dNumIDRec=6133889');
+        expect(result.value).not.toContain('dRucRec=');
+      }
+    });
+
+    it('usa dNumIDRec con fallback "0" cuando iNatRec no es 1 y no hay documento', () => {
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd">
+  <dVerFor>150</dVerFor>
+  <DE Id="${cdc}">
+    <gDatGralOpe>
+      <dFeEmiDE>2026-04-30T08:00:00</dFeEmiDE>
+      <gDatRec><iNatRec>2</iNatRec></gDatRec>
+    </gDatGralOpe>
+    <gDtipDE>
+      <gCamItem><dDesProSer>Item 1</dDesProSer></gCamItem>
+    </gDtipDE>
+    <gTotSub>
+      <dTotGralOpe>100000</dTotGralOpe>
+      <dTotIVA>0</dTotIVA>
+    </gTotSub>
+  </DE>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <Reference>
+        <DigestValue>testDigestABC123=</DigestValue>
+      </Reference>
+    </SignedInfo>
+  </Signature>
+</rDE>`;
+      const result = getQRUrl(xml, '0001', 'testCSC', 'test');
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.value).toContain('dNumIDRec=0');
       }
     });
 
