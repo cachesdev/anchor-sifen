@@ -1,7 +1,7 @@
 import * as soap from 'soap';
 import { createClientAsync, type RecibeClient } from '../gen/soap/recibe/recibe/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { normalizeControlId } from './validation.js';
+import { normalizeControlId, escapeXml } from './validation.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
 import type { SIFENRecibeResponse } from '../sifen/types/api.js';
@@ -58,12 +58,17 @@ export class SifenRecibeClient {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
-      const [parsed, raw] = await client.rEnviDeAsync({ dId: controlId, xDE: xmlDE } as never, {
-        overrideRootElement: {
-          namespace: '',
-          xmlnsAttributes: [{ name: 'xmlns', value: SIFEN_NS }]
+      const [parsed, raw] = await client.rEnviDeAsync(
+        {
+          $xml: `<dId>${escapeXml(controlId)}</dId><xDE>${xmlDE}</xDE>`
+        } as never,
+        {
+          overrideRootElement: {
+            namespace: '',
+            xmlnsAttributes: [{ name: 'xmlns', value: SIFEN_NS }]
+          }
         }
-      });
+      );
       return parseSIFENResponse(parsed, raw, parseRecibe);
     } catch (error) {
       return Err(
