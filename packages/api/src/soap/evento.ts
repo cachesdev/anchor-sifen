@@ -1,7 +1,7 @@
 import * as soap from 'soap';
 import { createClientAsync, type EventoClient } from '../gen/soap/evento/evento/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { normalizeControlId } from './validation.js';
+import { normalizeControlId, escapeXml } from './validation.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
 import type { SIFENEventoResponse } from '../sifen/types/api.js';
@@ -59,7 +59,9 @@ export class SifenEventoClient {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
       const [parsed, raw] = await client.rEnviEventoDeAsync(
-        { dId: controlId, dEvReg: eventoXml } as never,
+        {
+          $xml: `<dId>${escapeXml(controlId)}</dId><dEvReg>${eventoXml}</dEvReg>`
+        } as never,
         {
           overrideRootElement: {
             namespace: '',

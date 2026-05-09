@@ -1,7 +1,7 @@
 import * as soap from 'soap';
 import { createClientAsync, type ConsultaClient } from '../gen/soap/consulta/consulta/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { normalizeControlId } from './validation.js';
+import { normalizeControlId, escapeXml } from './validation.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
 import type { SIFENConsultaResponse } from '../sifen/types/api.js';
@@ -64,7 +64,9 @@ export class SifenConsultaClient {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
       const [parsed, raw] = await client.rEnviConsDeAsync(
-        { dId: controlId, dCDC: cdc },
+        {
+          $xml: `<dId>${escapeXml(controlId)}</dId><dCDC>${escapeXml(cdc)}</dCDC>`
+        } as never,
         {
           overrideRootElement: {
             namespace: '',

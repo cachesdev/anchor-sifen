@@ -4,7 +4,7 @@ import {
   type ConsultaLoteClient
 } from '../gen/soap/consultaLote/consultalote/client.js';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
-import { normalizeControlId } from './validation.js';
+import { normalizeControlId, escapeXml } from './validation.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
 import type { SIFENConsultaLoteResponse } from '../sifen/types/api.js';
@@ -67,7 +67,9 @@ export class SifenConsultaLoteClient {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
       const [parsed, raw] = await client.rEnviConsLoteDeAsync(
-        { dId: controlId, dProtConsLote: numeroLote },
+        {
+          $xml: `<dId>${escapeXml(controlId)}</dId><dProtConsLote>${escapeXml(numeroLote)}</dProtConsLote>`
+        } as never,
         {
           overrideRootElement: {
             namespace: '',

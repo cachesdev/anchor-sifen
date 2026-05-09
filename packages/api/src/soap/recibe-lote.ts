@@ -2,7 +2,7 @@ import * as soap from 'soap';
 import { SIFEN_ENDPOINTS, SIFEN_NS, SOAP_HEADER_XML } from './config.js';
 import type { SifenEnvironment } from './client.js';
 import type { Agent } from 'node:https';
-import { normalizeControlId } from './validation.js';
+import { normalizeControlId, escapeXml } from './validation.js';
 import {
   createClientAsync,
   type RecibeLoteClient
@@ -84,8 +84,10 @@ export class SifenRecibeLoteClient {
       const controlId = normalizeControlId(digitoControl);
       const loteZipBase64 = encodeLoteToBase64Zip(DE);
 
-      const [parsed, raw] = await client.rEnvioLoteAsync(
-        { dId: controlId, xDE: loteZipBase64 },
+      const [parsed, raw, _, out] = await client.rEnvioLoteAsync(
+        {
+          $xml: `<dId>${escapeXml(controlId)}</dId><xDE>${loteZipBase64}</xDE>`
+        } as never,
         {
           overrideRootElement: {
             namespace: '',
@@ -93,6 +95,7 @@ export class SifenRecibeLoteClient {
           }
         }
       );
+      console.log(out);
       return parseSIFENResponse(parsed, raw, parseRecibeLote);
     } catch (error) {
       return Err(

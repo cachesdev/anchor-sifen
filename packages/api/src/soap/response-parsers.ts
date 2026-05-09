@@ -11,6 +11,15 @@ import type {
 import { Err, Ok, type Result } from '../result';
 import { SifenError } from './sifen-error';
 
+/**
+ * node-soap deserializa elementos XML con ocurrencia 0-n como un objeto
+ * cuando hay un solo elemento. Esta funcion normaliza el valor a siempre Array.
+ */
+function ensureArray<T>(value: unknown): T[] {
+  if (!value) return [];
+  return Array.isArray(value) ? (value as T[]) : [value as T];
+}
+
 const SUCCESS_RECIBE_LOTE = '0300';
 const SUCCESS_CONSULTA_RUC = '0502';
 const SUCCESS_CONSULTA_DE = '0422';
@@ -270,10 +279,11 @@ export function parseConsultaLote(raw: unknown): Result<SIFENConsultaLoteRespons
     return Err(failSifen(r.dCodResLot, r.dMsgResLot, raw));
   }
 
-  const withExtra = raw as { dFecProc?: string; gResProcLote?: Array<unknown> };
-  const resultados = (withExtra.gResProcLote ?? [])
-    .map((item) => {
-      const i = v.safeParse(gResProcLoteSchema, item);
+  const withExtra = raw as { dFecProc?: string; gResProcLote?: unknown };
+  const resultados = ensureArray<Record<string, unknown>>(withExtra.gResProcLote)
+    .map((rawItem) => {
+      const gResProc = ensureArray<v.InferInput<typeof gResProcSchema>>(rawItem.gResProc);
+      const i = v.safeParse(gResProcLoteSchema, { ...rawItem, gResProc: gResProc.length ? gResProc : undefined });
       if (!i.success) return null;
       const vv = i.output;
       return {
@@ -296,7 +306,7 @@ export function parseConsultaLote(raw: unknown): Result<SIFENConsultaLoteRespons
 // ---- recibe (sync) ----
 
 const recibeSchema = v.object({
-  Id: v.string(),
+  Id: v.optional(v.string()),
   dFecProc: v.string(),
   dEstRes: v.string(),
   dProtAut: v.optional(v.number()),
@@ -304,8 +314,12 @@ const recibeSchema = v.object({
 });
 
 export function parseRecibe(raw: unknown): Result<SIFENRecibeResponse, SifenError> {
-  const root = raw as { rProtDe?: unknown };
-  const parsed = v.safeParse(recibeSchema, root.rProtDe);
+  const root = raw as { rProtDe?: Record<string, unknown> };
+  const rprot = root.rProtDe;
+  if (!rprot) return Err(fail(raw, 'rProtDe no encontrado en la respuesta.'));
+
+  const gResProc = ensureArray<v.InferInput<typeof gResProcSchema>>(rprot.gResProc);
+  const parsed = v.safeParse(recibeSchema, { ...rprot, gResProc: gResProc.length ? gResProc : undefined });
   if (!parsed.success) return Err(fail(raw, v.summarize(parsed.issues)));
 
   const r = parsed.output;
@@ -315,7 +329,7 @@ export function parseRecibe(raw: unknown): Result<SIFENRecibeResponse, SifenErro
   }
 
   return Ok({
-    cdc: r.Id,
+    cdc: r.Id!,
     estado: r.dEstRes,
     numeroTransaccion: r.dProtAut,
     fechaProcesamiento: new Date(r.dFecProc),
@@ -333,15 +347,16 @@ const gResProcEVeSchema = v.object({
 });
 
 export function parseEvento(raw: unknown): Result<SIFENEventoResponse, SifenError> {
-  const withExtra = raw as { dFecProc?: string; gResProcEVe?: Array<unknown> };
-  const eves = withExtra.gResProcEVe ?? [];
-  if (eves.length === 0) {
+  const withExtra = raw as { dFecProc?: string; gResProcEVe?: unknown };
+  const gResProcEVe = ensureArray<Record<string, unknown>>(withExtra.gResProcEVe);
+  if (gResProcEVe.length === 0) {
     return Err(fail(raw, 'Respuesta de evento sin resultados.'));
   }
 
-  const resultados = eves
-    .map((item) => {
-      const i = v.safeParse(gResProcEVeSchema, item);
+  const resultados = gResProcEVe
+    .map((rawItem) => {
+      const gResProc = ensureArray<v.InferInput<typeof gResProcSchema>>(rawItem.gResProc);
+      const i = v.safeParse(gResProcEVeSchema, { ...rawItem, gResProc: gResProc.length ? gResProc : undefined });
       if (!i.success) return null;
       const vv = i.output;
       return {
