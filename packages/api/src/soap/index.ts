@@ -18,7 +18,8 @@ export {
   parseConsultaDE,
   parseConsultaLote,
   parseRecibe,
-  parseEvento
+  parseEvento,
+  parseSIFENResponse as withRetEnviDeFallback
 } from './response-parsers';
 
 export { mapSoapError } from './errors';

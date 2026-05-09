@@ -11,7 +11,7 @@ import type { SIFENRecepLoteDEResponse } from '../sifen/types/api.js';
 import { strToU8, zipSync } from 'fflate';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseRecibeLote } from './response-parsers';
+import { parseRecibeLote, parseSIFENResponse } from './response-parsers';
 
 const MAX_SIRECEPLOTEDE_SIZE_BYTES = 10000 * 1024;
 
@@ -84,7 +84,7 @@ export class SifenRecibeLoteClient {
       const controlId = normalizeControlId(digitoControl);
       const loteZipBase64 = encodeLoteToBase64Zip(DE);
 
-      const [parsed] = await client.rEnvioLoteAsync(
+      const [parsed, raw] = await client.rEnvioLoteAsync(
         { dId: controlId, xDE: loteZipBase64 },
         {
           overrideRootElement: {
@@ -93,7 +93,7 @@ export class SifenRecibeLoteClient {
           }
         }
       );
-      return parseRecibeLote(parsed);
+      return parseSIFENResponse(parsed, raw, parseRecibeLote);
     } catch (error) {
       return Err(
         new SifenError({

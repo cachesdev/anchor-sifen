@@ -10,7 +10,7 @@ import type { Agent } from 'node:https';
 import type { SIFENConsultaLoteResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseConsultaLote } from './response-parsers';
+import { parseConsultaLote, parseSIFENResponse } from './response-parsers';
 
 export interface SifenConsultaLoteClientOptions {
   agent: Agent;
@@ -66,7 +66,7 @@ export class SifenConsultaLoteClient {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
-      const [result] = await client.rEnviConsLoteDeAsync(
+      const [parsed, raw] = await client.rEnviConsLoteDeAsync(
         { dId: controlId, dProtConsLote: numeroLote },
         {
           overrideRootElement: {
@@ -75,7 +75,7 @@ export class SifenConsultaLoteClient {
           }
         }
       );
-      return parseConsultaLote(result);
+      return parseSIFENResponse(parsed, raw, parseConsultaLote);
     } catch (error) {
       return Err(
         new SifenError({
