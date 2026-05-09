@@ -7,7 +7,7 @@ import type { Agent } from 'node:https';
 import type { SIFENConsultaResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseConsultaDE } from './response-parsers';
+import { parseConsultaDE, parseSIFENResponse } from './response-parsers';
 
 export interface SifenConsultaClientOptions {
   agent: Agent;
@@ -63,7 +63,7 @@ export class SifenConsultaClient {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
-      const [result] = await client.rEnviConsDeAsync(
+      const [parsed, raw] = await client.rEnviConsDeAsync(
         { dId: controlId, dCDC: cdc },
         {
           overrideRootElement: {
@@ -72,7 +72,7 @@ export class SifenConsultaClient {
           }
         }
       );
-      return parseConsultaDE(result);
+      return parseSIFENResponse(parsed, raw, parseConsultaDE);
     } catch (error) {
       return Err(
         new SifenError({

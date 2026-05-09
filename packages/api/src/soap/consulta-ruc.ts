@@ -10,7 +10,7 @@ import { escapeXml } from './validation.js';
 import type { SIFENConsRUCResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseConsultaRuc } from './response-parsers';
+import { parseConsultaRuc, parseSIFENResponse } from './response-parsers';
 
 export interface SifenRucClientOptions {
   agent: Agent;
@@ -60,7 +60,7 @@ export class SifenRucClient {
   }): Promise<Result<SIFENConsRUCResponse, SifenError>> {
     try {
       const client = await this.getClient();
-      const data = await client.rEnviConsRUCAsync(
+      const [parsed, raw] = await client.rEnviConsRUCAsync(
         {
           $xml: `<dId>${escapeXml(digitoControl)}</dId><dRUCCons>${escapeXml(ruc)}</dRUCCons>`
         } as never,
@@ -71,7 +71,7 @@ export class SifenRucClient {
           }
         }
       );
-      return parseConsultaRuc(data[0]);
+      return parseSIFENResponse(parsed, raw, parseConsultaRuc);
     } catch (error) {
       return Err(
         new SifenError({

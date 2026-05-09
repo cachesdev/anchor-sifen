@@ -7,7 +7,7 @@ import type { Agent } from 'node:https';
 import type { SIFENEventoResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseEvento } from './response-parsers';
+import { parseEvento, parseSIFENResponse } from './response-parsers';
 
 export interface SifenEventoClientOptions {
   agent: Agent;
@@ -58,7 +58,7 @@ export class SifenEventoClient {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
-      const [result] = await client.rEnviEventoDeAsync(
+      const [parsed, raw] = await client.rEnviEventoDeAsync(
         { dId: controlId, dEvReg: eventoXml } as never,
         {
           overrideRootElement: {
@@ -67,7 +67,7 @@ export class SifenEventoClient {
           }
         }
       );
-      return parseEvento(result);
+      return parseSIFENResponse(parsed, raw, parseEvento);
     } catch (error) {
       return Err(
         new SifenError({

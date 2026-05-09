@@ -1,4 +1,5 @@
 import * as v from 'valibot';
+import { DOMParser } from '@xmldom/xmldom';
 import type {
   SIFENRecepLoteDEResponse,
   SIFENConsRUCResponse,
@@ -16,6 +17,10 @@ const SUCCESS_CONSULTA_DE = '0422';
 const SUCCESS_CONSULTA_LOTE = '0362';
 const SUCCESS_RECIBE = 'Aprobado';
 
+const SOAP_ENV_NS_12 = 'http://www.w3.org/2003/05/soap-envelope';
+const SOAP_ENV_NS_11 = 'http://schemas.xmlsoap.org/soap/envelope/';
+const SIFEN_XSD_NS = 'http://ekuatia.set.gov.py/sifen/xsd';
+
 function fail(raw: unknown, details: string, cause?: unknown): SifenError {
   if (raw instanceof SifenError) return raw;
   return new SifenError({ details, rawObject: raw, cause });
@@ -30,6 +35,115 @@ function failSifen(sifenCodigo: string, sifenMessage: string, raw: unknown): Sif
   });
 }
 
+// ---- rRetEnviDe (rechazo genérico de SIFEN) ----
+
+const retEnviDeRejectionSchema = v.object({
+  dFecProc: v.optional(v.string()),
+  dEstRes: v.optional(v.string()),
+  gResProc: v.optional(
+    v.array(
+      v.object({
+        dCodRes: v.string(),
+        dMsgRes: v.string()
+      })
+    )
+  )
+});
+
+function getElementText(parent: Element, ns: string, localName: string): string | undefined {
+  const elements = parent.getElementsByTagNameNS(ns, localName);
+  const el = elements[0];
+  if (!el) return undefined;
+  return el.textContent?.trim() || undefined;
+}
+
+function parseRetEnviDe(raw: unknown): v.InferOutput<typeof retEnviDeRejectionSchema> | null {
+  if (typeof raw !== 'string') return null;
+
+  let doc: Document;
+  try {
+    doc = new DOMParser().parseFromString(raw, 'text/xml');
+  } catch {
+    return null;
+  }
+
+  const body =
+    doc.getElementsByTagNameNS(SOAP_ENV_NS_12, 'Body')[0] ??
+    doc.getElementsByTagNameNS(SOAP_ENV_NS_11, 'Body')[0];
+  if (!body) return null;
+
+  const retEnviDe = body.getElementsByTagNameNS(SIFEN_XSD_NS, 'rRetEnviDe')[0];
+  if (!retEnviDe) return null;
+
+  const rProtDe = retEnviDe.getElementsByTagNameNS(SIFEN_XSD_NS, 'rProtDe')[0];
+  if (!rProtDe) return null;
+
+  const gResProcElements = rProtDe.getElementsByTagNameNS(SIFEN_XSD_NS, 'gResProc');
+  const gResProc: Array<{ dCodRes: string; dMsgRes: string }> = [];
+  for (let i = 0; i < gResProcElements.length; i++) {
+    const el = gResProcElements[i];
+    if (!el) continue;
+    const dCodRes = getElementText(el, SIFEN_XSD_NS, 'dCodRes');
+    const dMsgRes = getElementText(el, SIFEN_XSD_NS, 'dMsgRes');
+    if (dCodRes && dMsgRes) {
+      gResProc.push({ dCodRes, dMsgRes });
+    }
+  }
+
+  const extracted = {
+    dFecProc: getElementText(rProtDe, SIFEN_XSD_NS, 'dFecProc') || undefined,
+    dEstRes: getElementText(rProtDe, SIFEN_XSD_NS, 'dEstRes') || undefined,
+    gResProc: gResProc.length > 0 ? gResProc : undefined
+  };
+
+  const parsed = v.safeParse(retEnviDeRejectionSchema, extracted);
+  return parsed.success ? parsed.output : null;
+}
+
+/**
+ * Aplica `responseParser` a `parsed` si el valor fue deserializado correctamente
+ * por el cliente SOAP. Si `parsed` es undefined o null, intenta extraer la
+ * respuesta genérica de rechazo rRetEnviDe desde el XML crudo (`raw`) y
+ * devuelve un SifenError con los códigos de SIFEN. Si incluso eso falla,
+ * devuelve un error genérico incluyendo `raw` como rawObject para depuración.
+ */
+export function parseSIFENResponse<T>(
+  parsed: unknown,
+  raw: unknown,
+  responseParser: (p: unknown) => Result<T, SifenError>
+): Result<T, SifenError> {
+  if (parsed !== undefined && parsed !== null) {
+    return responseParser(parsed);
+  }
+
+  const rejection = parseRetEnviDe(raw);
+  if (rejection) {
+    const firstError = rejection.gResProc?.[0];
+    const sifenCodigo = firstError?.dCodRes;
+    const sifenMessage = firstError?.dMsgRes ?? rejection.dEstRes;
+    const info = rejection.dEstRes
+      ? [rejection.dEstRes, sifenCodigo, firstError?.dMsgRes].filter(Boolean).join(' — ')
+      : sifenCodigo
+        ? `${sifenCodigo} — ${sifenMessage ?? ''}`
+        : '';
+    return Err(
+      new SifenError({
+        sifenCodigo,
+        sifenMessage,
+        details: `SIFEN ${info || 'rechazó la solicitud sin detalles adicionales'}.`,
+        rawObject: raw
+      })
+    );
+  }
+
+  return Err(
+    new SifenError({
+      details: 'El servicio SOAP no devolvió la estructura esperada.',
+      rawObject: raw
+    })
+  );
+}
+
 // ---- recibeLote ----
 
 const recibeLoteSchema = v.object({
@@ -37,7 +151,7 @@ const recibeLoteSchema = v.object({
   dCodRes: v.string(),
   dMsgRes: v.string(),
   dProtConsLote: v.optional(v.string()),
-  dTpoProces: v.optional(v.pipe(v.string(), v.toNumber()))
+  dTpoProces: v.optional(v.pipe(v.union([v.string(), v.number()]), v.toNumber()))
 });
 
 export function parseRecibeLote(raw: unknown): Result<SIFENRecepLoteDEResponse, SifenError> {

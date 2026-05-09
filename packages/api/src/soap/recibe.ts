@@ -7,7 +7,7 @@ import type { Agent } from 'node:https';
 import type { SIFENRecibeResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseRecibe } from './response-parsers';
+import { parseRecibe, parseSIFENResponse } from './response-parsers';
 
 export interface SifenRecibeClientOptions {
   agent: Agent;
@@ -58,13 +58,13 @@ export class SifenRecibeClient {
     try {
       const client = await this.getClient();
       const controlId = normalizeControlId(digitoControl);
-      const [result] = await client.rEnviDeAsync({ dId: controlId, xDE: xmlDE } as never, {
+      const [parsed, raw] = await client.rEnviDeAsync({ dId: controlId, xDE: xmlDE } as never, {
         overrideRootElement: {
           namespace: '',
           xmlnsAttributes: [{ name: 'xmlns', value: SIFEN_NS }]
         }
       });
-      return parseRecibe(result);
+      return parseSIFENResponse(parsed, raw, parseRecibe);
     } catch (error) {
       return Err(
         new SifenError({
