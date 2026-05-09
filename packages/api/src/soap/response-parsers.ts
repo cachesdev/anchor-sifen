@@ -283,7 +283,10 @@ export function parseConsultaLote(raw: unknown): Result<SIFENConsultaLoteRespons
   const resultados = ensureArray<Record<string, unknown>>(withExtra.gResProcLote)
     .map((rawItem) => {
       const gResProc = ensureArray<v.InferInput<typeof gResProcSchema>>(rawItem.gResProc);
-      const i = v.safeParse(gResProcLoteSchema, { ...rawItem, gResProc: gResProc.length ? gResProc : undefined });
+      const i = v.safeParse(gResProcLoteSchema, {
+        ...rawItem,
+        gResProc: gResProc.length ? gResProc : undefined
+      });
       if (!i.success) return null;
       const vv = i.output;
       return {
@@ -319,7 +322,10 @@ export function parseRecibe(raw: unknown): Result<SIFENRecibeResponse, SifenErro
   if (!rprot) return Err(fail(raw, 'rProtDe no encontrado en la respuesta.'));
 
   const gResProc = ensureArray<v.InferInput<typeof gResProcSchema>>(rprot.gResProc);
-  const parsed = v.safeParse(recibeSchema, { ...rprot, gResProc: gResProc.length ? gResProc : undefined });
+  const parsed = v.safeParse(recibeSchema, {
+    ...rprot,
+    gResProc: gResProc.length ? gResProc : undefined
+  });
   if (!parsed.success) return Err(fail(raw, v.summarize(parsed.issues)));
 
   const r = parsed.output;
@@ -356,7 +362,10 @@ export function parseEvento(raw: unknown): Result<SIFENEventoResponse, SifenErro
   const resultados = gResProcEVe
     .map((rawItem) => {
       const gResProc = ensureArray<v.InferInput<typeof gResProcSchema>>(rawItem.gResProc);
-      const i = v.safeParse(gResProcEVeSchema, { ...rawItem, gResProc: gResProc.length ? gResProc : undefined });
+      const i = v.safeParse(gResProcEVeSchema, {
+        ...rawItem,
+        gResProc: gResProc.length ? gResProc : undefined
+      });
       if (!i.success) return null;
       const vv = i.output;
       return {
