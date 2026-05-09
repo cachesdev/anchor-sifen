@@ -295,8 +295,8 @@ export function mapValorRestaItemToRaw(data: ValorRestaItem): GValorRestaItem {
     dDescItem: optionalBigToFixed(data.descuentoParticularItem, 8),
     dPorcDesIt: optionalBigToFixed(data.porcentajeDescuentoItem, 8),
     dDescGloItem: optionalBigToFixed(data.descuentoGlobalItem, 8),
-    dAntPreUniIt: optionalBigToFixed(data.anticipoParticularItem, 8),
-    dAntGloPreUniIt: optionalBigToFixed(data.anticipoGlobalItem, 8),
+    dAntPreUniIt: optionalBigToFixed(data.anticipoParticularItem, 8, { keepZero: true }),
+    dAntGloPreUniIt: optionalBigToFixed(data.anticipoGlobalItem, 8, { keepZero: true }),
     dTotOpeItem: data.valorTotalOperacionItem.toFixed(8),
     dTotOpeGs: optionalBigToFixed(data.valorTotalOperacionItemGs, 8)
   };

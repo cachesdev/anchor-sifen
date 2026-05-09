@@ -10,7 +10,7 @@ function makeForeignBig(value: string): object {
     s: b.s,
     toString() {
       return value;
-    },
+    }
   };
 }
 

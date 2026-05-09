@@ -11,6 +11,18 @@ describe('mapper — helpers', () => {
     it('retorna undefined para undefined', () => {
       expect(optionalBigToFixed(undefined, 2)).toBeUndefined();
     });
+
+    it('omite Big cero por defecto', () => {
+      expect(optionalBigToFixed(new Big(0), 8)).toBeUndefined();
+    });
+
+    it('conserva Big cero con keepZero: true', () => {
+      expect(optionalBigToFixed(new Big(0), 8, { keepZero: true })).toBe('0.00000000');
+    });
+
+    it('conserva Big no-cero sin keepZero', () => {
+      expect(optionalBigToFixed(new Big(100), 8)).toBe('100.00000000');
+    });
   });
 
   describe('formatDate', () => {

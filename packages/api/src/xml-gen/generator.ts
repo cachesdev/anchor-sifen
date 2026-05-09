@@ -18,5 +18,7 @@ export function generateDEXML({ raw: de, cdc }: PreparedDE): string {
     }
   };
 
-  return create({ version: '1.0', encoding: 'UTF-8' }).ele(xmlPayload).end({ prettyPrint: true });
+  return create({ version: '1.0', encoding: 'UTF-8' })
+    .ele(xmlPayload)
+    .end({ prettyPrint: false, headless: true });
 }

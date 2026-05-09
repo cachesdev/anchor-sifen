@@ -26,9 +26,10 @@ describe('xml-gen — generator', () => {
     }
   };
 
-  it('genera un string XML con declaracion y encoding', () => {
+  it('genera XML compacto sin declaracion ni whitespace', () => {
     const xml = generateDEXML(prepared);
-    expect(xml).toContain('<?xml version="1.0" encoding="UTF-8"?>');
+    expect(xml).not.toContain('<?xml');
+    expect(xml).not.toContain('\n');
   });
 
   it('incluye el namespace de SIFEN en el elemento raiz', () => {
