@@ -5,7 +5,7 @@ export interface SIFENRecepLoteDEResponse {
   fechaProcesamiento: Date;
   codigoResultado: string;
   mensajeResultado: string;
-  numeroLote?: number;
+  numeroLote?: string;
   tiempoProcesamiento: number;
 }
 
@@ -55,7 +55,7 @@ export interface SIFENConsultaLoteResponse {
 export interface SIFENRecibeResponse {
   cdc: string;
   estado: string;
-  numeroTransaccion?: number;
+  numeroTransaccion?: string;
   fechaProcesamiento: Date;
   validaciones: Array<{ codigo: string; mensaje: string }>;
 }
@@ -68,7 +68,7 @@ export interface SIFENEventoResponse {
   resultados: Array<{
     id: string;
     estado: string;
-    numeroTransaccion?: number;
+    numeroTransaccion?: string;
     validaciones: Array<{ codigo: string; mensaje: string }>;
   }>;
 }

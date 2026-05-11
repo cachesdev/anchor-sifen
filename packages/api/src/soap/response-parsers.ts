@@ -176,7 +176,7 @@ export function parseRecibeLote(raw: unknown): Result<SIFENRecepLoteDEResponse, 
     fechaProcesamiento: new Date(r.dFecProc),
     codigoResultado: r.dCodRes,
     mensajeResultado: r.dMsgRes,
-    numeroLote: r.dProtConsLote ? Number(r.dProtConsLote) : undefined,
+    numeroLote: r.dProtConsLote,
     tiempoProcesamiento: r.dTpoProces ?? 0
   });
 }
@@ -312,7 +312,7 @@ const recibeSchema = v.object({
   Id: v.optional(v.string()),
   dFecProc: v.string(),
   dEstRes: v.string(),
-  dProtAut: v.optional(v.number()),
+  dProtAut: v.optional(v.string()),
   gResProc: v.optional(v.array(gResProcSchema))
 });
 
@@ -348,7 +348,7 @@ export function parseRecibe(raw: unknown): Result<SIFENRecibeResponse, SifenErro
 const gResProcEVeSchema = v.object({
   id: v.string(),
   dEstRes: v.string(),
-  dProtAut: v.optional(v.number()),
+  dProtAut: v.optional(v.string()),
   gResProc: v.optional(v.array(gResProcSchema))
 });
 

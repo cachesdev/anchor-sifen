@@ -33,7 +33,7 @@ describe('SOAP — response parsers', () => {
       const result = parseRecibeLote(raw);
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.value.numeroLote).toBe(12345);
+        expect(result.value.numeroLote).toBe('12345');
         expect(result.value.tiempoProcesamiento).toBe(100);
       }
     });
