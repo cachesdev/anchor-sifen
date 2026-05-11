@@ -18,7 +18,7 @@ SIFEN rechaza cualquier XML que use prefijos de namespace en los elementos, a pe
 </xsns:rEnviConsRUC>
 ```
 
-**Aceptado (namespace por defecto):**
+**Aceptado (namespace por defecto, sin prefijos en hijos):**
 
 ```xml
 <rEnviConsRUC xmlns="http://ekuatia.set.gov.py/sifen/xsd">
@@ -27,98 +27,97 @@ SIFEN rechaza cualquier XML que use prefijos de namespace en los elementos, a pe
 </rEnviConsRUC>
 ```
 
-SIFEN aparenta hacer validación basada en strings en lugar de parsing XML consciente de namespaces. Esto está explícitamente indicado en el Manual Técnico v150, sección 7.2.4:
+SIFEN aparenta hacer validación basada en strings en lugar de parsing XML consciente de namespaces. Manual Técnico v150, sección 7.2.4:
 
 > _"No incorporar: Prefijos en el namespace de las etiquetas"_
 
 ### Impacto en node-soap
 
-La librería `node-soap` agrega prefijos `xsns:` a los elementos por defecto al serializar desde objetos JS. No existe opción de configuración para desactivar esto. La solución es inyectar XML crudo mediante la propiedad `$xml` en lugar de pasar objetos estructurados:
+La librería `node-soap` agrega prefijos `xsns:` a los elementos al serializar desde objetos JS. No existe opción de configuración para desactivar esto. La solución es inyectar XML crudo mediante la propiedad `$xml` **en todos los endpoints sin excepción**:
 
 ```typescript
-await client.rEnviConsRUCAsync(
+await client.rEnviDeAsync(
   {
-    $xml: `<dId>${dv}</dId><dRUCCons>${ruc}</dRUCCons>`
-  },
+    $xml: `<dId>${controlId}</dId><xDE>${xmlDE}</xDE>`
+  } as never,
   {
     overrideRootElement: {
       namespace: '',
-      xmlnsAttributes: [{ name: 'xmlns', value: 'http://ekuatia.set.gov.py/sifen/xsd' }]
+      xmlnsAttributes: [{ name: 'xmlns', value: SIFEN_NS }]
     }
   }
 );
 ```
 
+`overrideRootElement` asegura que el namespace por defecto se declare en el elemento raíz del body. `$xml` inyecta los hijos sin prefijos.
+
+**Campos que contienen XML embebido** (ej: `xDE`, `dEvReg`) no deben escaparse. Los demás sí (`escapeXml`).
+
+### endpoints y sus campos
+
+| Endpoint | Root | Hijos |
+|----------|------|-------|
+| recibe | `rEnviDe` | `dId`, `xDE` (XML) |
+| recibeLote | `rEnvioLote` | `dId`, `xDE` (base64 ZIP) |
+| consulta DE | `rEnviConsDe` | `dId`, `dCDC` |
+| consulta Lote | `rEnviConsLoteDe` | `dId`, `dProtConsLote` |
+| consulta RUC | `rEnviConsRUC` | `dId`, `dRUCCons` |
+| evento | `rEnviEventoDe` | `dId`, `dEvReg` (XML) |
+
 ---
 
 ## 2. El orden de los elementos debe seguir xs:sequence
 
-SIFEN aplica estrictamente el orden de elementos definido en el XSD mediante `<xs:sequence>`. Enviar campos fuera de orden produce error **0160 — "XML Mal Formado"**.
+SIFEN aplica estrictamente el orden de elementos definido en el XSD. Enviar campos fuera de orden produce error **0160 — "XML Mal Formado"**.
 
-Por ejemplo, `rEnviConsRUC` requiere `dId` antes de `dRUCCons`:
-
-```xml
-<!-- Definición XSD -->
-<xs:sequence>
-  <xs:element name="dId" type="dIdType"/>
-  <xs:element name="dRUCCons" type="tRuc"/>
-</xs:sequence>
-```
-
-`node-soap` serializa las claves de los objetos JS en su orden de enumeración, que puede no coincidir con la secuencia del schema. Esta es otra razón por la cual la inyección de `$xml` crudo es necesaria en los servicios de consulta.
+`node-soap` serializa las claves de los objetos JS en su orden de enumeración, que puede no coincidir con la secuencia del schema. Esta es otra razón por la cual la inyección de `$xml` crudo es necesaria — controlamos el orden exacto.
 
 ---
 
-## 3. Respuestas de error genéricas en endpoint incorrecto
+## 3. Respuestas de SIFEN: gResProc como objeto vs array
 
-Cuando un request llega al endpoint equivocado de SIFEN (ej.: enviar un payload `rEnviConsRUC` al servicio `recibe`), el servidor **no** retorna un SOAP fault correcto. En cambio, retorna el schema de respuesta `rRetEnviDe` (respuesta de recepción de DE) con código de error 0160:
+`node-soap` deserializa elementos XML con ocurrencia `0-n` como un **objeto** cuando hay un solo elemento, en lugar de un array. Esto rompe los esquemas Valibot que esperan `v.array(...)`.
 
-```xml
-<ns2:rRetEnviDe xmlns:ns2="http://ekuatia.set.gov.py/sifen/xsd">
-  <ns2:rProtDe>
-    <ns2:dEstRes>Rechazado</ns2:dEstRes>
-    <ns2:gResProc>
-      <ns2:dCodRes>0160</ns2:dCodRes>
-      <ns2:dMsgRes>XML Mal Formado.</ns2:dMsgRes>
-    </ns2:gResProc>
-  </ns2:rProtDe>
-</ns2:rRetEnviDe>
+**Solución:** normalizar con una función helper antes de la validación:
+
+```typescript
+function ensureArray<T>(value: unknown): T[] {
+  if (!value) return [];
+  return Array.isArray(value) ? (value as T[]) : [value as T];
+}
 ```
 
-Esto dificulta el debugging porque:
+Aplicar en `parseRecibe`, `parseConsultaLote` y `parseEvento` tanto al array externo como a los `gResProc` anidados.
 
-- `node-soap` intenta deserializar la respuesta como el tipo esperado, resultando en `undefined`
-- El mensaje "XML Mal Formado" es engañoso — el XML es perfectamente válido, solo está dirigido al servicio equivocado
+### dProtAut como string
 
-**Causa común:** Las URLs de los endpoints usan rutas con **guiones**, pero los nombres de archivo WSDL usan camelCase:
+`dProtAut` es un decimal de hasta 28 dígitos en el XSD (`xs:decimal`, totalDigits 28). Esto **excede** `Number.MAX_SAFE_INTEGER` en JavaScript. `node-soap` lo retorna como string, por lo que los esquemas Valibot deben usar `v.string()`, nunca `v.number()`.
 
-| Clave de config | URL correcta del endpoint      | Incorrecta (camelCase)            |
-| --------------- | ------------------------------ | --------------------------------- |
-| `consultaRuc`   | `consultas/consulta-ruc.wsdl`  | ~~`consultas/consultaRuc.wsdl`~~  |
-| `consultaLote`  | `consultas/consulta-lote.wsdl` | ~~`consultas/consultaLote.wsdl`~~ |
-| `recibeLote`    | `async/recibe-lote.wsdl`       | ~~`async/recibeLote.wsdl`~~       |
+### Id ausente en respuestas de rechazo
 
-Las URLs canónicas son las que aparecen en el elemento `<soap12:address location="...">` de cada archivo WSDL.
+Las respuestas de rechazo no incluyen el campo `Id` (CDC). El esquema de `recibe` debe declararlo como `v.optional(v.string())`.
 
 ---
 
-## 4. Reglas adicionales de formato XML
+## 4. Reglas de formato del DE
 
-Del Manual Técnico v150, sección 7.2.4 — todo lo siguiente causa rechazo:
+Del Manual Técnico v150, sección 7.2.4:
 
-- **Sin espacios en blanco** dentro o alrededor de las etiquetas: sin line-feeds, retornos de carro, tabulaciones, ni espacios entre elementos
-- **Sin etiquetas vacías**: no incluir `<dField/>` ni `<dField></dField>` para campos opcionales sin valor. Simplemente omitirlos
+- **Sin whitespace entre etiquetas**: `prettyPrint: false` obligatorio
+- **Sin declaración XML en DEs individuales**: `headless: true` en `generateDEXML`
+- **Sin etiquetas vacías**: omitir campos opcionales sin valor; no incluir `<dField/>` ni `<dField></dField>`
 - **Sin valores negativos** en campos numéricos
+- **Campos opcionales con valor cero**: deben **omitirse** del XML. Solo los campos `1-1` (obligatorios) pueden contener cero
+- **Strings sin espacios al inicio ni al final**: los datos de entrada deben recortarse (`trim`) antes del mapeo
 - **Sin comentarios XML** (`<!-- -->`), ni elementos `<annotation>` o `<documentation>`
-- **Los nombres de campos son case-sensitive**: `<gOpeDE>` ≠ `<GopeDE>` ≠ `<gopede>`
-- **Una sola declaración XML**: solo un `<?xml version="1.0" encoding="UTF-8"?>` por payload, incluso para envíos de lote
-- **Solo UTF-8**: cualquier otro encoding es rechazado (código de error 0107)
+- **Nombres case-sensitive**: `<gOpeDE>` ≠ `<GopeDE>` ≠ `<gopede>`
+- **Solo UTF-8**: cualquier otro encoding es rechazado (error 0107)
 
 ---
 
 ## 5. Declaraciones de namespace
 
-El único namespace aceptado es el namespace de SIFEN. Cualquier otro namespace produce error **0104**.
+El único namespace aceptado es `http://ekuatia.set.gov.py/sifen/xsd`. Excepción: `<Signature>` declara `xmlns="http://www.w3.org/2000/09/xmldsig#"`.
 
 ```xml
 <!-- Correcto -->
@@ -127,17 +126,74 @@ El único namespace aceptado es el namespace de SIFEN. Cualquier otro namespace 
      xsi:schemaLocation="http://ekuatia.set.gov.py/sifen/xsd siRecepDE_v150.xsd">
 ```
 
-Excepción: el elemento `<Signature>` declara su propio namespace de forma inline:
+### rLoteDE no lleva namespace
+
+En envíos de lote, el contenedor `<rLoteDE>` debe ser un elemento **sin namespace ni atributos**. Los `rDE` internos llevan sus propias declaraciones de namespace individualmente.
 
 ```xml
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<!-- Correcto -->
+<rLoteDE>
+  <rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://ekuatia.set.gov.py/sifen/xsd siRecepDE_v150.xsd">
+    <dVerFor>150</dVerFor>
+    ...
+  </rDE>
+</rLoteDE>
 ```
+
+### rLoteDE no lleva dVerFor
+
+El `rLoteDE` **no** tiene campo de versión. Cada `rDE` interno lleva su propio `<dVerFor>150</dVerFor>`.
 
 ---
 
-## 6. Requisito del SOAP Header
+## 6. CDC y codigoSeguridad
 
-Cada request debe incluir el elemento `deHeaderMsg` en el SOAP header, aunque esté vacío:
+### El codigoSeguridad debe coincidir con el CDC
+
+El `<dCodSeg>` en el XML del DE debe ser **extraído del CDC** (posiciones 35-43, 9 dígitos), no generado aleatoriamente. El CDC es la identidad del DE y sus campos deben ser consistentes con el contenido.
+
+### Zero-padding obligatorio
+
+El manual (sección 10.3) especifica: "En caso de ser un número de menos de 9 dígitos completar con 0 a la izquierda." El rango es `000000001`–`999999999`. El mapper debe formatear `dCodSeg` con `.padStart(9, '0')`.
+
+---
+
+## 7. Código QR
+
+### Parámetros con decimales exactos
+
+`dTotGralOpe` y `dTotIVA` en la URL del QR deben conservar el formato decimal **exacto** del XML, sin redondeo (`Math.round`). SIFEN valida el hash del QR contra los valores exactos del DE.
+
+### dRucRec vs dNumIDRec
+
+El nombre del parámetro en el QR depende de `iNatRec`:
+
+- `iNatRec = 1` (contribuyente): usar `dRucRec`
+- `iNatRec ≠ 1` (no contribuyente): usar `dNumIDRec`
+
+Si el campo correspondiente no existe, usar `"0"`.
+
+### Pre-validator usa URL de producción
+
+El pre-validator de SIFEN solo reconoce `https://ekuatia.set.gov.py/consultas/qr` (producción). La URL con `consultas-test` es rechazada por el validador (error 2502), aunque funcione correctamente en el entorno de test real.
+
+### Algoritmo del hash
+
+```
+STEP_1 = "nVersion=150&Id={cdc}&dFeEmiDE={hex}&dRucRec={ruc}&dTotGralOpe={total}&dTotIVA={iva}&cItems={count}&DigestValue={hex}&IdCSC={idCSC}"
+STEP_2 = STEP_1 + CSC
+cHashQR = SHA256(STEP_2)  (hex, lowercase)
+```
+
+Solo `dFeEmiDE` y `DigestValue` van en hexadecimal. El CSC se concatena directamente a STEP_1 (sin `&`). El CSC **nunca** va en la URL, solo en el cálculo del hash.
+
+---
+
+## 8. Requisito del SOAP Header
+
+Cada request debe incluir el elemento `deHeaderMsg` en el SOAP header:
 
 ```xml
 <soap:Header>
@@ -149,20 +205,33 @@ Si falta, retorna error **0180** — "Elemento de HeaderMsg inexistente en el SO
 
 ---
 
-## 7. `ClientSSLSecurity` trata strings como rutas de archivo
+## 9. Respuestas de error genéricas en endpoint incorrecto
 
-Al usar `ClientSSLSecurity` de `node-soap`, pasar contenido PEM como strings causa que internamente llame `fs.readFileSync()` sobre el string, interpretándolo como una ruta de archivo. Se deben pasar instancias de `Buffer`:
+Cuando un request llega al endpoint equivocado de SIFEN (ej.: enviar un payload `rEnviConsRUC` al servicio `recibe`), el servidor retorna el schema de respuesta `rRetEnviDe` con código de error 0160. El mensaje "XML Mal Formado" es engañoso.
+
+**Causa común:** Las URLs de los endpoints usan rutas con **guiones**:
+
+| Clave de config | URL correcta | Incorrecta |
+| --------------- | ------------ | ---------- |
+| `consultaRuc` | `consultas/consulta-ruc.wsdl` | ~~`consultas/consultaRuc.wsdl`~~ |
+| `consultaLote` | `consultas/consulta-lote.wsdl` | ~~`consultas/consultaLote.wsdl`~~ |
+| `recibeLote` | `async/recibe-lote.wsdl` | ~~`async/recibeLote.wsdl`~~ |
+
+---
+
+## 10. `ClientSSLSecurity` trata strings como rutas de archivo
+
+Al usar `ClientSSLSecurity` de `node-soap`, pasar contenido PEM como strings causa que internamente llame `fs.readFileSync()` sobre el string. Se deben pasar instancias de `Buffer`:
 
 ```typescript
-// Incorrecto — intenta leer el contenido PEM como nombre de archivo
-client.setSecurity(new soap.ClientSSLSecurity(privateKeyPem, certPem, opts));
-
-// Correcto — pasa el contenido PEM directamente a la capa TLS de Node
+// Correcto
 client.setSecurity(
   new soap.ClientSSLSecurity(Buffer.from(privateKeyPem), Buffer.from(certPem), opts)
-
-client.setSecurity(new soap.ClientSSLSecurity(privateKeyPem, certPem, opts));
-
-// Correcto — pasa el contenido PEM directamente a la capa TLS de Node
-client.setSecurity(new soap.ClientSSLSecurity(Buffer.from(privateKeyPem), Buffer.from(certPem), opts));
+);
 ```
+
+---
+
+## 11. El entorno de test de SIFEN
+
+El entorno de test (`sifen-test.set.gov.py`) tiene disponibilidad intermitente. Si un endpoint funciona en producción pero no en test con el mismo payload, asumir que es una caída del entorno de test y reintentar más tarde.
