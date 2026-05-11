@@ -13,10 +13,10 @@ describe('client — buildLote', () => {
     expect(lote).toContain('Id="CDC1"');
   });
 
-  it('incluye el namespace y schemaLocation', () => {
+  it('las declaraciones de namespace viven en los rDE internos, no en rLoteDE', () => {
     const lote = buildLote([deXml1]);
     expect(lote).toContain('xmlns="http://ekuatia.set.gov.py/sifen/xsd"');
-    expect(lote).toContain('xsi:schemaLocation');
+    expect(lote).toMatch(/^<rLoteDE><rDE/);
   });
 
   it('incluye varios DE en el lote', () => {
