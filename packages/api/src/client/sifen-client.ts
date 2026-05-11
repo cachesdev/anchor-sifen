@@ -77,10 +77,7 @@ export class SifenAPI {
 }
 
 export function buildLote(deXmls: string[]): string {
-  const root = create({ version: '1.0', encoding: 'UTF-8' })
-    .ele('http://ekuatia.set.gov.py/sifen/xsd', 'rLoteDE')
-    .att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
-    .att('xsi:schemaLocation', 'http://ekuatia.set.gov.py/sifen/xsd ProtProcesLoteDE_v150.xsd');
+  const root = create({ version: '1.0', encoding: 'UTF-8' }).ele('rLoteDE');
 
   for (const xml of deXmls) {
     const stripped = xml.replace(/<\?xml[^?]*\?>\s*/g, '').trim();
