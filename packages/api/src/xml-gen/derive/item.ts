@@ -5,6 +5,35 @@ import { Big, bigOrZero, HUNDRED, toBig, ZERO } from '../big';
 import type { DerivationConfig } from './config';
 
 /**
+ * Deriva el descuento global por item (EA004) a partir del
+ * porcentaje de descuento global (F010).
+ *
+ * NT-001: EA004 = F010 * E721 / 100
+ *
+ * Se ejecuta antes de applyItemDerivedFields para que EA008
+ * ya cuente con el descuento global poblado.
+ */
+export function applyDescuentoGlobalDerivedFields(out: DEC): void {
+  const subtotales = out.subtotalesTotales;
+  if (!subtotales) return;
+
+  const f010 = subtotales.porcentajeDescuentoGlobal;
+  if (!f010 || f010.lte(0)) return;
+
+  const items = getItemsOperacion(out);
+  if (!items) return;
+
+  for (const item of items) {
+    const valorItem = item.valorItem;
+    if (!valorItem) continue;
+
+    valorItem.valorRestaItem.descuentoGlobalItem = f010
+      .times(valorItem.precioUnitario)
+      .div(HUNDRED);
+  }
+}
+
+/**
  * Deriva los campos calculables a nivel de item:
  *
  * - EA008 (dTotOpeItem): valor total de la operacion por item.

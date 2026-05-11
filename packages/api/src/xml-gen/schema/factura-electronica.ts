@@ -37,7 +37,7 @@ function normalizeItem(
   vi.totalBrutoOperacionItem = toBig(0);
   const vr = vi.valorRestaItem;
   vr.descuentoParticularItem = toOptionalBig(vr.descuentoParticularItem);
-  vr.descuentoGlobalItem = toOptionalBig(vr.descuentoGlobalItem);
+  vr.descuentoGlobalItem = toBig(0);
   vr.anticipoParticularItem = toOptionalBig(vr.anticipoParticularItem);
   vr.anticipoGlobalItem = toOptionalBig(vr.anticipoGlobalItem);
   vr.porcentajeDescuentoItem = toBig(0);
@@ -110,7 +110,7 @@ export function normalizeFacturaElectronica(input: FacturaElectronicaInput): Fac
     totalDescuentoGlobal: toBig(0),
     totalAnticipoItem: toBig(0),
     totalAnticipoGlobal: toBig(0),
-    porcentajeDescuentoGlobal: toBig(0),
+    porcentajeDescuentoGlobal: toBig(out.subtotalesTotales.porcentajeDescuentoGlobal ?? 0),
     totalDescuentosOperacion: toBig(0),
     totalAnticiposOperacion: toBig(0),
     redondeoOperacion: toBig(0),

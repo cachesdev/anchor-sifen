@@ -26,7 +26,7 @@ describe('config de derivacion', () => {
       expect(cfg.aplicaSubtotales).toBe(true);
       expect(cfg.subtotalesIncluyeIva).toBe(false);
       expect(cfg.totalBrutoFormula).toBe('sumaItems');
-      expect(cfg.totalGsFormula).toBe('igualF014');
+      expect(cfg.totalGsFormula).toBe('tipoCambio');
     });
 
     it('NotaCreditoElectronica (C002=5) — sin condicion de operacion ni transporte', () => {

@@ -6,9 +6,10 @@ import {
   createItemOperacion,
   createValorItem,
   createValorRestaItem,
-  createIvaItem
+  createIvaItem,
+  createSubtotalesTotales
 } from '../../test-utils/factories';
-import { applyItemDerivedFields } from './item';
+import { applyDescuentoGlobalDerivedFields, applyItemDerivedFields } from './item';
 import type { DerivationConfig } from './config';
 
 const feConfig: DerivationConfig = {
@@ -305,6 +306,105 @@ describe('derive - item', () => {
       expect(
         de.datosEspecificosPorTipoDE.itemsOperacion![0]!.valorItem!.totalBrutoOperacionItem.eq(999)
       ).toBe(true);
+    });
+  });
+
+  describe('F010 → EA004: descuento global por item', () => {
+    it('F010=10%, precioUnitario=50000 → descuentoGlobalItem=5000', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(2),
+              valorItem: createValorItem({ precioUnitario: new Big(50000) })
+            })
+          ]
+        },
+        subtotalesTotales: createSubtotalesTotales({
+          porcentajeDescuentoGlobal: new Big(10)
+        })
+      });
+      applyDescuentoGlobalDerivedFields(de);
+      const item = de.datosEspecificosPorTipoDE.itemsOperacion![0]!;
+      expect(item.valorItem!.valorRestaItem.descuentoGlobalItem!.eq(5000)).toBe(true);
+    });
+
+    it('F010=10%, precioUnitario=100000 → descuentoGlobalItem=10000', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(1),
+              valorItem: createValorItem({ precioUnitario: new Big(100000) })
+            })
+          ]
+        },
+        subtotalesTotales: createSubtotalesTotales({
+          porcentajeDescuentoGlobal: new Big(10)
+        })
+      });
+      applyDescuentoGlobalDerivedFields(de);
+      const item = de.datosEspecificosPorTipoDE.itemsOperacion![0]!;
+      expect(item.valorItem!.valorRestaItem.descuentoGlobalItem!.eq(10000)).toBe(true);
+    });
+
+    it('F010 fraccionario: 10.5%, precioUnitario=100000 → descuentoGlobalItem=10500', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(1),
+              valorItem: createValorItem({ precioUnitario: new Big(100000) })
+            })
+          ]
+        },
+        subtotalesTotales: createSubtotalesTotales({
+          porcentajeDescuentoGlobal: new Big(10.5)
+        })
+      });
+      applyDescuentoGlobalDerivedFields(de);
+      const item = de.datosEspecificosPorTipoDE.itemsOperacion![0]!;
+      expect(item.valorItem!.valorRestaItem.descuentoGlobalItem!.eq(10500)).toBe(true);
+    });
+
+    it('F010=0 → descuentoGlobalItem no se modifica (sin descuento)', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(1),
+              valorItem: createValorItem({ precioUnitario: new Big(100000) })
+            })
+          ]
+        },
+        subtotalesTotales: createSubtotalesTotales({
+          porcentajeDescuentoGlobal: new Big(0)
+        })
+      });
+      applyDescuentoGlobalDerivedFields(de);
+      const item = de.datosEspecificosPorTipoDE.itemsOperacion![0]!;
+      expect(item.valorItem!.valorRestaItem.descuentoGlobalItem!.eq(0)).toBe(true);
+    });
+
+    it('F010=10% con EA008 estandar: el descuento se aplica', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(2),
+              valorItem: createValorItem({ precioUnitario: new Big(50000) })
+            })
+          ]
+        },
+        subtotalesTotales: createSubtotalesTotales({
+          porcentajeDescuentoGlobal: new Big(10)
+        })
+      });
+      applyDescuentoGlobalDerivedFields(de);
+      applyItemDerivedFields(de, feConfig);
+      const item = de.datosEspecificosPorTipoDE.itemsOperacion![0]!;
+      const ea008 = item.valorItem!.valorRestaItem.valorTotalOperacionItem;
+      expect(ea008.eq(90000)).toBe(true);
     });
   });
 });

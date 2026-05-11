@@ -126,7 +126,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaSubtotales: true,
     subtotalesIncluyeIva: false,
     totalBrutoFormula: 'sumaItems',
-    totalGsFormula: 'igualF014'
+    totalGsFormula: 'tipoCambio'
   },
 
   // C002 = 5 | Nota de Credito Electronica

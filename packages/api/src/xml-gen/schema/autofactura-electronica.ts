@@ -95,7 +95,7 @@ export function normalizeAutofacturaElectronica(
     totalDescuentoGlobal: toBig(0),
     totalAnticipoItem: toBig(0),
     totalAnticipoGlobal: toBig(0),
-    porcentajeDescuentoGlobal: toBig(0),
+    porcentajeDescuentoGlobal: toBig(out.subtotalesTotales?.porcentajeDescuentoGlobal ?? 0),
     totalDescuentosOperacion: toBig(0),
     totalAnticiposOperacion: toBig(0),
     redondeoOperacion: toBig(0),

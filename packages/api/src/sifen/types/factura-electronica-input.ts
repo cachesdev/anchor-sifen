@@ -47,6 +47,7 @@ export type ItemOperacion_FE_Input = DeepNumBig<
   OmitDeep<
     ItemOperacion_FE,
     | 'valorItem.totalBrutoOperacionItem'
+    | 'valorItem.valorRestaItem.descuentoGlobalItem'
     | 'valorItem.valorRestaItem.porcentajeDescuentoItem'
     | 'valorItem.valorRestaItem.valorTotalOperacionItem'
     | 'valorItem.valorRestaItem.valorTotalOperacionItemGs'
@@ -70,7 +71,7 @@ export interface FacturaElectronicaInput {
   timbrado: Timbrado_FE_Input;
   datosGeneralesOperacion: DatosGeneralesOperacion_FE_Input;
   datosEspecificosPorTipoDE: DatosEspecificosPorTipoDE_FE_Input;
-  subtotalesTotales: { comisionOperacion?: NumBig };
+  subtotalesTotales: { comisionOperacion?: NumBig; porcentajeDescuentoGlobal?: NumBig };
   camposUsoGeneral?: UsoGeneral;
   camposDocumentoElectronicoAsociado?: DocumentoElectronicoAsociado;
 }

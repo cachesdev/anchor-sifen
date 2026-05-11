@@ -225,7 +225,6 @@ export interface SubtotalesTotales {
    *   Si D015 ≠ PYG y D017 = 2, corresponde a la suma de todas las ocurrencias de EA009
    *   Este campo no debe existir si D015=PYG
    *   No informar si D015 = PYG
-   *   Cuando C002=4 corresponde a F014
    */
   totalOperacionGs?: Big;
 }
