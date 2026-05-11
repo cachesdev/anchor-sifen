@@ -6,10 +6,11 @@ import {
   createItemOperacion,
   createValorItem,
   createIvaItem,
-  createOperacionComercial
+  createOperacionComercial,
+  createSubtotalesTotales
 } from '../../test-utils/factories';
+import { applyDescuentoGlobalDerivedFields, applyItemDerivedFields } from './item';
 import { applySubtotalesDerivedFields } from './subtotal';
-import { applyItemDerivedFields } from './item';
 import type { DerivationConfig } from './config';
 
 const feConfig: DerivationConfig = {
@@ -184,6 +185,61 @@ describe('derive — subtotal', () => {
       applySubtotalesDerivedFields(de, feConfig);
       expect(de.subtotalesTotales!.subtotalExenta!.gt(0)).toBe(true);
       expect(de.subtotalesTotales!.subtotalIva10!.gt(0)).toBe(true);
+    });
+  });
+
+  describe('F013: redondeo moneda extranjera — edge cases', () => {
+    it('USD 10.26 → redondeo ~0.26', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [itemGravado10(10.26, 1)]
+        }
+      });
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+        monedaOperacion: 'USD'
+      });
+      applyItemDerivedFields(de, feConfig);
+      applySubtotalesDerivedFields(de, feConfig);
+      const redondeo = de.subtotalesTotales!.redondeoOperacion;
+      expect(redondeo.gt(0.25)).toBe(true);
+      expect(redondeo.lt(0.27)).toBe(true);
+    });
+
+    it('USD 10.50 → redondeo 0', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [itemGravado10(10.5, 1)]
+        }
+      });
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+        monedaOperacion: 'USD'
+      });
+      applyItemDerivedFields(de, feConfig);
+      applySubtotalesDerivedFields(de, feConfig);
+      expect(de.subtotalesTotales!.redondeoOperacion.eq(0)).toBe(true);
+    });
+  });
+
+  describe('F010 → EA004 → F033: consistencia descuento global', () => {
+    it('F010=10%, item 50000*2 → F033 = 10000 (10% del total bruto)', () => {
+      const de = createFacturaElectronicaDec({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(2),
+              valorItem: createValorItem({ precioUnitario: new Big(50000) }),
+              ivaItem: createIvaItem({ formaAfectacionTributariaIVA: 1, tasaIva: 10 })
+            })
+          ]
+        },
+        subtotalesTotales: createSubtotalesTotales({ porcentajeDescuentoGlobal: new Big(10) })
+      });
+      applyDescuentoGlobalDerivedFields(de);
+      applyItemDerivedFields(de, feConfig);
+      applySubtotalesDerivedFields(de, feConfig);
+      const sub = de.subtotalesTotales!;
+      expect(sub.totalDescuentoGlobal.eq(10000)).toBe(true);
+      expect(sub.porcentajeDescuentoGlobal.eq(10)).toBe(true);
     });
   });
 });

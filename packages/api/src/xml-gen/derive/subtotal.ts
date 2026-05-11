@@ -2,7 +2,7 @@ import { condicionTipoCambio, formaAfectacionTributariaIVA } from '../../sifen/t
 import type { DEC } from '../../sifen/types';
 import type { ItemOperacion } from '../../sifen/types/clean/e';
 import type { OperacionComercial } from '../../sifen/types/clean/d';
-import { Big, bigOrZero, HUNDRED, ZERO } from '../big';
+import { Big, bigOrZero, ZERO } from '../big';
 import { getItemsOperacion, getOperacionComercial } from './accessors';
 import type { DerivationConfig } from './config';
 
@@ -39,7 +39,6 @@ interface DerivedSubtotales {
   totalDescuentoGlobal: Big;
   totalAnticipoItem: Big;
   totalAnticipoGlobal: Big;
-  porcentajeDescuentoGlobal: Big;
   totalDescuentosOperacion: Big;
   totalAnticiposOperacion: Big;
   redondeoOperacion: Big;
@@ -204,9 +203,6 @@ function deriveSubtotales(
     totalDescuentoGlobal: acc.totalDescuentoGlobal,
     totalAnticipoItem: acc.totalAnticipoItem,
     totalAnticipoGlobal: acc.totalAnticipoGlobal,
-    porcentajeDescuentoGlobal: acc.totalBrutoOperacion.gt(0)
-      ? acc.totalDescuentoGlobal.times(HUNDRED).div(acc.totalBrutoOperacion)
-      : ZERO,
     totalDescuentosOperacion,
     totalAnticiposOperacion,
     redondeoOperacion,
@@ -240,7 +236,6 @@ function applySubtotales(out: DEC, derived: DerivedSubtotales): void {
   subtotales.totalDescuentoGlobal = derived.totalDescuentoGlobal;
   subtotales.totalAnticipoItem = derived.totalAnticipoItem;
   subtotales.totalAnticipoGlobal = derived.totalAnticipoGlobal;
-  subtotales.porcentajeDescuentoGlobal = derived.porcentajeDescuentoGlobal;
   subtotales.totalDescuentosOperacion = derived.totalDescuentosOperacion;
   subtotales.totalAnticiposOperacion = derived.totalAnticiposOperacion;
   subtotales.redondeoOperacion = derived.redondeoOperacion;

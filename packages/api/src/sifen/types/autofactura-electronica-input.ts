@@ -40,6 +40,7 @@ type ItemOperacion_AFE_Input = DeepNumBig<
   OmitDeep<
     ItemOperacion_FE,
     | 'valorItem.totalBrutoOperacionItem'
+    | 'valorItem.valorRestaItem.descuentoGlobalItem'
     | 'valorItem.valorRestaItem.porcentajeDescuentoItem'
     | 'valorItem.valorRestaItem.valorTotalOperacionItem'
     | 'valorItem.valorRestaItem.valorTotalOperacionItemGs'
@@ -59,7 +60,7 @@ export interface AutofacturaElectronicaInput {
   timbrado: Timbrado_AFE_Input;
   datosGeneralesOperacion: DatosGeneralesOperacion_AFE_Input;
   datosEspecificosPorTipoDE: DatosEspecificosPorTipoDE_AFE_Input;
-  subtotalesTotales: { comisionOperacion?: NumBig };
+  subtotalesTotales: { comisionOperacion?: NumBig; porcentajeDescuentoGlobal?: NumBig };
   camposUsoGeneral?: UsoGeneral;
   camposDocumentoElectronicoAsociado: DocumentoElectronicoAsociado;
 }
