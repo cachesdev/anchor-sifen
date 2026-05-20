@@ -15,13 +15,13 @@ export function extraerRuc(ruc: string): string {
 }
 
 /**
- * Calcula el dígito verificador numérico para un RUC/CI alfanumérico
+ * Calcula el dígito verificador numérico para un valor alfanumérico
  * usando el algoritmo módulo 11.
  */
-export function calcularDv(rucCi: string): number {
+export function calcularDv(input: string): number {
   const baseMax = 11;
   let numeroExpandido = '';
-  for (const char of rucCi) {
+  for (const char of input) {
     const upper = char.toUpperCase();
     const code = upper.charCodeAt(0);
     if (code >= 48 && code <= 57) {
