@@ -163,7 +163,7 @@ const prepared = buildFacturaElectronica({
     ]
   },
   subtotalesTotales: {
-    // Solo se provee comision y porcentaje de descuento global.
+    // Solo se provee comision y porcentaje de descuento global en caso de ser necesario.
     // Los subtotales y liquidaciones se calculan automaticamente desde los items.
   }
 });
@@ -176,7 +176,7 @@ if (!prepared.success) {
 // 2. Generar XML
 const xml = generateDEXML(prepared.value);
 
-// 3. Firmar (XAdES enveloped, RSA-SHA256)
+// 3. Firmar
 const signed = await api.signXML(xml);
 if (!signed.success) {
   console.error('Error de firma:', signed.error);
@@ -219,7 +219,7 @@ if (!batchResult.success) {
 
 console.log('Lote Nro:', batchResult.value.numeroLote);
 
-// Consultar resultado del lote (polling)
+// Consultar resultado del lote
 const status = await api.consultaLote({
   digitoControl: '0',
   numeroLote: batchResult.value.numeroLote
@@ -230,7 +230,7 @@ if (status.success) {
 }
 ```
 
-### Consultar RUC, DE y eventos
+### Consultar RUC, DE
 
 ```ts
 const rucResult = await api.consultaRUC({ digitoControl: '0', ruc: '80012345-1' });
@@ -245,14 +245,6 @@ const deResult = await api.consultaDE({
 if (deResult.success) {
   console.log('Mensaje:', deResult.value.mensajeResultado);
 }
-
-const eventoResult = await api.enviarEvento({
-  digitoControl: '0',
-  eventoXml: '<rRetEventoDe>...</rRetEventoDe>'
-});
-if (eventoResult.success) {
-  console.log('Resultados:', eventoResult.value.resultados.length);
-}
 ```
 
 ## Operaciones disponibles
@@ -264,7 +256,7 @@ if (eventoResult.success) {
 | `consultaDE()` | `siConsDE` | Consulta un DE por CDC |
 | `consultaLote()` | `siResultLoteDE` | Consulta resultado de lote por numero |
 | `consultaRUC()` | `siConsRUC` | Consulta datos del contribuyente por RUC |
-| `enviarEvento()` | `siRecepEvento` | Envia eventos (cancelacion, NC, ND, etc.) |
+| `enviarEvento()` | `siRecepEvento` | Envia eventos |
 
 ## Tipos de DE implementados
 
@@ -272,43 +264,10 @@ if (eventoResult.success) {
 |--------|-----------|--------|
 | 1 | Factura Electronica (FE) | Implementado |
 | 4 | Autofactura Electronica (AFE) | Implementado |
-| 2, 3, 5-8 | Exportacion, Importacion, NCE, NDE, NRE, CRE | Arquitectura lista |
-
-Para agregar un nuevo tipo de DE, consulta [`docs/agregar-tipo-de.md`](docs/agregar-tipo-de.md).
-
-## Arquitectura
-
-```
-Usuario
-  |
-  +-> buildFacturaElectronica(input)   --> Valibot validacion + derivacion --> PreparedDE
-  +-> generateDEXML(prepared)          --> XML string
-  +-> api.signXML(xml)                 --> XAdES enveloped signature (RSA-SHA256)
-  +-> api.attachQR(xml)                --> QR URL + elemento <gCamFuFD>
-  +-> api.recibe({ xmlDE })            --> SOAP mTLS siRecepDE --> SET SIFEN
-```
-
-### Modulos principales
-
-| Modulo | Responsabilidad |
-|--------|----------------|
-| `sifen/types` | Tipos limpios, tipos raw XML, enumeraciones, tipos de respuesta de la API |
-| `xml-gen` | Validacion de entrada (Valibot), derivacion de campos, mapeo a XML, generacion de XML y CDC |
-| `xml-sign` | Firma XML XAdES enveloped con RSA-SHA256, verificacion |
-| `certificate` | Carga de PKCS12 desde archivo/Buffer/dummy, extraccion de certificado y llave privada |
-| `soap` | Clientes SOAP (6 servicios), agente HTTPS con mTLS, parseo de respuestas y errores SIFEN |
-| `qr` | Generacion de URL QR y adjuncion al XML firmado |
-| `client` | Clase `SifenAPI`: orquesta firma, QR y operaciones SOAP |
 
 ### Patron de errores
 
-Todas las operaciones usan un `Result<T, E>` (estilo Rust): nunca lanzan excepciones para errores esperados.
-
-```ts
-type Result<T, E> =
-  | { success: true; value: T; error?: never }
-  | { success: false; error: E; value?: never };
-```
+Todas las operaciones usan un result type, evitando asi excepciones.
 
 Los errores SIFEN vienen tipados con `SifenError`:
 
@@ -319,24 +278,6 @@ class SifenError extends Error {
   details?: string;       // Detalles adicionales
   rawObject?: unknown;    // Objeto raw parseado de la respuesta XML
 }
-```
-
-## Documentacion
-
-- [`docs/Manual-Tecnico-150.md`](docs/Manual-Tecnico-150.md) - Manual Tecnico SIFEN v150 completo
-- [`docs/Indice.md`](docs/Indice.md) - Indice del manual + 27 notas tecnicas de la SET
-- [`docs/XML-SIFEN.md`](docs/XML-SIFEN.md) - Guia de integracion XML: namespaces, orden de elementos, firmas, QR
-- [`docs/Autenticacion-SIFEN.md`](docs/Autenticacion-SIFEN.md) - Autenticacion: mTLS, certificados, codigos de error
-- [`docs/agregar-tipo-de.md`](docs/agregar-tipo-de.md) - Guia paso a paso para agregar nuevos tipos de DE
-
-## Desarrollo
-
-```bash
-pnpm install
-pnpm test          # Vitest
-pnpm check         # TypeScript --noEmit
-pnpm lint          # Prettier + ESLint
-pnpm build         # tsdown -> dist/
 ```
 
 ## Licencia

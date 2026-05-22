@@ -1,9 +1,31 @@
 {
   "name": "@anchor-sifen/api",
   "version": "0.1.0",
+  "description": "Cliente TypeScript para SIFEN. genera, firma, envía y consulta Documentos Electrónicos (DE) del sistema de facturación electrónica de Paraguay SIFEN",
+  "keywords": [
+    "sifen",
+    "paraguay",
+    "factura-electronica",
+    "set",
+    "dnit",
+    "xml",
+    "firma-digital",
+    "documento-electronico",
+    "facturacion"
+  ],
   "type": "module",
-  "author": "Anchor Software",
+  "author": "Anchor Software - Gustavo Dominguez",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cachesdev/anchor-sifen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cachesdev/anchor-sifen/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
@@ -41,9 +63,16 @@
     "vite-bundle-explorer": "^1.0.0",
     "vitest": "^4.0.16"
   },
+  "files": [
+    "dist/",
+    "README.md"
+  ],
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@praha/error-factory": "^1.4.0",
