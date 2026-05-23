@@ -1,6 +1,35 @@
-# @anchor-sifen/api
+# @anchorsoft/sifen
 
 Cliente TypeScript para SIFEN. Genera, firma, envia y consulta Documentos Electronicos (DE) con el fisco.
+
+> [!WARNING]
+> **NO USAR EN PRODUCCION**
+>
+> Este paquete se encuentra en etapa experimental. Todavia no fue probado en produccion. **no uses el paquete para facturacion, ya que no esta 100% testeado y podria generar numeros incorrectos.**
+> La libreria estara sujeta a cambios con incompatibilidades hasta la version 1.0.0, la cual solo sera lanzada una vez que se hayan implementado y testeado los tipos de DE y se haya estabilizado la API.
+
+## Razonamiento
+
+La razon por la que esta libreria existe es por que las otras soluciones simplemente dejan mucho que desear, especialmente en area del tipado y validacion. 
+
+SIFEN es un sistema complejo, con reglas de negocio estrictas y una documentacion oficial arcaica que no es precisamente amigable para los desarrolladores. Sin embargo, el DE es un documento legal, y cualquier error en su generacion puede tener consecuencias graves.
+
+los objetivos principales son estos:
+
+- Tener una API completamente tipada
+- Ser capaz de validar el DE localmente, sin disparar contra SIFEN
+- Transformar la documentacion de SIFEN a una mas amigable para desarrolladores y herramientas de IA
+
+Con estos 3 puntos, se reduce la cantidad de error humano dramaticamente, y el tiempo de desarrollo se acorta significativamente.
+
+La libreria tiene las siguientes caracteristicas principales:
+
+- **Tipos por tipo de DE.** Cada Documento Electronico tiene su propio builder tipado.
+- **Esquema XML completo tipado.** Todos los campos del XML de SIFEN estan modelados como tipos TypeScript, tanto en su forma original segun el manual como su forma "legible".
+- **Mappers tipados.** La transformacion entre la representacion limpia y el XML esta completamente tipada, sin sorpresas.
+- **Validacion del lado del cliente** _(pendiente)_. La API oficial de SIFEN solo valida en el servidor. Esta libreria incluye un motor de validacion que se ejecuta localmente y inenta reproducir las mismas validaciones que SIFEN, para detectar errores antes de enviar el DE.
+- **Multiples fuentes de certificado.** Se puede cargar el certificado desde archivo `.p12`, desde un `Buffer`, o implementar tu propio adaptador.
+- **Documentacion en Markdown para LLMs.** La documentacion oficial de SIFEN viene en PDFs, dificiles de consumir por herramientas de IA. En `docs/` se encuentra la documentacion relevante en `.md`.
 
 ## Requisitos
 
@@ -11,10 +40,10 @@ Cliente TypeScript para SIFEN. Genera, firma, envia y consulta Documentos Electr
 ## Instalacion
 
 ```bash
-npm install @anchor-sifen/api
+npm install @anchorsoft/sifen
 ```
 
-## Configuracion
+## Uso Basico
 
 ```ts
 import {
@@ -22,7 +51,7 @@ import {
   createFilePKCS12Source,
   createBufferPKCS12Source,
   createDummyPKCS12Source
-} from '@anchor-sifen/api';
+} from '@anchorsoft/sifen';
 
 // Desde archivo .p12 en disco
 const certSource = createFilePKCS12Source('/ruta/cert.p12', 'password');
@@ -69,7 +98,7 @@ import {
   codigoMoneda,
   codigoDepartamento,
   codigoCiudad
-} from '@anchor-sifen/api';
+} from '@anchorsoft/sifen';
 
 const api = new SifenAPI({
   environment: 'test',
@@ -247,23 +276,10 @@ if (deResult.success) {
 }
 ```
 
-## Operaciones disponibles
-
-| Metodo | Servicio SIFEN | Descripcion |
-|--------|----------------|-------------|
-| `recibe()` | `siRecepDE` | Envio sincronico de un solo DE |
-| `recibeLote()` | `siRecepLoteDE` | Envio asincronico de lote de DE |
-| `consultaDE()` | `siConsDE` | Consulta un DE por CDC |
-| `consultaLote()` | `siResultLoteDE` | Consulta resultado de lote por numero |
-| `consultaRUC()` | `siConsRUC` | Consulta datos del contribuyente por RUC |
-| `enviarEvento()` | `siRecepEvento` | Envia eventos |
-
 ## Tipos de DE implementados
 
-| Codigo | Documento | Estado |
-|--------|-----------|--------|
-| 1 | Factura Electronica (FE) | Implementado |
-| 4 | Autofactura Electronica (AFE) | Implementado |
+- Factura Electronica (FE)
+- Autofactura Electronica (AFE)
 
 ### Patron de errores
 
@@ -273,12 +289,16 @@ Los errores SIFEN vienen tipados con `SifenError`:
 
 ```ts
 class SifenError extends Error {
-  sifenCodigo?: string;   // Codigo del error (ej. "0015")
+  sifenCodigo?: string;   // Codigo del error
   sifenMessage?: string;  // Mensaje descriptivo
   details?: string;       // Detalles adicionales
   rawObject?: unknown;    // Objeto raw parseado de la respuesta XML
 }
 ```
+
+## Disclaimer IA
+
+Esta libreria fue desarrollada con ayuda de multiples arneses de IA, incluyendo Copilot, Claude Code y principalmente Opencode, **esto no significa que la libreria fue vibecodeada**. El codigo generado por IA fue revisado, testeado y corregido manualmente, siguiendo extrictamente la documentacion oficial de SIFEN y sus notas tecnicas.
 
 ## Licencia
 
