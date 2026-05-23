@@ -1,12 +1,12 @@
 {
-  "name": "anchor-sifen",
+  "name": "sifen-monorepo",
   "version": "0.1.0",
   "private": "true",
   "type": "module",
   "keywords": [],
   "author": "Anchor Software",
   "license": "MIT",
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@11.2.2",
   "scripts": {
     "changeset": "changeset",
     "changeset:version": "changeset version && pnpm install --lockfile-only",
