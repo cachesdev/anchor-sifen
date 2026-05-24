@@ -8,6 +8,6 @@ Monorepo del paquete npm [**@anchorsoft/sifen**](https://www.npmjs.com/package/@
 |---|---|
 | [**@anchorsoft/sifen**](./packages/api) | Genera, firma, envia y consulta Documentos Electronicos |
 
-## Licencia
+## Notas
 
-MIT
+El commit history se ve raro ya que tuve que re-escribir la historia desde el principio y se perdieron las fechas originales. la libreria esta siendo desarrollada desde enero de 2026.
