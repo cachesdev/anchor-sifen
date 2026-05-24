@@ -55,14 +55,14 @@ await client.rEnviDeAsync(
 
 ### endpoints y sus campos
 
-| Endpoint | Root | Hijos |
-|----------|------|-------|
-| recibe | `rEnviDe` | `dId`, `xDE` (XML) |
-| recibeLote | `rEnvioLote` | `dId`, `xDE` (base64 ZIP) |
-| consulta DE | `rEnviConsDe` | `dId`, `dCDC` |
-| consulta Lote | `rEnviConsLoteDe` | `dId`, `dProtConsLote` |
-| consulta RUC | `rEnviConsRUC` | `dId`, `dRUCCons` |
-| evento | `rEnviEventoDe` | `dId`, `dEvReg` (XML) |
+| Endpoint      | Root              | Hijos                     |
+| ------------- | ----------------- | ------------------------- |
+| recibe        | `rEnviDe`         | `dId`, `xDE` (XML)        |
+| recibeLote    | `rEnvioLote`      | `dId`, `xDE` (base64 ZIP) |
+| consulta DE   | `rEnviConsDe`     | `dId`, `dCDC`             |
+| consulta Lote | `rEnviConsLoteDe` | `dId`, `dProtConsLote`    |
+| consulta RUC  | `rEnviConsRUC`    | `dId`, `dRUCCons`         |
+| evento        | `rEnviEventoDe`   | `dId`, `dEvReg` (XML)     |
 
 ---
 
@@ -211,11 +211,11 @@ Cuando un request llega al endpoint equivocado de SIFEN (ej.: enviar un payload 
 
 **Causa común:** Las URLs de los endpoints usan rutas con **guiones**:
 
-| Clave de config | URL correcta | Incorrecta |
-| --------------- | ------------ | ---------- |
-| `consultaRuc` | `consultas/consulta-ruc.wsdl` | ~~`consultas/consultaRuc.wsdl`~~ |
-| `consultaLote` | `consultas/consulta-lote.wsdl` | ~~`consultas/consultaLote.wsdl`~~ |
-| `recibeLote` | `async/recibe-lote.wsdl` | ~~`async/recibeLote.wsdl`~~ |
+| Clave de config | URL correcta                   | Incorrecta                        |
+| --------------- | ------------------------------ | --------------------------------- |
+| `consultaRuc`   | `consultas/consulta-ruc.wsdl`  | ~~`consultas/consultaRuc.wsdl`~~  |
+| `consultaLote`  | `consultas/consulta-lote.wsdl` | ~~`consultas/consultaLote.wsdl`~~ |
+| `recibeLote`    | `async/recibe-lote.wsdl`       | ~~`async/recibeLote.wsdl`~~       |
 
 ---
 

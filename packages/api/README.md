@@ -10,7 +10,7 @@ Cliente TypeScript para SIFEN. Genera, firma, envia y consulta Documentos Electr
 
 ## Razonamiento
 
-La razon por la que esta libreria existe es por que las otras soluciones simplemente dejan mucho que desear, especialmente en area del tipado y validacion. 
+La razon por la que esta libreria existe es por que las otras soluciones simplemente dejan mucho que desear, especialmente en area del tipado y validacion.
 
 SIFEN es un sistema complejo, con reglas de negocio estrictas y una documentacion oficial arcaica que no es precisamente amigable para los desarrolladores. Sin embargo, el DE es un documento legal, y cualquier error en su generacion puede tener consecuencias graves.
 
@@ -289,10 +289,10 @@ Los errores SIFEN vienen tipados con `SifenError`:
 
 ```ts
 class SifenError extends Error {
-  sifenCodigo?: string;   // Codigo del error
-  sifenMessage?: string;  // Mensaje descriptivo
-  details?: string;       // Detalles adicionales
-  rawObject?: unknown;    // Objeto raw parseado de la respuesta XML
+  sifenCodigo?: string; // Codigo del error
+  sifenMessage?: string; // Mensaje descriptivo
+  details?: string; // Detalles adicionales
+  rawObject?: unknown; // Objeto raw parseado de la respuesta XML
 }
 ```
 

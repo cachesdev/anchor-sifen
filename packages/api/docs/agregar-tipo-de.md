@@ -8,16 +8,16 @@ patrones de FacturaElectronica (C002=1) y AutofacturaElectronica (C002=4).
 
 ## Resumen de archivos a tocar
 
-| # | Archivo | Acción |
-|---|---------|--------|
-| 1 | `src/sifen/types/nuevo-de.ts` | **Crear** — tipo clean wrapper |
-| 2 | `src/sifen/types/nuevo-de-input.ts` | **Crear** — tipo de input del usuario |
-| 3 | `src/sifen/types/index.ts` | **Modificar** — agregar exports |
-| 4 | `src/xml-gen/schema/nuevo-de.ts` | **Crear** — schema valibot + normalización |
-| 5 | `src/xml-gen/schema/index.ts` | **Modificar** — agregar export |
-| 6 | `src/xml-gen/derive/config.ts` | **Modificar** — agregar entrada en `configPorTipoDE` |
-| 7 | `src/xml-gen/nuevo-de.ts` | **Crear** — función `buildNuevoDe()` |
-| 8 | `src/xml-gen/index.ts` | **Modificar** — agregar export |
+| #   | Archivo                             | Acción                                               |
+| --- | ----------------------------------- | ---------------------------------------------------- |
+| 1   | `src/sifen/types/nuevo-de.ts`       | **Crear** — tipo clean wrapper                       |
+| 2   | `src/sifen/types/nuevo-de-input.ts` | **Crear** — tipo de input del usuario                |
+| 3   | `src/sifen/types/index.ts`          | **Modificar** — agregar exports                      |
+| 4   | `src/xml-gen/schema/nuevo-de.ts`    | **Crear** — schema valibot + normalización           |
+| 5   | `src/xml-gen/schema/index.ts`       | **Modificar** — agregar export                       |
+| 6   | `src/xml-gen/derive/config.ts`      | **Modificar** — agregar entrada en `configPorTipoDE` |
+| 7   | `src/xml-gen/nuevo-de.ts`           | **Crear** — función `buildNuevoDe()`                 |
+| 8   | `src/xml-gen/index.ts`              | **Modificar** — agregar export                       |
 
 ---
 
@@ -56,9 +56,7 @@ export type DatosEspecificosPorTipoDE_MiDE = SimplifyDeep<
       // Quitá los grupos que NO aplican a este tipo de DE.
       // Ej: para NCE/NDE omitir facturaElectronica, autofacturaElectronica,
       // notaRemisionElectronica.
-      | 'facturaElectronica'
-      | 'autofacturaElectronica'
-      | 'notaRemisionElectronica'
+      'facturaElectronica' | 'autofacturaElectronica' | 'notaRemisionElectronica'
     >,
     // Hacé obligatorios los grupos que SÍ aplican y los campos de items.
     | 'notaCreditoDebitoElectronica'
@@ -87,15 +85,15 @@ export interface MiDocumentoElectronico extends Omit<
 
 ### Campos que se suelen omitir de `DatosEspecificosPorTipoDE` según C002:
 
-| Grupo en E001 | C002=1 (FE) | C002=4 (AFE) | C002=5,6 (NCE/NDE) | C002=7 (NRE) |
-|---|---|---|---|---|
-| `facturaElectronica` | Obligatorio | Omitir | Omitir | Omitir |
-| `autofacturaElectronica` | Omitir | Obligatorio | Omitir | Omitir |
-| `notaCreditoDebitoElectronica` | Omitir | Omitir | Obligatorio | Omitir |
-| `notaRemisionElectronica` | Omitir | Omitir | Omitir | Obligatorio |
-| `condicionOperacion` | Obligatorio | Obligatorio | Omitir | Omitir |
-| `itemsOperacion` | Obligatorio | Obligatorio | Obligatorio | — |
-| `transporte` | Opcional | Omitir | Omitir | Obligatorio |
+| Grupo en E001                  | C002=1 (FE) | C002=4 (AFE) | C002=5,6 (NCE/NDE) | C002=7 (NRE) |
+| ------------------------------ | ----------- | ------------ | ------------------ | ------------ |
+| `facturaElectronica`           | Obligatorio | Omitir       | Omitir             | Omitir       |
+| `autofacturaElectronica`       | Omitir      | Obligatorio  | Omitir             | Omitir       |
+| `notaCreditoDebitoElectronica` | Omitir      | Omitir       | Obligatorio        | Omitir       |
+| `notaRemisionElectronica`      | Omitir      | Omitir       | Omitir             | Obligatorio  |
+| `condicionOperacion`           | Obligatorio | Obligatorio  | Omitir             | Omitir       |
+| `itemsOperacion`               | Obligatorio | Obligatorio  | Obligatorio        | —            |
+| `transporte`                   | Opcional    | Omitir       | Omitir             | Obligatorio  |
 
 ---
 
@@ -200,6 +198,7 @@ export * from './nuevo-de-input';
 ## Paso 4: Schema valibot + normalización (`xml-gen/schema/nuevo-de.ts`)
 
 Creá una función `normalizeMiDocumentoElectronico` que:
+
 1. Clona el input y hace trim de strings
 2. Setea `tipoDE`, `timbrado.tipoDocumento` al valor numérico correcto
 3. Inicializa campos derivados a cero/undefined
@@ -301,14 +300,14 @@ export const miDocumentoElectronicoSchema = v.pipe(
 
 ### Checklist de normalización por tipo de DE:
 
-| Aspecto | FE | AFE | NCE/NDE | NRE |
-|---------|----|-----|---------|-----|
-| `tipoDocumento` numérico | 1 | 4 | 5 o 6 | 7 |
-| Descuentos/anticipos en items | `toOptionalBig` | `undefined` (no aplican) | `toOptionalBig` | `undefined` (sin valorItem) |
-| `porcentajeDescuentoGlobal` del input | Sí | Sí | Sí | N/A (sin subtotales) |
-| IVA en items | Normalizar | No normalizar (sin IVA) | Normalizar | No normalizar |
-| `condicionOperacion` | Normalizar | Normalizar (sin pagoCredito) | No | No |
-| `transporte` | Normalizar transportista | No | No | Normalizar |
+| Aspecto                               | FE                       | AFE                          | NCE/NDE         | NRE                         |
+| ------------------------------------- | ------------------------ | ---------------------------- | --------------- | --------------------------- |
+| `tipoDocumento` numérico              | 1                        | 4                            | 5 o 6           | 7                           |
+| Descuentos/anticipos en items         | `toOptionalBig`          | `undefined` (no aplican)     | `toOptionalBig` | `undefined` (sin valorItem) |
+| `porcentajeDescuentoGlobal` del input | Sí                       | Sí                           | Sí              | N/A (sin subtotales)        |
+| IVA en items                          | Normalizar               | No normalizar (sin IVA)      | Normalizar      | No normalizar               |
+| `condicionOperacion`                  | Normalizar               | Normalizar (sin pagoCredito) | No              | No                          |
+| `transporte`                          | Normalizar transportista | No                           | No              | Normalizar                  |
 
 ---
 
@@ -341,17 +340,17 @@ MiDocumentoElectronico: {
 
 ### Valores típicos por C002:
 
-| Campo | C002=1 (FE) | C002=4 (AFE) | C002=5,6 (NCE/NDE) | C002=7 (NRE) |
-|-------|-------------|--------------|---------------------|--------------|
-| `ea008Formula` | `'estandar'` | `'autofactura'` | `'estandar'` | `'estandar'` |
-| `aplicaValorItem` | `true` | `true` | `true` | `false` |
-| `aplicaIvaItem` | `true` | `false` | `true` | `false` |
-| `aplicaCondicionOperacion` | `true` | `true` | `false` | `false` |
-| `aplicaTransporte` | `true` | `false` | `false` | `true` |
-| `aplicaSubtotales` | `true` | `true` | `true` | `false` |
-| `subtotalesIncluyeIva` | `true` | `false` | `true` | `false` |
-| `totalBrutoFormula` | `'sumaSubtotales'` | `'sumaItems'` | `'sumaSubtotales'` | `'sumaSubtotales'` |
-| `totalGsFormula` | `'tipoCambio'` | `'tipoCambio'` | `'tipoCambio'` | `'tipoCambio'` |
+| Campo                      | C002=1 (FE)        | C002=4 (AFE)    | C002=5,6 (NCE/NDE) | C002=7 (NRE)       |
+| -------------------------- | ------------------ | --------------- | ------------------ | ------------------ |
+| `ea008Formula`             | `'estandar'`       | `'autofactura'` | `'estandar'`       | `'estandar'`       |
+| `aplicaValorItem`          | `true`             | `true`          | `true`             | `false`            |
+| `aplicaIvaItem`            | `true`             | `false`         | `true`             | `false`            |
+| `aplicaCondicionOperacion` | `true`             | `true`          | `false`            | `false`            |
+| `aplicaTransporte`         | `true`             | `false`         | `false`            | `true`             |
+| `aplicaSubtotales`         | `true`             | `true`          | `true`             | `false`            |
+| `subtotalesIncluyeIva`     | `true`             | `false`         | `true`             | `false`            |
+| `totalBrutoFormula`        | `'sumaSubtotales'` | `'sumaItems'`   | `'sumaSubtotales'` | `'sumaSubtotales'` |
+| `totalGsFormula`           | `'tipoCambio'`     | `'tipoCambio'`  | `'tipoCambio'`     | `'tipoCambio'`     |
 
 ---
 
@@ -393,6 +392,7 @@ datos específicos que no están cubiertos por las factories genéricas (FE ya
 cubre la mayoría).
 
 Agregar tests de derivación en `src/xml-gen/derive/` que verifiquen:
+
 - Las fórmulas de item (EA008, E735, E736) con la config del nuevo DE
 - Los subtotales (F002-F026) se acumulan correctamente
 - El pipeline completo produce un `PreparedDE` sin errores
