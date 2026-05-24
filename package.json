@@ -5,7 +5,6 @@
   "type": "module",
   "keywords": [],
   "author": "Anchor Software",
-  "license": "MIT",
   "packageManager": "pnpm@11.2.2",
   "scripts": {
     "changeset": "changeset",

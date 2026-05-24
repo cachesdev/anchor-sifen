@@ -298,8 +298,16 @@ class SifenError extends Error {
 
 ## Disclaimer IA
 
-Esta libreria fue desarrollada con ayuda de multiples arneses de IA, incluyendo Copilot, Claude Code y principalmente Opencode, **esto no significa que la libreria fue vibecodeada**. El codigo generado por IA fue revisado, testeado y corregido manualmente, siguiendo extrictamente la documentacion oficial de SIFEN y sus notas tecnicas.
+Esta libreria fue desarrollada con ayuda de multiples arneses de IA, **esto no significa que la libreria fue vibecodeada**. El codigo generado por IA fue revisado, testeado y corregido manualmente, siguiendo extrictamente la documentacion oficial de SIFEN y sus notas tecnicas.
 
 ## Licencia
 
-MIT
+[`**BUSL-1.1** (Business Source License 1.1)`](./LICENSE).
+
+Informacion adicional sobre la licencia:
+
+- **No se puede usar esta libreria en produccion ni con fines comerciales**, Esto es temporal para evitar competencia con Anchor Software, se agregaran clausulas a la BUSL para versiones futuras que aceptan el uso comercial interno y de venta de sistemas, pero bloqueando su uso para SaaS.
+- Se puede leer el codigo, modificarlo, redistribuirlo y usarlo para educacion o investigacion.
+- Cada version se convierte automaticamente en **MIT** al cumplir 4 años desde su publicacion.
+
+Para licencias comerciales SaaS, contactar al autor.
