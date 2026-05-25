@@ -18,6 +18,7 @@ los objetivos principales son estos:
 
 - Tener una API completamente tipada
 - Ser capaz de validar el DE localmente, sin disparar contra SIFEN
+- Evitar el uso de numeros flotantes para representar dinero, lo cual todas las otras librerias hacen
 - Transformar la documentacion de SIFEN a una mas amigable para desarrolladores y herramientas de IA
 
 Con estos 3 puntos, se reduce la cantidad de error humano dramaticamente, y el tiempo de desarrollo se acorta significativamente.
@@ -29,6 +30,7 @@ La libreria tiene las siguientes caracteristicas principales:
 - **Mappers tipados.** La transformacion entre la representacion limpia y el XML esta completamente tipada, sin sorpresas.
 - **Validacion del lado del cliente** _(pendiente)_. La API oficial de SIFEN solo valida en el servidor. Esta libreria incluye un motor de validacion que se ejecuta localmente y inenta reproducir las mismas validaciones que SIFEN, para detectar errores antes de enviar el DE.
 - **Multiples fuentes de certificado.** Se puede cargar el certificado desde archivo `.p12`, desde un `Buffer`, o implementar tu propio adaptador.
+- **Todo el dinero esta manejado con big.js**, evita los errores de precision.
 - **Documentacion en Markdown para LLMs.** La documentacion oficial de SIFEN viene en PDFs, dificiles de consumir por herramientas de IA. En `docs/` se encuentra la documentacion relevante en `.md`.
 
 ## Requisitos
