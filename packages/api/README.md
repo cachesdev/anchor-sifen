@@ -1,6 +1,6 @@
 # @anchorsoft/sifen
 
-Cliente TypeScript para SIFEN. Genera, firma, envia y consulta Documentos Electronicos (DE) con el fisco.
+Cliente TypeScript para SIFEN. Genera, firma, envia y consulta Documentos Electronicos (DE).
 
 > [!WARNING]
 > **NO USAR EN PRODUCCION**
