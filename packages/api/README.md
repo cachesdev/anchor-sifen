@@ -21,7 +21,7 @@ los objetivos principales son estos:
 - Evitar el uso de numeros flotantes para representar dinero, lo cual todas las otras librerias hacen
 - Transformar la documentacion de SIFEN a una mas amigable para desarrolladores y herramientas de IA
 
-Con estos 3 puntos, se reduce la cantidad de error humano dramaticamente, y el tiempo de desarrollo se acorta significativamente.
+Con estos puntos, se reduce la cantidad de error humano dramaticamente, y el tiempo de desarrollo se acorta significativamente.
 
 La libreria tiene las siguientes caracteristicas principales:
 
