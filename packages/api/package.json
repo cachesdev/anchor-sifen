@@ -28,7 +28,7 @@
   },
   "packageManager": "pnpm@10.28.0",
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && cp -r src/gen/soap/wsdl dist/wsdl",
     "dev": "tsdown --watch",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",

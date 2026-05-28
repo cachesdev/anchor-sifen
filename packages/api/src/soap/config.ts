@@ -1,5 +1,5 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { existsSync } from 'node:fs';
 import type { SifenEnvironment } from './client';
 
 export const SIFEN_NS = 'http://ekuatia.set.gov.py/sifen/xsd';
@@ -17,7 +17,9 @@ export type SifenService =
   | 'consultaLote'
   | 'consultaRuc';
 
-const WSDL_DIR = path.resolve(fileURLToPath(import.meta.url), '../../src/gen/soap/wsdl');
+const prodWsdlDir = path.resolve(import.meta.dirname, 'wsdl');
+const devWsdlDir = path.resolve(import.meta.dirname, '../../src/gen/soap/wsdl');
+const WSDL_DIR = existsSync(prodWsdlDir) ? prodWsdlDir : devWsdlDir;
 
 export const SIFEN_ENDPOINTS: Record<
   SifenEnvironment,
