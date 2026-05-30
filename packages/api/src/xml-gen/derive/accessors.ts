@@ -59,7 +59,7 @@ export function getPagoContadoEntregaInicial(doc: DEC): PagoContadoEntregaInicia
   return doc.datosEspecificosPorTipoDE.condicionOperacion?.pagoContadoEntregaInicial;
 }
 
-export function getItemsOperacion(doc: DEC): ItemOperacion[] | undefined {
+export function getItemsOperacion(doc: DEC): ItemOperacion[] {
   return doc.datosEspecificosPorTipoDE.itemsOperacion;
 }
 

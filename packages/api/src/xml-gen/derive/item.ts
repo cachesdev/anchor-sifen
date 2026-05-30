@@ -21,7 +21,6 @@ export function applyDescuentoGlobalDerivedFields(out: DEC): void {
   if (!f010 || f010.lte(0)) return;
 
   const items = getItemsOperacion(out);
-  if (!items) return;
 
   for (const item of items) {
     const valorItem = item.valorItem;
@@ -65,9 +64,6 @@ export function applyItemDerivedFields(out: DEC, config: DerivationConfig): void
   }
 
   const items = getItemsOperacion(out);
-  if (!items) {
-    return;
-  }
 
   for (const item of items) {
     const valorItem = item.valorItem;

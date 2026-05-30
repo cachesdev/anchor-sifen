@@ -70,9 +70,6 @@ function accumulateItems(doc: DEC): ItemAccumulation {
   const acc = createEmptyItemAccumulation();
 
   const items = getItemsOperacion(doc);
-  if (!items) {
-    return acc;
-  }
 
   for (const item of items) {
     const valorItem = item.valorItem;

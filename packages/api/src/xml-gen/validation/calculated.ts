@@ -8,6 +8,6 @@ import type { ValidationError } from './types';
 export function validateCalculated(doc: DEC): ValidationError[] {
   return [
     ...validate(doc, calculatedDocumentRules),
-    ...validateItems(doc, getItemsOperacion(doc) ?? [], calculatedItemRules)
+    ...validateItems(doc, getItemsOperacion(doc), calculatedItemRules)
   ];
 }

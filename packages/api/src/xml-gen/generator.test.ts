@@ -11,7 +11,7 @@ describe('xml-gen — generator', () => {
       dDVId: 8,
       dFecFirma: '2026-04-30T12:00:00',
       dSisFact: 1,
-      gOpeDE: { iTipEmi: 1, dDesTipEmi: 'Normal', dCodSeg: 123456789 },
+      gOpeDE: { iTipEmi: 1, dDesTipEmi: 'Normal', dCodSeg: '123456789' },
       gTimb: {
         iTiDE: 1,
         dDesTiDE: 'Factura electrónica',

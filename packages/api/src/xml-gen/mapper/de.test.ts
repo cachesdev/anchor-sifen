@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { createOperacionDE, createTimbrado } from '../../test-utils/factories/base';
-import { mapOperacionDEToRaw, mapTimbradoToRaw } from './de';
+import { createOperacionDE, createTimbrado, createItemOperacion } from '../../test-utils/factories/base';
+import { mapDatosEspecificosPorTipoDEToRaw, mapOperacionDEToRaw, mapTimbradoToRaw } from './de';
+import type { DatosEspecificosPorTipoDE } from '../../sifen/types/clean/de';
 
 describe('mapper — de', () => {
   describe('mapTimbradoToRaw', () => {
@@ -44,6 +45,33 @@ describe('mapper — de', () => {
         createOperacionDE({ informacionEmisor: 'Info personalizada' })
       );
       expect(result.dInfoEmi).toBe('Info personalizada');
+    });
+  });
+
+  describe('mapDatosEspecificosPorTipoDEToRaw — itemsOperacion obligatorio', () => {
+    it('mapea itemsOperacion a gCamItem', () => {
+      const data: DatosEspecificosPorTipoDE = {
+        itemsOperacion: [createItemOperacion()]
+      };
+      const result = mapDatosEspecificosPorTipoDEToRaw(data);
+      expect(result.gCamItem).toBeDefined();
+      expect(result.gCamItem).toHaveLength(1);
+    });
+
+    it('mapea multiples items correctamente', () => {
+      const data: DatosEspecificosPorTipoDE = {
+        itemsOperacion: [createItemOperacion(), createItemOperacion(), createItemOperacion()]
+      };
+      const result = mapDatosEspecificosPorTipoDEToRaw(data);
+      expect(result.gCamItem).toHaveLength(3);
+    });
+
+    it('gCamItem siempre es un array (no undefined)', () => {
+      const data: DatosEspecificosPorTipoDE = {
+        itemsOperacion: [createItemOperacion()]
+      };
+      const result = mapDatosEspecificosPorTipoDEToRaw(data);
+      expect(Array.isArray(result.gCamItem)).toBe(true);
     });
   });
 });

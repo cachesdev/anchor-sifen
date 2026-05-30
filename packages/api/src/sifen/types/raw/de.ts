@@ -307,7 +307,7 @@ export interface GDtipDE {
   /**
    * E8 - E700 | Campos que describen los ítems de la operación | Pagina 85
    */
-  gCamItem?: GCamItem[];
+  gCamItem: GCamItem[];
   /**
    * E9 - E790 | Campos complementarios comerciales de uso específico | Pagina 93
    */

@@ -305,7 +305,7 @@ export interface DatosEspecificosPorTipoDE {
   /**
    * E8 - E700 | gCamItem | Campos que describen los ítems de la operación | Pagina 85
    */
-  itemsOperacion?: ItemOperacion[];
+  itemsOperacion: ItemOperacion[];
   /**
    * E9 - E790 | gCamEsp | Campos complementarios comerciales de uso específico | Pagina 93
    */

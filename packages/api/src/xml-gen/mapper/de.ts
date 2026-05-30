@@ -69,7 +69,7 @@ export function mapDatosEspecificosPorTipoDEToRaw(data: DatosEspecificosPorTipoD
     ),
     gCamNRE: optionalMapper(mapNotaRemisionElectronicaToRaw, data.notaRemisionElectronica),
     gCamCond: optionalMapper(mapCondicionOperacionToRaw, data.condicionOperacion),
-    gCamItem: data.itemsOperacion?.map(mapItemOperacionToRaw),
+    gCamItem: data.itemsOperacion.map(mapItemOperacionToRaw),
     gCamEsp: optionalMapper(mapUsoComercialToRaw, data.usosComerciales),
     gTransp: optionalMapper(mapTransporteToRaw, data.transporte)
   };
