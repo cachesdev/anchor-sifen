@@ -1,5 +1,12 @@
 # @anchorsoft/sifen
 
+## 0.2.0
+
+### Minor Changes
+
+- 4e1538b: Implementar parseador reverso de XML a raw y clean
+- 93752b5: Implementar mappers reversos raw -> clean
+
 ## 0.1.4
 
 ### Patch Changes
