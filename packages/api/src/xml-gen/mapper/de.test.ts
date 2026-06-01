@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { createOperacionDE, createTimbrado, createItemOperacion } from '../../test-utils/factories/base';
+import {
+  createOperacionDE,
+  createTimbrado,
+  createItemOperacion
+} from '../../test-utils/factories/base';
 import { mapDatosEspecificosPorTipoDEToRaw, mapOperacionDEToRaw, mapTimbradoToRaw } from './de';
 import type { DatosEspecificosPorTipoDE } from '../../sifen/types/clean/de';
 
