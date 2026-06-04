@@ -1,5 +1,6 @@
 import { Big } from 'big.js';
 import { describe, expect, it } from 'vitest';
+import { Big as SifenBig, isBig as isSifenBig, toBig as toSifenBig } from '../index';
 import { bigOrZero, HUNDRED, isBig, ONE, toBig, toOptionalBig, ZERO } from './big';
 
 function makeForeignBig(value: string): object {
@@ -15,6 +16,16 @@ function makeForeignBig(value: string): object {
 }
 
 describe('big', () => {
+  it('exporta Big, isBig y toBig desde la raiz publica del paquete', () => {
+    const fb = makeForeignBig('123.45');
+
+    expect(isSifenBig(fb)).toBe(true);
+
+    const result = toSifenBig(fb as unknown as SifenBig);
+    expect(result).toBeInstanceOf(SifenBig);
+    expect(result.eq('123.45')).toBe(true);
+  });
+
   describe('isBig', () => {
     it('retorna true para un Big local', () => {
       expect(isBig(new Big(42))).toBe(true);

@@ -125,6 +125,39 @@ export function attachQRToSignedXML(
 }
 
 /**
+ * Lee la URL QR ya embebida en un XML.
+ *
+ * Parsea `dCarQR` directamente.
+ */
+export function extractQRUrlFromDEXML(xml: string): Result<string, QRGenError> {
+  try {
+    const doc = new DOMParser().parseFromString(xml, 'text/xml');
+    if (!doc.documentElement) {
+      return Err(new QRGenError({ details: 'Elemento raiz no encontrado en XML DE.' }));
+    }
+
+    const gCamFuFD = doc.getElementsByTagName('gCamFuFD')[0];
+    if (!gCamFuFD) {
+      return Err(new QRGenError({ details: 'Elemento gCamFuFD no encontrado en XML DE.' }));
+    }
+
+    const qrUrl = gCamFuFD.getElementsByTagName('dCarQR')[0]?.textContent?.trim() ?? '';
+    if (!qrUrl) {
+      return Err(new QRGenError({ details: 'Elemento dCarQR no encontrado o vacio en XML DE.' }));
+    }
+
+    return Ok(qrUrl);
+  } catch (error) {
+    return Err(
+      new QRGenError({
+        details: 'Error desconocido al extraer URL QR',
+        cause: error
+      })
+    );
+  }
+}
+
+/**
  * Construye y retorna unicamente la URL del codigo QR.
  *
  * Extrae los campos requeridos del XML firmado y calcula la URL del QR,
