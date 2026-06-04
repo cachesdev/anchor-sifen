@@ -1,5 +1,11 @@
 # @anchorsoft/sifen
 
+## 0.3.0
+
+### Minor Changes
+
+- 613b1a4: Exportar helpers de QR y BigJS
+
 ## 0.2.0
 
 ### Minor Changes
