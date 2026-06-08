@@ -1,5 +1,16 @@
 # @anchorsoft/sifen
 
+## 0.4.0
+
+### Minor Changes
+
+- 2bcc961: Implementar tipado de respuesta en consultaDE
+- 83be957: Implementar enviarEvento tipado
+
+### Patch Changes
+
+- 83be957: Tipar enums en raw evento, agregar docstrings
+
 ## 0.3.0
 
 ### Minor Changes
