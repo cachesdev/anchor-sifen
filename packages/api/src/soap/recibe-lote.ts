@@ -11,7 +11,8 @@ import type { SIFENRecepLoteDEResponse } from '../sifen/types/api.js';
 import { strToU8, zipSync } from 'fflate';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseRecibeLote, parseSIFENResponse } from './response-parsers';
+import { parseRecibeLote } from './recibe-lote.parser';
+import { parseSIFENResponse } from './parser-utils';
 
 const MAX_SIRECEPLOTEDE_SIZE_BYTES = 10000 * 1024;
 

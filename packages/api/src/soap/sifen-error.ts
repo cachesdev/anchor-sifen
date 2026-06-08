@@ -10,6 +10,11 @@ export class SifenError extends ErrorFactory({
     rawObject?: unknown;
   }>()
 }) {
+  /**
+   * True cuando el error proviene de un codigo de rechazo devuelto por SIFEN.
+   *
+   * Los errores locales de parseo/transporte usan `details` sin `sifenCodigo`.
+   */
   get isSifenRejection(): boolean {
     return this.sifenCodigo !== undefined;
   }

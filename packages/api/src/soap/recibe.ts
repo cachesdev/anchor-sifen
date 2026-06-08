@@ -7,7 +7,8 @@ import type { Agent } from 'node:https';
 import type { SIFENRecibeResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseRecibe, parseSIFENResponse } from './response-parsers';
+import { parseRecibe } from './recibe.parser';
+import { parseSIFENResponse } from './parser-utils';
 
 export interface SifenRecibeClientOptions {
   agent: Agent;

@@ -12,15 +12,13 @@ export { SifenEventoClient } from './evento';
 export { SifenRecibeClient } from './recibe';
 
 export { SifenError } from './sifen-error';
-export {
-  parseRecibeLote,
-  parseConsultaRuc,
-  parseConsultaDE,
-  parseConsultaLote,
-  parseRecibe,
-  parseEvento,
-  parseSIFENResponse as withRetEnviDeFallback
-} from './response-parsers';
+export { parseRecibeLote } from './recibe-lote.parser';
+export { parseConsultaRuc } from './consulta-ruc.parser';
+export { parseConsultaDE } from './consulta.parser';
+export { parseConsultaLote } from './consulta-lote.parser';
+export { parseRecibe } from './recibe.parser';
+export { parseEvento } from './evento.parser';
+export { parseSIFENResponse as withRetEnviDeFallback } from './parser-utils';
 
 export { mapSoapError } from './errors';
 export { normalizeControlId, normalizeSignedXml } from './validation';

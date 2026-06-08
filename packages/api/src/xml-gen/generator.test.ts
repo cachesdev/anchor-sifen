@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { generateDEXML } from './generator';
+import { codigoCiudad, descripcionCodigoCiudad } from '../gen/ciudades';
+import { codigoDepartamento, descripcionCodigoDepartamento } from '../gen/departamentos';
+import { codigoDistrito, descripcionCodigoDistrito } from '../gen/distritos';
+import { codigoPais } from '../gen/paises';
+import { tipoOperacion, naturalezaReceptor } from '../sifen/types/enums';
+import { generateDEXML, generateEventoXML } from './generator';
 import type { PreparedDE } from './de-pipeline';
+import { mapEventoRegistrableToRaw } from './mapper/evento';
 
 describe('xml-gen — generator', () => {
   const prepared: PreparedDE = {
@@ -60,5 +66,60 @@ describe('xml-gen — generator', () => {
     expect(xml).toContain('<dEst>001</dEst>');
     expect(xml).toContain('<dPunExp>001</dPunExp>');
     expect(xml).toContain('<dNumDoc>0000001</dNumDoc>');
+  });
+
+  it('genera XML de evento registrable compacto y con rEve@Id', () => {
+    const raw = mapEventoRegistrableToRaw(
+      {
+        tipo: 'cancelacion',
+        idEvento: '123',
+        cdc: '01800195515031005001331122026030517018918308',
+        motivo: 'Error en datos'
+      },
+      new Date('2026-04-30T12:00:00')
+    );
+
+    const xml = generateEventoXML(raw);
+
+    expect(xml).not.toContain('<?xml');
+    expect(xml).not.toContain('\n');
+    expect(xml).toContain('<gGroupGesEve xmlns="http://ekuatia.set.gov.py/sifen/xsd">');
+    expect(xml).toContain('<rEve Id="123">');
+    expect(xml).toContain('<dFecFirma>2026-04-30T12:00:00</dFecFirma>');
+    expect(xml).toContain('<dVerFor>150</dVerFor>');
+    expect(xml).toContain('<rGeVeCan>');
+    expect(xml).toContain('<Id>01800195515031005001331122026030517018918308</Id>');
+    expect(xml).toContain('<mOtEve>Error en datos</mOtEve>');
+  });
+
+  it('deriva descripciones disponibles al mapear nominacion', () => {
+    const raw = mapEventoRegistrableToRaw(
+      {
+        tipo: 'nominacionFacturaElectronica',
+        idEvento: '7',
+        cdc: '01800195515031005001331122026030517018918308',
+        motivo: 'Nominacion de receptor',
+        naturalezaReceptor: naturalezaReceptor.Contribuyente,
+        tipoOperacion: tipoOperacion.B2B,
+        codigoPaisReceptor: codigoPais.Paraguay,
+        rucReceptor: '616159-6',
+        nombreReceptor: 'ACME SA',
+        codigoDepartamentoReceptor: codigoDepartamento.Capital,
+        codigoDistritoReceptor: codigoDistrito.AsuncionDistrito,
+        codigoCiudadReceptor: codigoCiudad.AsuncionDistrito
+      },
+      new Date('2026-04-30T12:00:00')
+    );
+
+    const xml = generateEventoXML(raw);
+
+    expect(xml).toContain('<rGEveNom>');
+    expect(xml).toContain('<cPaisRec>PRY</cPaisRec>');
+    expect(xml).toContain('<dDesPaisRe>Paraguay</dDesPaisRe>');
+    expect(xml).toContain('<dRucRec>616159</dRucRec>');
+    expect(xml).toContain('<dDVRec>6</dDVRec>');
+    expect(xml).toContain(`<dDesDepRec>${descripcionCodigoDepartamento[1]}</dDesDepRec>`);
+    expect(xml).toContain(`<dDesDisRec>${descripcionCodigoDistrito[1]}</dDesDisRec>`);
+    expect(xml).toContain(`<dDesCiuRec>${descripcionCodigoCiudad[1]}</dDesCiuRec>`);
   });
 });

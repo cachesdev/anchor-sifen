@@ -18,6 +18,12 @@
 - `DE XML parser`: Parser that converts `rDE`/`DE` XML into the raw `Documento Electronico` shape; signature, QR, namespace, and schema metadata are outside this raw DE boundary.
 - `Reverse mapper`: Mapper that converts a raw type back into its corresponding clean type.
 - `Reverse-mapped DE`: Clean representation of a DE as received from raw/XML data, primarily for validation or UI display rather than resubmission to SIFEN.
+- `SIFEN Event`: SIFEN lifecycle occurrence that can mark, modify, or describe the state of a DE or DTE. This is broader than events submitted by the taxpayer, and the base SDK representation should preserve event data before requiring event-specific interpretation.
+- `Registrable SIFEN Event`: SIFEN Event submitted to SIFEN through `siRecepEvento`; this is a narrower subset of SIFEN Event. Send-side construction follows the event types accepted for registration by the MT/NTs and request schema, while consultation event ledgers can contain a broader event catalog.
+- `SIFEN Event interpretation`: Mapping a preserved SIFEN Event payload into event-type-specific clean fields; distinct from preserving events in a SIFEN Event ledger.
+- `SIFEN Event identifier`: Identifier of a specific event record. It is distinct from a CDC; event payloads expose a CDC only when the event is tied to a specific DE or DTE. For registrable events submitted through `siRecepEvento`, the emitter generates this identifier and SIFEN echoes it in the event reception result.
+- `SIFEN Event ledger`: Typed SDK view of the SIFEN Events associated with a CDC as returned by SIFEN; SIFEN remains the source of truth.
+- `SIFEN Event construction`: Typed SDK capability for building `Registrable SIFEN Event` XML before submission; distinct from parsing SIFEN-returned event ledgers.
 - `MT 150`: Technical specification for the SIFEN electronic invoicing system. md version can be find under /docs.
 - `NT`: "Nota Tecnica" or technical note, a document that provides clarifications and updates to the MT 150 specification. md version can be find under /docs/notas-tecnicas. an index file 'Indice.md' can be found in the same directory to help navigate the NTs and the MT 150.
 

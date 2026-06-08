@@ -1,3 +1,5 @@
+import type { Evento, EventoRecepcion } from './clean';
+
 /**
  * Respuesta limpia siRecepLoteDE
  */
@@ -28,10 +30,12 @@ export interface SIFENConsRUCResponse {
  * Respuesta limpia siConsDE
  */
 export interface SIFENConsultaResponse {
+  fechaProcesamiento?: Date;
   codigoResultado: string;
   mensajeResultado: string;
-  fechaProcesamiento?: Date;
-  xmlDE?: string;
+  deXml: string;
+  protocoloAutorizacionXml: string;
+  eventos: Evento[];
 }
 
 /**
@@ -56,6 +60,7 @@ export interface SIFENRecibeResponse {
   cdc: string;
   estado: string;
   numeroTransaccion?: string;
+  digestValue?: string;
   fechaProcesamiento: Date;
   validaciones: Array<{ codigo: string; mensaje: string }>;
 }
@@ -63,12 +68,4 @@ export interface SIFENRecibeResponse {
 /**
  * Respuesta limpia siRecepEvento
  */
-export interface SIFENEventoResponse {
-  fechaProcesamiento?: Date;
-  resultados: Array<{
-    id: string;
-    estado: string;
-    numeroTransaccion?: string;
-    validaciones: Array<{ codigo: string; mensaje: string }>;
-  }>;
-}
+export type SIFENEventoResponse = EventoRecepcion;

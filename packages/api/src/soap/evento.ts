@@ -7,7 +7,8 @@ import type { Agent } from 'node:https';
 import type { SIFENEventoResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseEvento, parseSIFENResponse } from './response-parsers';
+import { parseEvento } from './evento.parser';
+import { parseSIFENResponse } from './parser-utils';
 
 export interface SifenEventoClientOptions {
   agent: Agent;
@@ -48,7 +49,7 @@ export class SifenEventoClient {
     return this.clientPromise;
   }
 
-  async enviarEvento({
+  async enviarEventoXml({
     digitoControl,
     eventoXml
   }: {

@@ -185,10 +185,10 @@ export async function consultarDE(cdc: string) {
 
   const result = await api.consultaDE({ digitoControl: '0', cdc });
   if (!result.success) return result.error;
-  return result.value.mensajeResultado;
+  return result.value.protocoloAutorizacionXml;
 }
 
-export async function enviarEvento(xml: string) {
+export async function enviarEvento(cdc: string) {
   const api = new SifenAPI({
     environment: 'test',
     certificateSource: createDummyPKCS12Source(),
@@ -196,7 +196,15 @@ export async function enviarEvento(xml: string) {
     csc: 'ABCD0000000000000000000000000000'
   });
 
-  const result = await api.enviarEvento({ digitoControl: '0', eventoXml: xml });
+  const result = await api.enviarEvento({
+    digitoControl: '0',
+    evento: {
+      tipo: 'cancelacion',
+      idEvento: '1',
+      cdc,
+      motivo: 'Error en datos'
+    }
+  });
   if (!result.success) return result.error;
-  return result.value.resultados.length;
+  return result.value.idEvento;
 }

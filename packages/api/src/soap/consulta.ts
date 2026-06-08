@@ -7,7 +7,8 @@ import type { Agent } from 'node:https';
 import type { SIFENConsultaResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseConsultaDE, parseSIFENResponse } from './response-parsers';
+import { parseConsultaDE } from './consulta.parser';
+import { parseSIFENResponse } from './parser-utils.js';
 
 export interface SifenConsultaClientOptions {
   agent: Agent;

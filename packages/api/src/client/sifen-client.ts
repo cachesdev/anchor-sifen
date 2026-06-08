@@ -1,9 +1,11 @@
 import { create, fragment } from 'xmlbuilder2';
 import { CertificateManager, type PKCS12Source } from '../certificate';
 import { attachQRToSignedXML, getQRUrl } from '../qr';
-import { SifenSoapClient } from '../soap';
+import { SifenSoapClient, type SifenError } from '../soap';
+import type { SIFENEventoResponse, EnviarEventoInput } from '../sifen/types';
 import { XMLSigner, type XMLSignError } from '../xml-sign';
 import type { Result } from '../result';
+import { generateEventoXML, mapEventoRegistrableToRaw } from '../xml-gen';
 
 export interface SIFENConfig {
   environment: 'test' | 'prod';
@@ -59,8 +61,18 @@ export class SifenAPI {
     return this.soap.consultaLoteClient.consultaLote(params);
   }
 
-  enviarEvento(params: { digitoControl: string | number; eventoXml: string }) {
-    return this.soap.eventoClient.enviarEvento(params);
+  async enviarEvento(
+    params: EnviarEventoInput
+  ): Promise<Result<SIFENEventoResponse, SifenError | XMLSignError>> {
+    const raw = mapEventoRegistrableToRaw(params.evento, new Date());
+    const xml = generateEventoXML(raw);
+    const signed = await this.xmlSigner.signEvento(xml, this.certData);
+    if (!signed.success) return signed;
+
+    return this.soap.eventoClient.enviarEventoXml({
+      digitoControl: params.digitoControl,
+      eventoXml: signed.value.signedXml
+    });
   }
 
   recibeLote(params: { digitoControl: string | number; DE: string | string[] }) {

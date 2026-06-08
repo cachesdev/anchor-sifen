@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildLote } from './sifen-client';
+import { createDummyPKCS12Source } from '../certificate';
+import { buildLote, SifenAPI } from './sifen-client';
 
 describe('client — buildLote', () => {
   const deXml1 =
@@ -35,5 +36,57 @@ describe('client — buildLote', () => {
     const lote = buildLote([]);
     expect(lote).toContain('<rLoteDE');
     expect(lote).not.toContain('\n');
+  });
+});
+
+describe('client — enviarEvento', () => {
+  it('genera y firma XML de evento antes de enviarlo por SOAP', async () => {
+    const api = new SifenAPI({
+      environment: 'test',
+      certificateSource: createDummyPKCS12Source(),
+      idCSC: '1',
+      csc: 'ABCD0000000000000000000000000000'
+    });
+    let sent: { digitoControl: string | number; eventoXml: string } | undefined;
+
+    (
+      api as unknown as {
+        soap: { eventoClient: { enviarEventoXml: typeof stubEnviarEventoXml } };
+      }
+    ).soap.eventoClient.enviarEventoXml = stubEnviarEventoXml;
+
+    const result = await api.enviarEvento({
+      digitoControl: '7',
+      evento: {
+        tipo: 'cancelacion',
+        idEvento: '123',
+        cdc: '01800195515031005001331122026030517018918308',
+        motivo: 'Error en datos'
+      }
+    });
+
+    expect(result.success).toBe(true);
+    expect(sent?.digitoControl).toBe('7');
+    expect(sent?.eventoXml).toContain('<gGroupGesEve');
+    expect(sent?.eventoXml).toContain('<rEve Id="123">');
+    expect(sent?.eventoXml).toContain('<rGeVeCan>');
+    expect(sent?.eventoXml).toContain('<Signature');
+
+    async function stubEnviarEventoXml(params: {
+      digitoControl: string | number;
+      eventoXml: string;
+    }) {
+      sent = params;
+      return {
+        success: true as const,
+        value: {
+          fechaProcesamiento: new Date('2024-06-15T10:30:00'),
+          idEvento: '123',
+          estado: 'Aprobado',
+          numeroTransaccion: '1234567890',
+          validaciones: [{ codigo: '0600', mensaje: 'Evento registrado' }]
+        }
+      };
+    }
   });
 });

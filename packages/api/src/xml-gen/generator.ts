@@ -1,5 +1,6 @@
 import { create } from 'xmlbuilder2';
 import type { PreparedDE } from './de-pipeline';
+import type { RGesEve } from '../sifen/types/raw';
 
 const SIFEN_XSD_NAMESPACE = 'http://ekuatia.set.gov.py/sifen/xsd';
 const XSI_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
@@ -14,6 +15,23 @@ export function generateDEXML({ raw: de, cdc }: PreparedDE): string {
       DE: {
         '@Id': cdc,
         ...de
+      }
+    }
+  };
+
+  return create({ version: '1.0', encoding: 'UTF-8' })
+    .ele(xmlPayload)
+    .end({ prettyPrint: false, headless: true });
+}
+
+export function generateEventoXML(evento: RGesEve): string {
+  const xmlPayload = {
+    'gGroupGesEve@http://ekuatia.set.gov.py/sifen/xsd': {
+      rGesEve: {
+        rEve: {
+          '@Id': evento.idEvento,
+          ...evento.rEve
+        }
       }
     }
   };

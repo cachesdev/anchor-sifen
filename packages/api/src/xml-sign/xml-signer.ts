@@ -19,6 +19,15 @@ export interface SignedDocumentResult {
   cdc: string;
 }
 
+export interface SignedEventoResult {
+  /** XML de gGroupGesEve con cada rEve firmado */
+  signedXml: string;
+  /** DigestValue extraido de la firma XML */
+  digestValue: string;
+  /** Identificador del evento firmado */
+  idEvento: string;
+}
+
 export class XMLSigner {
   /**
    * Firma un XML segun la especificacion SIFEN.
@@ -81,6 +90,59 @@ export class XMLSigner {
       return Err(
         new XMLSignError({
           details: error instanceof Error ? error.message : 'Error desconocido al firmar.',
+          cause: error
+        })
+      );
+    }
+  }
+
+  async signEvento(
+    xml: string,
+    certData: CertificateData
+  ): Promise<Result<SignedEventoResult, XMLSignError>> {
+    try {
+      const doc = new DOMParser().parseFromString(xml, 'text/xml');
+      const idEvento = extractEventoId(doc);
+
+      const eventoElement = doc.getElementsByTagName('rEve')[0];
+      if (!eventoElement) {
+        return Err(new XMLSignError({ details: 'Elemento rEve no encontrado en el XML.' }));
+      }
+
+      const sig = new xmlCrypto.SignedXml();
+      sig.signatureAlgorithm = 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
+      sig.canonicalizationAlgorithm = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
+
+      sig.addReference({
+        xpath: `//*[@Id='${idEvento}']`,
+        transforms: [
+          'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
+          'http://www.w3.org/2001/10/xml-exc-c14n#'
+        ],
+        digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
+        uri: `#${idEvento}`
+      });
+
+      sig.privateKey = certData.privateKeyPem;
+      sig.getKeyInfoContent = () => {
+        return `<X509Data><X509Certificate>${certData.certificateBase64}</X509Certificate></X509Data>`;
+      };
+
+      const serializedDoc = new XMLSerializer().serializeToString(doc);
+      sig.computeSignature(serializedDoc, {
+        location: { reference: '//*[local-name()="rEve"]', action: 'after' },
+        prefix: '',
+        attrs: { xmlns: 'http://www.w3.org/2000/09/xmldsig#' }
+      });
+
+      const signedXml = sig.getSignedXml();
+      const digestValue = extractDigestValue(signedXml);
+
+      return Ok({ signedXml, digestValue, idEvento });
+    } catch (error) {
+      return Err(
+        new XMLSignError({
+          details: error instanceof Error ? error.message : 'Error desconocido al firmar evento.',
           cause: error
         })
       );
@@ -153,6 +215,25 @@ export function extractCDC(doc: Document): string {
   }
 
   return cdc;
+}
+
+export function extractEventoId(doc: Document): string {
+  const eventElements = doc.getElementsByTagName('rEve');
+  if (!eventElements || eventElements.length === 0) {
+    throw new Error('Elemento rEve no encontrado en el documento XML.');
+  }
+
+  const eventElement = eventElements[0];
+  if (!eventElement) {
+    throw new Error('Elemento rEve es nulo.');
+  }
+
+  const idEvento = eventElement.getAttribute('Id');
+  if (!idEvento) {
+    throw new Error('Atributo Id no encontrado en el elemento rEve.');
+  }
+
+  return idEvento;
 }
 
 /**

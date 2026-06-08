@@ -58,6 +58,78 @@ export type DescripcionTipoDocumentoElectronico = ValueOf<
 >;
 
 /**
+ * GCO003 | iTipConf | Tipo de Conformidad | MT 150 p. 124
+ *
+ * Observaciones:
+ *   1= Conformidad Total del DTE
+ *   2= Conformidad Parcial del DTE, cuando la mercaderia sera entregada o
+ *      servicio sera prestado en una fecha posterior a la recepcion del DE/DTE
+ */
+export const tipoConformidadEvento = {
+  Total: 1,
+  Parcial: 2
+} as const;
+export type TipoConformidadEvento = ValueOf<typeof tipoConformidadEvento>;
+export const descripcionTipoConformidadEvento = {
+  [tipoConformidadEvento.Total]: 'Conformidad Total del DTE',
+  [tipoConformidadEvento.Parcial]: 'Conformidad Parcial del DTE'
+} as const satisfies Record<TipoConformidadEvento, string>;
+export type DescripcionTipoConformidadEvento = ValueOf<typeof descripcionTipoConformidadEvento>;
+
+/**
+ * GET003 | dMotEv | Motivo del evento de actualizacion de transporte | MT 150 p. 130
+ *
+ * Observaciones:
+ *   1= Cambio del local de la entrega
+ *   2= Cambio del chofer
+ *   3= Cambio del transportista
+ *   4= Cambio de vehiculo
+ */
+export const motivoActualizacionTransporteEvento = {
+  CambioLocalEntrega: 1,
+  CambioChofer: 2,
+  CambioTransportista: 3,
+  CambioVehiculo: 4
+} as const;
+export type MotivoActualizacionTransporteEvento = ValueOf<
+  typeof motivoActualizacionTransporteEvento
+>;
+export const descripcionMotivoActualizacionTransporteEvento = {
+  [motivoActualizacionTransporteEvento.CambioLocalEntrega]: 'Cambio del local de la entrega',
+  [motivoActualizacionTransporteEvento.CambioChofer]: 'Cambio del chofer',
+  [motivoActualizacionTransporteEvento.CambioTransportista]: 'Cambio del transportista',
+  [motivoActualizacionTransporteEvento.CambioVehiculo]: 'Cambio de vehiculo'
+} as const satisfies Record<MotivoActualizacionTransporteEvento, string>;
+export type DescripcionMotivoActualizacionTransporteEvento = ValueOf<
+  typeof descripcionMotivoActualizacionTransporteEvento
+>;
+
+/**
+ * dTipEnd | Tipo de Endoso | siRecepEvento_v150.xsd
+ *
+ * Observaciones:
+ *   El MT 150 presenta Endoso de FE como evento futuro y no define los nombres
+ *   de estos valores; el XSD vigente solo restringe el campo a 1 o 2.
+ */
+export const tipoEndosoEvento = {
+  Tipo1: 1,
+  Tipo2: 2
+} as const;
+export type TipoEndosoEvento = ValueOf<typeof tipoEndosoEvento>;
+
+/**
+ * iTipFac | Tipo de Factor | siRecepEvento_v150.xsd
+ *
+ * Observaciones:
+ *   El MT 150 presenta Endoso de FE como evento futuro y no define los nombres
+ *   de estos valores; el XSD vigente solo permite el valor 1.
+ */
+export const tipoFactorEndosoEvento = {
+  Tipo1: 1
+} as const;
+export type TipoFactorEndosoEvento = ValueOf<typeof tipoFactorEndosoEvento>;
+
+/**
  * D1 - D011 | iTipTra | Tipo de transacción | Pagina 66
  *
  * Observaciones:

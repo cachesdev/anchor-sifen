@@ -4,6 +4,7 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "lib": ["es2023"],
+    "strict": true,
     "rootDir": ".",
     "outDir": "./dist",
     "declaration": true,

@@ -10,7 +10,8 @@ import { escapeXml } from './validation.js';
 import type { SIFENConsRUCResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseConsultaRuc, parseSIFENResponse } from './response-parsers';
+import { parseConsultaRuc } from './consulta-ruc.parser';
+import { parseSIFENResponse } from './parser-utils';
 
 export interface SifenRucClientOptions {
   agent: Agent;

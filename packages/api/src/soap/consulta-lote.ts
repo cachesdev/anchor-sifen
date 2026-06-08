@@ -10,7 +10,8 @@ import type { Agent } from 'node:https';
 import type { SIFENConsultaLoteResponse } from '../sifen/types/api.js';
 import { Err, type Result } from '../result';
 import { SifenError } from './sifen-error';
-import { parseConsultaLote, parseSIFENResponse } from './response-parsers';
+import { parseConsultaLote } from './consulta-lote.parser';
+import { parseSIFENResponse } from './parser-utils';
 
 export interface SifenConsultaLoteClientOptions {
   agent: Agent;

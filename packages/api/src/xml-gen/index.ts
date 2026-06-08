@@ -1,4 +1,4 @@
-export { generateDEXML } from './generator';
+export { generateDEXML, generateEventoXML } from './generator';
 export { buildFacturaElectronica } from './factura-electronica';
 export { buildAutofacturaElectronica } from './autofactura-electronica';
 export { prepareDE, type PreparedDE } from './de-pipeline';
