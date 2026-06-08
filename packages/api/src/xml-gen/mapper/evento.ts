@@ -39,7 +39,7 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
           dPunExp: evento.puntoExpedicion,
           dNumIn: evento.numeroInicio,
           dNumFin: evento.numeroFin,
-          iTiDE: String(asLiteral(evento.tipoDE)),
+          iTiDE: asLiteral(evento.tipoDE),
           mOtEve: evento.motivo,
           dSerieNum: evento.serie
         }
@@ -53,15 +53,14 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
           Id: evento.cdc,
           dFecEmi: formatDate(evento.fechaEmision, 'date-time'),
           dFecRecep: formatDate(evento.fechaRecepcion, 'date-time'),
-          iTipRec: String(tipoReceptor),
+          iTipRec: tipoReceptor,
           dNomRec: evento.nombreReceptor,
           dRucRec: evento.rucReceptor !== undefined ? extraerRuc(evento.rucReceptor) : undefined,
           dDVRec:
             evento.rucReceptor !== undefined
               ? String(calcularDv(extraerRuc(evento.rucReceptor)))
               : undefined,
-          dTipIDRec:
-            tipoDocumentoReceptor !== undefined ? String(tipoDocumentoReceptor) : undefined,
+          dTipIDRec: tipoDocumentoReceptor,
           dNumID: evento.numeroDocumentoReceptor,
           dTotalGs: toBig(evento.totalGuaranies).toFixed(8)
         }
@@ -72,7 +71,7 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
       return {
         rGeVeConf: {
           Id: evento.cdc,
-          iTipConf: String(asLiteral(evento.tipoConformidad)),
+          iTipConf: asLiteral(evento.tipoConformidad),
           dFecRecep: formatDate(evento.fechaRecepcion, 'date-time')
         }
       };
@@ -88,15 +87,14 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
           Id: evento.cdc,
           dFecEmi: formatDate(evento.fechaEmision, 'date-time'),
           dFecRecep: formatDate(evento.fechaRecepcion, 'date-time'),
-          iTipRec: String(tipoReceptor),
+          iTipRec: tipoReceptor,
           dNomRec: evento.nombreReceptor,
           dRucRec: evento.rucReceptor !== undefined ? extraerRuc(evento.rucReceptor) : undefined,
           dDVRec:
             evento.rucReceptor !== undefined
               ? String(calcularDv(extraerRuc(evento.rucReceptor)))
               : undefined,
-          dTipIDRec:
-            tipoDocumentoReceptor !== undefined ? String(tipoDocumentoReceptor) : undefined,
+          dTipIDRec: tipoDocumentoReceptor,
           dNumID: evento.numeroDocumentoReceptor,
           mOtEve: evento.motivo
         }
@@ -111,21 +109,20 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
       return {
         rGeVeEnd: {
           Id: evento.cdc,
-          iTipRec: String(tipoReceptor),
+          iTipRec: tipoReceptor,
           dNomRec: evento.nombreReceptor,
           dRucRec: evento.rucReceptor !== undefined ? extraerRuc(evento.rucReceptor) : undefined,
           dDVRec:
             evento.rucReceptor !== undefined
               ? String(calcularDv(extraerRuc(evento.rucReceptor)))
               : undefined,
-          dTipIDRec:
-            tipoDocumentoReceptor !== undefined ? String(tipoDocumentoReceptor) : undefined,
+          dTipIDRec: tipoDocumentoReceptor,
           dNumIDRec: evento.numeroDocumentoReceptor,
           dRucEmi: extraerRuc(evento.rucEmisor),
           dDVEmi: String(calcularDv(extraerRuc(evento.rucEmisor))),
           dNomEmi: evento.nombreEmisor,
-          dTipEnd: String(tipoEndoso),
-          iTipFac: String(tipoFactor),
+          dTipEnd: tipoEndoso,
+          iTipFac: tipoFactor,
           dNomFac: evento.nombreFactor,
           dRucFac: extraerRuc(evento.rucFactor),
           dDVFac: String(calcularDv(extraerRuc(evento.rucFactor))),
@@ -160,19 +157,18 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
       return {
         rGeVeTr: {
           Id: evento.cdc,
-          dMotEv: String(motivo),
-          cDepEnt:
-            codigoDepartamentoEntrega !== undefined ? String(codigoDepartamentoEntrega) : undefined,
+          dMotEv: motivo,
+          cDepEnt: codigoDepartamentoEntrega,
           dDesDepEnt:
             codigoDepartamentoEntrega !== undefined
               ? descripcionCodigoDepartamento[codigoDepartamentoEntrega]
               : undefined,
-          cDisEnt: codigoDistritoEntrega !== undefined ? String(codigoDistritoEntrega) : undefined,
+          cDisEnt: codigoDistritoEntrega,
           dDesDisEnt:
             codigoDistritoEntrega !== undefined
               ? descripcionCodigoDistrito[codigoDistritoEntrega]
               : undefined,
-          cCiuEnt: codigoCiudadEntrega !== undefined ? String(codigoCiudadEntrega) : undefined,
+          cCiuEnt: codigoCiudadEntrega,
           dDesCiuEnt:
             codigoCiudadEntrega !== undefined
               ? descripcionCodigoCiudad[codigoCiudadEntrega]
@@ -182,8 +178,7 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
           dCompDir1: evento.complementoDireccionEntrega,
           dNomChof: evento.nombreChofer,
           dNumIDChof: evento.numeroDocumentoChofer,
-          iNatTrans:
-            naturalezaTransportista !== undefined ? String(naturalezaTransportista) : undefined,
+          iNatTrans: naturalezaTransportista,
           dRucTrans:
             evento.rucTransportista !== undefined ? extraerRuc(evento.rucTransportista) : undefined,
           dDVTrans:
@@ -191,29 +186,23 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
               ? String(calcularDv(extraerRuc(evento.rucTransportista)))
               : undefined,
           dNomTrans: evento.nombreTransportista,
-          iTipIDTrans:
-            tipoDocumentoTransportista !== undefined
-              ? String(tipoDocumentoTransportista)
-              : undefined,
+          iTipIDTrans: tipoDocumentoTransportista,
           dDTipIDTrans:
             tipoDocumentoTransportista !== undefined
               ? descripcionTipoDocumentoTransportista[tipoDocumentoTransportista]
               : undefined,
           dNumIDTrans: evento.numeroDocumentoTransportista,
-          iTipTrans: tipoTransporte !== undefined ? String(tipoTransporte) : undefined,
+          iTipTrans: tipoTransporte,
           dDesTipTrans:
             tipoTransporte !== undefined ? descripcionTipoTransporte[tipoTransporte] : undefined,
-          iModTrans: modalidadTransporte !== undefined ? String(modalidadTransporte) : undefined,
+          iModTrans: modalidadTransporte,
           dDesModTrans:
             modalidadTransporte !== undefined
               ? descripcionModalidadTransporte[modalidadTransporte]
               : undefined,
           dTiVehTras: evento.tipoVehiculo,
           dMarVeh: evento.marcaVehiculo,
-          dTipIdenVeh:
-            tipoIdentificacionVehiculo !== undefined
-              ? String(tipoIdentificacionVehiculo)
-              : undefined,
+          dTipIdenVeh: tipoIdentificacionVehiculo,
           dNroIDVeh: evento.numeroIdentificacionVehiculo,
           dNroMatVeh: evento.matriculaVehiculo
         }
@@ -233,19 +222,17 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
         rGEveNom: {
           Id: evento.cdc,
           mOtEve: evento.motivo,
-          iNatRec: String(naturalezaReceptor),
-          iTiOpe: String(tipoOperacion),
+          iNatRec: naturalezaReceptor,
+          iTiOpe: tipoOperacion,
           cPaisRec: codigoPaisReceptor,
           dDesPaisRe: descripcionCodigoPais[codigoPaisReceptor],
-          iTiContRec:
-            tipoContribuyenteReceptor !== undefined ? String(tipoContribuyenteReceptor) : undefined,
+          iTiContRec: tipoContribuyenteReceptor,
           dRucRec: evento.rucReceptor !== undefined ? extraerRuc(evento.rucReceptor) : undefined,
           dDVRec:
             evento.rucReceptor !== undefined
               ? String(calcularDv(extraerRuc(evento.rucReceptor)))
               : undefined,
-          iTipIDRec:
-            tipoDocumentoReceptor !== undefined ? String(tipoDocumentoReceptor) : undefined,
+          iTipIDRec: tipoDocumentoReceptor,
           dDTipIDRec:
             tipoDocumentoReceptor !== undefined
               ? descripcionTipoDocumentoReceptor[tipoDocumentoReceptor]
@@ -255,21 +242,17 @@ function mapEventoPayloadToRaw(evento: EventoRegistrable): RGesEve['rEve']['gGro
           dNomFanRec: evento.nombreFantasiaReceptor,
           dDirRec: evento.direccionReceptor,
           dNumCasRec: evento.numeroCasaReceptor,
-          cDepRec:
-            codigoDepartamentoReceptor !== undefined
-              ? String(codigoDepartamentoReceptor)
-              : undefined,
+          cDepRec: codigoDepartamentoReceptor,
           dDesDepRec:
             codigoDepartamentoReceptor !== undefined
               ? descripcionCodigoDepartamento[codigoDepartamentoReceptor]
               : undefined,
-          cDisRec:
-            codigoDistritoReceptor !== undefined ? String(codigoDistritoReceptor) : undefined,
+          cDisRec: codigoDistritoReceptor,
           dDesDisRec:
             codigoDistritoReceptor !== undefined
               ? descripcionCodigoDistrito[codigoDistritoReceptor]
               : undefined,
-          cCiuRec: codigoCiudadReceptor !== undefined ? String(codigoCiudadReceptor) : undefined,
+          cCiuRec: codigoCiudadReceptor,
           dDesCiuRec:
             codigoCiudadReceptor !== undefined
               ? descripcionCodigoCiudad[codigoCiudadReceptor]
