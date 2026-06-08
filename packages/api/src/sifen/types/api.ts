@@ -1,4 +1,4 @@
-import type { Evento, EventoRecepcion } from './clean';
+import type { ConsultaDEXML, EventoRecepcion } from './clean';
 
 /**
  * Respuesta limpia siRecepLoteDE
@@ -30,12 +30,10 @@ export interface SIFENConsRUCResponse {
  * Respuesta limpia siConsDE
  */
 export interface SIFENConsultaResponse {
-  fechaProcesamiento?: Date;
+  fechaProcesamiento: Date;
   codigoResultado: string;
   mensajeResultado: string;
-  deXml: string;
-  protocoloAutorizacionXml: string;
-  eventos: Evento[];
+  contenedorDE: ConsultaDEXML;
 }
 
 /**

@@ -185,7 +185,7 @@ export async function consultarDE(cdc: string) {
 
   const result = await api.consultaDE({ digitoControl: '0', cdc });
   if (!result.success) return result.error;
-  return result.value.protocoloAutorizacionXml;
+  return result.value.contenedorDE.protocoloAutorizacion;
 }
 
 export async function enviarEvento(cdc: string) {

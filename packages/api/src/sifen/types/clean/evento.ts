@@ -29,6 +29,18 @@ export interface EventoRecepcion {
   validaciones: Array<{ codigo: string; mensaje: string }>;
 }
 
+export interface ResultadoRecepcionEvento {
+  idEvento: string;
+  estado: string;
+  numeroTransaccion?: string;
+  validaciones: Array<{ codigo: string; mensaje: string }>;
+}
+
+export interface RecepcionEvento {
+  fechaProcesamiento: Date;
+  resultados: ResultadoRecepcionEvento[];
+}
+
 /** Eventos registrables por siRecepEvento. */
 export interface EventoRegistrableBase<TTipo extends string> {
   /** GDE007 | gGroupTiEvt | Tipo de evento registrable | MT 150 p. 120 | Selecciona el elemento XML específico del evento. */
@@ -307,16 +319,88 @@ export interface EnviarEventoInput {
   evento: EventoRegistrable;
 }
 
-export interface Evento {
+export interface EventoMetadata {
+  /** GDE003 | rEve@Id | Identificador del evento | MT 150 p. 120 | Atributo de rEve; no es el CDC. */
+  idEvento: string;
+  /** GDE004 | dFecFirma | Fecha y hora del firmado | MT 150 p. 120 | Ocu 1-1. */
+  fechaFirma: Date;
+  /** GDE005 | dVerFor | Versión del formato | MT 150 p. 120 | Ocu 1-1. */
+  versionFormato: number;
+}
+
+export interface EventoAsociacionRetencion {
+  tipo: 'asociacionRetencion';
+  cdc: string;
+  numeroTimbradoRetencion: string;
+  establecimientoRetencion: string;
+  puntoExpedicionRetencion: string;
+  numeroDocumentoRetencion: string;
+  codigoConceptoRetencion: string;
+  fechaEmisionRetencion: Date;
+}
+
+export interface EventoAnulacionRetencion extends Omit<EventoAsociacionRetencion, 'tipo'> {
+  tipo: 'anulacionRetencion';
+  fechaAnulacionRetencion: Date;
+}
+
+export interface EventoTransferenciaCreditosFiscales {
+  tipo: 'transferenciaCreditosFiscales';
+  cdc: string;
+  numeroTransferenciaCreditosFiscales: string;
+  fechaAceptacionTransferenciaCreditosFiscales: Date;
+}
+
+export interface EventoDevolucionCreditosFiscalesCuestionado {
+  tipo: 'devolucionCreditosFiscalesCuestionado';
+  cdc: string;
+  numeroSolicitudDevolucion: string;
+  numeroInformeDevolucion: string;
+  numeroResolucionDevolucion: string;
+  fechaEmisionSolicitud: Date;
+  fechaEmisionInforme: Date;
+  fechaEmisionResolucion: Date;
+}
+
+export interface EventoDevolucionCreditosFiscalesDevuelto extends Omit<
+  EventoDevolucionCreditosFiscalesCuestionado,
+  'tipo'
+> {
+  tipo: 'devolucionCreditosFiscalesDevuelto';
+}
+
+export interface EventoAnticipo {
+  tipo: 'anticipo';
+  cdc: string;
+}
+
+export interface EventoRemision {
+  tipo: 'remision';
+  cdc: string;
+}
+
+export interface EventoDesconocido extends EventoMetadata {
+  tipo: 'desconocido';
   tipoXml: string;
-  idEvento?: string;
-  fechaFirma?: Date;
-  fechaFirmaRaw?: string;
-  versionFormato?: number;
-  versionFormatoRaw?: string;
-  eventoXml: string;
   payloadXml: string;
+}
+
+export type Evento =
+  | (EventoMetadata & EventoRegistrable)
+  | (EventoMetadata & EventoAsociacionRetencion)
+  | (EventoMetadata & EventoAnulacionRetencion)
+  | (EventoMetadata & EventoTransferenciaCreditosFiscales)
+  | (EventoMetadata & EventoDevolucionCreditosFiscalesCuestionado)
+  | (EventoMetadata & EventoDevolucionCreditosFiscalesDevuelto)
+  | (EventoMetadata & EventoAnticipo)
+  | (EventoMetadata & EventoRemision)
+  | EventoDesconocido;
+
+export interface RegistroEvento {
+  eventoXml: string;
   recepcionXml?: string;
+  eventos: Evento[];
+  recepcion?: RecepcionEvento;
 }
 
 /**
@@ -335,7 +419,7 @@ export interface ConsultaDEXML {
 
    * • definido en el Schema XML 4
    */
-  protocoloAutorizacionXml: string;
+  protocoloAutorizacion: string;
   /**
    * ContDE04 | xContEv | Contenedor de Evento | Pagina 51
    *
@@ -344,5 +428,5 @@ export interface ConsultaDEXML {
 
    * • Definido en el Schema XML 12
    */
-  eventos: Evento[];
+  registroEventos: RegistroEvento[];
 }

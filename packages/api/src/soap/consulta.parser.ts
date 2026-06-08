@@ -34,6 +34,6 @@ export function parseConsultaDE(raw: unknown): Result<SIFENConsultaResponse, Sif
     codigoResultado: r.dCodRes,
     mensajeResultado: r.dMsgRes,
     fechaProcesamiento: new Date(parsed.output.dFecProc),
-    ...consultaDE.value
+    contenedorDE: consultaDE.value
   });
 }

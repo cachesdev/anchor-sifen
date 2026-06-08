@@ -1,5 +1,5 @@
 import { Err, Ok, type Result } from '../result';
-import type { ConsultaDEXML, Evento } from '../sifen/types/clean';
+import type { ConsultaDEXML, RecepcionEvento, RegistroEvento } from '../sifen/types/clean';
 import {
   directChild,
   directChildren,
@@ -12,6 +12,7 @@ import {
 } from './dom-utils';
 import { XMLParseError } from './errors';
 import { parseEventosXML } from './evento';
+import { parseRawDate } from '../xml-gen/mapper/reverse/helpers';
 
 /**
  * Parsea el contenedor XML devuelto por siConsDE.
@@ -29,48 +30,82 @@ export function parserContenDE(xml: string): Result<ConsultaDEXML, XMLParseError
       throw new Error('El contenedor de consulta no contiene DE XML.');
     }
 
-    const protocoloAutorizacionXml = extractProtocoloAutorizacion(root);
-
-    const eventos = directChildren(root, 'xContEv').flatMap((container) =>
-      parseEventoContainer(container)
-    );
+    const protocoloAutorizacion = extractProtocoloAutorizacion(root);
+    const registroEventos = directChildren(root, 'xContEv').flatMap(parseXContEv);
 
     return Ok({
       deXml: serialize(deElement),
-      protocoloAutorizacionXml,
-      eventos
+      protocoloAutorizacion,
+      registroEventos
     });
   } catch (cause) {
     return Err(new XMLParseError({ details: errorMessage(cause) }));
   }
 }
 
-/**
- * Extrae los eventos de un xContEv.
- *
- * SIFEN envuelve el contenido en rContEv. xEvento contiene el XML del evento
- * como nodo XML o como texto escapado. rResEnviEventoDe se preserva como XML
- * crudo porque no forma parte del modelo Evento limpio.
- */
-function parseEventoContainer(container: Element): Evento[] {
-  const rContEv = directChild(container, 'rContEv') ?? container;
+function parseXContEv(container: Element): RegistroEvento[] {
+  const registros = directChildren(container, 'rContEv');
+  if (registros.length > 0) return registros.map(parseRContEv);
 
-  const xEvento = directChild(rContEv, 'xEvento');
-  if (!xEvento) {
-    throw new Error('xContEv no contiene xEvento.');
-  }
+  if (localName(container) === 'rContEv') return [parseRContEv(container)];
 
-  const recepcionElement = directChild(rContEv, 'rResEnviEventoDe');
-  const recepcionXml = recepcionElement ? serialize(recepcionElement) : undefined;
+  throw new Error('xContEv no contiene rContEv.');
+}
+
+function parseRContEv(container: Element): RegistroEvento {
+  const xEvento = directChild(container, 'xEvento');
+  if (!xEvento) throw new Error('rContEv no contiene xEvento.');
 
   const eventoXml = xmlPayload(xEvento);
-  const parsed = parseEventosXML(eventoXml);
-  if (!parsed.success) {
-    throw parsed.error;
+  const parsedEventos = parseEventosXML(eventoXml);
+  if (!parsedEventos.success) throw parsedEventos.error;
+
+  const recepcionElement = directChild(container, 'rResEnviEventoDe');
+  if (!recepcionElement) return { eventoXml, eventos: parsedEventos.value };
+
+  return {
+    eventoXml,
+    recepcionXml: serialize(recepcionElement),
+    eventos: parsedEventos.value,
+    recepcion: parseRecepcionEvento(recepcionElement)
+  };
+}
+
+function parseRecepcionEvento(wrapper: Element): RecepcionEvento {
+  const root = directChild(wrapper, 'rRetEnviEventoDe');
+  if (!root) {
+    throw new Error('rResEnviEventoDe no contiene rRetEnviEventoDe.');
   }
 
-  if (!recepcionXml) return parsed.value;
-  return parsed.value.map((evento) => ({ ...evento, recepcionXml }));
+  const fechaProcesamientoRaw = requiredText(root, 'dFecProc');
+  const resultados = directChildren(root, 'gResProcEVe').map((result) => ({
+    idEvento: requiredText(result, 'id'),
+    estado: requiredText(result, 'dEstRes'),
+    numeroTransaccion: text(result, 'dProtAut'),
+    validaciones: parseValidaciones(result)
+  }));
+
+  if (resultados.length === 0) {
+    throw new Error('rRetEnviEventoDe no contiene gResProcEVe.');
+  }
+
+  return {
+    fechaProcesamiento: parseDate(fechaProcesamientoRaw, 'dFecProc'),
+    resultados
+  };
+}
+
+function parseValidaciones(result: Element): Array<{ codigo: string; mensaje: string }> {
+  const validaciones = directChildren(result, 'gResProc').map((validation) => ({
+    codigo: requiredText(validation, 'dCodRes'),
+    mensaje: requiredText(validation, 'dMsgRes')
+  }));
+
+  if (validaciones.length === 0) {
+    throw new Error('gResProcEVe no contiene gResProc.');
+  }
+
+  return validaciones;
 }
 
 /**
@@ -101,4 +136,14 @@ function xmlPayload(container: Element): string {
   const payload = container.textContent?.trim();
   if (!payload) throw new Error(`${localName(container)} no contiene XML.`);
   return payload;
+}
+
+function requiredText(root: Element, childName: string): string {
+  const value = text(root, childName);
+  if (value === undefined) throw new Error(`Campo requerido ausente: ${childName}.`);
+  return value;
+}
+
+function parseDate(value: string, field: string): Date {
+  return parseRawDate(value, 'date-time', field);
 }

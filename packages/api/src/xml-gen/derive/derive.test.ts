@@ -10,7 +10,7 @@ describe('derive — calculateFields', () => {
   });
 
   it('muta el DE in-place y retorna la misma referencia', () => {
-    const de = createFacturaElectronicaDec();
+    const de = createFacturaElectronicaDec({ digitoVerificadorId: -1 });
     const dvOriginal = de.digitoVerificadorId;
 
     const result = calculateFields(de);
