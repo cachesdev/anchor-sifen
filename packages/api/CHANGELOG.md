@@ -1,5 +1,11 @@
 # @anchorsoft/sifen
 
+## 0.6.0
+
+### Minor Changes
+
+- 2143994: Exponer XML por evento en RegistroEvento
+
 ## 0.5.0
 
 ### Minor Changes
