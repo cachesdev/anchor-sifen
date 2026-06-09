@@ -11,3 +11,4 @@ export * from './xml-parse';
 export * from './xml-sign';
 export * from './result';
 export * from './gen';
+export * from './soap';
