@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createDummyPKCS12Source } from '../certificate';
+import { extractDigestValue } from '../xml-sign';
 import { buildLote, SifenAPI } from './sifen-client';
 
 describe('client — buildLote', () => {
@@ -82,6 +83,67 @@ describe('client — enviarEvento', () => {
         value: {
           fechaProcesamiento: new Date('2024-06-15T10:30:00'),
           idEvento: '123',
+          estado: 'Aprobado',
+          numeroTransaccion: '1234567890',
+          validaciones: [{ codigo: '0600', mensaje: 'Evento registrado' }]
+        }
+      };
+    }
+  });
+
+  it('ejecuta afterSigning despues de firmar y antes de enviar por SOAP', async () => {
+    const api = new SifenAPI({
+      environment: 'test',
+      certificateSource: createDummyPKCS12Source(),
+      idCSC: '1',
+      csc: 'ABCD0000000000000000000000000000'
+    });
+    const order: string[] = [];
+    let digestValue: string | undefined;
+
+    (
+      api as unknown as {
+        soap: { eventoClient: { enviarEventoXml: typeof stubEnviarEventoXml } };
+      }
+    ).soap.eventoClient.enviarEventoXml = stubEnviarEventoXml;
+
+    const result = await api.enviarEvento({
+      digitoControl: '7',
+      evento: {
+        tipo: 'cancelacion',
+        idEvento: '456',
+        cdc: '01800195515031005001331122026030517018918308',
+        motivo: 'Error en datos'
+      },
+      afterSigning: (context) => {
+        order.push('afterSigning');
+        digestValue = context.digestValue;
+
+        expect(Object.isFrozen(context)).toBe(true);
+        expect(context.unsignedXml).toContain('<gGroupGesEve');
+        expect(context.unsignedXml).not.toContain('<Signature');
+        expect(context.signedXml).toContain('<Signature');
+        expect(context.idEvento).toBe('456');
+        expect(context.digestValue).toBe(extractDigestValue(context.signedXml));
+      }
+    });
+
+    expect(result.success).toBe(true);
+    expect(order).toEqual(['afterSigning', 'soap']);
+    expect(digestValue?.length).toBeGreaterThan(0);
+
+    async function stubEnviarEventoXml(params: {
+      digitoControl: string | number;
+      eventoXml: string;
+    }) {
+      order.push('soap');
+      expect(order).toEqual(['afterSigning', 'soap']);
+      expect(params.eventoXml).toContain('<Signature');
+      return {
+        success: true as const,
+        value: {
+          fechaProcesamiento: new Date('2024-06-15T10:30:00'),
+          idEvento: '456',
           estado: 'Aprobado',
           numeroTransaccion: '1234567890',
           validaciones: [{ codigo: '0600', mensaje: 'Evento registrado' }]

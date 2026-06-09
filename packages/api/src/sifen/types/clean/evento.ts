@@ -314,11 +314,6 @@ export type EventoRegistrable =
   | EventoActualizacionTransporte
   | EventoNominacionFacturaElectronica;
 
-export interface EnviarEventoInput {
-  digitoControl: string | number;
-  evento: EventoRegistrable;
-}
-
 export interface EventoMetadata {
   /** GDE003 | rEve@Id | Identificador del evento | MT 150 p. 120 | Atributo de rEve; no es el CDC. */
   idEvento: string;

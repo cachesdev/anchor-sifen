@@ -2,7 +2,7 @@ import { create, fragment } from 'xmlbuilder2';
 import { CertificateManager, type PKCS12Source } from '../certificate';
 import { attachQRToSignedXML, getQRUrl } from '../qr';
 import { SifenSoapClient, type SifenError } from '../soap';
-import type { SIFENEventoResponse, EnviarEventoInput } from '../sifen/types';
+import type { SIFENEventoResponse, EventoRegistrable } from '../sifen/types';
 import { XMLSigner, type XMLSignError } from '../xml-sign';
 import type { Result } from '../result';
 import { generateEventoXML, mapEventoRegistrableToRaw } from '../xml-gen';
@@ -12,6 +12,19 @@ export interface SIFENConfig {
   certificateSource: PKCS12Source;
   idCSC: string;
   csc: string;
+}
+
+export interface EnviarEventoInput {
+  digitoControl: string | number;
+  evento: EventoRegistrable;
+  afterSigning?: (context: Readonly<EnviarEventoAfterSigningContext>) => void | Promise<void>;
+}
+
+export interface EnviarEventoAfterSigningContext {
+  unsignedXml: string;
+  signedXml: string;
+  digestValue: string;
+  idEvento: string;
 }
 
 export class SifenAPI {
@@ -68,6 +81,15 @@ export class SifenAPI {
     const xml = generateEventoXML(raw);
     const signed = await this.xmlSigner.signEvento(xml, this.certData);
     if (!signed.success) return signed;
+
+    await params.afterSigning?.(
+      Object.freeze({
+        unsignedXml: xml,
+        signedXml: signed.value.signedXml,
+        digestValue: signed.value.digestValue,
+        idEvento: signed.value.idEvento
+      })
+    );
 
     return this.soap.eventoClient.enviarEventoXml({
       digitoControl: params.digitoControl,
