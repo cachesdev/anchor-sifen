@@ -1,5 +1,11 @@
 # @anchorsoft/sifen
 
+## 0.6.1
+
+### Patch Changes
+
+- fccf3f7: exportar tipos SOAP
+
 ## 0.6.0
 
 ### Minor Changes
