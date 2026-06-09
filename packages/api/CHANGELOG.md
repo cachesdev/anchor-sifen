@@ -1,5 +1,11 @@
 # @anchorsoft/sifen
 
+## 0.5.0
+
+### Minor Changes
+
+- b9a053c: Hack temporal para obtener digest value de enviarEvento
+
 ## 0.4.0
 
 ### Minor Changes
