@@ -11,7 +11,7 @@ import {
   text
 } from './dom-utils';
 import { XMLParseError } from './errors';
-import { parseEventosXML } from './evento';
+import { parseEventosFirmadosXML } from './evento';
 import { parseRawDate } from '../xml-gen/mapper/reverse/helpers';
 
 /**
@@ -56,15 +56,15 @@ function parseRContEv(container: Element): RegistroEvento {
   const xEvento = directChild(container, 'xEvento');
   if (!xEvento) throw new Error('rContEv no contiene xEvento.');
 
-  const eventoXml = xmlPayload(xEvento);
-  const parsedEventos = parseEventosXML(eventoXml);
+  const grupoEventoXml = xmlPayload(xEvento);
+  const parsedEventos = parseEventosFirmadosXML(grupoEventoXml);
   if (!parsedEventos.success) throw parsedEventos.error;
 
   const recepcionElement = directChild(container, 'rResEnviEventoDe');
-  if (!recepcionElement) return { eventoXml, eventos: parsedEventos.value };
+  if (!recepcionElement) return { grupoEventoXml, eventos: parsedEventos.value };
 
   return {
-    eventoXml,
+    grupoEventoXml,
     recepcionXml: serialize(recepcionElement),
     eventos: parsedEventos.value,
     recepcion: parseRecepcionEvento(recepcionElement)

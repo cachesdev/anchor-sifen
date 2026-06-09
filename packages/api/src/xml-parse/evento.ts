@@ -192,6 +192,15 @@ export function parseEventoXML(xml: string): Result<Evento, XMLParseError> {
 }
 
 export function parseEventosXML(xml: string): Result<Evento[], XMLParseError> {
+  const eventos = parseEventosFirmadosXML(xml);
+  if (!eventos.success) return eventos;
+
+  return Ok(eventos.value.map(({ evento }) => evento));
+}
+
+export function parseEventosFirmadosXML(
+  xml: string
+): Result<Array<{ evento: Evento; eventoXml: string }>, XMLParseError> {
   try {
     const doc = parseXmlDocument(xml);
     return Ok(parseEventosElement(doc.documentElement));
@@ -200,7 +209,7 @@ export function parseEventosXML(xml: string): Result<Evento[], XMLParseError> {
   }
 }
 
-function parseEventosElement(root: Element): Evento[] {
+function parseEventosElement(root: Element): Array<{ evento: Evento; eventoXml: string }> {
   switch (localName(root)) {
     case 'gGroupGesEve':
       return directChildren(root, 'rGesEve').map(parseRGesEve);
@@ -211,13 +220,16 @@ function parseEventosElement(root: Element): Evento[] {
   }
 }
 
-function parseRGesEve(root: Element): Evento {
+function parseRGesEve(root: Element): { evento: Evento; eventoXml: string } {
   const rEves = directChildren(root, 'rEve');
   if (rEves.length !== 1) {
     throw new Error(`rGesEve debe contener un rEve; contiene ${rEves.length}.`);
   }
 
-  return parseREve(rEves[0]!);
+  return {
+    evento: parseREve(rEves[0]!),
+    eventoXml: serialize(root)
+  };
 }
 
 function parseREve(rEve: Element): Evento {

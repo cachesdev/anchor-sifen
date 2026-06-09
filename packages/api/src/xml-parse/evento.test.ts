@@ -187,7 +187,11 @@ describe('xml-parse — consulta DE', () => {
     expect(result.value.deXml).toContain('<rDE');
     expect(result.value.protocoloAutorizacion).toBe('1234567890');
     expect(result.value.registroEventos).toHaveLength(1);
-    expect(result.value.registroEventos[0]!.eventos[0]!.tipo).toBe('cancelacion');
+    const registro = result.value.registroEventos[0]!;
+    expect(registro.eventos[0]!.evento.tipo).toBe('cancelacion');
+    expect(registro.grupoEventoXml).toContain('<gGroupGesEve');
+    expect(registro.eventos[0]!.eventoXml).toContain('<rGesEve');
+    expect(registro.eventos[0]!.eventoXml).not.toContain('<gGroupGesEve');
   });
 
   it('parseConsultaDEXML conserva un xContEv como un registro aunque contenga varios rGesEve', () => {
@@ -200,7 +204,7 @@ describe('xml-parse — consulta DE', () => {
     expect(result.success).toBe(true);
     if (!result.success) return;
     expect(result.value.registroEventos).toHaveLength(1);
-    expect(result.value.registroEventos[0]!.eventos.map((evento) => evento.idEvento)).toEqual([
+    expect(result.value.registroEventos[0]!.eventos.map(({ evento }) => evento.idEvento)).toEqual([
       '1',
       '2'
     ]);
@@ -214,7 +218,7 @@ describe('xml-parse — consulta DE', () => {
 
     expect(result.success).toBe(true);
     if (result.success)
-      expect(result.value.registroEventos[0]!.eventos[0]!.tipo).toBe('conformidad');
+      expect(result.value.registroEventos[0]!.eventos[0]!.evento.tipo).toBe('conformidad');
   });
 
   it('parseConsultaDEXML maneja consultas sin registroEventos', () => {

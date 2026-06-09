@@ -41,8 +41,8 @@ describe('SOAP — parseConsultaDE', () => {
     if (result.success) {
       expect(result.value.contenedorDE.registroEventos).toHaveLength(1);
       const registro = result.value.contenedorDE.registroEventos[0]!;
-      expect(registro.eventoXml).toContain('<gGroupGesEve');
-      expect(registro.eventos[0]).toMatchObject({ tipo: 'conformidad', idEvento: '1' });
+      expect(registro.grupoEventoXml).toContain('<gGroupGesEve');
+      expect(registro.eventos[0]!.evento).toMatchObject({ tipo: 'conformidad', idEvento: '1' });
     }
   });
 
@@ -78,7 +78,7 @@ describe('SOAP — parseConsultaDE', () => {
     const result = parseConsultaDE(raw);
     expect(result.success).toBe(true);
     if (result.success) {
-      const evento = result.value.contenedorDE.registroEventos[0]!.eventos[0]!;
+      const { evento } = result.value.contenedorDE.registroEventos[0]!.eventos[0]!;
       expect(evento.tipo).toBe('desconocido');
       if (evento.tipo !== 'desconocido') return;
       expect(evento.tipoXml).toBe('rGeVeFuturo');

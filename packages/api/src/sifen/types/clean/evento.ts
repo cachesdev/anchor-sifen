@@ -392,9 +392,12 @@ export type Evento =
   | EventoDesconocido;
 
 export interface RegistroEvento {
-  eventoXml: string;
+  grupoEventoXml: string;
   recepcionXml?: string;
-  eventos: Evento[];
+  eventos: Array<{
+    evento: Evento;
+    eventoXml: string;
+  }>;
   recepcion?: RecepcionEvento;
 }
 
