@@ -1,5 +1,11 @@
 # @anchorsoft/sifen
 
+## 0.6.2
+
+### Patch Changes
+
+- 49a5ce4: Corrige generación, firma y lectura de eventos SIFEN.
+
 ## 0.6.1
 
 ### Patch Changes
