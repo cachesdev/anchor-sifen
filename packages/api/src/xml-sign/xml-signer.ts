@@ -58,7 +58,7 @@ export class XMLSigner {
 
       const sig = new xmlCrypto.SignedXml();
       sig.signatureAlgorithm = 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
-      sig.canonicalizationAlgorithm = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
+      sig.canonicalizationAlgorithm = 'http://www.w3.org/2001/10/xml-exc-c14n#';
 
       sig.addReference({
         xpath: `//*[@Id='${cdc}']`,
@@ -111,7 +111,7 @@ export class XMLSigner {
 
       const sig = new xmlCrypto.SignedXml();
       sig.signatureAlgorithm = 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
-      sig.canonicalizationAlgorithm = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
+      sig.canonicalizationAlgorithm = 'http://www.w3.org/2001/10/xml-exc-c14n#';
 
       sig.addReference({
         xpath: `//*[@Id='${idEvento}']`,

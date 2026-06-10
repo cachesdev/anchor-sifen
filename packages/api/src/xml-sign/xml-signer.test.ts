@@ -132,5 +132,21 @@ describe('xml-sign', () => {
       if (!signResult.success) throw signResult.error;
       expect(signer.verifySignature(signResult.value.signedXml, certData)).toBe(true);
     });
+
+    it('verifySignature retorna true para un evento firmado embebido en SOAP', async () => {
+      const signer = new XMLSigner();
+      const signResult = await signer.signEvento(xml, certData);
+      if (!signResult.success) throw signResult.error;
+
+      const soapXml =
+        '<?xml version="1.0" encoding="utf-8"?>' +
+        '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns0="http://ekuatia.set.gov.py/sifen/xsd" xmlns:xsns="http://ekuatia.set.gov.py/sifen/xsd">' +
+        '<soap:Header><deHeaderMsg xmlns="http://ekuatia.set.gov.py/sifen/xsd"></deHeaderMsg></soap:Header>' +
+        '<soap:Body><xsns:rEnviEventoDe xmlns:xsns="http://ekuatia.set.gov.py/sifen/xsd" xmlns="http://ekuatia.set.gov.py/sifen/xsd"><dId>1</dId><dEvReg>' +
+        signResult.value.signedXml +
+        '</dEvReg></xsns:rEnviEventoDe></soap:Body></soap:Envelope>';
+
+      expect(signer.verifySignature(soapXml, certData)).toBe(true);
+    });
   });
 });

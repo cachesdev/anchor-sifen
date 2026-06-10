@@ -8,6 +8,10 @@ describe('SOAP — parseConsultaDE', () => {
     return `<rContDe xmlns="http://ekuatia.set.gov.py/sifen/xsd"><rDE><dVerFor>150</dVerFor><DE Id="${cdc}"><dDVId>1</dDVId></DE></rDE><dProtAut>1234567890</dProtAut>${registroEventos}</rContDe>`;
   }
 
+  function contenedorDEFragment(registroEventos = '<xContEv></xContEv>'): string {
+    return `<?xml version="1.0" encoding="UTF-8"?><rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd"><dVerFor>150</dVerFor><DE Id="${cdc}"><dDVId>1</dDVId></DE></rDE><dProtAut>1234567890</dProtAut>${registroEventos}`;
+  }
+
   it('retorna metadata y contenedorDE limpio cuando no hay registroEventos', () => {
     const raw = {
       dFecProc: '2026-05-15T10:30:00',
@@ -25,6 +29,23 @@ describe('SOAP — parseConsultaDE', () => {
       expect(result.value.contenedorDE.protocoloAutorizacion).toBe('1234567890');
       expect(result.value.contenedorDE.registroEventos).toEqual([]);
     }
+  });
+
+  it('parsea xContenDE como fragmento XML sin rContDe y con xContEv vacio', () => {
+    const raw = {
+      dFecProc: '2026-05-15T10:30:00',
+      dCodRes: '0422',
+      dMsgRes: 'OK',
+      xContenDE: contenedorDEFragment()
+    };
+
+    const result = parseConsultaDE(raw);
+
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.value.contenedorDE.deXml).toContain('<rDE');
+    expect(result.value.contenedorDE.protocoloAutorizacion).toBe('1234567890');
+    expect(result.value.contenedorDE.registroEventos).toEqual([]);
   });
 
   it('retorna registroEventos parseados desde xContEv', () => {

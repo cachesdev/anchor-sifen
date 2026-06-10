@@ -248,6 +248,40 @@ describe('xml-parse — consulta DE', () => {
     });
   });
 
+  it('parseConsultaDEXML usa rEve@Id cuando rResEnviEventoDe no incluye id', () => {
+    const event = registroEventoXml(
+      `<rGeVeCan><Id>${CDC}</Id><mOtEve>Error en datos</mOtEve></rGeVeCan>`,
+      '5'
+    );
+    const recepcion =
+      '<rResEnviEventoDe><rRetEnviEventoDe><dFecProc>2026-05-15T10:01:00</dFecProc><gResProcEVe><dEstRes>Aprobado</dEstRes><dProtAut>9876543210</dProtAut><gResProc><dCodRes>0600</dCodRes><dMsgRes>Se encontro el evento</dMsgRes></gResProc></gResProcEVe></rRetEnviEventoDe></rResEnviEventoDe>';
+    const xContEv = `<xContEv><rContEv><xEvento>${grupoEventosXml(event)}</xEvento>${recepcion}</rContEv></xContEv>`;
+    const result = parserContenDE(consultaXml(xContEv));
+
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.value.registroEventos[0]!.recepcion?.resultados[0]).toMatchObject({
+      idEvento: '5',
+      estado: 'Aprobado',
+      numeroTransaccion: '9876543210'
+    });
+  });
+
+  it('parseConsultaDEXML no reutiliza un id fallback en resultados ambiguos', () => {
+    const event = registroEventoXml(
+      `<rGeVeCan><Id>${CDC}</Id><mOtEve>Error en datos</mOtEve></rGeVeCan>`,
+      '5'
+    );
+    const resultWithoutId =
+      '<gResProcEVe><dEstRes>Aprobado</dEstRes><gResProc><dCodRes>0600</dCodRes><dMsgRes>Evento registrado</dMsgRes></gResProc></gResProcEVe>';
+    const recepcion = `<rResEnviEventoDe><rRetEnviEventoDe><dFecProc>2026-05-15T10:01:00</dFecProc>${resultWithoutId}${resultWithoutId}</rRetEnviEventoDe></rResEnviEventoDe>`;
+    const xContEv = `<xContEv><rContEv><xEvento>${grupoEventosXml(event)}</xEvento>${recepcion}</rContEv></xContEv>`;
+    const result = parserContenDE(consultaXml(xContEv));
+
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.details).toContain('Campo requerido ausente: id');
+  });
+
   it('rechaza rResEnviEventoDe sin rRetEnviEventoDe anidado', () => {
     const event = registroEventoXml(
       `<rGeVeCan><Id>${CDC}</Id><mOtEve>Error en datos</mOtEve></rGeVeCan>`
@@ -261,9 +295,7 @@ describe('xml-parse — consulta DE', () => {
   });
 
   it('parseConsultaDEXML rechaza XML que no tenga rContDe como raiz', () => {
-    const result = parserContenDE(
-      `<rDE xmlns="http://ekuatia.set.gov.py/sifen/xsd"><DE Id="${CDC}"/></rDE>`
-    );
+    const result = parserContenDE(`<otroContenedor><DE Id="${CDC}"/></otroContenedor>`);
 
     expect(result.success).toBe(false);
     if (!result.success) expect(result.error.details).toContain('raiz rContDe');

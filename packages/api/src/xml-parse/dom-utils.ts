@@ -20,7 +20,8 @@ export function parseXmlDocument(xml: string): Document {
     !doc.documentElement ||
     localName(doc.documentElement) === 'parsererror'
   ) {
-    throw new Error('XML mal formado.');
+    const details = parseErrors.length > 0 ? ` ${parseErrors.join(' ')}` : '';
+    throw new Error(`XML mal formado.${details}`);
   }
 
   return doc;

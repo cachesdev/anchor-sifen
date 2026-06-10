@@ -4,13 +4,14 @@ import type { RGesEve } from '../sifen/types/raw';
 
 const SIFEN_XSD_NAMESPACE = 'http://ekuatia.set.gov.py/sifen/xsd';
 const XSI_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
-const SCHEMA_LOCATION = `${SIFEN_XSD_NAMESPACE} siRecepDE_v150.xsd`;
+const DE_SCHEMA_LOCATION = `${SIFEN_XSD_NAMESPACE} siRecepDE_v150.xsd`;
+const EVENTO_SCHEMA_LOCATION = `${SIFEN_XSD_NAMESPACE} siRecepEvento_v150.xsd`;
 
 export function generateDEXML({ raw: de, cdc }: PreparedDE): string {
   const xmlPayload = {
     'rDE@http://ekuatia.set.gov.py/sifen/xsd': {
       '@xmlns:xsi': XSI_NAMESPACE,
-      '@xsi:schemaLocation': SCHEMA_LOCATION,
+      '@xsi:schemaLocation': DE_SCHEMA_LOCATION,
       dVerFor: 150,
       DE: {
         '@Id': cdc,
@@ -27,6 +28,8 @@ export function generateDEXML({ raw: de, cdc }: PreparedDE): string {
 export function generateEventoXML(evento: RGesEve): string {
   const xmlPayload = {
     'gGroupGesEve@http://ekuatia.set.gov.py/sifen/xsd': {
+      '@xmlns:xsi': XSI_NAMESPACE,
+      '@xsi:schemaLocation': EVENTO_SCHEMA_LOCATION,
       rGesEve: {
         rEve: {
           '@Id': evento.idEvento,

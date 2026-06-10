@@ -83,7 +83,11 @@ describe('xml-gen — generator', () => {
 
     expect(xml).not.toContain('<?xml');
     expect(xml).not.toContain('\n');
-    expect(xml).toContain('<gGroupGesEve xmlns="http://ekuatia.set.gov.py/sifen/xsd">');
+    expect(xml).toContain('xmlns="http://ekuatia.set.gov.py/sifen/xsd"');
+    expect(xml).toContain('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"');
+    expect(xml).toContain(
+      'xsi:schemaLocation="http://ekuatia.set.gov.py/sifen/xsd siRecepEvento_v150.xsd"'
+    );
     expect(xml).toContain('<rEve Id="123">');
     expect(xml).toContain('<dFecFirma>2026-04-30T12:00:00</dFecFirma>');
     expect(xml).toContain('<dVerFor>150</dVerFor>');
