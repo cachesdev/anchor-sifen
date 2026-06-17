@@ -99,7 +99,7 @@ export function normalizeAutofacturaElectronica(
     totalDescuentosOperacion: toBig(0),
     totalAnticiposOperacion: toBig(0),
     redondeoOperacion: toBig(0),
-    comisionOperacion: toOptionalBig(out.subtotalesTotales?.comisionOperacion),
+    comisionOperacion: undefined,
     totalNetoOperacion: toBig(0),
     liquidacionIva5: undefined,
     liquidacionIva10: undefined,

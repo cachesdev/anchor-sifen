@@ -37,6 +37,7 @@ const feConfig: DerivationConfig = {
   aplicaTransporte: true,
   aplicaSubtotales: true,
   subtotalesIncluyeIva: true,
+  aplicaComisionOperacion: true,
   totalBrutoFormula: 'sumaSubtotales',
   totalGsFormula: 'tipoCambio'
 };

@@ -12,6 +12,7 @@ describe('config de derivacion', () => {
       expect(cfg.aplicaTransporte).toBe(true);
       expect(cfg.aplicaSubtotales).toBe(true);
       expect(cfg.subtotalesIncluyeIva).toBe(true);
+      expect(cfg.aplicaComisionOperacion).toBe(true);
       expect(cfg.totalBrutoFormula).toBe('sumaSubtotales');
       expect(cfg.totalGsFormula).toBe('tipoCambio');
     });
@@ -25,6 +26,7 @@ describe('config de derivacion', () => {
       expect(cfg.aplicaTransporte).toBe(false);
       expect(cfg.aplicaSubtotales).toBe(true);
       expect(cfg.subtotalesIncluyeIva).toBe(false);
+      expect(cfg.aplicaComisionOperacion).toBe(false);
       expect(cfg.totalBrutoFormula).toBe('sumaItems');
       expect(cfg.totalGsFormula).toBe('tipoCambio');
     });

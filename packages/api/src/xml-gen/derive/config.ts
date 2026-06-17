@@ -46,9 +46,16 @@ export interface DerivationConfig {
 
   /**
    * Si los campos de IVA en subtotales (F002-F005, F015-F020) deben calcularse.
-   * False para C002 = 4 (AFE). MT v150, p. 102.
+   * Tambien se condiciona por D013 en la derivacion. False para C002 = 4
+   * (AFE). MT v150, p. 102; NT 013.
    */
   readonly subtotalesIncluyeIva: boolean;
+
+  /**
+   * Si F025 (dComi) aplica para el tipo de DE.
+   * False para C002 = 4 (AFE). MT v150, p. 102.
+   */
+  readonly aplicaComisionOperacion: boolean;
 
   /**
    * Formula para F008 (Total Bruto de la operacion):
@@ -62,9 +69,9 @@ export interface DerivationConfig {
   /**
    * Formula para F023 (Total general de la operacion en guaranies):
    * - 'tipoCambio': calculo basado en D018 o EA009 segun D017.
-   *   Aplica para C002 = 1, 5, 6. MT v150, p. 105.
-   * - 'igualF014': F023 = F014.
-   *   Aplica para C002 = 4. MT v150, p. 105.
+   *   Aplica cuando D015 != PYG. MT v150, p. 105; NT 008.
+   * - 'igualF014': F023 = F014. Variante historica del MT v150 removida por
+   *   NT 008 para AFE; no se usa en las configuraciones vigentes.
    */
   readonly totalGsFormula: 'tipoCambio' | 'igualF014';
 }
@@ -86,6 +93,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: true,
     aplicaSubtotales: true,
     subtotalesIncluyeIva: true,
+    aplicaComisionOperacion: true,
     totalBrutoFormula: 'sumaSubtotales',
     totalGsFormula: 'tipoCambio'
   },
@@ -99,6 +107,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: true,
     aplicaSubtotales: true,
     subtotalesIncluyeIva: true,
+    aplicaComisionOperacion: true,
     totalBrutoFormula: 'sumaSubtotales',
     totalGsFormula: 'tipoCambio'
   },
@@ -112,6 +121,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: true,
     aplicaSubtotales: true,
     subtotalesIncluyeIva: false,
+    aplicaComisionOperacion: true,
     totalBrutoFormula: 'sumaSubtotales',
     totalGsFormula: 'tipoCambio'
   },
@@ -125,6 +135,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: false,
     aplicaSubtotales: true,
     subtotalesIncluyeIva: false,
+    aplicaComisionOperacion: false,
     totalBrutoFormula: 'sumaItems',
     totalGsFormula: 'tipoCambio'
   },
@@ -138,6 +149,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: false,
     aplicaSubtotales: true,
     subtotalesIncluyeIva: true,
+    aplicaComisionOperacion: true,
     totalBrutoFormula: 'sumaSubtotales',
     totalGsFormula: 'tipoCambio'
   },
@@ -151,6 +163,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: false,
     aplicaSubtotales: true,
     subtotalesIncluyeIva: true,
+    aplicaComisionOperacion: true,
     totalBrutoFormula: 'sumaSubtotales',
     totalGsFormula: 'tipoCambio'
   },
@@ -164,6 +177,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: true,
     aplicaSubtotales: false,
     subtotalesIncluyeIva: false,
+    aplicaComisionOperacion: false,
     totalBrutoFormula: 'sumaSubtotales',
     totalGsFormula: 'tipoCambio'
   },
@@ -177,6 +191,7 @@ export const configPorTipoDE: Record<TipoDocumentoElectronicoLabel, DerivationCo
     aplicaTransporte: false,
     aplicaSubtotales: true,
     subtotalesIncluyeIva: true,
+    aplicaComisionOperacion: true,
     totalBrutoFormula: 'sumaSubtotales',
     totalGsFormula: 'tipoCambio'
   }

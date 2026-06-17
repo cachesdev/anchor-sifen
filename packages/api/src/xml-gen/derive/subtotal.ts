@@ -1,4 +1,8 @@
-import { condicionTipoCambio, formaAfectacionTributariaIVA } from '../../sifen/types';
+import {
+  condicionTipoCambio,
+  formaAfectacionTributariaIVA,
+  tipoImpuestoAfectado
+} from '../../sifen/types';
 import type { DEC } from '../../sifen/types';
 import type { ItemOperacion } from '../../sifen/types/clean/e';
 import type { OperacionComercial } from '../../sifen/types/clean/d';
@@ -61,12 +65,14 @@ export function applySubtotalesDerivedFields(out: DEC, config: DerivationConfig)
     return;
   }
 
-  const accumulation = accumulateItems(out);
-  const derived = deriveSubtotales(accumulation, out, config);
+  const operacionComercial = getOperacionComercial(out);
+  const incluyeCamposIva = shouldDeriveIvaSubtotalFields(config, operacionComercial);
+  const accumulation = accumulateItems(out, incluyeCamposIva);
+  const derived = deriveSubtotales(accumulation, out, config, incluyeCamposIva);
   applySubtotales(out, derived);
 }
 
-function accumulateItems(doc: DEC): ItemAccumulation {
+function accumulateItems(doc: DEC, incluyeCamposIva: boolean): ItemAccumulation {
   const acc = createEmptyItemAccumulation();
 
   const items = getItemsOperacion(doc);
@@ -106,7 +112,9 @@ function accumulateItems(doc: DEC): ItemAccumulation {
       );
     }
 
-    accumulateIva(acc, item.ivaItem, valorTotalItem);
+    if (incluyeCamposIva) {
+      accumulateIva(acc, item.ivaItem, valorTotalItem);
+    }
   }
 
   return acc;
@@ -115,11 +123,14 @@ function accumulateItems(doc: DEC): ItemAccumulation {
 function deriveSubtotales(
   acc: ItemAccumulation,
   doc: DEC,
-  config: DerivationConfig
+  config: DerivationConfig,
+  incluyeCamposIva: boolean
 ): DerivedSubtotales {
   const operacionComercial = getOperacionComercial(doc);
   const subtotalesExistentes = doc.subtotalesTotales;
-  const comisionOperacion = bigOrZero(subtotalesExistentes?.comisionOperacion);
+  const comisionOperacion = config.aplicaComisionOperacion
+    ? bigOrZero(subtotalesExistentes?.comisionOperacion)
+    : ZERO;
 
   // MT v150, p. 102-103, campo F013 (dRedon):
   // Se realiza sobre el campo F008. Redondeo a multiplos de 50 guaranies
@@ -138,10 +149,10 @@ function deriveSubtotales(
     .minus(redondeoOperacion)
     .plus(comisionOperacion);
 
-  const liquidacionIva5 = acc.hasIva5 ? acc.liquidacionIva5 : undefined;
-  const liquidacionIva10 = acc.hasIva10 ? acc.liquidacionIva10 : undefined;
-  const hasIva5Only = acc.hasIva5 && !acc.hasIva10;
-  const hasIva10Only = acc.hasIva10 && !acc.hasIva5;
+  const liquidacionIva5 = incluyeCamposIva && acc.hasIva5 ? acc.liquidacionIva5 : undefined;
+  const liquidacionIva10 = incluyeCamposIva && acc.hasIva10 ? acc.liquidacionIva10 : undefined;
+  const hasIva5Only = incluyeCamposIva && acc.hasIva5 && !acc.hasIva10;
+  const hasIva10Only = incluyeCamposIva && acc.hasIva10 && !acc.hasIva5;
 
   // MT v150, p. 104, campos F036 y F037 (dLiqTotIVA5, dLiqTotIVA10):
   // Liquidacion total del IVA por redondeo.
@@ -153,13 +164,12 @@ function deriveSubtotales(
 
   // MT v150, p. 104, campo F026 (dIVAComi):
   // Liquidacion total del IVA de la comision. Se aplica la tasa del 10%.
-  const liquidacionIvaComision = comisionOperacion.gt(0)
-    ? comisionOperacion.times(10).div(110)
-    : undefined;
+  const liquidacionIvaComision =
+    incluyeCamposIva && comisionOperacion.gt(0) ? comisionOperacion.times(10).div(110) : undefined;
 
   // MT v150, p. 104, campo F017 (dTotIVA):
   // Liquidacion total del IVA: F015 + F016 - F036 - F037 + F026
-  const hasAnyIva = acc.hasIva5 || acc.hasIva10;
+  const hasAnyIva = incluyeCamposIva && (acc.hasIva5 || acc.hasIva10);
   const hasAnyLiquidacionIva =
     hasAnyIva ||
     liquidacionIvaRedondeo5 !== undefined ||
@@ -183,19 +193,11 @@ function deriveSubtotales(
     : undefined;
 
   return {
-    subtotalExenta: config.subtotalesIncluyeIva && acc.hasExenta ? acc.subtotalExenta : undefined,
-    subtotalExonerada:
-      config.subtotalesIncluyeIva && acc.hasExonerada ? acc.subtotalExonerada : undefined,
-    subtotalIva5: config.subtotalesIncluyeIva && acc.hasIva5 ? acc.subtotalIva5 : undefined,
-    subtotalIva10: config.subtotalesIncluyeIva && acc.hasIva10 ? acc.subtotalIva10 : undefined,
-    totalBrutoOperacion:
-      config.totalBrutoFormula === 'sumaItems'
-        ? acc.totalBrutoOperacion
-        : // MT v150, p. 103, F008 = F002 + F003 + F004 + F005
-          bigOrZero(acc.hasExenta ? acc.subtotalExenta : undefined)
-            .plus(bigOrZero(acc.hasExonerada ? acc.subtotalExonerada : undefined))
-            .plus(bigOrZero(acc.hasIva5 ? acc.subtotalIva5 : undefined))
-            .plus(bigOrZero(acc.hasIva10 ? acc.subtotalIva10 : undefined)),
+    subtotalExenta: incluyeCamposIva && acc.hasExenta ? acc.subtotalExenta : undefined,
+    subtotalExonerada: incluyeCamposIva && acc.hasExonerada ? acc.subtotalExonerada : undefined,
+    subtotalIva5: incluyeCamposIva && acc.hasIva5 ? acc.subtotalIva5 : undefined,
+    subtotalIva10: incluyeCamposIva && acc.hasIva10 ? acc.subtotalIva10 : undefined,
+    totalBrutoOperacion: deriveTotalBrutoOperacion(acc, config, incluyeCamposIva),
     totalDescuentoParticular: acc.totalDescuentoParticular,
     totalDescuentoGlobal: acc.totalDescuentoGlobal,
     totalAnticipoItem: acc.totalAnticipoItem,
@@ -207,15 +209,42 @@ function deriveSubtotales(
     totalNetoOperacion,
     liquidacionIva5,
     liquidacionIva10,
-    liquidacionIvaRedondeo5: config.subtotalesIncluyeIva ? liquidacionIvaRedondeo5 : undefined,
-    liquidacionIvaRedondeo10: config.subtotalesIncluyeIva ? liquidacionIvaRedondeo10 : undefined,
-    liquidacionIvaComision: config.subtotalesIncluyeIva ? liquidacionIvaComision : undefined,
-    liquidacionTotalIva: config.subtotalesIncluyeIva ? liquidacionTotalIva : undefined,
-    totalBaseGravada5: config.subtotalesIncluyeIva ? totalBaseGravada5 : undefined,
-    totalBaseGravada10: config.subtotalesIncluyeIva ? totalBaseGravada10 : undefined,
-    totalBaseGravadaIva: config.subtotalesIncluyeIva ? totalBaseGravadaIva : undefined,
+    liquidacionIvaRedondeo5: incluyeCamposIva ? liquidacionIvaRedondeo5 : undefined,
+    liquidacionIvaRedondeo10: incluyeCamposIva ? liquidacionIvaRedondeo10 : undefined,
+    liquidacionIvaComision: incluyeCamposIva ? liquidacionIvaComision : undefined,
+    liquidacionTotalIva: incluyeCamposIva ? liquidacionTotalIva : undefined,
+    totalBaseGravada5: incluyeCamposIva ? totalBaseGravada5 : undefined,
+    totalBaseGravada10: incluyeCamposIva ? totalBaseGravada10 : undefined,
+    totalBaseGravadaIva: incluyeCamposIva ? totalBaseGravadaIva : undefined,
     totalOperacionGs: deriveTotalOperacionGs(acc, operacionComercial, totalNetoOperacion, config)
   };
+}
+
+function deriveTotalBrutoOperacion(
+  acc: ItemAccumulation,
+  config: DerivationConfig,
+  incluyeCamposIva: boolean
+): Big {
+  if (config.totalBrutoFormula === 'sumaSubtotales' && incluyeCamposIva) {
+    // MT v150, p. 103, F008 = F002 + F003 + F004 + F005 para contextos IVA.
+    return bigOrZero(acc.hasExenta ? acc.subtotalExenta : undefined)
+      .plus(bigOrZero(acc.hasExonerada ? acc.subtotalExonerada : undefined))
+      .plus(bigOrZero(acc.hasIva5 ? acc.subtotalIva5 : undefined))
+      .plus(bigOrZero(acc.hasIva10 ? acc.subtotalIva10 : undefined));
+  }
+
+  return acc.totalBrutoOperacion;
+}
+
+function shouldDeriveIvaSubtotalFields(
+  config: DerivationConfig,
+  operacionComercial: OperacionComercial | undefined
+): boolean {
+  return (
+    config.subtotalesIncluyeIva &&
+    (operacionComercial?.tipoImpuestoAfectado === tipoImpuestoAfectado.IVA ||
+      operacionComercial?.tipoImpuestoAfectado === tipoImpuestoAfectado.IVA_Renta)
+  );
 }
 
 function applySubtotales(out: DEC, derived: DerivedSubtotales): void {

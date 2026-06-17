@@ -1,6 +1,6 @@
 import { Big } from 'big.js';
 import { describe, expect, it } from 'vitest';
-import { formaAfectacionTributariaIVA } from '../../sifen/types/enums';
+import { formaAfectacionTributariaIVA, tipoImpuestoAfectado } from '../../sifen/types/enums';
 import {
   createFacturaElectronicaDec,
   createItemOperacion,
@@ -21,6 +21,7 @@ const feConfig: DerivationConfig = {
   aplicaTransporte: true,
   aplicaSubtotales: true,
   subtotalesIncluyeIva: true,
+  aplicaComisionOperacion: true,
   totalBrutoFormula: 'sumaSubtotales',
   totalGsFormula: 'tipoCambio'
 };
@@ -33,10 +34,34 @@ function itemGravado10(precio: number, cantidad = 1) {
   });
 }
 
+function createOperacionComercialIva(
+  overrides: Parameters<typeof createOperacionComercial>[0] = {}
+) {
+  return createOperacionComercial({
+    tipoImpuestoAfectado: tipoImpuestoAfectado.IVA,
+    ...overrides
+  });
+}
+
+function createFacturaElectronicaDecIva(
+  overrides?: Parameters<typeof createFacturaElectronicaDec>[0]
+) {
+  const de = createFacturaElectronicaDec(overrides);
+  const tipoImpuesto =
+    overrides?.datosGeneralesOperacion?.operacionComercial?.tipoImpuestoAfectado ??
+    tipoImpuestoAfectado.IVA;
+
+  de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+    ...de.datosGeneralesOperacion.operacionComercial,
+    tipoImpuestoAfectado: tipoImpuesto
+  });
+  return de;
+}
+
 describe('derive — subtotal', () => {
   describe('F008: totalBrutoOperacion = suma de subtotales por IVA', () => {
     it('acumula items gravados al 10%', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [itemGravado10(100000, 1), itemGravado10(50000, 1)]
         }
@@ -49,14 +74,85 @@ describe('derive — subtotal', () => {
     });
   });
 
+  describe('D013: campos F de IVA', () => {
+    it('no deriva campos F de IVA cuando D013 no es IVA ni IVA-Renta', () => {
+      const de = createFacturaElectronicaDecIva({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(1),
+              valorItem: createValorItem({ precioUnitario: new Big(10025) }),
+              ivaItem: createIvaItem({
+                formaAfectacionTributariaIVA: formaAfectacionTributariaIVA.Gravado,
+                tasaIva: 10
+              })
+            })
+          ]
+        },
+        subtotalesTotales: createSubtotalesTotales({ comisionOperacion: new Big(11000) })
+      });
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
+        monedaOperacion: 'PYG',
+        tipoImpuestoAfectado: tipoImpuestoAfectado.Renta
+      });
+
+      applyItemDerivedFields(de, feConfig);
+      applySubtotalesDerivedFields(de, feConfig);
+
+      const sub = de.subtotalesTotales!;
+      expect(sub.totalBrutoOperacion.eq(10025)).toBe(true);
+      expect(sub.comisionOperacion?.eq(11000)).toBe(true);
+      expect(sub.subtotalExenta).toBeUndefined();
+      expect(sub.subtotalExonerada).toBeUndefined();
+      expect(sub.subtotalIva5).toBeUndefined();
+      expect(sub.subtotalIva10).toBeUndefined();
+      expect(sub.liquidacionIva5).toBeUndefined();
+      expect(sub.liquidacionIva10).toBeUndefined();
+      expect(sub.liquidacionTotalIva5).toBeUndefined();
+      expect(sub.liquidacionTotalIva10).toBeUndefined();
+      expect(sub.liquidacionIvaComision).toBeUndefined();
+      expect(sub.liquidacionTotalIva).toBeUndefined();
+      expect(sub.totalBaseGravada5).toBeUndefined();
+      expect(sub.totalBaseGravada10).toBeUndefined();
+      expect(sub.totalBaseGravadaIva).toBeUndefined();
+    });
+
+    it('calcula F008 desde items valorados cuando D013=Ninguno no tiene ivaItem', () => {
+      const de = createFacturaElectronicaDecIva({
+        datosEspecificosPorTipoDE: {
+          itemsOperacion: [
+            createItemOperacion({
+              cantidadProductoServicio: new Big(1),
+              valorItem: createValorItem({ precioUnitario: new Big(123456) }),
+              ivaItem: undefined
+            })
+          ]
+        }
+      });
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
+        monedaOperacion: 'PYG',
+        tipoImpuestoAfectado: tipoImpuestoAfectado.Ninguno
+      });
+
+      applyItemDerivedFields(de, feConfig);
+      applySubtotalesDerivedFields(de, feConfig);
+
+      const sub = de.subtotalesTotales!;
+      expect(sub.totalBrutoOperacion.eq(123456)).toBe(true);
+      expect(sub.subtotalIva5).toBeUndefined();
+      expect(sub.subtotalIva10).toBeUndefined();
+      expect(sub.liquidacionTotalIva).toBeUndefined();
+    });
+  });
+
   describe('F013: redondeo — multiplos de 50 PYG o 0.50 extranjera', () => {
     it('para PYG: redondea a multiplos de 50', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [itemGravado10(10025, 1)]
         }
       });
-      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
         monedaOperacion: 'PYG'
       });
       applyItemDerivedFields(de, feConfig);
@@ -65,12 +161,12 @@ describe('derive — subtotal', () => {
     });
 
     it('para PYG: sin redondeo si ya es multiplo de 50', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [itemGravado10(10050, 1)]
         }
       });
-      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
         monedaOperacion: 'PYG'
       });
       applyItemDerivedFields(de, feConfig);
@@ -79,12 +175,12 @@ describe('derive — subtotal', () => {
     });
 
     it('para moneda extranjera: redondea a 0.50', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [itemGravado10(10.3, 1)]
         }
       });
-      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
         monedaOperacion: 'USD'
       });
       applyItemDerivedFields(de, feConfig);
@@ -97,12 +193,12 @@ describe('derive — subtotal', () => {
 
   describe('F023: totalOperacionGs', () => {
     it('para PYG retorna undefined', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [itemGravado10(100000, 1)]
         }
       });
-      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
         monedaOperacion: 'PYG'
       });
       applyItemDerivedFields(de, feConfig);
@@ -114,7 +210,7 @@ describe('derive — subtotal', () => {
   describe('no aplicaSubtotales', () => {
     it('sale temprano sin modificar subtotales', () => {
       const configSinSub = { ...feConfig, aplicaSubtotales: false };
-      const de = createFacturaElectronicaDec();
+      const de = createFacturaElectronicaDecIva();
       const original = de.subtotalesTotales!.totalBrutoOperacion;
       applySubtotalesDerivedFields(de, configSinSub);
       expect(de.subtotalesTotales!.totalBrutoOperacion).toBe(original);
@@ -123,7 +219,7 @@ describe('derive — subtotal', () => {
 
   describe('clasificacion de items por tipo de IVA', () => {
     it('items exentos van a subtotalExenta', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [
             createItemOperacion({
@@ -145,7 +241,7 @@ describe('derive — subtotal', () => {
     });
 
     it('items exonerados van a subtotalExonerada', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [
             createItemOperacion({
@@ -166,7 +262,7 @@ describe('derive — subtotal', () => {
     });
 
     it('items gravado parcial: base exenta a subtotalExenta, gravado a IVA', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [
             createItemOperacion({
@@ -190,12 +286,12 @@ describe('derive — subtotal', () => {
 
   describe('F013: redondeo moneda extranjera — edge cases', () => {
     it('USD 10.26 → redondeo ~0.26', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [itemGravado10(10.26, 1)]
         }
       });
-      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
         monedaOperacion: 'USD'
       });
       applyItemDerivedFields(de, feConfig);
@@ -206,12 +302,12 @@ describe('derive — subtotal', () => {
     });
 
     it('USD 10.50 → redondeo 0', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [itemGravado10(10.5, 1)]
         }
       });
-      de.datosGeneralesOperacion.operacionComercial = createOperacionComercial({
+      de.datosGeneralesOperacion.operacionComercial = createOperacionComercialIva({
         monedaOperacion: 'USD'
       });
       applyItemDerivedFields(de, feConfig);
@@ -222,7 +318,7 @@ describe('derive — subtotal', () => {
 
   describe('F010 → EA004 → F033: consistencia descuento global', () => {
     it('F010=10%, item 50000*2 → F033 = 10000 (10% del total bruto)', () => {
-      const de = createFacturaElectronicaDec({
+      const de = createFacturaElectronicaDecIva({
         datosEspecificosPorTipoDE: {
           itemsOperacion: [
             createItemOperacion({

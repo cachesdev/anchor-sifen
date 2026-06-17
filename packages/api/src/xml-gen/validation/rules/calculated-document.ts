@@ -3,11 +3,15 @@ import type { ValidationRule } from '../types';
 
 export const calculatedDocumentRules: ValidationRule<DEC>[] = [
   {
-    id: 'EXAMPLE_DOCUMENT_RULE',
-    description: 'Regla de documento de ejemplo (deshabilitada por defecto).',
-    tags: ['example', 'placeholder'],
-    when: () => false,
-    check: () => true,
-    message: () => 'Regla de documento de ejemplo fallo.'
+    id: 'D022',
+    description: 'NT 012: Autofactura Electronica debe usar moneda PYG.',
+    tags: ['nt-012', 'autofactura', 'moneda'],
+    when: (doc) => doc.tipoDE === 'AutofacturaElectronica',
+    check: (doc) => doc.datosGeneralesOperacion.operacionComercial?.monedaOperacion === 'PYG',
+    message: (doc) => {
+      const moneda =
+        doc.datosGeneralesOperacion.operacionComercial?.monedaOperacion ?? 'sin moneda';
+      return `Autofactura Electronica (C002=4) debe usar moneda PYG (D015=PYG); recibido ${moneda}.`;
+    }
   }
 ];
