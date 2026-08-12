@@ -13,3 +13,8 @@ export {
 } from './factura-electronica-input';
 
 export { createFacturaElectronicaDec } from './factura-electronica';
+
+export {
+  createNotaCreditoElectronicaInput,
+  createNotaDebitoElectronicaInput
+} from './nota-credito-debito-electronica-input';

@@ -67,12 +67,12 @@ export function applySubtotalesDerivedFields(out: DEC, config: DerivationConfig)
 
   const operacionComercial = getOperacionComercial(out);
   const incluyeCamposIva = shouldDeriveIvaSubtotalFields(config, operacionComercial);
-  const accumulation = accumulateItems(out, incluyeCamposIva);
+  const accumulation = accumulateItems(out, config.subtotalesIncluyeIva);
   const derived = deriveSubtotales(accumulation, out, config, incluyeCamposIva);
   applySubtotales(out, derived);
 }
 
-function accumulateItems(doc: DEC, incluyeCamposIva: boolean): ItemAccumulation {
+function accumulateItems(doc: DEC, acumulaAfectacionIva: boolean): ItemAccumulation {
   const acc = createEmptyItemAccumulation();
 
   const items = getItemsOperacion(doc);
@@ -112,7 +112,7 @@ function accumulateItems(doc: DEC, incluyeCamposIva: boolean): ItemAccumulation 
       );
     }
 
-    if (incluyeCamposIva) {
+    if (acumulaAfectacionIva) {
       accumulateIva(acc, item.ivaItem, valorTotalItem);
     }
   }
@@ -193,8 +193,9 @@ function deriveSubtotales(
     : undefined;
 
   return {
-    subtotalExenta: incluyeCamposIva && acc.hasExenta ? acc.subtotalExenta : undefined,
-    subtotalExonerada: incluyeCamposIva && acc.hasExonerada ? acc.subtotalExonerada : undefined,
+    subtotalExenta: config.subtotalesIncluyeIva && acc.hasExenta ? acc.subtotalExenta : undefined,
+    subtotalExonerada:
+      config.subtotalesIncluyeIva && acc.hasExonerada ? acc.subtotalExonerada : undefined,
     subtotalIva5: incluyeCamposIva && acc.hasIva5 ? acc.subtotalIva5 : undefined,
     subtotalIva10: incluyeCamposIva && acc.hasIva10 ? acc.subtotalIva10 : undefined,
     totalBrutoOperacion: deriveTotalBrutoOperacion(acc, config, incluyeCamposIva),
@@ -225,12 +226,17 @@ function deriveTotalBrutoOperacion(
   config: DerivationConfig,
   incluyeCamposIva: boolean
 ): Big {
-  if (config.totalBrutoFormula === 'sumaSubtotales' && incluyeCamposIva) {
-    // MT v150, p. 103, F008 = F002 + F003 + F004 + F005 para contextos IVA.
+  if (
+    config.totalBrutoFormula === 'sumaSubtotales' &&
+    config.subtotalesIncluyeIva &&
+    (acc.hasExenta || acc.hasExonerada || (incluyeCamposIva && (acc.hasIva5 || acc.hasIva10)))
+  ) {
+    // MT v150, p. 103, F008 = F002 + F003 + F004 + F005 cuando existen
+    // subtotales por afectacion. F002/F003 tambien aplican a Renta/Ninguno.
     return bigOrZero(acc.hasExenta ? acc.subtotalExenta : undefined)
       .plus(bigOrZero(acc.hasExonerada ? acc.subtotalExonerada : undefined))
-      .plus(bigOrZero(acc.hasIva5 ? acc.subtotalIva5 : undefined))
-      .plus(bigOrZero(acc.hasIva10 ? acc.subtotalIva10 : undefined));
+      .plus(bigOrZero(incluyeCamposIva && acc.hasIva5 ? acc.subtotalIva5 : undefined))
+      .plus(bigOrZero(incluyeCamposIva && acc.hasIva10 ? acc.subtotalIva10 : undefined));
   }
 
   return acc.totalBrutoOperacion;

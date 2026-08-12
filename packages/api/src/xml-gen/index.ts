@@ -1,7 +1,16 @@
 export { generateDEXML, generateEventoXML } from './generator';
 export { buildFacturaElectronica } from './factura-electronica';
 export { buildAutofacturaElectronica } from './autofactura-electronica';
-export { prepareDE, type PreparedDE } from './de-pipeline';
+export {
+  buildNotaCreditoElectronica,
+  buildNotaDebitoElectronica
+} from './nota-credito-debito-electronica';
+export {
+  prepareDE,
+  type PreparedDE,
+  type PreparedNotaCreditoElectronica,
+  type PreparedNotaDebitoElectronica
+} from './de-pipeline';
 export * from './derive';
 export * from './mapper';
 export * from './validation';

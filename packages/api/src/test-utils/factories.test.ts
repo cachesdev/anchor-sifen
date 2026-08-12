@@ -43,7 +43,9 @@ import {
   createPolizaSeguros,
   createSectorSupermercados,
   createDatosAdicionalesUsoComercial,
-  createCarga
+  createCarga,
+  createNotaCreditoElectronicaInput,
+  createNotaDebitoElectronicaInput
 } from './factories';
 import { codigoMoneda } from '../gen/monedas';
 
@@ -176,6 +178,32 @@ describe('input factories', () => {
     const a = createFacturaElectronicaInput();
     const b = createFacturaElectronicaInput();
     expect(a.id_cdc).not.toBe(b.id_cdc);
+  });
+
+  it.each([
+    { label: 'NCE', factory: createNotaCreditoElectronicaInput, prefix: '05' },
+    { label: 'NDE', factory: createNotaDebitoElectronicaInput, prefix: '06' }
+  ] as const)('$label factory produce una nota minima con CDC propio', ({ factory, prefix }) => {
+    const note = factory();
+
+    expect(note.id_cdc).toHaveLength(44);
+    expect(note.id_cdc.startsWith(prefix)).toBe(true);
+    expect(note.datosEspecificosPorTipoDE.notaCreditoDebitoElectronica).toBeDefined();
+    expect(note.datosEspecificosPorTipoDE.itemsOperacion).toHaveLength(1);
+    expect(note.camposDocumentoElectronicoAsociado).toBeDefined();
+    expect('facturaElectronica' in note.datosEspecificosPorTipoDE).toBe(false);
+    expect('autofacturaElectronica' in note.datosEspecificosPorTipoDE).toBe(false);
+    expect('notaRemisionElectronica' in note.datosEspecificosPorTipoDE).toBe(false);
+    expect('condicionOperacion' in note.datosEspecificosPorTipoDE).toBe(false);
+    expect('transporte' in note.datosEspecificosPorTipoDE).toBe(false);
+  });
+
+  it('las factories NCE/NDE respetan overrides', () => {
+    const nce = createNotaCreditoElectronicaInput({ id_cdc: 'NCE-CUSTOM' });
+    const nde = createNotaDebitoElectronicaInput({ id_cdc: 'NDE-CUSTOM' });
+
+    expect(nce.id_cdc).toBe('NCE-CUSTOM');
+    expect(nde.id_cdc).toBe('NDE-CUSTOM');
   });
 
   it('todas las factories base exportadas producen objetos sin lanzar', () => {

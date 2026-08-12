@@ -2,6 +2,8 @@ export * from './autofactura-electronica';
 export * from './autofactura-electronica-input';
 export * from './factura-electronica';
 export * from './factura-electronica-input';
+export * from './nota-credito-debito-electronica';
+export * from './nota-credito-debito-electronica-input';
 export * from './enums';
 export * from './clean';
 export * from './raw';
