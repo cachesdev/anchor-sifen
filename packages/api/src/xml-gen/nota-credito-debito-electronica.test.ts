@@ -128,6 +128,8 @@ describe('public NCE/NDE builders', () => {
     const xml = generateDEXML(result.value);
     expect(xml).toContain('<iTiDE>5</iTiDE>');
     expect(xml).toContain('<gCamNCDE><iMotEmi>3</iMotEmi><dDesMotEmi>Descuento</dDesMotEmi>');
+    expect(xml).toContain('<gCamItem>');
+    expect(xml).toContain('<gTotSub>');
     expect(xml).toContain(`<dCdCDERef>${referencedCDC}</dCdCDERef>`);
     expect(xml).toContain('<gCamDEAsoc><iTipDocAso>1</iTipDocAso>');
     expect(xml).toContain('<dRucFus>80000001</dRucFus>');
@@ -180,15 +182,25 @@ describe('public NCE/NDE builders', () => {
     expect(result.value.raw.gDtipDE.gCamFE).toBeUndefined();
     expect(result.value.raw.gDtipDE.gCamAE).toBeUndefined();
     expect(result.value.raw.gDtipDE.gCamNRE).toBeUndefined();
+    expect(result.value.raw.gDtipDE.gCamItem).toHaveLength(1);
     expect(result.value.raw.gTotSub!.dSubExe).toBe('110000.00000000');
     expect(result.value.raw.gTotSub!.dTotOpe).toBe('110000.00000000');
     expect(result.value.raw.gTotSub!.dTotIVA).toBeUndefined();
+    expect(result.value.raw.gCamDEAsoc).toMatchObject({
+      iTipDocAso: tipoDocumentoAsociado.Electronico,
+      dDesTipDocAso: 'Electrónico',
+      dCdCDERef: referencedCDC
+    });
 
     const xml = generateDEXML(result.value);
     expect(xml).toContain('<iTiDE>6</iTiDE>');
     expect(xml).toContain(
       '<gCamNCDE><iMotEmi>6</iMotEmi><dDesMotEmi>Recupero de costo</dDesMotEmi>'
     );
+    expect(xml).toContain('<gCamItem>');
+    expect(xml).toContain('<gTotSub>');
+    expect(xml).toContain('<gCamDEAsoc><iTipDocAso>1</iTipDocAso>');
+    expect(xml).toContain(`<dCdCDERef>${referencedCDC}</dCdCDERef>`);
     expect(xml).toContain('<dSubExe>110000.00000000</dSubExe>');
     expect(xml).not.toContain('<gCamCond>');
     expect(xml).not.toContain('<gTransp>');

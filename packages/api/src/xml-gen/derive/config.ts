@@ -45,9 +45,10 @@ export interface DerivationConfig {
   readonly aplicaSubtotales: boolean;
 
   /**
-   * Si los campos de IVA en subtotales (F002-F005, F015-F020) deben calcularse.
-   * Tambien se condiciona por D013 en la derivacion. False para C002 = 4
-   * (AFE). MT v150, p. 102; NT 013.
+   * Si los subtotales por afectacion tributaria deben calcularse.
+   * F002/F003 aplican sin depender de D013. F004/F005 y F015-F020 tambien
+   * requieren que D013 incluya IVA. False para C002 = 4 (AFE).
+   * MT v150, p. 102; NT 013.
    */
   readonly subtotalesIncluyeIva: boolean;
 
