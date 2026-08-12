@@ -1,6 +1,6 @@
 {
   "name": "@anchorsoft/sifen",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "Cliente TypeScript para SIFEN. genera, firma, envía y consulta Documentos Electrónicos (DE) del sistema de facturación electrónica de Paraguay SIFEN",
   "keywords": [
     "sifen",

@@ -1,5 +1,11 @@
 # @anchorsoft/sifen
 
+## 0.7.0
+
+### Minor Changes
+
+- 1b3c17c: Agregar builders publicos para notas de credito y debito electronicas.
+
 ## 0.6.3
 
 ### Patch Changes
